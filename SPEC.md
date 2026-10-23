@@ -1,6 +1,6 @@
 # Tagging for Correct Aggregation: Project Spec
 
-*Owner: Karan Patel · Version 2 (3-day plan) · October 23, 2026 · Send target: Monday, October 26, 2026, morning ET*
+*Owner: Karan Patel · Version 2.2 (3-day plan; BLS and Census macro data; Claude Haiku 5.5 eval; static results page for the pitch) · October 23, 2026 · Send target: Monday, October 26, 2026, morning ET*
 
 ---
 
@@ -15,8 +15,9 @@ Work **one phase per Claude Code session**, using this prompt pattern:
 After each phase:
 
 1. Do the "you check personally" items for that phase. Don't delegate these to Claude Code.
-2. Commit with the message `phase N: <what was done>`.
-3. If you made a design choice along the way, add it to the decisions log in §15.
+2. Commit with the message `phase N: <what was done>`, push, and open a pull request into `main`.
+3. **Merge that pull request into `main` yourself, after your checks, before starting the next session.** Each new Claude Code session starts from `main`, so unmerged work is invisible to it.
+4. If you made a design choice along the way, add it to the decisions log in §15.
 
 Use your Claude project chat for thinking and decisions, and Claude Code for building.
 
@@ -28,6 +29,9 @@ Version 1 planned 7 days. Version 2 fits the same design into 3 days (Friday to 
 - **Smaller evaluation:** 42 questions (7 per category, minimum 36), 504 runs.
 - **Cut:** auto-tagging (Phase 16) and the one-page case study PDF. The README carries the write-up.
 - **Added rules:** concept chosen per company and metric with a coverage table; uniqueness keys based on dates, never fiscal labels; one numeric answer per question (or refuse); questions dropped when a trap answer is too close to the correct one; B vs. C reported paired by question.
+- **Macro data source:** CPI from the Bureau of Labor Statistics and food-service sales from the Census Bureau, downloaded by hand, instead of FRED (FRED's terms restrict this use; see §6.4).
+- **Eval model:** Claude Haiku 5.5 with a hard $5 budget cap (estimated full-run cost about $1), instead of Sonnet (about $22).
+- **Pitch frontend:** a static, read-only results page (§13.1) built from the recorded eval runs, used as the main screen in the Loom video. No chatbot, no backend, no live model calls.
 - **Added process:** question wording drafted by hand on Friday, before `semantics.py` exists; test values collected from filings first and reused in the answer-key verification.
 - **Added to the write-up:** a "Related approaches" section on semantic layers.
 
@@ -77,9 +81,10 @@ Version 1 planned 7 days. Version 2 fits the same design into 3 days (Friday to 
 
 **What earns credibility with this reader (someone who builds this kind of system):**
 
-- Answer keys checked by hand against primary sources (filings, FRED, earnings releases).
+- Answer keys checked by hand against primary sources (filings, BLS, Census, earnings releases).
 - A fair baseline. Setup B contains the same facts as the tags, so the comparison is honest.
 - Results that include where your own system failed.
+- Checking data licenses and using primary public-domain sources (BLS, Census) instead of a redistributor with restrictive terms.
 - Correct finance details: fiscal-quarter mapping, YTD subtraction, why annual EPS isn't the sum of quarterly EPS, why comps don't compare across companies.
 - Naming the existing approaches (semantic layers, metric views) instead of presenting the idea as new.
 - Reproducible with one command. Small, clean, and tested.
@@ -92,7 +97,8 @@ Version 1 planned 7 days. Version 2 fits the same design into 3 days (Friday to 
 - Results that look too perfect, with no failures discussed.
 - Calling a small difference between setups a finding when it is within noise.
 - Claims about Jefferies' internal systems.
-- A web app, chatbot interface, or anything that looks like a copy of their product.
+- A chatbot, a live question-answering UI over financial data, or anything that looks like a copy of their product. (A static page that replays recorded eval runs, §13.1, is fine: it shows evidence, not a product.)
+- Any number on the results page that isn't read from the eval output files.
 - Broken links, an exposed API key, or a messy repo.
 - Numbers that contradict your resume or what you said in the interview.
 
@@ -158,11 +164,11 @@ There are no predicted numbers. Whatever the results show gets reported as is.
 - 5 tables and about 20 tag entries
 - 4 MCP tools
 - 42 questions (7 per category; minimum 36), 4 setups, 3 runs each (504 runs), one model
-- A README whose first screen carries the write-up, and a two-minute video
+- A static, read-only results page for the pitch (§13.1), a README whose first screen carries the write-up, and a two-minute video
 
 **Not in scope:**
 
-- Any user interface
+- Any interactive product UI: no chatbot, no live querying, no login, no backend. The only frontend is the static results page in §13.1.
 - Streaming (one line in "next steps")
 - Deploying on Databricks
 - Auto-tagging (RQ4; one line in "next steps")
@@ -179,10 +185,10 @@ There are no predicted numbers. Whatever the results show gets reported as is.
 SOURCES                         INGESTION              STORAGE                    CORE LOGIC            INTERFACES                 OUTPUTS
 SEC XBRL companyfacts API  ───► src/ingest_sec.py  ─┐
 Wikimedia pageviews API    ───► src/ingest_wiki.py ─┤
-FRED CSV                   ───► src/ingest_fred.py ─┼─► src/build_db.py ─► data/warehouse.duckdb ─┐
+BLS + Census (manual)      ───► src/ingest_macro.py─┼─► src/build_db.py ─► data/warehouse.duckdb ─┐
 Earnings releases (manual) ───► data/comps*.csv    ─┘                                               ├─► src/semantics.py ─┬─► src/mcp_server.py ──► Claude Code demo, Loom
                                                          tags/tags.yaml ─► src/tags.py (validate) ──┘   (the only place    └─► eval/run_eval.py ──► eval/results/*.jsonl
-                                                                                                         math rules live)                             └─► eval/score.py ──► results table, README
+                                                                                                         math rules live)                             └─► eval/score.py ──► summary.json ──► report/build_report.py ──► docs/index.html (results page), README
 ```
 
 **The layers and why each exists:**
@@ -197,7 +203,7 @@ Earnings releases (manual) ───► data/comps*.csv    ─┘               
 **Design principles (say these in the interview):**
 
 - Store data as filed and interpret it in one place.
-- Every number carries lineage: a filing accession number, a FRED series and retrieval date, or a release URL.
+- Every number carries lineage: a filing accession number, a BLS or Census series with its download date, or a release URL.
 - Agents get read-only access.
 - The answer key is computed independently of `semantics.py` and checked by hand.
 - Questions are drafted before the core logic exists and frozen before any evaluation run.
@@ -288,20 +294,23 @@ def fiscal_labels(end, fye_month=12):
 
 ### 6.3 Wikipedia pageviews (the alternative-data stand-in)
 
-- **Endpoint:** `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{title}/daily/20240101/20251231`. Use the same User-Agent header as for SEC.
+- **Endpoint:** `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{title}/daily/20240101/20251231`. Send the header `User-Agent: tagging-aggregation/0.1 (patelkaran.tech@gmail.com)`, Wikimedia's preferred format. Wait for each request to finish before sending the next.
 - **Brand articles (8):** Chipotle, Wingstop, KFC, Taco Bell, Pizza Hut, Habit Burger Grill, Olive Garden, LongHorn Steakhouse.
 - **Parent articles (2):** Yum! Brands, Darden Restaurants.
 - **Verify each title in a browser first** and copy it from the URL. The API counts only that exact title; views of redirect pages are not included.
 - **Labeling:** brand articles get grain `brand`, parent articles get grain `parent`. For single-brand companies, the brand article is the only row.
 - **Periods:** these are calendar dates. Questions about this data use calendar quarters (CY2025Q1, and so on).
 
-### 6.4 FRED macro data
+### 6.4 Macro data (primary government sources, downloaded by hand)
 
-- **Food-service sales:** `https://fred.stlouisfed.org/graph/fredgraph.csv?id=RSFSDP`
-- **CPI, food away from home:** `https://fred.stlouisfed.org/graph/fredgraph.csv?id=CUSR0000SEFV`
-- From each series' FRED page, write down the units, seasonal adjustment, whether it's annualized, and the base period for the index. These go into the tags verbatim.
-- Record the retrieval date. Retail sales estimates get revised after first release, so the date is part of the lineage.
-- Check the CSV column names; FRED has changed them before.
+FRED's terms of use forbid "data mining, scraping or extraction" and use "in connection with the development or training of any software program or system or machine learning." So both series come straight from the agencies that publish them. Both are U.S. government data; BLS states that everything it publishes is in the public domain.
+
+- **CPI, food away from home:** Bureau of Labor Statistics series `CUSR0000SEFV` (seasonally adjusted, U.S. city average). Download the monthly values from January 2024 to the latest month from the BLS data tools. Save the file exactly as downloaded in `data/raw/macro/`, with a name like `bls_CUSR0000SEFV.csv`.
+- **Food-service sales:** Census Bureau monthly retail trade data, "Food services and drinking places" (NAICS 722), seasonally adjusted, millions of dollars. Download the monthly values for the same months. Save the file exactly as downloaded in `data/raw/macro/`, with a name like `census_naics722_sa.csv`. Note whether the values are advance estimates or revised estimates.
+- **Record in the decisions log, from each source page:** units, seasonal adjustment, whether the series is annualized, the CPI base period, the page URL, and the download date. These go into the tags word for word.
+- The download date is part of the lineage, because retail sales estimates get revised after first release.
+- `macro_monthly.series_id` values: `CUSR0000SEFV` for CPI and `CENSUS_722_SA` for food-service sales.
+- No network is needed for this data. `src/ingest_macro.py` reads the local files only.
 
 ### 6.5 Comparable sales (entered by hand)
 
@@ -427,7 +436,7 @@ Loading should fail loudly on any unknown field or bad value. Add a rule that me
 | derived.operating_margin | ratio | Computed as total operating income ÷ total revenue; never averaged |
 | comps_quarterly.comp_sales_pct | ratio | Not addable; comparability is by definition ID, so cross-company comparisons must warn |
 | brand_attention_daily.views | count | Addable; roll up using brand rows only (parent rows would double-count) |
-| macro.RSFSDP | flow | Monthly; a quarter is the sum of its months *if* the series isn't annualized (check FRED) |
+| macro.food_services_sales | flow | Census NAICS 722, monthly, seasonally adjusted; a quarter is the sum of its months *if* the series isn't annualized (check the Census page) |
 | macro.CUSR0000SEFV | index | Use percent change or a period average; never sum |
 | Dimension columns: ticker, fiscal_year, fiscal_quarter, period_basis, period_end, grain, parent_ticker, accession, date | dimension / identifier | Describe their meaning only |
 
@@ -570,7 +579,7 @@ The expected values in these tests must come from filings you checked by hand, n
 - **Never use `semantics.py` to compute the answer key.** Use a separate short script, `eval/make_questions.py`, with direct pandas or SQL, so the code being tested is not grading itself. Check yourself that it imports nothing from `semantics.py`.
 - Then check every answer by hand in `eval/verification_log.csv`, with columns `question_id, source_url, where_in_source, value_seen, matches, notes`. Reuse the rows from `tests/expected_values.md` where they apply:
   - **SEC numbers:** open the filing and find the number in the statement. For derived quarters, check both pieces. For CMG EPS, check against the latest filing that shows that period (post-split).
-  - **FRED:** check against the series page.
+  - **BLS and Census:** check against the downloaded file and the agency's own web page for that series.
   - **Comps:** check against the earnings release.
   - **Pageviews:** spot-check three totals with the Wikimedia "Pageviews Analysis" web tool, and confirm the parent row is excluded.
 - No question goes into an evaluation run until its log row says `matches = yes`.
@@ -599,11 +608,13 @@ All four share the same model, the same base instructions, and the same final-an
 
 ### 11.5 Harness (`eval/run_eval.py`)
 
-- Model `claude-sonnet-5-5`, default temperature, up to 10 tool-use turns, `max_tokens` 2000.
+- Model `claude-haiku-5-5` (Anthropic API), default temperature, up to 10 tool-use turns, `max_tokens` 2000.
+- **Cost control:** the harness adds up the cost after every run from the token counts and the published prices, and stops at a hard cap of **$5**. Cache the fixed part of each prompt (instructions plus the setup's context) with prompt caching. The estimated full-run cost is about $1.
+- **API key:** read from `ANTHROPIC_API_KEY`, stored as a network secret in the cloud environment or in a local `.env`. Never committed.
 - 3 runs for each question and setup: 504 runs for 42 questions. Concurrency of 5.
 - Retry API errors with increasing waits. Never retry because an answer was wrong.
 - For each run, write one line to `eval/results/{setup}.jsonl`: question_id, setup, run, final, all tool calls with inputs, full text, tokens, and time taken.
-- **Pilot first:** 5 questions × 4 setups = 20 runs. Read every transcript, fix bugs, and estimate the cost from actual token use before the full run.
+- **Pilot first:** 5 questions × 4 setups = 20 runs. Read every transcript, fix bugs, and project the full-run cost from actual token use. Start the full run only if the projection is under the cap.
 - **Fallback:** if the pilot shows a cost or rate-limit problem, use 2 runs per question and say so in the README.
 
 ### 11.6 Scoring (`eval/score.py`)
@@ -632,6 +643,9 @@ All four share the same model, the same base instructions, and the same final-an
 - Behavior accuracy.
 - **B vs. C paired by question:** how many questions B got right and C got wrong, and the reverse (majority vote across runs). With this sample size, a difference of a few questions is within noise and must be reported that way.
 - Average tool calls and tokens per question, which shows the cost of each setup.
+- The total cost of the run and the exact model ID and run date.
+
+`score.py` also writes the same results as `eval/results/summary.json`. The results page (§13.1) reads only this file, `questions.yaml`, `tags.yaml`, `verification_log.csv` and the `.jsonl` transcripts.
 
 ### 11.7 Error analysis
 
@@ -667,11 +681,14 @@ Rules for this repo:
 - Never invent data values. If a value can't be fetched or found, stop and tell me.
 - Never commit API keys. Read keys from .env.
 - Follow SPEC.md exactly; ask before changing the schema, tag fields, tool descriptions, or the question file.
-- Scope is Version 2: 4 companies (CMG, WING, YUM, DRI), 42 questions, 504 runs. No auto-tagging, no case study PDF.
+- Scope is Version 2.2: 4 companies (CMG, WING, YUM, DRI), 42 questions, 504 runs, eval model claude-haiku-5-5 with a $5 cap. No auto-tagging, no case study PDF.
+- The only frontend is the static results page in SPEC.md §13.1. Never build a chatbot, a live query UI, or a backend. Every number on the page must be read from eval output files.
 - semantics.py is the only place aggregation rules live.
 - The eval answer key must never be computed with semantics.py.
 - Agents get read-only DuckDB access.
 - Never change a test's expected value to make it pass.
+- Start every session from an up-to-date main (git pull). If SPEC.md is missing, stop and tell me; never go looking for it on other branches.
+- End every phase by committing, pushing, and opening a PR into main. Never merge it yourself; I merge after my checks.
 - Every phase ends by running its acceptance checks and showing the output. Then stop.
 ```
 
@@ -695,15 +712,16 @@ Rules for this repo:
 **Phase 4: Comps entry (you, by hand, while Phase 1 runs).** Spec §6.5. Claude Code only creates the two CSV templates.
 - **Accept when:** 12 values entered, 3 definitions, every value re-checked.
 - **You check personally:** all of it. This phase is the finance-credibility core.
-- **Also while Phase 1 runs:** verify the 10 Wikipedia titles in a browser, and write the FRED metadata into the decisions log.
+- **Also while Phase 1 runs:** verify the 10 Wikipedia titles in a browser, and download the BLS and Census files into `data/raw/macro/` and write their metadata into the decisions log (§6.4).
 
 **Phase 2: Wikipedia ingestion.** Spec §6.3.
 - **Files:** `src/ingest_wiki.py`, raw JSON, parquet.
 - **Accept when:** 731 rows per article for all 10 articles, with no gaps.
 
-**Phase 3: FRED ingestion.** Spec §6.4. Can run in the same session as Phase 2.
-- **Accept when:** both series loaded with a retrieval date.
-- **Prompt seed (Phases 2 and 3):** "Read SPEC.md §6.3, §6.4 and §12 Phases 2 and 3. Do Phases 2 and 3 only. Use exactly these Wikipedia titles: <paste the 10 titles>. Record the FRED retrieval date. Run both phases' acceptance checks and show the output. Then stop."
+**Phase 3: Macro ingestion.** Spec §6.4. Can run in the same session as Phase 2.
+- **Files:** `src/ingest_macro.py`, reading only the local files in `data/raw/macro/`. No network.
+- **Accept when:** both series loaded monthly from January 2024, each with its download date, units and seasonal adjustment as recorded in the decisions log.
+- **Prompt seed (Phases 2 and 3):** "Read SPEC.md §6.3, §6.4 and §12 Phases 2 and 3. Do Phases 2 and 3 only. Use exactly these Wikipedia titles: <paste the 10 titles>. Read the macro data only from the local files in data/raw/macro/; take download dates and units from the decisions log. Run both phases' acceptance checks and show the output. Then stop."
 
 **Phase 5: Build the database.** Spec §7.
 - **Accept when:** all data checks in §7 print clean.
@@ -722,7 +740,7 @@ Rules for this repo:
   - The validator passes.
   - A deliberately broken tag fails validation.
 - **You check personally:** every additivity and time-rollup value.
-- **Prompt seed:** "Read SPEC.md §8 and §12 Phase 6. Do Phase 6 only. Use the FRED units, seasonal adjustment and annualization from the decisions log, word for word. Show that a deliberately broken tag fails validation. Then stop."
+- **Prompt seed:** "Read SPEC.md §8 and §12 Phase 6. Do Phase 6 only. Use the BLS and Census units, seasonal adjustment and annualization from the decisions log, word for word. Show that a deliberately broken tag fails validation. Then stop."
 
 **Phase 7: Core logic and tests.** Spec §9.
 - **Order:** first, you collect expected values from filings into `tests/expected_values.md` (about 1 hour). Then Claude Code writes the tests from those values only, you approve them, and then it writes the code.
@@ -758,20 +776,30 @@ Rules for this repo:
 **Phase 12: Harness and pilot.** Spec §11.4–11.5.
 - **Accept when:** the pilot of 20 runs completes and the transcripts look sensible.
 - **You check personally:** read all 20 transcripts. Decide on 3 runs or 2 from the measured cost, and record the decision.
-- **Prompt seed:** "Read SPEC.md §11.4–11.5 and §12 Phase 12. Build eval/run_eval.py with concurrency 5 and a --pilot flag (5 questions x 4 setups). Run the pilot. Print tokens and cost per run and an estimate for the full run. Then stop."
+- **Prompt seed:** "Read SPEC.md §11.4–11.5 and §12 Phase 12. Build eval/run_eval.py for claude-haiku-5-5 with prompt caching, concurrency 5, a running cost total with a hard $5 cap, and a --pilot flag (5 questions x 4 setups). Run the pilot. Print tokens and cost per run and the projected cost of the full run. Then stop."
 
 **Phase 13: Full run and scoring.** Spec §11.6.
 - **Files:** `eval/results/*.jsonl`, `eval/score.py`, `eval/results/summary.md`.
 - **Accept when:** all runs complete, parse failures are listed, and the tables are generated, including the B vs. C paired table.
 - **You check personally:** pick three runs at random and check their scores by hand.
-- **While the full run is going:** write the README sections that don't depend on results (§13).
+- **While the full run is going:** Claude Code builds the results page (Phase 15a) against the pilot results, and you write the README sections that don't depend on results (§13).
 
 **Phase 14: Error analysis.** Spec §11.7.
 - **Files:** `docs/error_analysis.md`.
 - **You check personally:** written by you, using examples Claude Code pulls out of the transcripts.
 
-**Phase 15: Write-up, video, and email.** Spec §13.
-- **Accept when:** the README's first screen is complete, the video is recorded, the email is drafted (not sent), and the quickstart works from a fresh clone.
+**Phase 15a: Results page.** Spec §13.1. Built by Claude Code while the full run (Phase 13) is going, first against the pilot results, then regenerated from the full results.
+- **Files:** `report/build_report.py`, `report/template.html`, `report/replays.yaml`, `docs/index.html`.
+- **Accept when:**
+  - `python report/build_report.py` builds `docs/index.html` from the eval output files only, and fails loudly if any file or number is missing.
+  - The page opens offline from the file system and on GitHub Pages.
+  - All six sections in §13.1 render at a 1440-pixel-wide laptop window, and the page also reads at phone width.
+  - Every SEC link on the page opens the right filing.
+- **You check personally:** every number on the page against `summary.md`; the replay for Yum's total assets in setups A and D; that nothing on the page claims more than the results show.
+- **Prompt seed:** "Read SPEC.md §13.1 and §12 Phase 15a. Build report/build_report.py and the template. The page is static and read-only: no backend, no API calls, no chatbot, no external scripts except one pinned charting library if needed. Read data only from eval/results/summary.json, eval/results/*.jsonl, eval/questions.yaml, tags/tags.yaml and eval/verification_log.csv. Use eval/results/pilot results for now. Fail loudly if any number is missing. Then stop."
+
+**Phase 15b: Write-up, video, and email.** Spec §13.
+- **Accept when:** the results page is regenerated from the full results, the README's first screen is complete, the video is recorded from the results page plus the live MCP demo, the email is drafted (not sent), and the quickstart works from a fresh clone.
 
 **Phase 16: Auto-tagging. CUT in Version 2.** Listed as a next step in the README.
 
@@ -784,7 +812,7 @@ Rules for this repo:
 1. Title, plus one sentence stating the problem.
 2. The results table: accuracy by setup, and trap-hit rate.
 3. A three-line takeaway. Lead with the B vs. C result, stated honestly (if the difference is within noise, say so).
-4. A GIF or link to the video.
+4. A link to the results page (§13.1) and to the video.
 5. Quickstart: `python src/build_db.py && pytest && python eval/run_eval.py --pilot`
 6. Architecture diagram (§5).
 7. How the answer key was verified.
@@ -794,15 +822,49 @@ Rules for this repo:
 11. "How this maps to Unity Catalog," two hedged sentences.
 12. Next steps: auto-tagging for vendor onboarding, a clean-table baseline, streaming (one line each).
 
+### 13.1 Results page: the pitch frontend (`docs/index.html`)
+
+**Why it exists:** the reader will spend about two minutes. They won't read a repo, and a terminal recording is hard to follow. The results page turns the evidence into something they can see at a glance in the Loom video and open themselves afterwards.
+
+**What it is:** one static, read-only HTML page, generated by `report/build_report.py` from the recorded eval output, and published free on GitHub Pages from the `docs/` folder. No backend, no login, no API key, no live model calls, no cost.
+
+**What it is not:** not a chatbot, not a query box, not a product. It replays runs that already happened. This keeps it from looking like a copy of their analyst platform, and it can't fail on camera.
+
+**Sections, top to bottom:**
+
+1. **The problem.** One sentence, plus the Yum example: `SUM(total_assets)` over four quarters vs. the year-end balance, both numbers shown, with the 10-K link.
+2. **Results at a glance.** A bar chart of accuracy by setup (A, B, C, D) with the run-to-run range, and trap-hit rate by setup. The sample size is printed beside the chart ("42 questions × 3 runs, claude-haiku-5-5, run on <date>").
+3. **Side-by-side replay.** A picker for 6 questions you choose, one per category, listed in `report/replays.yaml`. For the chosen question it shows setup A and setup D in two columns, with tabs for B and C:
+   - each step the model took: the SQL it wrote or the tool it called, with inputs;
+   - a short excerpt of what came back;
+   - the final answer, a badge (correct, or the name of the trap it hit), the correct answer, and the source links.
+   Transcripts are shown as recorded, shortened with a "show full" toggle, never edited.
+4. **What a tag looks like.** The tag cards for `total_assets` and `op_cash_flow`, each with one plain sentence on what the tag tells the model.
+5. **B vs. C.** The paired result in one box, with the honest wording from §13 (if the difference is within noise, the page says so).
+6. **How it was checked.** Answer key computed without `semantics.py`; number of questions hand-verified against filings; questions frozen before any run (with the commit date of the draft); the limits from §11.8; links to the repo and the error analysis.
+
+**Rules:**
+
+- **Never stage a failure.** If setup A happened to answer the Yum question correctly, replay the clearest real setup A failure instead, and say in the video that A sometimes gets it right. Pick the replays only after the full run.
+- Every number on the page is read from `summary.json` or the other output files at build time. No number is typed into the template. The build fails if one is missing.
+- Plain language, modest claims: "a small experiment."
+- No Jefferies or Databricks logos, names in headings, or styling.
+- Readable at a 1440-pixel laptop window for recording, and at phone width.
+- Light and dark themes, a clear type scale, and one accent color. Green, red and amber are used only for correct, wrong and warning.
+- Self-contained: inline CSS and JS. At most one charting library from a CDN, pinned to an exact version, or hand-drawn SVG bars.
+
+**Time budget:** about 2 hours of Claude Code time on Sunday while the full run is going, plus 30 minutes of your checking.
+
 **Two-minute Loom script (one or two takes, no editing, under 2:30):**
 
-| Time | What to show |
-|---|---|
-| 0:00–0:15 | The problem in one sentence |
-| 0:15–0:45 | Setup A sums four quarters of Yum's total assets: a wrong answer, delivered confidently |
-| 0:45–1:20 | Setup D: the tool rejects the method, returns the Q4 balance, and you click the filing link on camera |
-| 1:20–1:45 | The results table, and the one most surprising finding |
-| 1:45–2:00 | Limitations and next step |
+| Time | Screen | What you say |
+|---|---|---|
+| 0:00–0:15 | Results page, section 1 | The problem in one sentence: valid SQL, wrong answer |
+| 0:15–0:45 | Replay: Yum's FY2025 total assets, setup A | The model sums four quarter-end balances and answers confidently; the badge names the trap |
+| 0:45–1:10 | Same replay, setup D | The tool rejects the sum, returns the year-end balance; you click the filing link and the 10-K opens |
+| 1:10–1:25 | Claude Code, live | One question through the MCP server, to show it's a working tool, not just a page |
+| 1:25–1:50 | Results page, sections 2 and 5 | The results chart and the B vs. C finding, stated honestly |
+| 1:50–2:10 | Results page, section 6 | How the answers were checked, the main limit, and the next step |
 
 **The email:** use the draft from earlier in this conversation. Fill in the numbers only from `summary.md`, and verify the recipient's name.
 
@@ -847,7 +909,7 @@ Rules for this repo:
 |---|---|
 | Fri Oct 23 | 0–5, plus question drafting (comps by hand while Phase 1 runs) |
 | Sat Oct 24 | 6–10; questions frozen by the end of the day (protect the evening) |
-| Sun Oct 25 | 11–15 |
+| Sun Oct 25 | 11–15 (the results page, 15a, is built while the full run goes) |
 | Mon Oct 26, morning ET | Pre-send checklist, then send (8:30–10:00 ET) |
 
 **Risks and fallbacks (decide now, not at 1 a.m.):**
@@ -862,7 +924,8 @@ Rules for this repo:
 | Pilot shows high cost or rate limits | Sun noon | Use 2 runs per question and say so in the README. |
 | Full run unfinished | Sun 6 p.m. | Score only if every setup has every question for at least 2 runs. Never compare setups on different questions. |
 | D wins too easily | Sun, during write-up | Report it honestly, include D's failures and limits, and lead with the B-vs-C result |
-| Video isn't working | Sun 10 p.m. | Record a plain one-take screen capture of the demo only. |
+| Results page not ready | Sun 6 p.m. | Ship only sections 1–3 (problem, results, Yum replay). If even that fails, record the Loom from the README and the live MCP demo. |
+| Video isn't working | Sun 10 p.m. | Record a plain one-take screen capture of the results page and the demo only. |
 | Still behind on Sunday night | Sun 11 p.m. | Send Tuesday morning instead. A one-day slip costs little; a wrong number costs a lot. |
 
 **Cut order (if still late after the fallbacks above):** video polish first (a plain recording is fine), then WING's fundamentals. Never cut hand verification, setup B, or the error analysis.
@@ -884,7 +947,8 @@ Rules for this repo:
 - One XBRL concept per (ticker, metric), chosen for full coverage.
 - Tags per metric.
 - B contains the same facts as C; D has no SQL.
-- One model, 3 runs (2 if the pilot requires it).
+- One model, claude-haiku-5-5, with a $5 budget cap; 3 runs (2 if the pilot requires it).
+- The only frontend is a static, read-only results page generated from eval output; no chatbot or live UI.
 - 42 questions (minimum 36), drafted before the core logic and frozen before any run.
 - Answer key built independently of `semantics.py` and hand-verified.
 - Auto-tagging and the case study PDF cut.
@@ -892,7 +956,7 @@ Rules for this repo:
 **Open questions to decide during the build (record answers here):**
 
 - Exact Wikipedia titles.
-- FRED series details (units, seasonal adjustment, annualization, CPI base period).
+- BLS and Census series details (units, seasonal adjustment, annualization, CPI base period, advance or revised estimates).
 - Whether any company is missing a metric's concept.
 - Whether Darden's fiscal 2026 is a 53-week year.
 - 3 runs or 2, after the pilot.
@@ -904,7 +968,8 @@ Rules for this repo:
 - [ ] NorthPort and other numbers are consistent with your resume and what you said in the interview.
 - [ ] Repo is public, and links open in a private browser window.
 - [ ] No keys in git history (`git log -p | grep -i key`).
-- [ ] README's first screen shows the problem, results, and video.
+- [ ] README's first screen shows the problem, results, and links to the results page and video.
+- [ ] Results page is live on GitHub Pages, every number matches `summary.md`, and every link opens.
 - [ ] Video is under 2:30 and the filing link works on camera.
 - [ ] Language is modest: a small experiment, no claims about Jefferies' internal systems.
 - [ ] You have re-run the quickstart from a fresh clone.
