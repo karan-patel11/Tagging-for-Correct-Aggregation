@@ -360,7 +360,7 @@ CREATE TABLE macro_monthly (
 
 - Row counts per table.
 - Each of the 4 companies has 8 fiscal quarters of balance-sheet values.
-- Each of the 10 brands and parents has 731 days, summed across its titles (Habit Burger Grill has two titles) (2024 is a leap year).
+- Each of the 10 brands and parents has 731 days, summed across its titles (Habit Burger Grill has two titles; 2024 is a leap year).
 - No duplicate keys, using the date-based keys in §6.2 (never fiscal labels).
 - No `period_basis = 'other'` rows left.
 - 12 comps rows and 3 definitions.
@@ -716,7 +716,7 @@ Rules for this repo:
 
 **Phase 2: Wikipedia ingestion.** Spec §6.3.
 - **Files:** `src/ingest_wiki.py`, raw JSON, parquet.
-- **Accept when:** 731 rows per article for all 10 articles, with no gaps.
+- **Accept when:** 731 distinct dates per brand and parent, summed across titles, with no gaps.
 
 **Phase 3: Macro ingestion.** Spec §6.4. Can run in the same session as Phase 2.
 - **Files:** `src/ingest_macro.py`, reading only the local files in `data/raw/macro/`. No network.
