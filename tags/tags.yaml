@@ -1,0 +1,388 @@
+# Tags for the five tables in SPEC §7. One entry per metric (fundamentals is a long table), plus dimension and identifier columns.
+# Facts come from SPEC.md, its §15 decisions log, the data files and data/raw/*/retrieved.json.
+
+# ---- Measures ----
+
+- id: fundamentals.revenue
+  table: fundamentals
+  filter: {metric: revenue}
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  period_basis: mixed
+  derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Total revenue as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: fundamentals.operating_income
+  table: fundamentals
+  filter: {metric: operating_income}
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  period_basis: mixed
+  derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Operating income as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: fundamentals.net_income
+  table: fundamentals
+  filter: {metric: net_income}
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  period_basis: mixed
+  derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Net income as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: fundamentals.op_cash_flow
+  table: fundamentals
+  filter: {metric: op_cash_flow}
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  period_basis: mixed
+  derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Net cash provided by operating activities as filed; 10-Q values are year-to-date, and for DRI the metric is operating cash flow from continuing operations only. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: fundamentals.capex
+  table: fundamentals
+  filter: {metric: capex}
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  period_basis: mixed
+  derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Payments to acquire property, plant and equipment as filed, stored as positive numbers; 10-Q values are year-to-date. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: fundamentals.total_assets
+  table: fundamentals
+  filter: {metric: total_assets}
+  semantic_type: stock
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: false
+  time_rollup: last
+  valid_methods: [last, sum_across_entities, pct_change]
+  period_basis: mixed
+  derivation: "Balance at the period end; the yearly value is the balance at the last quarter end."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Total assets on the balance sheet at each quarter-end date, as originally reported. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: fundamentals.diluted_eps
+  table: fundamentals
+  filter: {metric: diluted_eps}
+  semantic_type: per_share
+  unit: USD/shares
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: reported_fy_value
+  valid_methods: []
+  period_basis: mixed
+  derivation: "The annual figure is the reported FY value. Q4 is never derived as FY minus YTD9."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  description: "Diluted earnings per share in USD per share as filed, with the reported figure for each period; share counts differ between periods and between companies, so values are not additive. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: derived.operating_margin
+  table: fundamentals
+  filter: {metric: [operating_income, revenue]}
+  semantic_type: ratio
+  unit: null
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: none
+  valid_methods: [ratio_of_sums]
+  period_basis: mixed
+  derivation: "Total operating income divided by total revenue over the same entities and period; never an average of ratios."
+  calendar: fiscal
+  entity_grain: company
+  lineage: {source: "Derived from fundamentals.operating_income and fundamentals.revenue", inputs_retrieved_on: "2026-10-24"}
+  description: "Operating margin, computed as total operating income divided by total revenue for the same entities and period; it is not stored in the database. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+
+- id: comps_quarterly.comp_sales_pct
+  table: comps_quarterly
+  filter: null
+  semantic_type: ratio
+  unit: percent
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: none
+  valid_methods: []
+  period_basis: quarterly
+  derivation: "Stored as printed in each company's earnings release; definition_id joins to comps_definitions (CMG_10K, WING_10K, DRI_10K)."
+  calendar: fiscal
+  entity_grain: company
+  comparability: by_definition_id
+  lineage: {source: "Company earnings releases (8-K Exhibit 99.1), entered by hand", id_column: source_url, cross_checked_on: "2026-10-24", retrieved_on: null}
+  description: "Quarterly comparable sales change in percent for CMG, WING and DRI, joined to the company's definition through definition_id. The three measures differ (CMG comparable restaurant sales, WING domestic same store sales, DRI blended consolidated same-restaurant sales), so values are not comparable across companies."
+
+- id: brand_attention_daily.views
+  table: brand_attention_daily
+  filter: null
+  semantic_type: count
+  unit: views
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, sum_across_entities, rollup_to_parent]
+  period_basis: daily
+  derivation: "Rollup to the parent uses grain = 'brand' rows only; Habit Burger Grill's two article titles are summed by date."
+  calendar: calendar
+  entity_grain: brand
+  hierarchy: "brand -> parent_ticker"
+  lineage: {source: "Wikimedia Pageviews REST API (en.wikipedia, all-access, user, daily)", url_template: "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{title}/daily/20240101/20251231", id_column: article_title, retrieved_on: "2026-10-24"}
+  description: "Daily English Wikipedia pageviews for the article in article_title, on calendar dates. Parent rows (grain = 'parent') are separate series and must not be added to brand rows; Habit Burger Grill has two article titles because the article was renamed, and they are summed by date."
+
+- id: macro.CUSR0000SEFV
+  table: macro_monthly
+  filter: {series_id: CUSR0000SEFV}
+  semantic_type: index
+  unit: index_points
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: mean
+  valid_methods: [pct_change, mean_over_time]
+  period_basis: monthly
+  derivation: "A period level is the mean of its monthly index values; changes are percent changes. A range that includes a missing month is insufficient data and is never averaged over the available months."
+  calendar: calendar
+  seasonal_adjustment: SA
+  annualized: false
+  lineage: {source: "U.S. Bureau of Labor Statistics", url: "https://data.bls.gov/timeseries/CUSR0000SEFV", id_column: series_id, file: "data/raw/macro/bls_CUSR0000SEFV.xlsx", retrieved_on: "2026-10-23"}
+  description: "CPI-U food away from home, U.S. city average, monthly index with base 1982-84 = 100, seasonally adjusted and not annualized. October 2025 was not published (lapse in appropriations) and is absent."
+
+- id: macro.food_services_sales
+  table: macro_monthly
+  filter: {series_id: CENSUS_722_SA}
+  semantic_type: flow
+  unit: USD_millions
+  additive_over_entities: false
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods: [sum_over_time, pct_change]
+  period_basis: monthly
+  derivation: "A calendar quarter is the sum of its three months, because the series is not annualized."
+  calendar: calendar
+  seasonal_adjustment: SA
+  annualized: false
+  lineage: {source: "U.S. Census Bureau, Monthly Retail Trade", url: "https://www.census.gov/econ/currentdata/", id_column: series_id, file: "data/raw/macro/census_naics722_sa.xlsx", release_date: "2026-10-15", retrieved_on: "2026-10-24"}
+  description: "Census Monthly Retail Trade, NAICS 722 Food services and drinking places, U.S. total, seasonally adjusted monthly sales in millions of USD, not annualized. The latest month in the file is a preliminary estimate that is later superseded by a revised estimate."
+
+# ---- Dimension and identifier columns ----
+
+- id: fundamentals.metric
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: metric}
+  description: "Name of the fundamentals metric the row holds; one value column carries all metrics."
+
+- id: fundamentals.ticker
+  table: fundamentals
+  semantic_type: identifier
+  lineage: {source: "fundamentals column", id_column: ticker}
+  description: "Stock ticker symbol of the company."
+
+- id: fundamentals.cik
+  table: fundamentals
+  semantic_type: identifier
+  lineage: {source: "fundamentals column", id_column: cik}
+  description: "SEC Central Index Key of the company."
+
+- id: fundamentals.concept
+  table: fundamentals
+  semantic_type: identifier
+  lineage: {source: "fundamentals column", id_column: concept}
+  description: "XBRL concept name the value was taken from; one concept is used per ticker and metric."
+
+- id: fundamentals.unit
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: unit}
+  description: "Unit of the value as filed: USD, or USD/shares for diluted EPS."
+
+- id: fundamentals.period_start
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: period_start}
+  description: "First day of the period the value covers; empty for balance-sheet (instant) values."
+
+- id: fundamentals.period_end
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: period_end}
+  description: "Last day of the period the value covers, or the balance-sheet date for instant values."
+
+- id: fundamentals.period_basis
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: period_basis}
+  description: "Length of the period, classified from its dates rather than the filing label: Q single quarter, YTD6 six months to date, YTD9 nine months to date, FY full year, instant balance-sheet date."
+
+- id: fundamentals.fiscal_year
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: fiscal_year}
+  description: "Fiscal year computed from the period end date using each company's fiscal year-end month (December for CMG, WING and YUM; May for DRI), not taken from the SEC fy field."
+
+- id: fundamentals.fiscal_quarter
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: fiscal_quarter}
+  description: "Fiscal quarter 1 to 4 computed from the period end date; YTD6 rows are quarter 2, YTD9 rows quarter 3 and FY rows quarter 4, so quarter alone does not identify a single period."
+
+- id: fundamentals.form
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: form}
+  description: "SEC form type of the source filing: 10-Q or 10-K."
+
+- id: fundamentals.accession
+  table: fundamentals
+  semantic_type: identifier
+  lineage: {source: "fundamentals column", id_column: accession}
+  description: "SEC accession number of the filing the value was taken from."
+
+- id: fundamentals.filed
+  table: fundamentals
+  semantic_type: dimension
+  lineage: {source: "fundamentals column", id_column: filed}
+  description: "Date the source filing was filed with the SEC."
+
+- id: comps_quarterly.ticker
+  table: comps_quarterly
+  semantic_type: identifier
+  lineage: {source: "comps_quarterly column", id_column: ticker}
+  description: "Stock ticker symbol of the company."
+
+- id: comps_quarterly.fiscal_year
+  table: comps_quarterly
+  semantic_type: dimension
+  lineage: {source: "comps_quarterly column", id_column: fiscal_year}
+  description: "Fiscal year the comparable sales value refers to."
+
+- id: comps_quarterly.fiscal_quarter
+  table: comps_quarterly
+  semantic_type: dimension
+  lineage: {source: "comps_quarterly column", id_column: fiscal_quarter}
+  description: "Fiscal quarter 1 to 4 the comparable sales value refers to."
+
+- id: comps_quarterly.definition_id
+  table: comps_quarterly
+  semantic_type: identifier
+  lineage: {source: "comps_quarterly column", id_column: definition_id}
+  description: "Key into comps_definitions identifying which company definition the value follows."
+
+- id: comps_quarterly.source_url
+  table: comps_quarterly
+  semantic_type: identifier
+  lineage: {source: "comps_quarterly column", id_column: source_url}
+  description: "URL of the earnings release (8-K Exhibit 99.1) the value was entered from."
+
+- id: comps_definitions.definition_id
+  table: comps_definitions
+  semantic_type: identifier
+  lineage: {source: "comps_definitions column", id_column: definition_id}
+  description: "Unique id of a comparable sales definition (CMG_10K, WING_10K, DRI_10K)."
+
+- id: comps_definitions.ticker
+  table: comps_definitions
+  semantic_type: identifier
+  lineage: {source: "comps_definitions column", id_column: ticker}
+  description: "Stock ticker symbol of the company the definition belongs to."
+
+- id: comps_definitions.definition_text
+  table: comps_definitions
+  semantic_type: dimension
+  lineage: {source: "comps_definitions column", id_column: definition_text}
+  description: "The company's own definition of its comparable sales measure, copied from its 10-K."
+
+- id: comps_definitions.source_url
+  table: comps_definitions
+  semantic_type: identifier
+  lineage: {source: "comps_definitions column", id_column: source_url}
+  description: "URL of the 10-K the definition was copied from."
+
+- id: comps_definitions.notes
+  table: comps_definitions
+  semantic_type: dimension
+  lineage: {source: "comps_definitions column", id_column: notes}
+  description: "Free-text notes on the definition."
+
+- id: brand_attention_daily.date
+  table: brand_attention_daily
+  semantic_type: dimension
+  lineage: {source: "brand_attention_daily column", id_column: date}
+  description: "Calendar date the pageview count refers to."
+
+- id: brand_attention_daily.article_title
+  table: brand_attention_daily
+  semantic_type: identifier
+  lineage: {source: "brand_attention_daily column", id_column: article_title}
+  description: "Exact Wikipedia article title whose pageviews the row counts."
+
+- id: brand_attention_daily.brand
+  table: brand_attention_daily
+  semantic_type: dimension
+  lineage: {source: "brand_attention_daily column", id_column: brand}
+  description: "Brand name for brand rows; the parent company name for parent rows."
+
+- id: brand_attention_daily.grain
+  table: brand_attention_daily
+  semantic_type: dimension
+  lineage: {source: "brand_attention_daily column", id_column: grain}
+  description: "Level of the row: brand for a brand's own article, parent for a parent company's article."
+
+- id: brand_attention_daily.parent_ticker
+  table: brand_attention_daily
+  semantic_type: identifier
+  lineage: {source: "brand_attention_daily column", id_column: parent_ticker}
+  description: "Ticker of the parent company; for a single-brand company, its own ticker."
+
+- id: macro_monthly.series_id
+  table: macro_monthly
+  semantic_type: identifier
+  lineage: {source: "macro_monthly column", id_column: series_id}
+  description: "Identifier of the macro series: CUSR0000SEFV for CPI, CENSUS_722_SA for food-service sales."
+
+- id: macro_monthly.date
+  table: macro_monthly
+  semantic_type: dimension
+  lineage: {source: "macro_monthly column", id_column: date}
+  description: "First day of the calendar month the value refers to."
+
+- id: macro_monthly.retrieved_on
+  table: macro_monthly
+  semantic_type: dimension
+  lineage: {source: "macro_monthly column", id_column: retrieved_on}
+  description: "Date the source file was downloaded."
