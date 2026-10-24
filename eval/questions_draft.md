@@ -47,7 +47,7 @@ Window: CMG, WING, YUM fiscal 2024–2025; DRI fiscal 2025–2026; comps CMG/WIN
 1. What was the percent change in the CPI for food away from home (seasonally adjusted) from December 2024 to December 2025?
 2. What was the percent change in the CPI for food away from home (seasonally adjusted) from June 2024 to June 2025?
 3. What was the annual average of the monthly CPI for food away from home (seasonally adjusted) for calendar 2024, in index points?
-4. What was the annual average of the monthly CPI for food away from home (seasonally adjusted) for calendar 2025, in index points?
+4. What was the percent change in the CPI for food away from home (seasonally adjusted) from December 2024 to June 2025?
 5. What were total US food services and drinking places sales (seasonally adjusted) for calendar Q3 2024, in millions of US dollars?
 6. What were total US food services and drinking places sales (seasonally adjusted) for calendar Q1 2025, in millions of US dollars?
 7. What were total US food services and drinking places sales (seasonally adjusted) for calendar Q2 2025, in millions of US dollars?
@@ -87,3 +87,7 @@ ratios:
 1. What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?
 2. What was Wingstop's full-year fiscal 2025 operating margin (year ended December 27, 2025), in percent?
 3. What was Chipotle's full-year fiscal 2024 operating margin, in percent?
+
+## Changes after draft
+
+Indices #4 replaced (was: annual average CPI for calendar 2025). Reason: BLS did not publish October 2025 CPI, so no 12-month average exists. Decided before any evaluation run.
