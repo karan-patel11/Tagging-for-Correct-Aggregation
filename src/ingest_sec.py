@@ -142,20 +142,58 @@ def load_rows(ticker):
 
 
 def dedupe(df):
-    """Latest-filed row per date-based key (§6.2 rule 3). Never key on fiscal labels."""
+    """One row per date-based key (§6.2 rule 3). Never key on fiscal labels.
+
+    Duration facts keep the latest-filed row (post-split EPS); instant (balance-sheet)
+    facts keep the earliest-filed row (as originally reported). Prints every key
+    where filings disagree on value.
+    """
     df = df.copy()
     df["_start"] = df.period_start.fillna(pd.Timestamp(0))
     key = ["ticker", "metric", "concept", "_start", "period_end"]
     df = df.sort_values(key + ["filed", "accession"])
-    latest = df.groupby(key)["filed"].transform("max")
-    tied = df[df.filed == latest]
+    instant = df.period_start.isna()
+    by_key = df.groupby(key)["filed"]
+    pick = by_key.transform("max").where(~instant, by_key.transform("min"))
+    tied = df[df.filed == pick]
     conflicts = tied.groupby(key)["value"].nunique()
     conflicts = conflicts[conflicts > 1]
     if len(conflicts):
         print("\nCONFLICT: same key, same filing date, different values:")
         print(tied.set_index(key).loc[conflicts.index].to_string())
         sys.exit("Stopping: resolve conflicting values by hand.")
-    return df.drop_duplicates(key, keep="last").drop(columns="_start")
+    kept = pd.concat([df[~instant].drop_duplicates(key, keep="last"),
+                      df[instant].drop_duplicates(key, keep="first")]).sort_values(key)
+    report_conflicts(df, kept, key)
+    return kept.drop(columns="_start")
+
+
+def report_conflicts(df, kept, key):
+    print("\n=== Filing conflicts ===")
+    n = df.groupby(key)["value"].nunique()
+    n = n[n > 1]
+    if not len(n):
+        print("NONE")
+        return
+    kept_by_key = kept.set_index(key)
+    for k in n.index:
+        ticker, metric, concept, _, end = k
+        grp = df.set_index(key).loc[[k]]
+        r = kept_by_key.loc[k]
+        start = "-" if pd.isna(r.period_start) else r.period_start.date()
+        print(f"{ticker} {metric} {concept} {r.period_basis} {start} .. {end.date()}  "
+              f"kept {r.value:,} ({r.accession})")
+        for g in grp.itertuples():
+            print(f"    {g.value:>20,}  {g.accession}  filed {g.filed.date()}")
+
+
+def copy_tag_suspects(kept):
+    """Kept rows whose value equals another kept row's value at a different period_end, same (ticker, metric), same accession."""
+    m = kept.merge(kept, on=["ticker", "metric", "accession", "value"], suffixes=("", "_match"))
+    m = m[m.period_end != m.period_end_match]
+    return m[["ticker", "metric", "concept", "period_basis", "period_start", "period_end", "value",
+              "accession", "filed", "concept_match", "period_basis_match", "period_start_match",
+              "period_end_match"]].drop_duplicates()
 
 
 def covered_periods(rows, metric):
@@ -194,6 +232,14 @@ def main():
                      "value", "form", "accession", "filed"]].to_string(index=False))
 
     rows = dedupe(allrows[allrows.period_basis != "other"])
+
+    print("\n=== Copy-tag suspects ===")
+    sus = copy_tag_suspects(rows)
+    if len(sus):
+        with pd.option_context("display.width", 250):
+            print(sus.to_string(index=False))
+    else:
+        print("NONE")
 
     # Coverage table and concept choice.
     print("\n=== Concept coverage (window periods; flows: Q1=Q, Q2=Q|YTD6, Q3=Q|YTD9, Q4=FY) ===")
