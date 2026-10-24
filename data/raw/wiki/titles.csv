@@ -1,0 +1,12 @@
+brand,grain,parent_ticker,api_title
+Chipotle,brand,CMG,Chipotle_Mexican_Grill
+Wingstop,brand,WING,Wingstop
+KFC,brand,YUM,KFC
+Taco Bell,brand,YUM,Taco_Bell
+Pizza Hut,brand,YUM,Pizza_Hut
+Habit Burger Grill,brand,YUM,Habit_Burger_&_Grill
+Habit Burger Grill,brand,YUM,The_Habit_Burger_Grill
+Olive Garden,brand,DRI,Olive_Garden
+LongHorn Steakhouse,brand,DRI,LongHorn_Steakhouse
+Yum! Brands,parent,YUM,Yum!_Brands
+Darden Restaurants,parent,DRI,Darden_Restaurants

@@ -1,0 +1,79 @@
+{
+  "Chipotle_Mexican_Grill": {
+    "title": "Chipotle_Mexican_Grill",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Chipotle_Mexican_Grill/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:13:39Z"
+  },
+  "Wingstop": {
+    "title": "Wingstop",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Wingstop/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:14:00Z"
+  },
+  "KFC": {
+    "title": "KFC",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/KFC/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:14:03Z"
+  },
+  "Taco_Bell": {
+    "title": "Taco_Bell",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Taco_Bell/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:14:05Z"
+  },
+  "Pizza_Hut": {
+    "title": "Pizza_Hut",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Pizza_Hut/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:14:08Z"
+  },
+  "Habit_Burger_&_Grill": {
+    "title": "Habit_Burger_&_Grill",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Habit_Burger_%26_Grill/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 490,
+    "retrieved_at_utc": "2026-10-24T02:14:10Z"
+  },
+  "The_Habit_Burger_Grill": {
+    "title": "The_Habit_Burger_Grill",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/The_Habit_Burger_Grill/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:14:12Z"
+  },
+  "Olive_Garden": {
+    "title": "Olive_Garden",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Olive_Garden/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:15:00Z"
+  },
+  "LongHorn_Steakhouse": {
+    "title": "LongHorn_Steakhouse",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/LongHorn_Steakhouse/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:15:03Z"
+  },
+  "Yum!_Brands": {
+    "title": "Yum!_Brands",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Yum%21_Brands/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:15:05Z"
+  },
+  "Darden_Restaurants": {
+    "title": "Darden_Restaurants",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Darden_Restaurants/daily/20240101/20251231",
+    "http_status": 200,
+    "items": 731,
+    "retrieved_at_utc": "2026-10-24T02:15:07Z"
+  }
+}
