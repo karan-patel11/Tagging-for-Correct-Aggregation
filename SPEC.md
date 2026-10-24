@@ -962,6 +962,9 @@ Rules for this repo:
 - Copy-tag check compares kept rows with other kept rows only. Copies removed by the earliest-filed rule appear in the filing-conflicts report instead.
 - Wikipedia: "Chipotle" is the pepper article; the brand uses "Chipotle_Mexican_Grill".
 - Wikipedia: Habit Burger Grill was renamed during the window. Both titles are stored as brand rows and summed by date; the Pageviews API logs each request under one title, so this does not double-count. Habit therefore includes one former title's views; no other brand includes redirect views. Both are listed as limitations.
+- Macro CPI: BLS CUSR0000SEFV, CPI-U food away from home, U.S. city average. Units: index, base 1982-84 = 100. Seasonally adjusted: yes. Annualized: no. URL: https://data.bls.gov/timeseries/CUSR0000SEFV. Downloaded: 2026-10-23. File: data/raw/macro/bls_CUSR0000SEFV.xlsx. BLS did not publish 2025-10 (data unavailable due to the 2025 lapse in appropriations); the month is absent from macro_monthly and is never filled.
+- Macro food-service sales: Census Monthly Retail Trade, NAICS 722 Food services and drinking places, U.S. total, seasonally adjusted sales, monthly. Units: millions of USD, not annualized. Release date: October 15, 2026. The latest month in the file (2026-08) is a preliminary estimate (all current-month estimates are preliminary and are later superseded by revised estimates); Census prints NA for months without data. URL: https://www.census.gov/econ/currentdata/. Downloaded: 2026-10-24. File: data/raw/macro/census_naics722_sa.xlsx.
+- semantics.py: mean_over_time and any aggregation over a range that includes a missing month returns status error with "insufficient data". It never averages the available months.
 
 **Open questions to decide during the build (record answers here):**
 
