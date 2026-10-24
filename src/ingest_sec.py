@@ -34,7 +34,8 @@ CANDIDATES = {
     "revenue": ("USD", ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues"]),
     "operating_income": ("USD", ["OperatingIncomeLoss"]),
     "net_income": ("USD", ["NetIncomeLoss"]),
-    "op_cash_flow": ("USD", ["NetCashProvidedByUsedInOperatingActivities"]),
+    "op_cash_flow": ("USD", ["NetCashProvidedByUsedInOperatingActivities",
+                             "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"]),
     "capex": ("USD", ["PaymentsToAcquirePropertyPlantAndEquipment"]),
     "total_assets": ("USD", ["Assets"]),
     "diluted_eps": ("USD/shares", ["EarningsPerShareDiluted"]),
@@ -159,10 +160,14 @@ def dedupe(df):
 
 def covered_periods(rows, metric):
     """Fiscal (year, quarter) pairs a concept covers, per FLOW_COVER or instant rows."""
+    if rows.empty:
+        return set()
     if metric in INSTANT_METRICS:
         ok = rows[rows.period_basis == "instant"]
     else:
-        ok = rows[[b in FLOW_COVER[q] for b, q in zip(rows.period_basis, rows.fiscal_quarter)]]
+        mask = pd.Series([b in FLOW_COVER[q] for b, q in zip(rows.period_basis, rows.fiscal_quarter)],
+                         index=rows.index, dtype=bool)
+        ok = rows[mask]
     return set(zip(ok.fiscal_year, ok.fiscal_quarter))
 
 

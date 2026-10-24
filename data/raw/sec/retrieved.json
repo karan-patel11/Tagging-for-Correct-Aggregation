@@ -1,0 +1,22 @@
+{
+  "CMG": {
+    "cik": "0001058090",
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001058090.json",
+    "retrieved_on": "2026-10-24"
+  },
+  "WING": {
+    "cik": "0001636222",
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001636222.json",
+    "retrieved_on": "2026-10-24"
+  },
+  "YUM": {
+    "cik": "0001041061",
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001041061.json",
+    "retrieved_on": "2026-10-24"
+  },
+  "DRI": {
+    "cik": "0000940944",
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000940944.json",
+    "retrieved_on": "2026-10-24"
+  }
+}
