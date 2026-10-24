@@ -253,7 +253,7 @@ CAVA and Sweetgreen are not in the data. CAVA appears in exactly one question, a
 | revenue | `RevenueFromContractWithCustomerExcludingAssessedTax`, `Revenues` |
 | operating_income | `OperatingIncomeLoss` |
 | net_income | `NetIncomeLoss` |
-| op_cash_flow | `NetCashProvidedByUsedInOperatingActivities` |
+| op_cash_flow | `NetCashProvidedByUsedInOperatingActivities`, `NetCashProvidedByUsedInOperatingActivitiesContinuingOperations` |
 | capex | `PaymentsToAcquirePropertyPlantAndEquipment` |
 | total_assets | `Assets` |
 | diluted_eps | `EarningsPerShareDiluted` (unit `USD/shares`) |
@@ -269,7 +269,7 @@ CAVA and Sweetgreen are not in the data. CAVA appears in exactly one question, a
 
 1. **Ignore the JSON's `fy` and `fp` fields.** They describe the filing, not the number. A FY2025 10-K also contains FY2024 comparison figures, all labeled 2025. Compute fiscal labels yourself from the period end date.
 2. **Classify each row by how long its period is,** not by its label. Restaurant companies use 52/53-week calendars, so quarters run 84–98 days.
-3. **Remove duplicates by date-based keys.** For duration facts, keep the latest-filed row for each (ticker, metric, period_start, period_end). For balance-sheet facts, keep the latest-filed row for each (ticker, metric, period_end). Never use fiscal labels as keys: a YTD9 row and a Q3 row both get fiscal quarter 3. Using the latest filing means post-split EPS for CMG; record this choice in the decisions log.
+3. **Remove duplicates by date-based keys.** For duration facts, keep the latest-filed row for each (ticker, metric, period_start, period_end). For balance-sheet facts, keep the earliest-filed row for each (ticker, metric, period_end): balance sheets are not split-adjusted, and later filings can mis-tag comparative dates (DRI's FY2026 Q1 and Q2 10-Qs do). Print every conflict between filings. Never use fiscal labels as keys: a YTD9 row and a Q3 row both get fiscal quarter 3. Using the latest filing means post-split EPS for CMG; record this choice in the decisions log.
 4. **Keep only forms 10-Q and 10-K.** Amendments are out of scope; list that under limitations.
 5. **Store all period types as filed:** single quarters, YTD6, YTD9, full-year, and balance-sheet values. Don't store derived Q4 values; `semantics.py` derives them on request.
 
@@ -952,6 +952,14 @@ Rules for this repo:
 - 42 questions (minimum 36), drafted before the core logic and frozen before any run.
 - Answer key built independently of `semantics.py` and hand-verified.
 - Auto-tagging and the case study PDF cut.
+- op_cash_flow candidate 2 is NetCashProvidedByUsedInOperatingActivitiesContinuingOperations. DRI uses it because DRI does not tag the total concept. DRI reports small nonzero discontinued-operations operating cash flow in the window (−7.9M fiscal Q3 2025 YTD9, −8.5M FY2025), so DRI op_cash_flow means continuing operations only. Every DRI cash-flow question and the op_cash_flow tag description must say "from continuing operations".
+- Revenue concept: CMG, WING and YUM use Revenues; DRI uses RevenueFromContractWithCustomerExcludingAssessedTax.
+- Phase 1 branch was fast-forwarded onto the Phase 0 commit.
+- Coverage rule for flows: Q1 needs a single-quarter row; Q2 a quarter or YTD6 row; Q3 a quarter or YTD9 row; Q4 the FY row. Balances need a value at each quarter end. Diluted EPS Q4 is never derived as FY minus YTD9.
+- Only rows inside each company's fiscal window are stored.
+- Dedupe: duration facts keep the latest-filed row (post-split EPS); balance-sheet facts keep the earliest-filed row (as originally reported).
+- DRI fiscal 2026 is a 53-week year (2025-05-26 to 2026-05-31, 371 days inclusive); its Q4 is 14 weeks. Confirmed by hand on the 10-K cover page.
+- Copy-tag check compares kept rows with other kept rows only. Copies removed by the earliest-filed rule appear in the filing-conflicts report instead.
 
 **Open questions to decide during the build (record answers here):**
 
