@@ -1,0 +1,13 @@
+Rules for this repo:
+- Never invent data values. If a value can't be fetched or found, stop and tell me.
+- Never commit API keys. Read keys from .env.
+- Follow SPEC.md exactly; ask before changing the schema, tag fields, tool descriptions, or the question file.
+- Scope is Version 2.2: 4 companies (CMG, WING, YUM, DRI), 42 questions, 504 runs, eval model claude-haiku-5-5 with a $5 cap. No auto-tagging, no case study PDF.
+- The only frontend is the static results page in SPEC.md §13.1. Never build a chatbot, a live query UI, or a backend. Every number on the page must be read from eval output files.
+- semantics.py is the only place aggregation rules live.
+- The eval answer key must never be computed with semantics.py.
+- Agents get read-only DuckDB access.
+- Never change a test's expected value to make it pass.
+- Start every session from an up-to-date main (git pull). If SPEC.md is missing, stop and tell me; never go looking for it on other branches.
+- End every phase by committing, pushing, and opening a PR into main. Never merge it yourself; I merge after my checks.
+- Every phase ends by running its acceptance checks and showing the output. Then stop.
