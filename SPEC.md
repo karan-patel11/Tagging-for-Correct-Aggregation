@@ -253,7 +253,7 @@ CAVA and Sweetgreen are not in the data. CAVA appears in exactly one question, a
 | revenue | `RevenueFromContractWithCustomerExcludingAssessedTax`, `Revenues` |
 | operating_income | `OperatingIncomeLoss` |
 | net_income | `NetIncomeLoss` |
-| op_cash_flow | `NetCashProvidedByUsedInOperatingActivities` |
+| op_cash_flow | `NetCashProvidedByUsedInOperatingActivities`, `NetCashProvidedByUsedInOperatingActivitiesContinuingOperations` |
 | capex | `PaymentsToAcquirePropertyPlantAndEquipment` |
 | total_assets | `Assets` |
 | diluted_eps | `EarningsPerShareDiluted` (unit `USD/shares`) |
@@ -952,6 +952,8 @@ Rules for this repo:
 - 42 questions (minimum 36), drafted before the core logic and frozen before any run.
 - Answer key built independently of `semantics.py` and hand-verified.
 - Auto-tagging and the case study PDF cut.
+- op_cash_flow candidate 2 is NetCashProvidedByUsedInOperatingActivitiesContinuingOperations. DRI uses it because DRI does not tag the total concept. This assumes DRI reports no discontinued-operations operating cash flow in the window; to be verified by hand against the fiscal Q3 2025 10-Q.
+- Revenue concept: CMG, WING and YUM use Revenues; DRI uses RevenueFromContractWithCustomerExcludingAssessedTax.
 
 **Open questions to decide during the build (record answers here):**
 
