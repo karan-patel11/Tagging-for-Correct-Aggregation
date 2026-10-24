@@ -295,7 +295,7 @@ def fiscal_labels(end, fye_month=12):
 ### 6.3 Wikipedia pageviews (the alternative-data stand-in)
 
 - **Endpoint:** `https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{title}/daily/20240101/20251231`. Send the header `User-Agent: tagging-aggregation/0.1 (patelkaran.tech@gmail.com)`, Wikimedia's preferred format. Wait for each request to finish before sending the next.
-- **Brand articles (8):** Chipotle, Wingstop, KFC, Taco Bell, Pizza Hut, Habit Burger Grill, Olive Garden, LongHorn Steakhouse.
+- **Brand articles (8):** Chipotle Mexican Grill, Wingstop, KFC, Taco Bell, Pizza Hut, Habit Burger & Grill (plus its former title, The Habit Burger Grill), Olive Garden, LongHorn Steakhouse.
 - **Parent articles (2):** Yum! Brands, Darden Restaurants.
 - **Verify each title in a browser first** and copy it from the URL. The API counts only that exact title; views of redirect pages are not included.
 - **Labeling:** brand articles get grain `brand`, parent articles get grain `parent`. For single-brand companies, the brand article is the only row.
@@ -360,7 +360,7 @@ CREATE TABLE macro_monthly (
 
 - Row counts per table.
 - Each of the 4 companies has 8 fiscal quarters of balance-sheet values.
-- Each of the 10 articles has 731 days (2024 is a leap year).
+- Each of the 10 brands and parents has 731 days, summed across its titles (Habit Burger Grill has two titles) (2024 is a leap year).
 - No duplicate keys, using the date-based keys in §6.2 (never fiscal labels).
 - No `period_basis = 'other'` rows left.
 - 12 comps rows and 3 definitions.
@@ -960,6 +960,8 @@ Rules for this repo:
 - Dedupe: duration facts keep the latest-filed row (post-split EPS); balance-sheet facts keep the earliest-filed row (as originally reported).
 - DRI fiscal 2026 is a 53-week year (2025-05-26 to 2026-05-31, 371 days inclusive); its Q4 is 14 weeks. Confirmed by hand on the 10-K cover page.
 - Copy-tag check compares kept rows with other kept rows only. Copies removed by the earliest-filed rule appear in the filing-conflicts report instead.
+- Wikipedia: "Chipotle" is the pepper article; the brand uses "Chipotle_Mexican_Grill".
+- Wikipedia: Habit Burger Grill was renamed during the window. Both titles are stored as brand rows and summed by date; the Pageviews API logs each request under one title, so this does not double-count. Habit therefore includes one former title's views; no other brand includes redirect views. Both are listed as limitations.
 
 **Open questions to decide during the build (record answers here):**
 
