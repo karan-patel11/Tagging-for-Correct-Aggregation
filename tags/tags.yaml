@@ -92,7 +92,7 @@
   additive_over_time: false
   time_rollup: last
   valid_methods: [last, sum_across_entities, pct_change]
-  period_basis: mixed
+  period_basis: instant
   derivation: "Balance at the period end; the yearly value is the balance at the last quarter end."
   calendar: fiscal
   entity_grain: company
@@ -119,7 +119,7 @@
   table: fundamentals
   filter: {metric: [operating_income, revenue]}
   semantic_type: ratio
-  unit: null
+  unit: percent
   additive_over_entities: false
   additive_over_time: false
   time_rollup: none
@@ -129,7 +129,7 @@
   calendar: fiscal
   entity_grain: company
   lineage: {source: "Derived from fundamentals.operating_income and fundamentals.revenue", inputs_retrieved_on: "2026-10-24"}
-  description: "Operating margin, computed as total operating income divided by total revenue for the same entities and period; it is not stored in the database. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
+  description: "Operating margin, computed as total operating income divided by total revenue for the same entities and period; it is not stored in the database. Expressed in percent (operating income ÷ revenue × 100). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: comps_quarterly.comp_sales_pct
   table: comps_quarterly
@@ -145,7 +145,7 @@
   calendar: fiscal
   entity_grain: company
   comparability: by_definition_id
-  lineage: {source: "Company earnings releases (8-K Exhibit 99.1), entered by hand", id_column: source_url, cross_checked_on: "2026-10-24", retrieved_on: null}
+  lineage: {source: "Company earnings releases (8-K Exhibit 99.1), entered by hand", id_column: source_url, cross_checked_on: "2026-10-24", retrieved_on: "2026-10-24"}
   description: "Quarterly comparable sales change in percent for CMG, WING and DRI, joined to the company's definition through definition_id. The three measures differ (CMG comparable restaurant sales, WING domestic same store sales, DRI blended consolidated same-restaurant sales), so values are not comparable across companies."
 
 - id: brand_attention_daily.views
