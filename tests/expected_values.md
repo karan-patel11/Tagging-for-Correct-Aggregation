@@ -17,7 +17,7 @@ Re-check on 2026-10-25: the available workspace contains the two expected-values
 | Item | Status | Result / remaining requirement |
 |---|---|---|
 | Personal verification and sign-off | BLOCKED | Personal source and arithmetic verification has not been certified. The name above is attribution, not a verification signature. |
-| Test 3 database OCF scope | BLOCKED | Database unavailable. Retain 580.3M total and 588.2M continuing-only; the selected oracle remains total OCF until the database scope is checked. |
+| Test 3 database OCF scope | RESOLVED | Scope is continuing operations only, per tag description and SPEC §15. Repo database values still to be confirmed in Task 2. |
 | Test 4 capex concept | BLOCKED | Phase 1 coverage table unavailable. Confirm the selected concept against Purchases of leasehold improvements, property and equipment; no concept name is asserted. |
 | Test 7 pipeline title | BLOCKED | Source title recorded as Habit Burger & Grill; actual Phase 2 mapping unavailable. Pipeline title is unconfirmed. |
 | Test 8 definition IDs | BLOCKED | Available definition CSV has no definition_id field. Actual CMG and WING IDs require the repository's authoritative definition records. |
@@ -26,7 +26,7 @@ Re-check on 2026-10-25: the available workspace contains the two expected-values
 | Test 10 coverage window | BLOCKED | Actual repository coverage unavailable; insufficient-data behavior remains a contract expectation. |
 | Test 11 and test execution | BLOCKED | Test implementation unavailable; source-reference assertions and repository tests have not run. |
 
-DRI cash-flow scope: **total operating cash flow, including discontinued operations**. A continuing-only database value must remain labeled continuing-only and must not be substituted for the total.
+DRI cash-flow scope: operating cash flow from continuing operations only (SPEC §15).
 
 ---
 
@@ -49,25 +49,25 @@ Sources: [YUM FY2025 10-K](https://www.sec.gov/Archives/edgar/data/1041061/00010
 
 ## Test 3 and 12: DRI operating cash flow, fiscal Q3 2025 (YTD9 − YTD6)
 
-**Decision: retain 580.3M as the total-OCF oracle and 588.2M as the continuing-only alternative; database scope is unconfirmed, so integration remains blocked.**
+Scope resolved: continuing operations only, per the `fundamentals.op_cash_flow` tag description and the SPEC §15 decisions log.
 
-**Scope: total operating cash flow, including discontinued operations.** The filing does not print a single combined OCF subtotal. It prints the continuing and discontinued pieces separately. The combined YTD amounts below are derived from those pieces, not mislabeled as printed observations.
+Scope: operating cash flow from continuing operations only. The discontinued-operations rows are kept for reference and are not used by the test.
 
 | piece | period start | period end | as printed | full value (USD) | form | accession | statement / column |
 |---|---|---|---|---|---|---|---|
-| YTD9 continuing operations | 2024-05-27 | 2025-02-23 | $ 1,250.0 (in millions) | 1,250,000,000 | 10-Q | 0000940944-25-000018 | Cash flows, pp. 8–9, nine-months current-year column; Net cash provided by operating activities of continuing operations |
-| YTD9 discontinued operations | 2024-05-27 | 2025-02-23 | (7.9) (in millions) | -7,900,000 | 10-Q | 0000940944-25-000018 | Same statement and column; Net cash used in operating activities of discontinued operations |
-| YTD6 continuing operations | 2024-05-27 | 2024-11-24 | $ 661.8 (in millions) | 661,800,000 | 10-Q | 0000940944-25-000003 | Cash flows, pp. 8–9, six-months current-year column; Net cash provided by operating activities of continuing operations |
-| YTD6 discontinued operations | 2024-05-27 | 2024-11-24 | — (in millions) | 0 | 10-Q | 0000940944-25-000003 | Same statement and column; Net cash (used in) provided by operating activities of discontinued operations |
+| YTD9 continuing operations (USED BY TEST) | 2024-05-27 | 2025-02-23 | $ 1,250.0 (in millions) | 1,250,000,000 | 10-Q | 0000940944-25-000018 | Cash flows, pp. 8–9, nine-months current-year column; Net cash provided by operating activities of continuing operations |
+| YTD9 discontinued operations (reference only) | 2024-05-27 | 2025-02-23 | (7.9) (in millions) | -7,900,000 | 10-Q | 0000940944-25-000018 | Same statement and column; Net cash used in operating activities of discontinued operations |
+| YTD6 continuing operations (USED BY TEST) | 2024-05-27 | 2024-11-24 | $ 661.8 (in millions) | 661,800,000 | 10-Q | 0000940944-25-000003 | Cash flows, pp. 8–9, six-months current-year column; Net cash provided by operating activities of continuing operations |
+| YTD6 discontinued operations (reference only) | 2024-05-27 | 2024-11-24 | — (in millions) | 0 | 10-Q | 0000940944-25-000003 | Same statement and column; Net cash (used in) provided by operating activities of discontinued operations |
 
 - Scale conversions: 1,250.0 × 1,000,000 = 1,250,000,000; -7.9 × 1,000,000 = -7,900,000; 661.8 × 1,000,000 = 661,800,000 USD. The source dash represents zero.
 - Derived YTD9 total OCF = 1,250,000,000 + (-7,900,000) = **1,242,100,000 USD**.
 - Derived YTD6 total OCF = 661,800,000 + 0 = **661,800,000 USD**.
-- Expected fiscal Q3 2025 total OCF = YTD9 total − YTD6 total = 1,242,100,000 − 661,800,000 = **580,300,000 USD**.
+- Expected fiscal Q3 2025 operating cash flow = YTD9 continuing − YTD6 continuing = 1,250,000,000 − 661,800,000 = **588,200,000 USD**.
+- Total including discontinued operations: 580,300,000 USD. Recorded as an alternative, not the oracle.
 - Expected Q3 period: start = YTD6 end + one day = 2024-11-24 + one day = **2024-11-25**; end = YTD9 end = **2025-02-23**.
 - Date check: YTD6 start == YTD9 start? **Yes, both 2024-05-27.** The cash-flow headers print the duration and ending date. Their common start is the day after the prior fiscal year-end, 2024-05-26, shown in the filings; the start is a derived boundary rather than a printed start-date column.
-- Trap (un-differenced YTD9 total) = **1,242,100,000 USD**.
-- Additional scope trap: continuing-only Q3 = 1,250,000,000 − 661,800,000 = **588,200,000 USD**, which is 7,900,000 above the selected total-OCF scope.
+- Trap (un-differenced YTD9) = 1,250,000,000 USD.
 - Test 12 check: Q3 start and end both between **2024-11-15 and 2025-03-15**, inclusive? **Yes.** This is a cross-calendar-year fiscal quarter, not CY2025Q1.
 
 Sources: [DRI FY2025 Q3 10-Q](https://www.sec.gov/Archives/edgar/data/940944/000094094425000018/dri-20250223.htm), [DRI FY2025 Q2 10-Q](https://www.sec.gov/Archives/edgar/data/940944/000094094425000003/dri-20241124.htm). The Q2 filing date is 2025-01-02; select by fiscal period rather than assuming a December filing date.
@@ -147,6 +147,7 @@ Source settings: project en.wikipedia.org; platform All (all-access); agent User
 - The dashboard independently prints **758,080** as the five-page total, consistent with that trap.
 - **Title finding:** the template's Habit Burger Grill is an entity label, not the verified exact article title. Selecting that literal title returned “No data found.” This is missing data, not a zero count. The article heading and dashboard confirm **Habit Burger & Grill**, which has data for the requested historical period.
 - Confirmed pipeline title: **BLOCKED — Phase 2 mapping unavailable.** The source title recorded above, **Habit Burger & Grill**, is a candidate for comparison, not a confirmed pipeline mapping.
+- SPEC §15 records the article title as 'Habit Burger & Grill'. The pipeline mapping is still to be confirmed in Task 2.
 - Canonical title source: [Wikipedia article](https://en.wikipedia.org/wiki/Habit_Burger_%26_Grill). The Phase 2 title file is unavailable, so matching this title to the actual pipeline remains pending. No alternate title's traffic or redirect traffic has been added.
 
 ## Test 8: multi-company comps, FY2025 Q1 (warning, no combined value)
