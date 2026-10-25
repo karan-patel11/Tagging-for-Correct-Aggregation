@@ -18,12 +18,12 @@ Re-check on 2026-10-25: the available workspace contains the two expected-values
 |---|---|---|
 | Personal verification and sign-off | BLOCKED | Personal source and arithmetic verification has not been certified. The name above is attribution, not a verification signature. |
 | Test 3 database OCF scope | RESOLVED | Scope is continuing operations only, per tag description and SPEC §15. Repo database values still to be confirmed in Task 2. |
-| Test 4 capex concept | BLOCKED | Phase 1 coverage table unavailable. Confirm the selected concept against Purchases of leasehold improvements, property and equipment; no concept name is asserted. |
-| Test 7 pipeline title | BLOCKED | Source title recorded as Habit Burger & Grill; actual Phase 2 mapping unavailable. Pipeline title is unconfirmed. |
-| Test 8 definition IDs | BLOCKED | Available definition CSV has no definition_id field. Actual CMG and WING IDs require the repository's authoritative definition records. |
-| Test 9 raw CPI comparison | BLOCKED — STOP | Raw file unavailable. Matches raw file: NOT CHECKED. No match or mismatch is asserted; integration must stop here. |
+| Test 4 capex concept | RESOLVED | Concept PaymentsToAcquirePropertyPlantAndEquipment; repo FY and YTD9 values match. |
+| Test 7 pipeline title | RESOLVED | Two Habit titles summed (Habit_Burger_&_Grill and The_Habit_Burger_Grill). |
+| Test 8 definition IDs | RESOLVED | IDs CMG_10K and WING_10K; repo comps match. |
+| Test 9 raw CPI comparison | RESOLVED | Raw file data/raw/macro/bls_CUSR0000SEFV.xlsx matches both values. |
 | Test 5 eval eligibility | RESOLVED — EXCLUDE FROM EVAL | Recorded quarter-sum and annual EPS both equal 1.14, with a difference of 0.00. Retain the semantic assertion; this question cannot distinguish the aggregation error. |
-| Test 10 coverage window | BLOCKED | Actual repository coverage unavailable; insufficient-data behavior remains a contract expectation. |
+| Test 10 coverage window | RESOLVED | CMG revenue window starts FY2024. |
 | Test 11 and test execution | BLOCKED | Test implementation unavailable; source-reference assertions and repository tests have not run. |
 
 DRI cash-flow scope: operating cash flow from continuing operations only (SPEC §15).
@@ -71,6 +71,8 @@ Scope: operating cash flow from continuing operations only. The discontinued-ope
 - Test 12 check: Q3 start and end both between **2024-11-15 and 2025-03-15**, inclusive? **Yes.** This is a cross-calendar-year fiscal quarter, not CY2025Q1.
 
 Sources: [DRI FY2025 Q3 10-Q](https://www.sec.gov/Archives/edgar/data/940944/000094094425000018/dri-20250223.htm), [DRI FY2025 Q2 10-Q](https://www.sec.gov/Archives/edgar/data/940944/000094094425000003/dri-20241124.htm). The Q2 filing date is 2025-01-02; select by fiscal period rather than assuming a December filing date.
+
+The repo cites the latest-filed accessions, 0000940944-25-000071 (YTD6, FY2026 Q2 10-Q) and 0000940944-26-000009 (YTD9, FY2026 Q3 10-Q), which print the same continuing-operations values as prior-year comparatives (661.8 and 1,250.0, checked by hand on 2026-10-25). The original FY2025 10-Qs (0000940944-25-000003, 0000940944-25-000018) are where the values were first reported. Test 3 asserts that its two sources are the repo-cited accessions.
 
 ## Test 4: CMG capex, FY2025 Q4 (FY − YTD9)
 
@@ -140,22 +142,23 @@ Source settings: project en.wikipedia.org; platform All (all-access); agent User
 | Taco Bell | brand | 226,860 | 226860 | 2026-10-25 |
 | Pizza Hut | brand | 107,956 | 107956 | 2026-10-25 |
 | Habit Burger & Grill | brand | 19,169 | 19169 | 2026-10-25 |
+| The_Habit_Burger_Grill | brand | 1,302 | 1302 | 2026-10-25 |
 | Yum! Brands | parent | 138,002 | 138002 | 2026-10-25 |
 
-- Expected YUM rollup = KFC + Taco Bell + Pizza Hut + Habit = 266093 + 226860 + 107956 + 19169 = **620078 views**.
-- Trap (including parent) = 620078 + 138002 = **758080 views**.
-- The dashboard independently prints **758,080** as the five-page total, consistent with that trap.
-- **Title finding:** the template's Habit Burger Grill is an entity label, not the verified exact article title. Selecting that literal title returned “No data found.” This is missing data, not a zero count. The article heading and dashboard confirm **Habit Burger & Grill**, which has data for the requested historical period.
+- Expected YUM rollup = KFC + Taco Bell + Pizza Hut + Habit_Burger_&_Grill + The_Habit_Burger_Grill = 266093 + 226860 + 107956 + 19169 + 1302 = 620078 + 1302 = 621380 views.
+- Trap (including parent) = 621380 + 138002 = 759382 views.
+- The dashboard independently prints **758,080** as the five-page total excluding The_Habit_Burger_Grill.
+- Habit has two brand articles, summed by date per SPEC §15: Habit_Burger_&_Grill (current title, data from 2024-08-29) and The_Habit_Burger_Grill (former title, still receiving redirect traffic). The spec's old label 'Habit Burger Grill' has no data.
 - Confirmed pipeline title: **BLOCKED — Phase 2 mapping unavailable.** The source title recorded above, **Habit Burger & Grill**, is a candidate for comparison, not a confirmed pipeline mapping.
 - SPEC §15 records the article title as 'Habit Burger & Grill'. The pipeline mapping is still to be confirmed in Task 2.
-- Canonical title source: [Wikipedia article](https://en.wikipedia.org/wiki/Habit_Burger_%26_Grill). The Phase 2 title file is unavailable, so matching this title to the actual pipeline remains pending. No alternate title's traffic or redirect traffic has been added.
+- Canonical title source: [Wikipedia article](https://en.wikipedia.org/wiki/Habit_Burger_%26_Grill). The Phase 2 title file is unavailable, so matching this title to the actual pipeline remains pending.
 
 ## Test 8: multi-company comps, FY2025 Q1 (warning, no combined value)
 
 | ticker | fiscal period | actual quarter end | comp as printed | numeric percent | definition_id | release URL (8-K exhibit 99.1) |
 |---|---|---|---|---|---|---|
-| CMG | FY2025Q1 | 2025-03-31 | Comparable restaurant sales decreased 0.4% | -0.4 | BLOCKED_ID_UNAVAILABLE | https://www.sec.gov/Archives/edgar/data/1058090/000105809025000028/cmg-20250423xex991.htm |
-| WING | FY2025Q1 | 2025-03-29 | Domestic same store sales growth: 0.5% | 0.5 | BLOCKED_ID_UNAVAILABLE | https://www.sec.gov/Archives/edgar/data/1636222/000163622225000056/a991wingq12025earningsrele.htm |
+| CMG | FY2025Q1 | 2025-03-31 | Comparable restaurant sales decreased 0.4% | -0.4 | CMG_10K | https://www.sec.gov/Archives/edgar/data/1058090/000105809025000028/cmg-20250423xex991.htm |
+| WING | FY2025Q1 | 2025-03-29 | Domestic same store sales growth: 0.5% | 0.5 | WING_10K | https://www.sec.gov/Archives/edgar/data/1636222/000163622225000056/a991wingq12025earningsrele.htm |
 
 - Expected: **status = warning; values = {CMG: -0.4, WING: 0.5}; both company-specific definitions returned; combined value = null**.
 - Actual definition IDs: **CMG — unavailable; WING — unavailable.** The two BLOCKED_ID_UNAVAILABLE cells are unresolved markers, not literal expected IDs. The available CSV has no definition_id field; integration remains blocked until authoritative repository IDs are checked.
@@ -177,7 +180,7 @@ Verified metadata on that page: Consumer Price Index for All Urban Consumers; Fo
 
 - Expected pct_change = (Dec 2025 − Dec 2024) / Dec 2024 × 100 = (389.889 − 374.644) / 374.644 × 100 = 15.245 / 374.644 × 100 = **4.06919635707%**.
 - Trap (index-point difference) = 389.889 − 374.644 = **15.245 index points**, not a percentage change.
-- **Matches raw file: NOT CHECKED — STOP.** The actual file under data/raw/macro/ is unavailable. Neither a match nor a mismatch is established. Do not approve Test 9 or integration. Once the raw file is available, compare the series, seasonal adjustment, dates, and both recorded levels (374.644 and 389.889); if either differs, stop and investigate the vintage before changing the oracle.
+- **Matches raw file: yes.** data/raw/macro/bls_CUSR0000SEFV.xlsx prints 374.644 (Dec 2024) and 389.889 (Dec 2025). The repo's retrieved_on is 2026-10-23.
 - Expected: **sum_over_time on CPI is rejected, status = error**. This is an expected assertion, not an observed result from running the repo.
 - Additional source finding: the BLS table marks **October 2025 unavailable due to the 2025 lapse in appropriations**. This does not remove the two December observations used here. It does mean a broader pipeline must not invent an October observation.
 
