@@ -269,7 +269,7 @@ CAVA and Sweetgreen are not in the data. CAVA appears in exactly one question, a
 
 1. **Ignore the JSON's `fy` and `fp` fields.** They describe the filing, not the number. A FY2025 10-K also contains FY2024 comparison figures, all labeled 2025. Compute fiscal labels yourself from the period end date.
 2. **Classify each row by how long its period is,** not by its label. Restaurant companies use 52/53-week calendars, so quarters run 84–98 days.
-3. **Remove duplicates by date-based keys.** For duration facts, keep the latest-filed row for each (ticker, metric, period_start, period_end); this gives split-adjusted EPS for CMG. For balance-sheet (instant) facts, keep the earliest-filed row for each (ticker, metric, period_end); later filings can carry mis-dated comparatives (DRI's FY2026 Q1 and Q2 10-Qs tag 2025-08-24 and 2025-11-23 balances as 2024-08-25 and 2024-11-24). Never use fiscal labels as keys.
+3. **Remove duplicates by date-based keys.** For duration facts, keep the latest-filed row for each (ticker, metric, period_start, period_end); this gives split-adjusted EPS for CMG. For balance-sheet (instant) facts, keep the earliest-filed row for each (ticker, metric, period_end); later filings can carry mis-dated comparatives (DRI's FY2026 Q1 and Q2 10-Qs tag 2025-08-24 and 2025-11-23 balances as 2024-08-25 and 2024-11-24). Never use fiscal labels as keys. Print every conflict between filings.
 4. **Keep only forms 10-Q and 10-K.** Amendments are out of scope; list that under limitations.
 5. **Store all period types as filed:** single quarters, YTD6, YTD9, full-year, and balance-sheet values. Don't store derived Q4 values; `semantics.py` derives them on request.
 
@@ -957,7 +957,6 @@ Rules for this repo:
 - Phase 1 branch was fast-forwarded onto the Phase 0 commit.
 - Coverage rule for flows: Q1 needs a single-quarter row; Q2 a quarter or YTD6 row; Q3 a quarter or YTD9 row; Q4 the FY row. Balances need a value at each quarter end. Diluted EPS Q4 is never derived as FY minus YTD9.
 - Only rows inside each company's fiscal window are stored.
-- Dedupe: duration facts keep the latest-filed row (post-split EPS); balance-sheet facts keep the earliest-filed row (as originally reported).
 - DRI fiscal 2026 is a 53-week year (2025-05-26 to 2026-05-31, 371 days inclusive); its Q4 is 14 weeks. Confirmed by hand on the 10-K cover page.
 - Copy-tag check compares kept rows with other kept rows only. Copies removed by the earliest-filed rule appear in the filing-conflicts report instead.
 - Wikipedia: "Chipotle" is the pepper article; the brand uses "Chipotle_Mexican_Grill".
