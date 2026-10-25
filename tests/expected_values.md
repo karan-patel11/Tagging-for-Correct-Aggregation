@@ -12,7 +12,7 @@ Before sign-off, personally open each cited source, confirm the value, period, s
 
 ## Readiness and unresolved checks
 
-Re-check on 2026-10-25: the available workspace contains the two expected-values drafts and the standalone comps files. It contains no Git repository, database, Phase 1 coverage table, Phase 2 title mapping, raw macro file, or test implementation. The available definition CSV has the columns ticker, metric, definition_text, source_url, and notes; it has no definition_id column. No new primary-source or arithmetic verification is certified by this file update.
+Repo cross-check on 2026-10-25 (Task 2, read-only): the database, raw files and definitions were inspected. Results are recorded in the readiness table. Sections below are updated to match.
 
 | Item | Status | Result / remaining requirement |
 |---|---|---|
@@ -24,7 +24,7 @@ Re-check on 2026-10-25: the available workspace contains the two expected-values
 | Test 9 raw CPI comparison | RESOLVED | Raw file data/raw/macro/bls_CUSR0000SEFV.xlsx matches both values. |
 | Test 5 eval eligibility | RESOLVED — EXCLUDE FROM EVAL | Recorded quarter-sum and annual EPS both equal 1.14, with a difference of 0.00. Retain the semantic assertion; this question cannot distinguish the aggregation error. |
 | Test 10 coverage window | RESOLVED | CMG revenue window starts FY2024. |
-| Test 11 and test execution | BLOCKED | Test implementation unavailable; source-reference assertions and repository tests have not run. |
+| Test 11 and test execution | PENDING | Runs in Phase 7. |
 
 DRI cash-flow scope: operating cash flow from continuing operations only (SPEC §15).
 
@@ -88,8 +88,7 @@ The repo cites the latest-filed accessions, 0000940944-25-000071 (YTD6, FY2026 Q
 - Equivalent signed-flow calculation: -[(-666,336,000) − (-468,881,000)] = **197,455,000 USD**.
 - Q4 period = **2025-10-01 through 2025-12-31**.
 - Exact line label: **Purchases of leasehold improvements, property and equipment**.
-- Confirmed Phase 1 concept name: **BLOCKED — coverage table unavailable; no concept name confirmed.**
-- Does it correspond to the actual Phase 1 selected XBRL concept? **UNVERIFIED: coverage table not supplied.** Do not approve this oracle for integration until the actual selected concept is checked. No XBRL concept is guessed here.
+- Confirmed Phase 1 concept name: PaymentsToAcquirePropertyPlantAndEquipment (repo FY 666336000 and YTD9 468881000 match).
 - Do not select the separately disclosed noncash purchases accrued in accounts payable and accrued liabilities, and do not use net investing cash flow.
 - Trap (FY positive capex) = **666,336,000 USD**; trap (YTD9 positive capex) = **468,881,000 USD**.
 
@@ -149,9 +148,9 @@ Source settings: project en.wikipedia.org; platform All (all-access); agent User
 - Trap (including parent) = 621380 + 138002 = 759382 views.
 - The dashboard independently prints **758,080** as the five-page total excluding The_Habit_Burger_Grill.
 - Habit has two brand articles, summed by date per SPEC §15: Habit_Burger_&_Grill (current title, data from 2024-08-29) and The_Habit_Burger_Grill (former title, still receiving redirect traffic). The spec's old label 'Habit Burger Grill' has no data.
-- Confirmed pipeline title: **BLOCKED — Phase 2 mapping unavailable.** The source title recorded above, **Habit Burger & Grill**, is a candidate for comparison, not a confirmed pipeline mapping.
-- SPEC §15 records the article title as 'Habit Burger & Grill'. The pipeline mapping is still to be confirmed in Task 2.
-- Canonical title source: [Wikipedia article](https://en.wikipedia.org/wiki/Habit_Burger_%26_Grill). The Phase 2 title file is unavailable, so matching this title to the actual pipeline remains pending.
+- Pipeline titles confirmed: data/raw/wiki/titles.csv holds Habit_Burger_&_Grill and The_Habit_Burger_Grill; the repo sums them by date (SPEC §15).
+- SPEC §15 records Habit as two brand articles summed by date: Habit_Burger_&_Grill and The_Habit_Burger_Grill.
+- Canonical title source: [Wikipedia article](https://en.wikipedia.org/wiki/Habit_Burger_%26_Grill).
 
 ## Test 8: multi-company comps, FY2025 Q1 (warning, no combined value)
 
@@ -161,7 +160,7 @@ Source settings: project en.wikipedia.org; platform All (all-access); agent User
 | WING | FY2025Q1 | 2025-03-29 | Domestic same store sales growth: 0.5% | 0.5 | WING_10K | https://www.sec.gov/Archives/edgar/data/1636222/000163622225000056/a991wingq12025earningsrele.htm |
 
 - Expected: **status = warning; values = {CMG: -0.4, WING: 0.5}; both company-specific definitions returned; combined value = null**.
-- Actual definition IDs: **CMG — unavailable; WING — unavailable.** The two BLOCKED_ID_UNAVAILABLE cells are unresolved markers, not literal expected IDs. The available CSV has no definition_id field; integration remains blocked until authoritative repository IDs are checked.
+- Definition IDs: CMG_10K, WING_10K (confirmed in comps_definitions and comps_quarterly).
 - CMG earnings 8-K accession: **0001058090-25-000028**. WING earnings 8-K accession: **0001636222-25-000056**.
 - Use the release's headline comp metric. WING's separate company-owned-only figure, 1.4%, is a different metric and is excluded.
 - Definition distinction: CMG's FY2025 10-K specifies company-owned restaurants operating at least 13 full calendar months. WING's domestic same-store base requires at least 52 full weeks and includes domestic franchised and company-owned restaurants. The Q1 fiscal ending dates also differ.

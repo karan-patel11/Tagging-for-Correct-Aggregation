@@ -360,7 +360,7 @@ CREATE TABLE macro_monthly (
 
 - Row counts per table.
 - Each of the 4 companies has 8 fiscal quarters of balance-sheet values.
-- Each article has 731 days, except Habit_Burger_&_Grill, which starts 2024-08-29.
+- Each of the 10 brands and parents has 731 days, summed across its titles. Habit has two titles (Habit_Burger_&_Grill starts 2024-08-29; The_Habit_Burger_Grill covers the full window); 2024 is a leap year.
 - No duplicate keys, using the date-based keys in §6.2 (never fiscal labels).
 - No `period_basis = 'other'` rows left.
 - 12 comps rows and 3 definitions.
