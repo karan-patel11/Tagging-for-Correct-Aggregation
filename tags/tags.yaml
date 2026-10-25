@@ -16,7 +16,7 @@
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Total revenue as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: fundamentals.operating_income
@@ -32,7 +32,7 @@
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Operating income as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: fundamentals.net_income
@@ -48,7 +48,7 @@
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Net income as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: fundamentals.op_cash_flow
@@ -64,7 +64,7 @@
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Net cash provided by operating activities as filed; 10-Q values are year-to-date, and for DRI the metric is operating cash flow from continuing operations only. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: fundamentals.capex
@@ -80,7 +80,7 @@
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Payments to acquire property, plant and equipment as filed, stored as positive numbers; 10-Q values are year-to-date. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: fundamentals.total_assets
@@ -96,7 +96,7 @@
   derivation: "Balance at the period end; the yearly value is the balance at the last quarter end."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Total assets on the balance sheet at each quarter-end date, as originally reported. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: fundamentals.diluted_eps
@@ -112,7 +112,7 @@
   derivation: "The annual figure is the reported FY value. Q4 is never derived as FY minus YTD9."
   calendar: fiscal
   entity_grain: company
-  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row."}
+  lineage: {source: "SEC EDGAR XBRL companyfacts API", url_template: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", id_columns: [accession, filed], concept_column: concept, retrieved_on: "2026-10-24", dedupe: "Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives."}
   description: "Diluted earnings per share in USD per share as filed, with the reported figure for each period; share counts differ between periods and between companies, so values are not additive. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May."
 
 - id: derived.operating_margin
