@@ -17,7 +17,7 @@ Repo cross-check on 2026-10-25 (Task 2, read-only): the database, raw files and 
 | Item | Status | Result / remaining requirement |
 |---|---|---|
 | Personal verification and sign-off | RESOLVED | Compiled from primary sources with AI browser assistance. A second pass re-read each of the 33 source values and 14 calculations against the linked pages, and all 47 matched. Karan Patel personally spot-checked these on 2026-10-25: every one of the 33 source values. |
-| Test 3 database OCF scope | RESOLVED | Scope is continuing operations only, per tag description and SPEC §15. Repo database values still to be confirmed in Task 2. |
+| Test 3 database OCF scope | RESOLVED | Scope is continuing operations only, per tag description and SPEC §15. Repo values confirmed in Task 2: YTD9 1250000000, YTD6 661800000 (continuing operations). |
 | Test 4 capex concept | RESOLVED | Concept PaymentsToAcquirePropertyPlantAndEquipment; repo FY and YTD9 values match. |
 | Test 7 pipeline title | RESOLVED | Two Habit titles summed (Habit_Burger_&_Grill and The_Habit_Burger_Grill). |
 | Test 8 definition IDs | RESOLVED | IDs CMG_10K and WING_10K; repo comps match. |
@@ -76,7 +76,7 @@ The repo cites the latest-filed accessions, 0000940944-25-000071 (YTD6, FY2026 Q
 
 ## Test 4: CMG capex, FY2025 Q4 (FY − YTD9)
 
-**Source values recorded; final concept-match approval is pending the Phase 1 coverage-table check.**
+**Source values recorded; concept confirmed as PaymentsToAcquirePropertyPlantAndEquipment (see below).**
 
 | piece | period start | period end | as printed | full signed cash flow (USD) | form | accession | statement / line label |
 |---|---|---|---|---|---|---|---|
@@ -187,13 +187,13 @@ Verified metadata on that page: Consumer Price Index for All Urban Consumers; Fo
 
 - Request: **CMG revenue for FY2023Q1**.
 - Expected under the specified project window: **status = error; explanation contains “insufficient data”; value = null**.
-- This expectation is taken from the supplied test contract. The actual repository's coverage window has not been inspected, so no runtime result or confirmed coverage exclusion is claimed.
+- This expectation is taken from the supplied test contract. Repo coverage window checked in Task 2: CMG revenue starts at FY2024 and has no FY2023 rows. No runtime result is claimed until the tests run.
 
 ## Test 11: every ok result has at least one source
 
 - No numeric source observations are needed.
 - Expected assertion: every ok result from tests **1, 3, 4, 5, 6, 7 and 9** has at least one source reference supporting the value and its period. Test 8 has the separate warning-and-definitions contract above.
-- This assertion has not been run. Tests with pending mapping or raw-file checks must not be reported as passed merely because source values exist in this document.
+- This assertion has not been run. Tests 4, 7, 8 and 9 depend on resolved mappings and raw-file checks (see readiness table); results must not be reported as passed until the tests run.
 
 ---
 
