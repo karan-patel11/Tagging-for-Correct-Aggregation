@@ -978,6 +978,7 @@ Rules for this repo:
 - pct_change is supported for macro month ranges only; fundamentals tags do not list it.
 - aggregate(last) on several entities returns the sum of each company's last-period balance; mixed fiscal calendars return a warning.
 - comp_sales_pct retrieved_on 2026-10-24 is the commit date of 9e1b5e4, when the values were committed, not a separately recorded entry date.
+- Phase 8: constrain the MCP SDK to `mcp>=2.3,<3`; the low-level server is verified with MCP 2.3.0 on Python 3.13.12. The 2026-10-26 local Claude Code demo returned DRI FY2025Q3 continuing-operations operating cash flow of 588,200,000 USD with both source accessions. A separate real stdio client also passed with the server launched from `/tmp`. Verification evidence and source checks are recorded in `docs/phase8_verification.md`.
 
 
 **Open questions to decide during the build (record answers here):**
