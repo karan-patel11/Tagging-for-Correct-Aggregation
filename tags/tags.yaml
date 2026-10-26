@@ -11,7 +11,7 @@
   additive_over_entities: true
   additive_over_time: true
   time_rollup: sum
-  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums]
   period_basis: mixed
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
   calendar: fiscal
@@ -27,7 +27,7 @@
   additive_over_entities: true
   additive_over_time: true
   time_rollup: sum
-  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums]
   period_basis: mixed
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
   calendar: fiscal
@@ -43,7 +43,7 @@
   additive_over_entities: true
   additive_over_time: true
   time_rollup: sum
-  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums]
   period_basis: mixed
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends."
   calendar: fiscal
@@ -59,7 +59,7 @@
   additive_over_entities: true
   additive_over_time: true
   time_rollup: sum
-  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums]
   period_basis: mixed
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived."
   calendar: fiscal
@@ -75,7 +75,7 @@
   additive_over_entities: true
   additive_over_time: true
   time_rollup: sum
-  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums, pct_change]
+  valid_methods: [sum_over_time, sum_across_entities, ratio_of_sums]
   period_basis: mixed
   derivation: "A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived."
   calendar: fiscal
@@ -91,7 +91,7 @@
   additive_over_entities: true
   additive_over_time: false
   time_rollup: last
-  valid_methods: [last, sum_across_entities, pct_change]
+  valid_methods: [last, sum_across_entities]
   period_basis: instant
   derivation: "Balance at the period end; the yearly value is the balance at the last quarter end."
   calendar: fiscal
