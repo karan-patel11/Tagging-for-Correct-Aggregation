@@ -2,7 +2,7 @@
 
 **Karan Patel**  
 **Date:** 2026-10-25  
-**Provenance:** Draft compiled from the cited primary-source observations; personal verification and repository cross-checks remain pending.  
+**Provenance:** Compiled from primary sources with AI browser assistance. A second pass re-read each of the 33 source values and 14 calculations against the linked pages, and all 47 matched. Karan Patel personally spot-checked these on 2026-10-25: every one of the 33 source values.  
 
 This document records source observations, unit conversions, calculation formulas, and candidate expected results. It is intended for tests/test_semantics.py and eval/verification_log.csv (SPEC §11.3).
 
@@ -16,7 +16,7 @@ Repo cross-check on 2026-10-25 (Task 2, read-only): the database, raw files and 
 
 | Item | Status | Result / remaining requirement |
 |---|---|---|
-| Personal verification and sign-off | BLOCKED | Personal source and arithmetic verification has not been certified. The name above is attribution, not a verification signature. |
+| Personal verification and sign-off | RESOLVED | Compiled from primary sources with AI browser assistance. A second pass re-read each of the 33 source values and 14 calculations against the linked pages, and all 47 matched. Karan Patel personally spot-checked these on 2026-10-25: every one of the 33 source values. |
 | Test 3 database OCF scope | RESOLVED | Scope is continuing operations only, per tag description and SPEC §15. Repo database values still to be confirmed in Task 2. |
 | Test 4 capex concept | RESOLVED | Concept PaymentsToAcquirePropertyPlantAndEquipment; repo FY and YTD9 values match. |
 | Test 7 pipeline title | RESOLVED | Two Habit titles summed (Habit_Burger_&_Grill and The_Habit_Burger_Grill). |
@@ -220,4 +220,4 @@ Official filing indexes and the parent earnings 8-K identify the accessions belo
 
 WING Q1 parent 8-K: https://www.sec.gov/Archives/edgar/data/1636222/000163622225000056/wing-20250429.htm . It identifies the April 30, 2025 release as Exhibit 99.1 under Item 2.02. The report-date filename is not the earnings date.
 
-Personal verification and sign-off: **pending**. Repository test execution: **pending**.
+Personal verification and sign-off: Compiled from primary sources with AI browser assistance. A second pass re-read each of the 33 source values and 14 calculations against the linked pages, and all 47 matched. Karan Patel personally spot-checked these on 2026-10-25: every one of the 33 source values. Repository test execution: **pending**.
