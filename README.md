@@ -15,3 +15,13 @@ python src/build_db.py && pytest && python eval/run_eval.py --pilot
 ```
 
 See [SPEC.md](SPEC.md) for the full design.
+
+## Run the MCP server
+
+The server (`src/mcp_server.py`) exposes four tools over stdio: `list_metrics`, `describe_column`, `get_metric`, `aggregate`. It reads `data/warehouse.duckdb` read-only, so build the database first (`python src/build_db.py`).
+
+```bash
+claude mcp add restaurant-semantics -- python /absolute/path/to/Tagging-for-Correct-Aggregation/src/mcp_server.py
+```
+
+Use the Python that has the project installed (a venv's `python` needs its absolute path too). Then ask Claude Code: "What was Darden's operating cash flow in fiscal Q3 2025, and where does that number come from?"
