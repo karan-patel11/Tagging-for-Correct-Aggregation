@@ -414,9 +414,6 @@ def aggregate(metric_id, entities, period, method, denominator_id=None):
 
     if method == "ratio_of_sums":
         result = _ratio_of_sums(tag, entities, p, period, denominator_id)
-    elif method == "pct_change":
-        return _error("pct_change on fundamentals is not supported; it covers macro month ranges",
-                      unit=tag.unit)
     else:
         metric = tag.filter["metric"]
         per = {}

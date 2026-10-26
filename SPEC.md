@@ -976,6 +976,7 @@ Rules for this repo:
 - BLS CPI has no October 2025 value (2025 appropriations lapse). No question depends on it.
 - Census NAICS 722 has a 2025-10 value; BLS CPI does not. CPI 2025 annual-average questions are not used.
 - pct_change is supported for macro month ranges only; fundamentals tags do not list it.
+- aggregate(last) on several entities returns the sum of each company's last-period balance; mixed fiscal calendars return a warning.
 - comp_sales_pct retrieved_on 2026-10-24 is the commit date of 9e1b5e4, when the values were committed, not a separately recorded entry date.
 
 
