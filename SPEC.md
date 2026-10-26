@@ -360,7 +360,7 @@ CREATE TABLE macro_monthly (
 
 - Row counts per table.
 - Each of the 4 companies has 8 fiscal quarters of balance-sheet values.
-- Each of the 10 brands and parents has 731 days, summed across its titles (Habit Burger Grill has two titles; 2024 is a leap year).
+- Each of the 10 brands and parents has 731 days, summed across its titles. Habit has two titles (Habit_Burger_&_Grill starts 2024-08-29; The_Habit_Burger_Grill covers the full window); 2024 is a leap year.
 - No duplicate keys, using the date-based keys in §6.2 (never fiscal labels).
 - No `period_basis = 'other'` rows left.
 - 12 comps rows and 3 definitions.
@@ -972,8 +972,11 @@ Rules for this repo:
 - derived.* tags point at their source table with a list-valued filter; they tag a computed metric, not a stored one.
 - Comps have no valid aggregate methods. aggregate() on comps with more than one entity returns status: warning with each company's value and full definition, whatever method is requested, and never a combined number.
 - operating_margin is returned in percent.
-- Habit's Wikipedia article title is 'Habit Burger & Grill'.
+- Habit is stored as two brand articles summed by date: Habit_Burger_&_Grill (current title, data from 2024-08-29) and The_Habit_Burger_Grill (former title, redirect traffic). The old label 'Habit Burger Grill' has no data.
 - BLS CPI has no October 2025 value (2025 appropriations lapse). No question depends on it.
+- Census NAICS 722 has a 2025-10 value; BLS CPI does not. CPI 2025 annual-average questions are not used.
+- pct_change is supported for macro month ranges only; fundamentals tags do not list it.
+- aggregate(last) on several entities returns the sum of each company's last-period balance; mixed fiscal calendars return a warning.
 - comp_sales_pct retrieved_on 2026-10-24 is the commit date of 9e1b5e4, when the values were committed, not a separately recorded entry date.
 
 
