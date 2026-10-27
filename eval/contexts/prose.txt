@@ -13,8 +13,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Total revenue as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -34,8 +34,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Operating income as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -55,8 +55,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Net income as filed with the SEC. Stored as filed in the period_basis column: single quarters (Q), year-to-date rows (YTD6, YTD9) and full-year rows (FY). CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -76,8 +76,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Net cash provided by operating activities as filed; 10-Q values are year-to-date, and for DRI the metric is operating cash flow from continuing operations only. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -97,8 +97,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Payments to acquire property, plant and equipment as filed, stored as positive numbers; 10-Q values are year-to-date. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -118,8 +118,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Total assets on the balance sheet at each quarter-end date, as originally reported. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -139,8 +139,8 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its source is SEC EDGAR XBRL companyfacts API.
 Its source URL template is https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-The accession and filed columns identify the source record.
-The concept column holds the source concept name.
+Its lineage id columns are accession and filed.
+Its lineage concept column is concept.
 It was retrieved on 2026-10-24.
 Deduplication rule: Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.
 Diluted earnings per share in USD per share as filed, with the reported figure for each period; share counts differ between periods and between companies, so values are not additive. CMG, WING and YUM report on calendar-year or 52/53-week years ending in late December; DRI's fiscal year ends in late May.
@@ -152,7 +152,7 @@ Its semantic type is ratio.
 Its unit is percent.
 Its values cannot be added across companies or brands.
 Its values cannot be added across periods.
-It has no rule for getting a yearly figure.
+Its time roll-up is none.
 The aggregation methods allowed for it are ratio_of_sums.
 Its period type varies by row; read the period_basis column.
 Derivation: Total operating income divided by total revenue over the same entities and period; never an average of ratios.
@@ -169,7 +169,7 @@ Its semantic type is ratio.
 Its unit is percent.
 Its values cannot be added across companies or brands.
 Its values cannot be added across periods.
-It has no rule for getting a yearly figure.
+Its time roll-up is none.
 No aggregation method is allowed for it.
 Its values are quarterly.
 Derivation: Stored as printed in each company's earnings release; definition_id joins to comps_definitions (CMG_10K, WING_10K, DRI_10K).
@@ -177,7 +177,7 @@ Its periods refer to the fiscal calendar.
 Each row is at the company level.
 Its comparability across companies is set by definition_id.
 Its source is Company earnings releases (8-K Exhibit 99.1), entered by hand.
-The source_url column identifies the source record.
+Its lineage id column is source_url.
 It was cross-checked on 2026-10-24.
 It was retrieved on 2026-10-24.
 Quarterly comparable sales change in percent for CMG, WING and DRI, joined to the company's definition through definition_id. The three measures differ (CMG comparable restaurant sales, WING domestic same store sales, DRI blended consolidated same-restaurant sales), so values are not comparable across companies.
@@ -198,7 +198,7 @@ Each row is at the brand level.
 Its hierarchy goes from brand up to parent_ticker.
 Its source is Wikimedia Pageviews REST API (en.wikipedia, all-access, user, daily).
 Its source URL template is https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{title}/daily/20240101/20251231
-The article_title column identifies the source record.
+Its lineage id column is article_title.
 It was retrieved on 2026-10-24.
 Daily English Wikipedia pageviews for the article in article_title, on calendar dates. Parent rows (grain = 'parent') are separate series and must not be added to brand rows; Habit Burger Grill has two article titles because the article was renamed, and they are summed by date.
 
@@ -218,7 +218,7 @@ It is seasonally adjusted.
 It is not annualized.
 Its source is U.S. Bureau of Labor Statistics.
 Its source URL is https://data.bls.gov/timeseries/CUSR0000SEFV
-The series_id column identifies the source record.
+Its lineage id column is series_id.
 Its source file is data/raw/macro/bls_CUSR0000SEFV.xlsx.
 It was retrieved on 2026-10-23.
 CPI-U food away from home, U.S. city average, monthly index with base 1982-84 = 100, seasonally adjusted and not annualized. October 2025 was not published (lapse in appropriations) and is absent.
@@ -239,7 +239,7 @@ It is seasonally adjusted.
 It is not annualized.
 Its source is U.S. Census Bureau, Monthly Retail Trade.
 Its source URL is https://www.census.gov/econ/currentdata/
-The series_id column identifies the source record.
+Its lineage id column is series_id.
 Its source file is data/raw/macro/census_naics722_sa.xlsx.
 Its source release date is 2026-10-15.
 It was retrieved on 2026-10-24.
@@ -249,215 +249,215 @@ fundamentals.metric:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The metric column identifies the source record.
+Its lineage id column is metric.
 Name of the fundamentals metric the row holds; one value column carries all metrics.
 
 fundamentals.ticker:
 It belongs to the fundamentals table.
 Its semantic type is identifier.
 Its source is fundamentals column.
-The ticker column identifies the source record.
+Its lineage id column is ticker.
 Stock ticker symbol of the company.
 
 fundamentals.cik:
 It belongs to the fundamentals table.
 Its semantic type is identifier.
 Its source is fundamentals column.
-The cik column identifies the source record.
+Its lineage id column is cik.
 SEC Central Index Key of the company.
 
 fundamentals.concept:
 It belongs to the fundamentals table.
 Its semantic type is identifier.
 Its source is fundamentals column.
-The concept column identifies the source record.
+Its lineage id column is concept.
 XBRL concept name the value was taken from; one concept is used per ticker and metric.
 
 fundamentals.unit:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The unit column identifies the source record.
+Its lineage id column is unit.
 Unit of the value as filed: USD, or USD/shares for diluted EPS.
 
 fundamentals.period_start:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The period_start column identifies the source record.
+Its lineage id column is period_start.
 First day of the period the value covers; empty for balance-sheet (instant) values.
 
 fundamentals.period_end:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The period_end column identifies the source record.
+Its lineage id column is period_end.
 Last day of the period the value covers, or the balance-sheet date for instant values.
 
 fundamentals.period_basis:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The period_basis column identifies the source record.
+Its lineage id column is period_basis.
 Length of the period, classified from its dates rather than the filing label: Q single quarter, YTD6 six months to date, YTD9 nine months to date, FY full year, instant balance-sheet date.
 
 fundamentals.fiscal_year:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The fiscal_year column identifies the source record.
+Its lineage id column is fiscal_year.
 Fiscal year computed from the period end date using each company's fiscal year-end month (December for CMG, WING and YUM; May for DRI), not taken from the SEC fy field.
 
 fundamentals.fiscal_quarter:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The fiscal_quarter column identifies the source record.
+Its lineage id column is fiscal_quarter.
 Fiscal quarter 1 to 4 computed from the period end date; YTD6 rows are quarter 2, YTD9 rows quarter 3 and FY rows quarter 4, so quarter alone does not identify a single period.
 
 fundamentals.form:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The form column identifies the source record.
+Its lineage id column is form.
 SEC form type of the source filing: 10-Q or 10-K.
 
 fundamentals.accession:
 It belongs to the fundamentals table.
 Its semantic type is identifier.
 Its source is fundamentals column.
-The accession column identifies the source record.
+Its lineage id column is accession.
 SEC accession number of the filing the value was taken from.
 
 fundamentals.filed:
 It belongs to the fundamentals table.
 Its semantic type is dimension.
 Its source is fundamentals column.
-The filed column identifies the source record.
+Its lineage id column is filed.
 Date the source filing was filed with the SEC.
 
 comps_quarterly.ticker:
 It belongs to the comps_quarterly table.
 Its semantic type is identifier.
 Its source is comps_quarterly column.
-The ticker column identifies the source record.
+Its lineage id column is ticker.
 Stock ticker symbol of the company.
 
 comps_quarterly.fiscal_year:
 It belongs to the comps_quarterly table.
 Its semantic type is dimension.
 Its source is comps_quarterly column.
-The fiscal_year column identifies the source record.
+Its lineage id column is fiscal_year.
 Fiscal year the comparable sales value refers to.
 
 comps_quarterly.fiscal_quarter:
 It belongs to the comps_quarterly table.
 Its semantic type is dimension.
 Its source is comps_quarterly column.
-The fiscal_quarter column identifies the source record.
+Its lineage id column is fiscal_quarter.
 Fiscal quarter 1 to 4 the comparable sales value refers to.
 
 comps_quarterly.definition_id:
 It belongs to the comps_quarterly table.
 Its semantic type is identifier.
 Its source is comps_quarterly column.
-The definition_id column identifies the source record.
+Its lineage id column is definition_id.
 Key into comps_definitions identifying which company definition the value follows.
 
 comps_quarterly.source_url:
 It belongs to the comps_quarterly table.
 Its semantic type is identifier.
 Its source is comps_quarterly column.
-The source_url column identifies the source record.
+Its lineage id column is source_url.
 URL of the earnings release (8-K Exhibit 99.1) the value was entered from.
 
 comps_definitions.definition_id:
 It belongs to the comps_definitions table.
 Its semantic type is identifier.
 Its source is comps_definitions column.
-The definition_id column identifies the source record.
+Its lineage id column is definition_id.
 Unique id of a comparable sales definition (CMG_10K, WING_10K, DRI_10K).
 
 comps_definitions.ticker:
 It belongs to the comps_definitions table.
 Its semantic type is identifier.
 Its source is comps_definitions column.
-The ticker column identifies the source record.
+Its lineage id column is ticker.
 Stock ticker symbol of the company the definition belongs to.
 
 comps_definitions.definition_text:
 It belongs to the comps_definitions table.
 Its semantic type is dimension.
 Its source is comps_definitions column.
-The definition_text column identifies the source record.
+Its lineage id column is definition_text.
 The company's own definition of its comparable sales measure, copied from its 10-K.
 
 comps_definitions.source_url:
 It belongs to the comps_definitions table.
 Its semantic type is identifier.
 Its source is comps_definitions column.
-The source_url column identifies the source record.
+Its lineage id column is source_url.
 URL of the 10-K the definition was copied from.
 
 comps_definitions.notes:
 It belongs to the comps_definitions table.
 Its semantic type is dimension.
 Its source is comps_definitions column.
-The notes column identifies the source record.
+Its lineage id column is notes.
 Free-text notes on the definition.
 
 brand_attention_daily.date:
 It belongs to the brand_attention_daily table.
 Its semantic type is dimension.
 Its source is brand_attention_daily column.
-The date column identifies the source record.
+Its lineage id column is date.
 Calendar date the pageview count refers to.
 
 brand_attention_daily.article_title:
 It belongs to the brand_attention_daily table.
 Its semantic type is identifier.
 Its source is brand_attention_daily column.
-The article_title column identifies the source record.
+Its lineage id column is article_title.
 Exact Wikipedia article title whose pageviews the row counts.
 
 brand_attention_daily.brand:
 It belongs to the brand_attention_daily table.
 Its semantic type is dimension.
 Its source is brand_attention_daily column.
-The brand column identifies the source record.
+Its lineage id column is brand.
 Brand name for brand rows; the parent company name for parent rows.
 
 brand_attention_daily.grain:
 It belongs to the brand_attention_daily table.
 Its semantic type is dimension.
 Its source is brand_attention_daily column.
-The grain column identifies the source record.
+Its lineage id column is grain.
 Level of the row: brand for a brand's own article, parent for a parent company's article.
 
 brand_attention_daily.parent_ticker:
 It belongs to the brand_attention_daily table.
 Its semantic type is identifier.
 Its source is brand_attention_daily column.
-The parent_ticker column identifies the source record.
+Its lineage id column is parent_ticker.
 Ticker of the parent company; for a single-brand company, its own ticker.
 
 macro_monthly.series_id:
 It belongs to the macro_monthly table.
 Its semantic type is identifier.
 Its source is macro_monthly column.
-The series_id column identifies the source record.
+Its lineage id column is series_id.
 Identifier of the macro series: CUSR0000SEFV for CPI, CENSUS_722_SA for food-service sales.
 
 macro_monthly.date:
 It belongs to the macro_monthly table.
 Its semantic type is dimension.
 Its source is macro_monthly column.
-The date column identifies the source record.
+Its lineage id column is date.
 First day of the calendar month the value refers to.
 
 macro_monthly.retrieved_on:
 It belongs to the macro_monthly table.
 Its semantic type is dimension.
 Its source is macro_monthly column.
-The retrieved_on column identifies the source record.
+Its lineage id column is retrieved_on.
 Date the source file was downloaded.
