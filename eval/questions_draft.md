@@ -16,17 +16,26 @@ Window: CMG, WING, YUM fiscal 2024–2025; DRI fiscal 2025–2026; comps CMG/WIN
 6. What was Chipotle's full-year diluted EPS for fiscal 2025, in US dollars per share?
 7. What was Wingstop's full-year diluted EPS for fiscal 2025 (year ended December 27, 2025), in US dollars per share?
 
+Replacements, added 2026-10-27, after semantics.py existed.
+
+8. What were Chipotle's total assets for fiscal 2024, in US dollars?
+
 ## ratios
 
 *Combined FY2025 operating margin for 2–3 December year-end companies × 3; one company's annual margin from its quarters × 3; one question mixing in DRI (expects a warning) × 1*
 
-1. What was the combined fiscal 2025 operating margin of Chipotle and Wingstop, calculated as their total operating income divided by their total revenue, in percent?
-2. What was the combined fiscal 2025 operating margin of Chipotle and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?
-3. What was the combined fiscal 2025 operating margin of Chipotle, Wingstop and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?
+1. What was the combined fiscal 2025 operating margin of Chipotle and Wingstop, in percent?
+2. What was the combined fiscal 2025 operating margin of Chipotle and Yum! Brands, in percent?
+3. What was the combined fiscal 2025 operating margin of Chipotle, Wingstop and Yum! Brands, in percent?
 4. What was Chipotle's full-year fiscal 2025 operating margin, in percent?
 5. What was Yum! Brands' full-year fiscal 2025 operating margin, in percent?
 6. What was Darden's full-year fiscal 2025 operating margin (year ended May 25, 2025), in percent?
-7. What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), calculated as their total operating income divided by their total revenue, in percent?
+7. What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), in percent?
+
+Replacements, added 2026-10-27, after semantics.py existed.
+
+8. What was the combined fiscal 2024 operating margin of Chipotle and Wingstop, in percent?
+9. What was the combined fiscal 2024 operating margin of Chipotle and Yum! Brands, in percent?
 
 ## ytd_calendar
 
@@ -39,6 +48,10 @@ Window: CMG, WING, YUM fiscal 2024–2025; DRI fiscal 2025–2026; comps CMG/WIN
 5. What was Darden's net cash from operating activities from continuing operations in fiscal Q3 2025 (quarter ended February 23, 2025), in US dollars?
 6. What was Darden's total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?
 7. What were total US food services and drinking places sales (seasonally adjusted) for the three calendar months December 2024, January 2025 and February 2025 combined (roughly Darden's fiscal Q3), in millions of US dollars?
+
+Replacements, added 2026-10-27, after semantics.py existed.
+
+8. What was Yum! Brands' net cash provided by operating activities in its fiscal Q4 2025, in US dollars?
 
 ## indices
 
@@ -84,7 +97,7 @@ time_additivity:
 3. What were Wingstop's total assets at the end of fiscal 2024 (year ended December 28, 2024), in US dollars?
 
 ratios:
-1. What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?
+1. What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, in percent?
 2. What was Wingstop's full-year fiscal 2025 operating margin (year ended December 27, 2025), in percent?
 3. What was Chipotle's full-year fiscal 2024 operating margin, in percent?
 
