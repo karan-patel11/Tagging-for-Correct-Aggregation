@@ -8,7 +8,9 @@
 A fact is one field of one tag (each lineage sub-field is its own fact); the tag id is the
 subject, not a fact. Each prose sentence comes from a fixed template for its field, so prose.txt
 states the facts in tags.txt, in the same order, and nothing else. Sentence wording for the
-schema fields follows the field meanings in SPEC §8.1.
+schema fields follows the field meanings in SPEC §8.1. Fields whose meaning the tags do not
+define (lineage id_column, id_columns, concept_column, and time_rollup: none) are mirrored as
+their values, without adding meaning (author's decision, Phase 11). MIRRORED lists them.
 
 Reads tags/tags.yaml and data/warehouse.duckdb (read_only). Never reads questions.yaml.
 
@@ -60,7 +62,7 @@ TIME_ROLLUP = {
     "last": "A yearly figure is the last value in the year.",
     "reported_fy_value": "A yearly figure is the reported full-year (FY) value.",
     "mean": "A yearly figure is the mean of its periods.",
-    "none": "It has no rule for getting a yearly figure.",
+    "none": "Its time roll-up is none.",
 }
 SA = {"SA": "It is seasonally adjusted.", "NSA": "It is not seasonally adjusted.",
       "n/a": "Seasonal adjustment does not apply to it."}
@@ -98,9 +100,9 @@ LINEAGE = {
     "source": lambda v: f"Its source is {v}.",
     "url_template": lambda v: f"Its source URL template is {v}",
     "url": lambda v: f"Its source URL is {v}",
-    "id_columns": lambda v: f"The {and_list(v)} columns identify the source record.",
-    "id_column": lambda v: f"The {v} column identifies the source record.",
-    "concept_column": lambda v: f"The {v} column holds the source concept name.",
+    "id_columns": lambda v: f"Its lineage id columns are {and_list(v)}.",
+    "id_column": lambda v: f"Its lineage id column is {v}.",
+    "concept_column": lambda v: f"Its lineage concept column is {v}.",
     "retrieved_on": lambda v: f"It was retrieved on {v}.",
     "dedupe": lambda v: f"Deduplication rule: {v}",
     "file": lambda v: f"Its source file is {v}.",
@@ -108,6 +110,13 @@ LINEAGE = {
     "cross_checked_on": lambda v: f"It was cross-checked on {v}.",
     "inputs_retrieved_on": lambda v: f"Its inputs were retrieved on {v}.",
 }
+
+
+MIRRORED = {"lineage.id_column", "lineage.id_columns", "lineage.concept_column"}
+
+
+def is_mirrored(field, value):
+    return field in MIRRORED or (field == "time_rollup" and value == "none")
 
 
 def build_facts(tags):
@@ -200,6 +209,17 @@ def main():
     if not n_tag_lines == n_prose == len(facts):
         sys.exit("STOP: fact counts differ")
     print("tags.txt re-parses to exactly tags/tags.yaml: yes")
+    mirrored = []
+    for tag in tags:
+        for field, value in tag.items():
+            if field == "lineage":
+                mirrored += [f"{tag['id']}#lineage.{k}" for k, v in value.items()
+                             if is_mirrored(f"lineage.{k}", v)]
+            elif is_mirrored(field, value):
+                mirrored.append(f"{tag['id']}#{field}")
+    print(f"facts using mirrored wording: {len(mirrored)}")
+    for fid in mirrored:
+        print(f"  {fid}")
     for name in ("schema_only.txt", "tags.txt", "prose.txt"):
         text = (OUT / name).read_text()
         print(f"{name:16s} {len(text):6d} chars  ~{len(text) // 4:5d} tokens (chars/4)")
