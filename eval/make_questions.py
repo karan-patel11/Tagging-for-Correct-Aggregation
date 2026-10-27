@@ -5,8 +5,10 @@ with direct SQL against data/warehouse.duckdb opened read_only. This file must n
 semantics.py or anything from src/: the code under test may not grade itself.
 
 For each question it prints the XBRL concepts used (fundamentals questions) and any wording flags,
-then drops every question with a trap answer within 2x the §11.6 tolerance of the correct answer,
-replaces it from the draft's spares in order, and prints counts per category.
+then selects 7 questions per category in draft order (main questions, then spares), skipping any
+whose trap answer is within 2x the §11.6 tolerance of the correct answer. Skipped questions stay in
+the draft for history. IDs are stable (see IDS); it stops if a category ends up short, or if a
+replacement question fails the 2x rule.
 
 Run: python eval/make_questions.py
 """
@@ -39,28 +41,32 @@ con = duckdb.connect(str(DB_PATH), read_only=True)
 # ---------------------------------------------------------------------------------------------
 
 def parse_draft():
-    """Return ({category: [text, ...]}, {category: [spare text, ...]}), wording untouched."""
-    main, spares = {}, {}
-    target, cat = None, None
+    """Return {category: [(section, number, text), ...]} in draft order, wording untouched.
+    section is "main" or "spare"; any number of questions per category is accepted."""
+    out = {c: [] for c in CATEGORIES}
+    section, cat = None, None
     for line in DRAFT.read_text().splitlines():
         if line.startswith("## Spares"):
-            target = spares
+            section, cat = "spare", None
             continue
         if line.startswith("## Changes"):
-            target = None
+            section = None
             continue
         m = re.match(r"^## (\w+)\s*$", line)
         if m and m.group(1) in CATEGORIES:
-            target, cat = main, m.group(1)
+            section, cat = "main", m.group(1)
             continue
         m = re.match(r"^(\w+):\s*$", line)
-        if target is spares and m and m.group(1) in CATEGORIES:
+        if section == "spare" and m and m.group(1) in CATEGORIES:
             cat = m.group(1)
             continue
         m = re.match(r"^(\d+)\.\s+(.*\S)\s*$", line)
-        if m and target is not None:
-            target.setdefault(cat, []).append(m.group(2))
-    return main, spares
+        if m and section and cat:
+            out[cat].append((section, int(m.group(1)), m.group(2)))
+    # Main questions first, then spares, each in draft order.
+    for cat in CATEGORIES:
+        out[cat].sort(key=lambda x: (x[0] != "main",))
+    return out
 
 
 # ---------------------------------------------------------------------------------------------
@@ -277,62 +283,97 @@ def q_refuse(unit, reason, check_sql):
                 notes=reason + " The trap is any confident single answer (behavioral).")
 
 
+# Builders keyed by (category, draft section, draft number).
 BUILDERS = {
-    "time_additivity": [
-        lambda: q_assets("CMG", 2025), lambda: q_assets("WING", 2025),
-        lambda: q_assets("YUM", 2025), lambda: q_assets("DRI", 2025),
-        lambda: q_assets("YUM", 2024), lambda: q_eps("CMG", 2025), lambda: q_eps("WING", 2025)],
-    "ratios": [
-        lambda: q_combined_margin([("CMG", 2025), ("WING", 2025)]),
-        lambda: q_combined_margin([("CMG", 2025), ("YUM", 2025)]),
-        lambda: q_combined_margin([("CMG", 2025), ("WING", 2025), ("YUM", 2025)]),
-        lambda: q_annual_margin("CMG", 2025), lambda: q_annual_margin("YUM", 2025),
-        lambda: q_annual_margin("DRI", 2025),
-        lambda: q_combined_margin([("CMG", 2025), ("YUM", 2025), ("DRI", 2025)], warning=True)],
-    "ytd_calendar": [
-        lambda: q_single_quarter("CMG", "op_cash_flow", 2025, 2),
-        lambda: q_single_quarter("YUM", "op_cash_flow", 2025, 3),
-        lambda: q_single_quarter("CMG", "capex", 2025, 4),
-        lambda: q_single_quarter("WING", "capex", 2025, 4),
-        lambda: q_single_quarter("DRI", "op_cash_flow", 2025, 3, wrong_fy=2026),
-        lambda: q_single_quarter("DRI", "revenue", 2026, 4, wrong_fy=2025),
-        lambda: q_food_months(["2024-12-01", "2025-01-01", "2025-02-01"],
-                              {"wrong_months_calendar_q1_2025": MONTHS["CY2025Q1"],
-                               "wrong_months_calendar_q4_2024": MONTHS["CY2024Q4"]})],
-    "indices": [
-        lambda: q_cpi_change("2024-12-01", "2025-12-01"),
-        lambda: q_cpi_change("2024-06-01", "2025-06-01"),
-        lambda: q_cpi_avg(2024),
-        lambda: q_cpi_change("2024-12-01", "2025-06-01"),
-        lambda: q_food_months(MONTHS["CY2024Q3"], {}),
-        lambda: q_food_months(MONTHS["CY2025Q1"], {}),
-        lambda: q_food_months(MONTHS["CY2025Q2"], {})],
-    "hierarchy": [
-        lambda: q_views(YUM_BRANDS, "CY2024Q4"), lambda: q_views(YUM_BRANDS, "CY2025Q1"),
-        lambda: q_views(YUM_BRANDS, "CY2025Q2"), lambda: q_views(DRI_BRANDS, "CY2024Q2"),
-        lambda: q_views(DRI_BRANDS, "CY2025Q3"), lambda: q_kfc_share("CY2025"),
-        lambda: q_kfc_share("CY2024Q4")],
-    "comparability_unanswerable": [
-        lambda: q_comps_diff(1), lambda: q_comps_diff(2), lambda: q_comps_diff(4),
-        lambda: q_refuse("USD", "Average unit volume is not in the data.",
-                         "SELECT count(*) FROM fundamentals WHERE metric ILIKE '%unit_volume%' "
-                         "OR metric ILIKE '%auv%'"),
-        lambda: q_refuse("count", "Restaurant counts are not in the data.",
-                         "SELECT count(*) FROM fundamentals WHERE metric ILIKE '%restaurant%' "
-                         "OR metric ILIKE '%unit_count%'"),
-        lambda: q_refuse("USD", "Fiscal 2023 is outside the window (CMG fiscal 2024-2025).",
-                         "SELECT count(*) FROM fundamentals WHERE ticker='CMG' AND fiscal_year=2023"),
-        lambda: q_refuse("percent", "CAVA is not in the data.",
-                         "SELECT (SELECT count(*) FROM comps_quarterly WHERE ticker='CAVA') + "
-                         "(SELECT count(*) FROM fundamentals WHERE ticker='CAVA')")],
+    ("time_additivity", "main", 1): lambda: q_assets("CMG", 2025),
+    ("time_additivity", "main", 2): lambda: q_assets("WING", 2025),
+    ("time_additivity", "main", 3): lambda: q_assets("YUM", 2025),
+    ("time_additivity", "main", 4): lambda: q_assets("DRI", 2025),
+    ("time_additivity", "main", 5): lambda: q_assets("YUM", 2024),
+    ("time_additivity", "main", 6): lambda: q_eps("CMG", 2025),
+    ("time_additivity", "main", 7): lambda: q_eps("WING", 2025),
+    ("time_additivity", "main", 8): lambda: q_assets("CMG", 2024),
+    ("time_additivity", "spare", 1): lambda: q_eps("CMG", 2024),
+    ("time_additivity", "spare", 2): lambda: q_eps("YUM", 2025),
+    ("time_additivity", "spare", 3): lambda: q_assets("WING", 2024),
+    ("ratios", "main", 1): lambda: q_combined_margin([("CMG", 2025), ("WING", 2025)]),
+    ("ratios", "main", 2): lambda: q_combined_margin([("CMG", 2025), ("YUM", 2025)]),
+    ("ratios", "main", 3): lambda: q_combined_margin([("CMG", 2025), ("WING", 2025), ("YUM", 2025)]),
+    ("ratios", "main", 4): lambda: q_annual_margin("CMG", 2025),
+    ("ratios", "main", 5): lambda: q_annual_margin("YUM", 2025),
+    ("ratios", "main", 6): lambda: q_annual_margin("DRI", 2025),
+    ("ratios", "main", 7): lambda: q_combined_margin([("CMG", 2025), ("YUM", 2025), ("DRI", 2025)],
+                                                     warning=True),
+    ("ratios", "main", 8): lambda: q_combined_margin([("CMG", 2024), ("WING", 2024)]),
+    ("ratios", "main", 9): lambda: q_combined_margin([("CMG", 2024), ("YUM", 2024)]),
+    ("ratios", "spare", 1): lambda: q_combined_margin([("WING", 2025), ("YUM", 2025)]),
+    ("ratios", "spare", 2): lambda: q_annual_margin("WING", 2025),
+    ("ratios", "spare", 3): lambda: q_annual_margin("CMG", 2024),
+    ("ytd_calendar", "main", 1): lambda: q_single_quarter("CMG", "op_cash_flow", 2025, 2),
+    ("ytd_calendar", "main", 2): lambda: q_single_quarter("YUM", "op_cash_flow", 2025, 3),
+    ("ytd_calendar", "main", 3): lambda: q_single_quarter("CMG", "capex", 2025, 4),
+    ("ytd_calendar", "main", 4): lambda: q_single_quarter("WING", "capex", 2025, 4),
+    ("ytd_calendar", "main", 5): lambda: q_single_quarter("DRI", "op_cash_flow", 2025, 3,
+                                                          wrong_fy=2026),
+    ("ytd_calendar", "main", 6): lambda: q_single_quarter("DRI", "revenue", 2026, 4, wrong_fy=2025),
+    ("ytd_calendar", "main", 7): lambda: q_food_months(
+        ["2024-12-01", "2025-01-01", "2025-02-01"],
+        {"wrong_months_calendar_q1_2025": MONTHS["CY2025Q1"],
+         "wrong_months_calendar_q4_2024": MONTHS["CY2024Q4"]}),
+    ("ytd_calendar", "main", 8): lambda: q_single_quarter("YUM", "op_cash_flow", 2025, 4),
+    ("indices", "main", 1): lambda: q_cpi_change("2024-12-01", "2025-12-01"),
+    ("indices", "main", 2): lambda: q_cpi_change("2024-06-01", "2025-06-01"),
+    ("indices", "main", 3): lambda: q_cpi_avg(2024),
+    ("indices", "main", 4): lambda: q_cpi_change("2024-12-01", "2025-06-01"),
+    ("indices", "main", 5): lambda: q_food_months(MONTHS["CY2024Q3"], {}),
+    ("indices", "main", 6): lambda: q_food_months(MONTHS["CY2025Q1"], {}),
+    ("indices", "main", 7): lambda: q_food_months(MONTHS["CY2025Q2"], {}),
+    ("hierarchy", "main", 1): lambda: q_views(YUM_BRANDS, "CY2024Q4"),
+    ("hierarchy", "main", 2): lambda: q_views(YUM_BRANDS, "CY2025Q1"),
+    ("hierarchy", "main", 3): lambda: q_views(YUM_BRANDS, "CY2025Q2"),
+    ("hierarchy", "main", 4): lambda: q_views(DRI_BRANDS, "CY2024Q2"),
+    ("hierarchy", "main", 5): lambda: q_views(DRI_BRANDS, "CY2025Q3"),
+    ("hierarchy", "main", 6): lambda: q_kfc_share("CY2025"),
+    ("hierarchy", "main", 7): lambda: q_kfc_share("CY2024Q4"),
+    ("comparability_unanswerable", "main", 1): lambda: q_comps_diff(1),
+    ("comparability_unanswerable", "main", 2): lambda: q_comps_diff(2),
+    ("comparability_unanswerable", "main", 3): lambda: q_comps_diff(4),
+    ("comparability_unanswerable", "main", 4): lambda: q_refuse(
+        "USD", "Average unit volume is not in the data.",
+        "SELECT count(*) FROM fundamentals WHERE metric ILIKE '%unit_volume%' "
+        "OR metric ILIKE '%auv%'"),
+    ("comparability_unanswerable", "main", 5): lambda: q_refuse(
+        "count", "Restaurant counts are not in the data.",
+        "SELECT count(*) FROM fundamentals WHERE metric ILIKE '%restaurant%' "
+        "OR metric ILIKE '%unit_count%'"),
+    ("comparability_unanswerable", "main", 6): lambda: q_refuse(
+        "USD", "Fiscal 2023 is outside the window (CMG fiscal 2024-2025).",
+        "SELECT count(*) FROM fundamentals WHERE ticker='CMG' AND fiscal_year=2023"),
+    ("comparability_unanswerable", "main", 7): lambda: q_refuse(
+        "percent", "CAVA is not in the data.",
+        "SELECT (SELECT count(*) FROM comps_quarterly WHERE ticker='CAVA') + "
+        "(SELECT count(*) FROM fundamentals WHERE ticker='CAVA')"),
 }
 
-SPARE_BUILDERS = {
-    "time_additivity": [lambda: q_eps("CMG", 2024), lambda: q_eps("YUM", 2025),
-                        lambda: q_assets("WING", 2024)],
-    "ratios": [lambda: q_combined_margin([("WING", 2025), ("YUM", 2025)]),
-               lambda: q_annual_margin("WING", 2025), lambda: q_annual_margin("CMG", 2024)],
+# Stable question IDs. The first 38 were assigned in the first build and never change; questions
+# added later take the next free ID. A selected question without an ID stops the build.
+IDS = {
+    ("time_additivity", "main", 1): "q001", ("time_additivity", "main", 2): "q002",
+    ("time_additivity", "main", 3): "q003", ("time_additivity", "main", 4): "q004",
+    ("time_additivity", "main", 5): "q005", ("time_additivity", "spare", 3): "q006",
+    ("ratios", "main", 1): "q007", ("ratios", "main", 2): "q008", ("ratios", "main", 3): "q009",
+    ("ratios", "main", 7): "q010", ("ratios", "spare", 1): "q011",
+    **{("ytd_calendar", "main", n): f"q{11 + n:03d}" for n in range(1, 7)},
+    **{("indices", "main", n): f"q{17 + n:03d}" for n in range(1, 8)},
+    **{("hierarchy", "main", n): f"q{24 + n:03d}" for n in range(1, 8)},
+    **{("comparability_unanswerable", "main", n): f"q{31 + n:03d}" for n in range(1, 8)},
+    # Replacements, added 2026-10-27, after semantics.py existed.
+    ("time_additivity", "main", 8): "q039", ("ratios", "main", 8): "q040",
+    ("ratios", "main", 9): "q041", ("ytd_calendar", "main", 8): "q042",
 }
+# The 2x rule must pass for these; if one fails the build stops instead of skipping it.
+MUST_PASS = {("time_additivity", "main", 8), ("ratios", "main", 8), ("ratios", "main", 9),
+             ("ytd_calendar", "main", 8)}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -344,7 +385,7 @@ def tolerance(kind, correct):
     return {"USD": 0.005 * abs(correct) if correct is not None else None,
             "percent": 0.1, "EPS": 0.01,
             "views": 0.001 * abs(correct) if correct is not None else None,
-            "index_pct_change": 0.05}.get(kind)
+            "index_pct_change": 0.05, "index_points": 0.1}.get(kind)
 
 
 def too_close(q):
@@ -399,51 +440,45 @@ def clean(v, kind):
 
 
 def main():
-    draft, spares = parse_draft()
+    draft = parse_draft()
     for cat in CATEGORIES:
-        if len(draft.get(cat, [])) != PER_CATEGORY:
-            sys.exit(f"STOP: draft has {len(draft.get(cat, []))} questions in {cat}, "
-                     f"expected {PER_CATEGORY}")
-        if len(BUILDERS[cat]) != PER_CATEGORY:
-            sys.exit(f"STOP: {len(BUILDERS[cat])} builders for {cat}")
+        for section, n, _ in draft[cat]:
+            if (cat, section, n) not in BUILDERS:
+                sys.exit(f"STOP: no builder for {cat} {section} #{n}")
 
     print("=== Wording edits (SPEC §11.1: only a missing period or unit) ===")
     if not WORDING_EDITS:
-        print("None. Every draft question already names its period and unit; wording is verbatim.")
+        print("None made by this script; wording is verbatim from the draft.")
     for (cat, n), (old, new) in WORDING_EDITS.items():
         print(f"{cat} #{n}: {old!r} -> {new!r}")
 
-    kept, dropped, spare_log = {c: [] for c in CATEGORIES}, [], []
+    kept, dropped, unused = {c: [] for c in CATEGORIES}, [], []
     concept_rows = []
 
-    def build(cat, label, text, builder):
-        q = builder()
-        q["category"], q["question"], q["label"] = cat, text, label
-        for t, m, c in q.get("concepts", []):
-            concept_rows.append((label, t, m, c))
-        q["flags"] = concept_flags(text, q.get("concepts", []))
-        return q
-
     for cat in CATEGORIES:
-        for i, (text, builder) in enumerate(zip(draft[cat], BUILDERS[cat]), 1):
-            q = build(cat, f"{cat} #{i}", text, builder)
-            close = too_close(q)
-            if close:
-                dropped.append((q, close))
-            else:
-                kept[cat].append(q)
-        pool = list(zip(spares.get(cat, []), SPARE_BUILDERS.get(cat, [])))
-        for j, (text, builder) in enumerate(pool, 1):
+        for section, n, text in draft[cat]:
+            key = (cat, section, n)
+            label = f"{cat} {'#' if section == 'main' else 'spare #'}{n}"
             if len(kept[cat]) >= PER_CATEGORY:
-                break
-            q = build(cat, f"{cat} spare #{j}", text, builder)
+                unused.append(label)
+                continue
+            q = BUILDERS[key]()
+            q["category"], q["question"], q["label"], q["key"] = cat, text, label, key
+            for t, m, c in q.get("concepts", []):
+                concept_rows.append((label, t, m, c))
+            q["flags"] = concept_flags(text, q.get("concepts", []))
             close = too_close(q)
+            if close and key in MUST_PASS:
+                for name, gap, lim in close:
+                    print(f"{label}: trap {name} gap {fmt(gap)} <= 2x tol {fmt(lim)}")
+                sys.exit(f"STOP: replacement question {label} fails the 2x rule: {text}")
             if close:
                 dropped.append((q, close))
-                spare_log.append(f"{q['label']}: tried, also dropped")
-            else:
-                kept[cat].append(q)
-                spare_log.append(f"{q['label']}: added")
+                continue
+            if key not in IDS:
+                sys.exit(f"STOP: selected question {label} has no ID: {text}")
+            q["id"] = IDS[key]
+            kept[cat].append(q)
 
     print("\n=== XBRL concepts used per fundamentals question ===")
     for label, t, m, c in concept_rows:
@@ -459,15 +494,7 @@ def main():
     if not any_flag:
         print("None.")
 
-    print("\n=== Questions with an undefined §11.6 tolerance (drop rule not applicable) ===")
-    for cat in CATEGORIES:
-        for q in kept[cat]:
-            if q["tol"] is not None and tolerance(q["tol"], q["correct"]) is None:
-                gaps = ", ".join(f"{n}={fmt(v)} (correct {fmt(q['correct'])})"
-                                 for n, v in q["trap_answers"].items())
-                print(f"{q['label']}: unit {q['unit']}; {gaps}")
-
-    print("\n=== Dropped: a trap answer within 2x tolerance of the correct answer ===")
+    print("\n=== Dropped (kept in the draft for history): a trap within 2x tolerance ===")
     if not dropped:
         print("None.")
     for q, close in dropped:
@@ -475,22 +502,45 @@ def main():
             print(f"{q['label']}: trap {name} = {fmt(q['trap_answers'][name])}, correct = "
                   f"{fmt(q['correct'])}, gap {fmt(gap)} <= 2x tol {fmt(lim)}")
         print(f"    {q['question']}")
+    print("\nNot evaluated (category already had 7): " + (", ".join(unused) or "none"))
 
-    print("\n=== Spares ===")
-    print("\n".join(spare_log) if spare_log else "None used.")
-
-    out, n = [], 0
+    print("\n=== Counts per category ===")
+    short = False
     for cat in CATEGORIES:
-        for q in kept[cat]:
-            n += 1
-            out.append({
-                "id": f"q{n:03d}", "category": cat, "question": q["question"],
-                "expected_behavior": q["expected_behavior"],
-                "correct": clean(q["correct"], q["tol"]), "unit": q["unit"],
-                "trap_answers": {k: clean(v, q["tol"]) for k, v in q["trap_answers"].items()},
-                "verified_against": q["verified_against"],
-                "notes": "; ".join(filter(None, [q.get("notes", ""), *q["flags"]])),
-            })
+        status = "OK" if len(kept[cat]) == PER_CATEGORY else f"SHORT by {PER_CATEGORY - len(kept[cat])}"
+        short |= len(kept[cat]) < PER_CATEGORY
+        print(f"{cat:27s} {len(kept[cat])}  {status}")
+    if short:
+        sys.exit("STOP: a category has fewer than 7 questions; questions.yaml not written.")
+
+    ids = [q["id"] for c in CATEGORIES for q in kept[c]]
+    if len(set(ids)) != len(ids):
+        sys.exit(f"STOP: duplicate IDs {ids}")
+
+    out = []
+    for q in sorted((q for c in CATEGORIES for q in kept[c]), key=lambda q: q["id"]):
+        out.append({
+            "id": q["id"], "category": q["category"], "question": q["question"],
+            "expected_behavior": q["expected_behavior"],
+            "correct": clean(q["correct"], q["tol"]), "unit": q["unit"],
+            "trap_answers": {k: clean(v, q["tol"]) for k, v in q["trap_answers"].items()},
+            "verified_against": q["verified_against"],
+            "notes": "; ".join(filter(None, [q.get("notes", ""), *q["flags"]])),
+        })
+
+    old = {q["id"]: q for q in yaml.safe_load(OUT.read_text())} if OUT.exists() else {}
+    print("\n=== Changes against the previous questions.yaml ===")
+    for q in out:
+        prev = old.get(q["id"])
+        if prev is None:
+            print(f"NEW {q['id']} ({q['category']}): {q['question']}")
+            continue
+        for field in q:
+            if q[field] != prev.get(field):
+                print(f"{q['id']} {field}:\n    before: {prev.get(field)!r}\n    after:  {q[field]!r}")
+    for qid in sorted(set(old) - {q["id"] for q in out}):
+        print(f"REMOVED {qid}")
+
     OUT.write_text("# Generated by eval/make_questions.py from eval/questions_draft.md. Do not edit "
                    "by hand;\n# correct and trap answers are computed with direct SQL "
                    "(no semantics.py).\n"
@@ -501,13 +551,7 @@ def main():
         traps = ", ".join(f"{k}={fmt(v)}" for k, v in q["trap_answers"].items()) or "-"
         print(f"{q['id']} {q['category']:27s} {q['expected_behavior']:20s} "
               f"{fmt(q['correct']):>20s} {q['unit']:18s} traps: {traps}")
-
-    print("\n=== Counts per category ===")
-    for cat in CATEGORIES:
-        status = "OK" if len(kept[cat]) == PER_CATEGORY else f"SHORT by {PER_CATEGORY - len(kept[cat])}"
-        print(f"{cat:27s} {len(kept[cat])}  {status}")
-    print(f"{'total':27s} {len(out)}  (target {PER_CATEGORY * len(CATEGORIES)})")
-    print(f"\nWrote {OUT.relative_to(ROOT)}")
+    print(f"\n{len(out)} questions. Wrote {OUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

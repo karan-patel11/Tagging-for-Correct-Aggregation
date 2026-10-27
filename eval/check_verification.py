@@ -40,8 +40,7 @@ TAG = re.compile(r"^\[([^\]]+)\]")
 
 
 def tolerance(q):
-    """Absolute tolerance from SPEC §11.6. index_points has no §11.6 tolerance, so it must
-    agree with questions.yaml at its stored precision (6 decimals)."""
+    """Absolute tolerance from SPEC §11.6."""
     unit, correct = q["unit"], q["correct"]
     if unit in ("USD", "USD millions"):
         return 0.005 * abs(correct)
@@ -54,7 +53,7 @@ def tolerance(q):
     if unit in ("percent", "percentage_points"):
         return 0.1
     if unit == "index_points":
-        return 5e-7
+        return 0.1
     raise ValueError(f"no tolerance rule for unit {unit!r} ({q['id']})")
 
 

@@ -31,7 +31,12 @@ con = duckdb.connect(str(DB_PATH), read_only=True)
 
 # Questions written to replace the 4 dropped ones go first. Add their exact text here, and their
 # pieces to PIECES, once they are in questions.yaml.
-REPLACEMENTS = []
+REPLACEMENTS = [
+    "What were Chipotle's total assets for fiscal 2024, in US dollars?",
+    "What was the combined fiscal 2024 operating margin of Chipotle and Wingstop, in percent?",
+    "What was the combined fiscal 2024 operating margin of Chipotle and Yum! Brands, in percent?",
+    "What was Yum! Brands' net cash provided by operating activities in its fiscal Q4 2025, in US dollars?",
+]
 
 # ---------------------------------------------------------------------------------------------
 # Pieces per question, keyed by exact question text (ids shift when questions are added).
@@ -79,17 +84,25 @@ PIECES = {
         sec("DRI", "total_assets", 2025, "instant"),
     "What were Yum! Brands' total assets at the end of fiscal 2024, in US dollars?":
         sec("YUM", "total_assets", 2024, "instant"),
+    "What were Chipotle's total assets for fiscal 2024, in US dollars?":
+        sec("CMG", "total_assets", 2024, "instant"),
+    "What was the combined fiscal 2024 operating margin of Chipotle and Wingstop, in percent?":
+        margin(("CMG", 2024), ("WING", 2024)),
+    "What was the combined fiscal 2024 operating margin of Chipotle and Yum! Brands, in percent?":
+        margin(("CMG", 2024), ("YUM", 2024)),
+    "What was Yum! Brands' net cash provided by operating activities in its fiscal Q4 2025, in US dollars?":
+        sec("YUM", "op_cash_flow", 2025, "FY", "YTD9"),
     "What were Wingstop's total assets at the end of fiscal 2024 (year ended December 28, 2024), in US dollars?":
         sec("WING", "total_assets", 2024, "instant"),
-    "What was the combined fiscal 2025 operating margin of Chipotle and Wingstop, calculated as their total operating income divided by their total revenue, in percent?":
+    "What was the combined fiscal 2025 operating margin of Chipotle and Wingstop, in percent?":
         margin(("CMG", 2025), ("WING", 2025)),
-    "What was the combined fiscal 2025 operating margin of Chipotle and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?":
+    "What was the combined fiscal 2025 operating margin of Chipotle and Yum! Brands, in percent?":
         margin(("CMG", 2025), ("YUM", 2025)),
-    "What was the combined fiscal 2025 operating margin of Chipotle, Wingstop and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?":
+    "What was the combined fiscal 2025 operating margin of Chipotle, Wingstop and Yum! Brands, in percent?":
         margin(("CMG", 2025), ("WING", 2025), ("YUM", 2025)),
-    "What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), calculated as their total operating income divided by their total revenue, in percent?":
+    "What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), in percent?":
         margin(("CMG", 2025), ("YUM", 2025), ("DRI", 2025)),
-    "What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, calculated as their total operating income divided by their total revenue, in percent?":
+    "What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, in percent?":
         margin(("WING", 2025), ("YUM", 2025)),
     "What was Chipotle's net cash from operating activities in fiscal Q2 2025 (the three months ended June 30, 2025), in US dollars?":
         sec("CMG", "op_cash_flow", 2025, "YTD6", "Q"),
@@ -379,9 +392,6 @@ def main():
         print(f"  {n:22s} {len(rs):4d} rows, {sum(1 for b in rs if not b[3]['value_seen']):4d} to fill")
     print(f"Pre-filled from tests/expected_values.md: {prefilled}")
     print(f"Rows you need to fill (value_seen blank): {total - prefilled}")
-    if not REPLACEMENTS:
-        print("Note: no replacement questions yet; questions.yaml has "
-              f"{len(questions)} of 42.")
 
 
 if __name__ == "__main__":
