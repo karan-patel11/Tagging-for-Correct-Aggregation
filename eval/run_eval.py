@@ -41,6 +41,7 @@ import subprocess
 import sys
 import threading
 import time
+from datetime import datetime, timezone
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -54,6 +55,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
 import mcp_server  # noqa: E402
+import logging  # noqa: E402
+
+logging.getLogger("httpx2").setLevel(logging.WARNING)  # one INFO line per request is noise here
 from tool_specs import RUN_SQL_SPEC, TOOL_SPECS  # noqa: E402
 
 MODEL = "claude-haiku-5-5"
@@ -283,6 +287,7 @@ def parse_final(text):
 
 def run_one(client, budget, q, setup, run, cache):
     t0 = time.time()
+    started_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     system = system_blocks(setup, cache)
     tools = SETUPS[setup]["tools"]
     messages = [{"role": "user", "content": q["question"]}]
@@ -326,7 +331,7 @@ def run_one(client, budget, q, setup, run, cache):
         "question_id": q["id"], "setup": setup, "run": run, "model": MODEL,
         "final": final, "final_line": final_line, "parsed": final is not None,
         "tool_calls": tool_calls, "text": turns, "tokens": dict(tokens),
-        "cost_usd": round(cost, 6), "seconds": round(time.time() - t0, 2),
+        "cost_usd": round(cost, 6), "seconds": round(time.time() - t0, 2), "started_at": started_at,
         "api_calls": api_calls, "stop_reason": stop_reason, "cached_prefix": cache, "error": error,
     }
 
@@ -351,6 +356,27 @@ def load_questions(ids=None):
     return ok
 
 
+def completed_runs(paths):
+    """(question_id, setup, run) keys already written without an API error, and the cost of every
+    line already written (errored runs were billed too)."""
+    done, spent = set(), 0.0
+    for p in paths:
+        if not p.exists():
+            continue
+        for n, line in enumerate(p.read_text().splitlines(), 1):
+            if not line.strip():
+                continue
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError:
+                print(f"WARNING: {p.name} line {n} is not valid JSON (interrupted write?); it will be re-run")
+                continue
+            spent += r.get("cost_usd", 0.0)
+            if not r.get("error"):
+                done.add((r["question_id"], r["setup"], r["run"]))
+    return done, spent
+
+
 def check_frozen():
     r = subprocess.run(["git", "diff", "--quiet", "questions-frozen", "--", str(QUESTIONS)], cwd=ROOT)
     if r.returncode != 0:
@@ -361,7 +387,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", action="store_true", help="5 questions x 4 setups x 1 run")
     ap.add_argument("--runs", type=int, default=3, help="runs per question and setup (full run)")
-    ap.add_argument("--overwrite", action="store_true", help="replace existing result files")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="full run: discard existing result files instead of resuming")
     args = ap.parse_args()
 
     check_frozen()
@@ -393,13 +420,23 @@ def main():
     out_dir = RESULTS / "pilot" if args.pilot else RESULTS
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = {s: out_dir / f"{s}.jsonl" for s in SETUPS}
-    if not args.pilot and not args.overwrite and any(p.exists() and p.stat().st_size for p in paths.values()):
-        sys.exit(f"Result files already exist in {out_dir}; pass --overwrite to replace them.")
-    files = {s: open(p, "w") for s, p in paths.items()}
+    # The pilot always starts fresh. The full run resumes: a (question, setup, run) already in
+    # its jsonl without an API error is skipped; new lines are appended.
+    resume = not args.pilot and not args.overwrite
+    done, prior_spend = completed_runs(paths.values()) if resume else (set(), 0.0)
+    files = {s: open(p, "a" if resume else "w") for s, p in paths.items()}
+    for s, p in paths.items():
+        if resume and p.stat().st_size and not p.read_bytes().endswith(b"\n"):
+            files[s].write("\n")  # never append onto a truncated line
     write_lock = threading.Lock()
 
     budget = Budget(COST_CAP_USD)
-    jobs = [(q, s, r) for r in range(1, runs + 1) for q in qs for s in SETUPS]
+    budget.spent = prior_spend  # the cap covers the whole full run, across resumed sessions
+    jobs = [(q, s, r) for r in range(1, runs + 1) for q in qs for s in SETUPS
+            if (q["id"], s, r) not in done]
+    if done:
+        print(f"Resuming: {len(done)} runs already in {out_dir} are skipped; "
+              f"${prior_spend:.4f} already spent counts toward the cap")
     records = []
     print(f"\n{len(jobs)} runs, concurrency {CONCURRENCY}\n")
     with ThreadPoolExecutor(CONCURRENCY) as pool:
