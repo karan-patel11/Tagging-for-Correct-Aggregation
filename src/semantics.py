@@ -137,11 +137,16 @@ def _fundamental(ticker, metric, p, label):
         r = _one(rows, basis, q)
         if r is None:
             return _insufficient(f"no reported {basis} {metric} for {ticker} {label}", unit=unit)
+        if basis == "FY":
+            explanation = "Reported annual figure from the FY 10-K; no derivation."
+            derivation = []
+        else:
+            explanation = f"Reported {basis} value as filed."
+            derivation = [f"{basis} = {r['value']}"]
         return _envelope("ok", r["value"], unit=unit,
                          period={"label": label, "start": _iso(r["period_start"]),
                                  "end": _iso(r["period_end"])},
-                         explanation=f"Reported {basis} value as filed.",
-                         derivation=[f"{basis} = {r['value']}"], sources=[_sec_source(r)])
+                         explanation=explanation, derivation=derivation, sources=[_sec_source(r)])
 
     # A reported single quarter is used as is.
     r = _one(rows, "Q", q)
