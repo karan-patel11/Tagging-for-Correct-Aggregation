@@ -1002,7 +1002,7 @@ Rules for this repo:
 - Tolerance for answers in index points (indices #3, CPI annual average) is 0.1 index points; §11.6 had no rule for this unit.
 - Capex is PaymentsToAcquirePropertyPlantAndEquipment (purchases of property and equipment) for all four companies. Questions that say "capital expenditure" mean this line, not total investing cash flow.
 - Indices #3 (q020) is a computed mean of the 12 seasonally adjusted monthly CPI values for 2024, not a BLS-published annual average. The downloaded BLS file for CUSR0000SEFV (data/raw/macro/bls_CUSR0000SEFV.xlsx) has monthly columns and empty HALF1/HALF2 columns, and no annual-average column.
-- FY-branch explanation clarified to state no derivation; output text only, no value changes, before any eval run.
+- FY-branch explanation clarified to state no derivation; output text only, no value changes, before any eval run. Applies to FY-basis requests only; reported quarterly values unchanged.
 
 
 **Open questions to decide during the build (record answers here):**
