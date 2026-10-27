@@ -161,7 +161,7 @@ def main():
                               f"questions.yaml {expected:,.6f}, tolerance {tol:,.6f} {q['unit']}")
 
     with LOG.open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
+        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         w.writeheader()
         w.writerows(log)
 
