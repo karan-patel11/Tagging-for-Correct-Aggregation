@@ -1,0 +1,44 @@
+TABLE brand_attention_daily
+  date DATE
+  article_title VARCHAR
+  brand VARCHAR
+  grain VARCHAR
+  parent_ticker VARCHAR
+  views BIGINT
+
+TABLE comps_definitions
+  definition_id VARCHAR
+  ticker VARCHAR
+  definition_text VARCHAR
+  source_url VARCHAR
+  notes VARCHAR
+
+TABLE comps_quarterly
+  ticker VARCHAR
+  fiscal_year INTEGER
+  fiscal_quarter INTEGER
+  comp_sales_pct DOUBLE
+  definition_id VARCHAR
+  source_url VARCHAR
+
+TABLE fundamentals
+  ticker VARCHAR
+  cik VARCHAR
+  metric VARCHAR
+  concept VARCHAR
+  value DOUBLE
+  unit VARCHAR
+  period_start DATE
+  period_end DATE
+  period_basis VARCHAR
+  fiscal_year INTEGER
+  fiscal_quarter INTEGER
+  form VARCHAR
+  accession VARCHAR
+  filed DATE
+
+TABLE macro_monthly
+  series_id VARCHAR
+  date DATE
+  value DOUBLE
+  retrieved_on DATE
