@@ -378,7 +378,7 @@ def main():
 
     built.sort(key=lambda b: (b[0], b[1], b[2]))
     with OUT.open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS)
+        w = csv.DictWriter(f, fieldnames=COLUMNS, lineterminator="\n")
         w.writeheader()
         for *_, row in built:
             w.writerow(row)
