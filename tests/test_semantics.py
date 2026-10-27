@@ -90,12 +90,17 @@ def test_04_cmg_q4_capex_is_fy_minus_ytd9(sem):
 
 # expected_values.md, "Test 5: CMG FY2025 diluted EPS"
 # Excluded from the eval: the quarter sum (0.28 + 0.32 + 0.29 + 0.25) also equals 1.14,
-# so this question cannot tell summing from the reported figure. The semantic test stays.
+# so the value cannot tell summing from the reported figure. The test asserts the method instead:
+# the reported annual figure, from one FY 10-K source, with no derivation steps.
 def test_05_cmg_fy2025_eps_is_reported_annual(sem):
     r = t5_cmg_eps_fy(sem)
     assert r["status"] == "ok"
     assert r["value"] == pytest.approx(1.14, abs=0.01)
+    assert "reported annual figure" in r["explanation"].lower()
     assert [s["accession"] for s in r["sources"]] == ["0001058090-26-000009"]
+    assert r["sources"][0]["form"] == "10-K"
+    assert r["sources"][0]["period_basis"] == "FY"
+    assert r["derivation"] == []
 
 
 # expected_values.md, "Test 6: combined FY2025 operating margin, CMG + WING"

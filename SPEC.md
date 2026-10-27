@@ -628,6 +628,7 @@ All four share the same model, the same base instructions, and the same final-an
 | EPS | $0.01 |
 | Views | 0.1% |
 | Index percent change | 0.05 percentage points |
+| Index points | 0.1 index points |
 
 **What each run is scored on:**
 
@@ -979,6 +980,29 @@ Rules for this repo:
 - aggregate(last) on several entities returns the sum of each company's last-period balance; mixed fiscal calendars return a warning.
 - comp_sales_pct retrieved_on 2026-10-24 is the commit date of 9e1b5e4, when the values were committed, not a separately recorded entry date.
 - Phase 8: constrain the MCP SDK to `mcp>=2.3,<3`; the low-level server is verified with MCP 2.3.0 on Python 3.13.12. The 2026-10-26 local Claude Code demo returned DRI FY2025Q3 continuing-operations operating cash flow of 588,200,000 USD with both source accessions. A separate real stdio client also passed with the server launched from `/tmp`. Verification evidence and source checks are recorded in `docs/phase8_verification.md`.
+- Phase 9: questions dropped by the 2x-tolerance rule (a trap answer within 2x the §11.6 tolerance of the correct answer). They stay in eval/questions_draft.md for history and are excluded from eval/questions.yaml.
+
+  | Draft question | Trap | Gap | 2x tolerance |
+  |---|---|---|---|
+  | time_additivity #6 (CMG FY2025 diluted EPS) | sum of 4 quarters | 0.00 | 0.02 |
+  | time_additivity #7 (WING FY2025 diluted EPS) | sum of 4 quarters | 0.02 | 0.02 |
+  | time_additivity spare #1 (CMG FY2024 diluted EPS) | sum of 4 quarters | 0.00 | 0.02 |
+  | time_additivity spare #2 (YUM FY2025 diluted EPS) | sum of 4 quarters | 0.00 | 0.02 |
+  | ratios #4 (CMG FY2025 margin) | mean of quarterly margins | 0.009 pp | 0.2 pp |
+  | ratios #5 (YUM FY2025 margin) | mean of quarterly margins | 0.124 pp | 0.2 pp |
+  | ratios #6 (DRI FY2025 margin) | mean of quarterly margins | 0.077 pp | 0.2 pp |
+  | ratios spare #2 (WING FY2025 margin) | mean of quarterly margins | 0.022 pp | 0.2 pp |
+  | ratios spare #3 (CMG FY2024 margin) | mean of quarterly margins | 0.039 pp | 0.2 pp |
+  | ytd_calendar #7 (food-service sales, Dec 2024-Feb 2025) | calendar Q1 2025 and calendar Q4 2024 months | 0.82% and 0.14% | 1.0% |
+
+  Spares are used after main questions in draft order, and only until a category has 7. Ratios spares #2 and #3 were checked in the first build (both dropped) and are no longer reached.
+- EPS sum-of-quarters cannot be tested with XBRL data: Q4 diluted EPS is not tagged, so a Q4 figure can only be made as FY minus YTD9, and the sum of the four quarters then equals the FY figure by construction (up to rounding). The semantic test for EPS stays and asserts the method (reported annual figure, one FY 10-K source, no derivation steps); EPS is not in the eval set.
+- Four replacement questions were written on 2026-10-27, after semantics.py existed (commit 4f06c42): time_additivity #8 (q039, CMG total assets for fiscal 2024), ratios #8 (q040, CMG + WING combined fiscal 2024 margin), ratios #9 (q041, CMG + YUM combined fiscal 2024 margin), ytd_calendar #8 (q042, YUM net cash provided by operating activities, fiscal Q4 2025). All four pass the 2x rule. The existing 38 IDs are unchanged; the four take q039-q042.
+- Removed the "calculated as their total operating income divided by their total revenue" method hint from 5 combined-margin questions (ratios #1, #2, #3, #7, spare #1; q007-q011). The hint named the correct aggregation, so the trap could not fire. This edit goes beyond §11.1's period/unit rule. It was the author's decision, made before any evaluation run.
+- Tolerance for answers in index points (indices #3, CPI annual average) is 0.1 index points; §11.6 had no rule for this unit.
+- Capex is PaymentsToAcquirePropertyPlantAndEquipment (purchases of property and equipment) for all four companies. Questions that say "capital expenditure" mean this line, not total investing cash flow.
+- Indices #3 (q020) is a computed mean of the 12 seasonally adjusted monthly CPI values for 2024, not a BLS-published annual average. The downloaded BLS file for CUSR0000SEFV (data/raw/macro/bls_CUSR0000SEFV.xlsx) has monthly columns and empty HALF1/HALF2 columns, and no annual-average column.
+- FY-branch explanation clarified to state no derivation; output text only, no value changes, before any eval run.
 
 
 **Open questions to decide during the build (record answers here):**
