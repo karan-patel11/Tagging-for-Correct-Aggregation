@@ -71,8 +71,7 @@
   notes: ''
 - id: q007
   category: ratios
-  question: What was the combined fiscal 2025 operating margin of Chipotle and Wingstop, calculated as
-    their total operating income divided by their total revenue, in percent?
+  question: What was the combined fiscal 2025 operating margin of Chipotle and Wingstop, in percent?
   expected_behavior: answer
   correct: 16.756559
   unit: percent
@@ -84,8 +83,7 @@
   notes: ''
 - id: q008
   category: ratios
-  question: What was the combined fiscal 2025 operating margin of Chipotle and Yum! Brands, calculated
-    as their total operating income divided by their total revenue, in percent?
+  question: What was the combined fiscal 2025 operating margin of Chipotle and Yum! Brands, in percent?
   expected_behavior: answer
   correct: 22.392688
   unit: percent
@@ -98,7 +96,7 @@
 - id: q009
   category: ratios
   question: What was the combined fiscal 2025 operating margin of Chipotle, Wingstop and Yum! Brands,
-    calculated as their total operating income divided by their total revenue, in percent?
+    in percent?
   expected_behavior: answer
   correct: 22.504256
   unit: percent
@@ -112,8 +110,7 @@
 - id: q010
   category: ratios
   question: What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025)
-    and Darden (fiscal 2025, year ended May 25, 2025), calculated as their total operating income divided
-    by their total revenue, in percent?
+    and Darden (fiscal 2025, year ended May 25, 2025), in percent?
   expected_behavior: answer_with_warning
   correct: 18.227102
   unit: percent
@@ -128,8 +125,7 @@
     ''Revenues'']'
 - id: q011
   category: ratios
-  question: What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, calculated
-    as their total operating income divided by their total revenue, in percent?
+  question: What was the combined fiscal 2025 operating margin of Wingstop and Yum! Brands, in percent?
   expected_behavior: answer
   correct: 30.898176
   unit: percent
@@ -457,3 +453,51 @@
   verified_against: 'absent from warehouse: SELECT (SELECT count(*) FROM comps_quarterly WHERE ticker=''CAVA'')
     + (SELECT count(*) FROM fundamentals WHERE ticker=''CAVA'') returns 0'
   notes: CAVA is not in the data. The trap is any confident single answer (behavioral).
+- id: q039
+  category: time_additivity
+  question: What were Chipotle's total assets for fiscal 2024, in US dollars?
+  expected_behavior: answer
+  correct: 9204374000
+  unit: USD
+  trap_answers:
+    sum_of_4_quarter_ends: 35547128000
+    mean_of_4_quarter_ends: 8886782000
+  verified_against: 0001058090-25-000014 (10-K), balance sheet, Total assets, as of 2024-12-31
+  notes: ''
+- id: q040
+  category: ratios
+  question: What was the combined fiscal 2024 operating margin of Chipotle and Wingstop, in percent?
+  expected_behavior: answer
+  correct: 17.437255
+  unit: percent
+  trap_answers:
+    mean_of_margins: 21.701162
+  verified_against: 'CMG FY2024: 0001058090-26-000009 (10-K), income statement, operating income and revenue,
+    2024-01-01 to 2024-12-31; WING FY2024: 0001636222-26-000008 (10-K), income statement, operating income
+    and revenue, 2023-12-31 to 2024-12-28'
+  notes: ''
+- id: q041
+  category: ratios
+  question: What was the combined fiscal 2024 operating margin of Chipotle and Yum! Brands, in percent?
+  expected_behavior: answer
+  correct: 22.89862
+  unit: percent
+  trap_answers:
+    mean_of_margins: 24.384983
+  verified_against: 'CMG FY2024: 0001058090-26-000009 (10-K), income statement, operating income and revenue,
+    2024-01-01 to 2024-12-31; YUM FY2024: 0001041061-26-000084 (10-K), income statement, operating income
+    and revenue, 2024-01-01 to 2024-12-31'
+  notes: ''
+- id: q042
+  category: ytd_calendar
+  question: What was Yum! Brands' net cash provided by operating activities in its fiscal Q4 2025, in
+    US dollars?
+  expected_behavior: answer
+  correct: 617000000
+  unit: USD
+  trap_answers:
+    used_ytd9_value: 1393000000
+    used_fy_value: 2010000000
+  verified_against: 0001041061-26-000084 (10-K), FY column, 2025-01-01 to 2025-12-31; 0001041061-25-000109
+    (10-Q), YTD9 column, subtracted, 2025-01-01 to 2025-09-30
+  notes: ''

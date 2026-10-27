@@ -104,3 +104,5 @@ ratios:
 ## Changes after draft
 
 Indices #4 replaced (was: annual average CPI for calendar 2025). Reason: BLS did not publish October 2025 CPI, so no 12-month average exists. Decided before any evaluation run.
+
+Removed the 'calculated as…' method hint from 5 combined-margin questions (ratios #1, #2, #3, #7, spare #1). The hint named the correct aggregation, so the trap could not fire. This edit goes beyond §11.1's period/unit rule. It was the author's decision, made before any evaluation run.
