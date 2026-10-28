@@ -262,6 +262,8 @@ def section_results(summary, questions):
 <h2>Accuracy was close across all four setups.</h2>
 <p class="muted">{e(sample)}. Bars show mean accuracy; markers show the lowest and highest run.
 The axis starts at zero.</p>
+<p>The setups differ by a few runs each. That is too few to rank them on this sample. The larger
+observed difference is in extra warnings, shown below.</p>
 {bars(acc_rows, True)}
 <div class="table-wrap"><table>
 <tr><th>Setup</th><th>Tools</th><th>Correct runs</th><th>Accuracy (run range)</th>
@@ -322,6 +324,10 @@ def source_links(urls):
             + "<br>".join(items) + "</details>")
 
 
+def calls_label(n):
+    return f"{n} tool call" + ("" if n == 1 else "s")
+
+
 def pane(runs, questions, vlog, qid, setup, run):
     q = questions[qid]
     rec, sc = scored(runs, questions, qid, setup, run)
@@ -347,9 +353,16 @@ def pane(runs, questions, vlog, qid, setup, run):
 <p class="small"><b>Final answer:</b> {final}</p>
 <p class="small"><b>Correct answer:</b> {e(expected)}</p>
 <p class="small">{links}</p></div>
-<details class="trace"><summary>View recorded steps · {len(rec.get('tool_calls') or [])} tool calls</summary>
+<details class="trace"><summary>View recorded steps · {calls_label(len(rec.get('tool_calls') or []))}</summary>
 <div class="trace-body">{render_steps(rec)}</div></details>
 </div>"""
+
+
+def remedy(r):
+    """An optional fix the author proposes for an observed failure. It was not run or measured."""
+    text = r.get("untested_remedy")
+    return (f'<div class="note small remedy"><b>Possible fix, not tested:</b> {e(text)}</div>'
+            if text else "")
 
 
 def section_replays(runs, questions, vlog, replays):
@@ -376,7 +389,7 @@ def section_replays(runs, questions, vlog, replays):
         blocks.append(f"""
 <div class="replay" data-q="{e(qid)}">
 <h3>{e(cat)}: {e(q["question"])}</h3>
-<div class="note small">{e(need(r, "note"))}</div>
+<div class="note small">{e(need(r, "note"))}</div>{remedy(r)}
 <div class="replay-cols">
   <div class="col"><div class="tabs js-only">{tabs}</div>{left}</div>
   <div class="col">{pane(runs, questions, vlog, qid, "D", shown["D"])}</div>
