@@ -73,7 +73,7 @@ th { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
 .picker button[aria-selected="true"], .tabs button[aria-selected="true"] { background: var(--accent-soft);
   border-color: var(--accent); color: var(--accent); font-weight: 600; }
 .tabs { display: flex; gap: 6px; margin-bottom: 8px; }
-.replay-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.replay-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .col { border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
 .step { border-left: 3px solid var(--line); padding: 4px 0 4px 10px; margin: 10px 0; }
 .step .tool { font-weight: 600; font-size: 0.85rem; }
@@ -86,6 +86,16 @@ th { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
 .note { background: var(--accent-soft); border-radius: 8px; padding: 10px 12px; margin: 8px 0 12px; }
 .record { font-size: 0.85rem; color: var(--muted); margin: 4px 0 8px; }
 details summary { cursor: pointer; color: var(--accent); font-size: 0.85rem; }
+.trace { margin-top: 14px; border: 1px solid var(--line); border-radius: 8px; }
+.trace > summary { padding: 10px 12px; background: var(--code); border-radius: 8px;
+  font-weight: 600; }
+.trace > summary:focus-visible, .run-record > summary:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 3px; }
+.trace[open] > summary { border-bottom: 1px solid var(--line); border-radius: 8px 8px 0 0; }
+.trace-body { padding: 4px 12px 10px; overflow-wrap: anywhere; }
+.run-record { margin: 4px 0 12px; }
+.run-record > summary { color: var(--muted); }
+.run-record p { margin: 6px 0 0; }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .card { border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
 .card dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 8px 0 0; font-size: 0.85rem; }
@@ -116,9 +126,8 @@ footer { margin-top: 24px; }
   <div>
     <div class="kicker">A small experiment</div>
     <h1>Tagging for Correct Aggregation</h1>
-    <p class="lede">Can a language model answer restaurant-sector finance questions correctly when the
-    data's aggregation rules are written down as column tags? This page replays recorded runs only.
-    Nothing here calls a model.</p>
+    <p class="lede">Compare schema, prose, tags and semantic tools on restaurant-finance questions.
+    Explore the recorded answers, calculations and sources.</p>
   </div>
   <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
 </header>
