@@ -1,5 +1,7 @@
 # Error analysis
 
+Terms and question texts: see [key.md](key.md).
+
 This analysis uses the stored full-run transcripts in `eval/results/{A,B,C,D}.jsonl` and the corrected [summary](../eval/results/summary.md). It was prepared with coding assistance; it does not assert a personal source-verification sign-off. No prompts, tools, frozen questions or recorded runs were changed for this analysis. Suggested remedies below are hypotheses for a future evaluation, not measured improvements.
 
 The recorded run starts fall on October 28, 2026 UTC (October 27 Eastern). Each setup has 126 runs. A has four incorrect runs, B has none, C has two, and D has two. These are run outcomes, not eight distinct failed questions. Unparsed output counts as incorrect.

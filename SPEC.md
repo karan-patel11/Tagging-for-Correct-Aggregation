@@ -1005,6 +1005,13 @@ Rules for this repo:
 - FY-branch explanation clarified to state no derivation; output text only, no value changes, before any eval run. Applies to FY-basis requests only; reported quarterly values unchanged.
 - Verification provenance: all 134 inputs cross-checked with agent assistance (BLS against the official API; pageviews re-fetched from the ingestion API; Census against the ingested workbook). Hand-checked by the author on 2026-10-27: 17 SEC rows (15 distinct amounts) read from filing HTML, including q039–q042 and the original FY2024 10-K comparison; 5 pageview totals in Pageviews Analysis; 3 Census months in the live MRTS table (released 2026-10-15, no revisions observed).
 - Scorer bug found while checking the full run (2026-10-28): score.py's scale-word pattern used `\b`, which treats `_` as part of a word, so a FINAL unit of `USD_millions` was not read as millions while the question unit `USD millions` was, and correct answers were divided by 1,000,000. Fixed in commit 4977d48 with a regression test. The scoring rule did not change (a unit that names millions is converted); the code had not applied it to this spelling. A before/after diff over all 504 runs flipped exactly 12 runs, all from incorrect to correct, all on q022-q024 (B 8, C 4); no other run or field changed except number_ok on those runs. Correct runs before/after: A 122/122, B 118/126, C 120/124, D 124/124. Recorded in eval/results/summary.md and summary.json (scorer_notes). Over-warning is reported as over-warned runs over all runs on answer-expected questions.
+- 2026-10-28: Phase 11: B's prose is generated from the tags by fixed templates, one sentence per fact (eval/make_contexts.py). The templates and three tag blocks were hand-checked on 2026-10-27. 51 of 378 facts mirror tag values verbatim (lineage id_column, id_columns, concept_column, and time_rollup: none).
+- 2026-10-28: tags.yaml uses lineage id_column inconsistently: on measure tags it names the column that links a value to its source (e.g. source_url, article_title, series_id); on dimension and identifier tags it is the column's own name. Not changed; mirrored verbatim in B and C.
+- 2026-10-28: The ratios category deviates from §11.2: 6 combined-margin questions (q007–q009, q011, q040, q041) plus q010, and none that sum one company's quarters into an annual margin (those drafts were dropped by the 2x-tolerance rule). Not changed, to preserve the freeze.
+- 2026-10-28: Runs: 3 per question per setup (504 in total); cost $0.4274.
+- 2026-10-28: Scoring rules fixed before results: a warning on an "answer" question is not scored incorrect; units naming thousands, millions or billions are converted before comparison; answer_with_warning also requires refused=false.
+- 2026-10-28: Null-result rule: if setups are close, report per-category results, failures, warning rates and cost, and claim neither that tags help nor that they do not.
+- 2026-10-28: Warnings on "answer" questions (over-warning): by a keyword heuristic (report/analyze_over_warnings.py, counts in report/over_warning_reasons.json), most cite stored filing dates, accession numbers or retrieval metadata (A 25/34, B 9/9, C 18/19, D 5/7). The dataset keeps the latest-filed row for duration facts, so prior-year values carry later filings' dates; the models flagged that. These are not scored as errors; the metric does not show that any setup hedges more or less well. q017 (A run 2, the only stored-trap hit): A read the question as asking for the full year, although the question names the 14-week quarter; it wrote that "the full year is the figure you asked about", gave the derived Q4 only as a cross-check, and put the full-year figure in FINAL. The full-year row is stored with fiscal_quarter 4.
 
 
 **Open questions to decide during the build (record answers here):**
@@ -1015,7 +1022,7 @@ Rules for this repo:
 - Whether Darden's fiscal 2026 is a 53-week year.
 - 3 runs or 2, after the pilot.
 
-**Pre-send checklist (Monday morning):**
+**Pre-send checklist (<SEND_DATE>):**
 
 - [ ] Recipient's name spelled correctly (check the calendar invite or the recruiter's email).
 - [ ] Every number in the email matches `summary.md`.
@@ -1027,4 +1034,4 @@ Rules for this repo:
 - [ ] Video is under 2:30 and the filing link works on camera.
 - [ ] Language is modest: a small experiment, no claims about Jefferies' internal systems.
 - [ ] You have re-run the quickstart from a fresh clone.
-- [ ] Sent once, on Monday morning, Eastern Time.
+- [ ] Sent once, on <SEND_DATE>, Eastern Time.

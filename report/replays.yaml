@@ -31,8 +31,11 @@ replays:
     runs: {A: 2, B: 1, C: 1, D: 1}
     expect: {A: trap, B: correct, C: correct, D: correct}
     note: >-
-      A calculated the quarter in its explanation, then returned annual revenue in its final answer.
-      This was the only stored-trap hit. A's other runs answered correctly.
+      A read the question as asking for the full year, although the question names the 14-week
+      quarter. It wrote that "the full year is the figure you asked about", gave the derived fourth
+      quarter only as a cross-check, and put the full-year figure in FINAL. The full-year row is
+      stored with fiscal_quarter set to the fourth quarter. This was the only stored-trap hit. A's
+      other runs answered correctly.
 
   - question_id: q018
     runs: {A: 1, B: 1, C: 1, D: 1}

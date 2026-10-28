@@ -1,7 +1,8 @@
 """Phase 15a: build the static results page docs/index.html (SPEC §13.1).
 
 Data comes only from eval/results/summary.json, eval/results/{A,B,C,D}.jsonl, eval/questions.yaml,
-tags/tags.yaml and eval/verification_log.csv. report/replays.yaml picks the replays and holds the
+tags/tags.yaml, eval/verification_log.csv and report/over_warning_reasons.json (written by
+report/analyze_over_warnings.py from the same runs). report/replays.yaml picks the replays and holds the
 plain-language notes; report/template.html holds the layout. Runs are scored with eval/score.py's
 score_run, the same code that produced summary.json, so a replay badge always matches the summary.
 
@@ -39,6 +40,8 @@ REPLAYS = ROOT / "report" / "replays.yaml"
 TEMPLATE = ROOT / "report" / "template.html"
 OUT = ROOT / "docs" / "index.html"
 ERROR_ANALYSIS = ROOT / "docs" / "error_analysis.md"
+OVER_WARNINGS = ROOT / "report" / "over_warning_reasons.json"
+OW_LABEL = "Warnings on questions whose key expects no caveat"
 
 SETUP_NAMES = {"A": "Schema only", "B": "Prose descriptions", "C": "Tags file", "D": "Semantic tools"}
 SETUP_TOOLS = {"A": "SQL", "B": "SQL", "C": "SQL", "D": "Semantic tools, no SQL"}
@@ -110,7 +113,8 @@ def load():
                 runs[(r["question_id"], r["setup"], r["run"])] = r
     replays = yaml.safe_load(read(REPLAYS))
     template = read(TEMPLATE)
-    return summary, questions, tags, vlog, runs, replays, template
+    ow = json.loads(read(OVER_WARNINGS))
+    return summary, questions, tags, vlog, runs, replays, template, ow
 
 
 def check_template(template):
@@ -180,6 +184,37 @@ def sources_for(vlog, qid):
 
 # ---------- sections ----------
 
+def section_intro(questions, tags, replays):
+    t = tags.get("fundamentals.total_assets") or die("tags.yaml has no fundamentals.total_assets")
+    rule = f"additive_over_time: {str(need(t, 'additive_over_time')).lower()}, time_rollup: {need(t, 'time_rollup')}"
+    counts = {}
+    for q in questions.values():
+        counts[q["expected_behavior"]] = counts.get(q["expected_behavior"], 0) + 1
+    names = {"answer": "answer", "answer_with_warning": "answer with warning", "refuse": "refuse"}
+    if set(counts) != set(names):
+        die(f"unexpected expected_behavior values {sorted(counts)}")
+    behaviours = ", ".join(f"<b>{e(names[k])}</b> ({counts[k]} questions)" for k in names)
+    score_link = need(need(replays, "links"), "repo") + "/blob/main/eval/score.py"
+    return f"""
+<p class="lede">One model answered the same restaurant-finance questions in four setups. This page
+replays the recorded runs. It does not call a model.</p>
+<dl class="defs">
+<dt>Tag</dt><dd>A rule attached to a metric, kept in <code>tags/tags.yaml</code>. For example, the
+<code>total_assets</code> tag sets <code>{e(rule)}</code> and reads: “{e(need(t, "derivation"))}” In
+plain terms: a balance; never sum it across quarters.</dd>
+<dt>Setups</dt><dd>A sees only the table schema. B gets prose sentences generated from the tags. C
+gets the tags file itself. D gets semantic tools that apply the tags, and no SQL.</dd>
+<dt>Expected behaviour</dt><dd>Each question's answer key expects one of three: {behaviours}.</dd>
+<dt>FINAL line</dt><dd>Every run ends with a FINAL line: the number, its unit and two flags.
+<code>warning=true</code> means the model attached a caveat to its number;
+<code>refused=true</code> means it declined to give a number.</dd>
+<dt>Stored trap</dt><dd>A specific wrong answer computed in advance for a question, such as the sum
+of four quarter-end balances. A run hits the trap when its number lands within tolerance of it.</dd>
+<dt>Correct</dt><dd>The run's behaviour matches the key and, unless the key expects a refusal, its
+number is within a per-unit tolerance defined in <a href="{e(score_link)}">eval/score.py</a>.</dd>
+</dl>"""
+
+
 def section_problem(questions, runs, vlog, replays):
     qid = need(replays, "problem_question")
     q = questions.get(qid) or die(f"unknown problem_question {qid}")
@@ -231,7 +266,7 @@ def bars(rows, with_range):
     return "\n".join(out)
 
 
-def section_results(summary, questions):
+def section_results(summary, questions, ow):
     setups = need(summary, "setups")
     model = ", ".join(need(summary, "model"))
     dates = need(summary, "run_dates")
@@ -242,38 +277,67 @@ def section_results(summary, questions):
     n_q = len(qids)
     if n_q != len(questions):
         die(f"summary covers {n_q} questions, questions.yaml has {len(questions)}")
+    # score.py checks every stored trap of every non-refuse question, so one run is checked once per trap.
+    n_traps = sum(len(q.get("trap_answers") or {}) for q in questions.values()
+                  if q["expected_behavior"] != "refuse")
+    ow_setups = need(ow, "setups")
     acc_rows, ow_rows, table = [], [], []
+    matched_total = ow_total = 0
     for s in score.SETUPS:
         v = setups.get(s) or die(f"summary has no setup {s}")
         a = need(v, "accuracy")
         mean, lo, hi = need(a, "mean"), need(a, "min"), need(a, "max")
         hits = sum(need(t, "hits") for t in need(v, "trap_hits").values())
-        trap_runs = sum(need(t, "runs") for t in v["trap_hits"].values())
-        ow, ow_n, ow_d = need(v, "over_warning_rate"), need(v, "over_warning_runs"), need(v, "answer_question_runs")
+        trap_checks = sum(need(t, "runs") for t in v["trap_hits"].values())
+        if trap_checks != n_traps * n_runs:
+            die(f"{s}: {trap_checks} trap checks in summary.json, questions.yaml gives "
+                f"{n_traps} stored traps x {n_runs} runs")
+        ow_r, ow_n, ow_d = need(v, "over_warning_rate"), need(v, "over_warning_runs"), need(v, "answer_question_runs")
+        o = ow_setups.get(s) or die(f"over_warning_reasons.json has no setup {s}")
+        if need(o, "warning_runs") != ow_n:
+            die(f"{s}: over_warning_reasons.json counts {o['warning_runs']} runs, summary.json {ow_n}")
+        matched = need(o, "matched")
+        matched_total += matched
+        ow_total += ow_n
         label = f"{s} · {SETUP_NAMES[s]}"
         acc_rows.append((label, mean, lo, hi, pct(mean)))
-        ow_rows.append((label, ow, None, None, pct(ow)))
+        ow_rows.append((label, ow_r, None, None, pct(ow_r)))
         table.append(f"<tr><td>{e(label)}</td><td>{e(SETUP_TOOLS[s])}</td>"
                      f"<td>{need(v, 'correct_runs')} / {need(v, 'n')}</td>"
                      f"<td>{e(pct(mean))} <span class='muted'>(runs {e(pct(lo))}–{e(pct(hi))})</span></td>"
-                     f"<td>{hits} / {trap_runs}</td><td>{ow_n} / {ow_d} ({e(pct(ow))})</td></tr>")
+                     f"<td>{hits} / {trap_checks}</td><td>{ow_n} / {ow_d} ({e(pct(ow_r))})</td>"
+                     f"<td>{matched} / {ow_n}</td></tr>")
+    if 2 * matched_total <= ow_total:
+        die(f"only {matched_total} of {ow_total} warning runs match the keyword pattern; "
+            "the page text says most do")
+    n_setup = need(setups["A"], "n")
     sample = f"{n_q} questions × {n_runs} runs, {model}, run on {' and '.join(dates)} (UTC)"
     return f"""
 <h2>Accuracy was close across all four setups.</h2>
 <p class="muted">{e(sample)}. Bars show mean accuracy; markers show the lowest and highest run.
 The axis starts at zero.</p>
-<p>The setups differ by a few runs each. That is too few to rank them on this sample. The larger
-observed difference is in extra warnings, shown below.</p>
+<p>The setups differ by a few runs each. That is too few to rank them on this sample. Warning rates
+differ more than accuracy; they are shown below.</p>
 {bars(acc_rows, True)}
 <div class="table-wrap"><table>
 <tr><th>Setup</th><th>Tools</th><th>Correct runs</th><th>Accuracy (run range)</th>
-<th>Stored-trap hits / runs</th><th>Over-warning / answer-question runs</th></tr>
+<th>Stored-trap hits / trap checks<sup>*</sup></th><th>{e(OW_LABEL)} / runs on those questions</th>
+<th>Of those warnings, cite filing dates or metadata (keyword match)</th></tr>
 {''.join(table)}
 </table></div>
-<h3 style="margin-top:20px">Secondary metric: over-warning</h3>
-<p class="muted">Warnings on questions labelled as needing an answer without a caveat. These count
-separately from accuracy; the measure does not judge the wording of each caveat.</p>
-{bars(ow_rows, False)}"""
+<p class="small muted"><sup>*</sup> A run on a question with several stored traps is checked once per
+trap: {n_traps} stored traps × {n_runs} runs = {n_traps * n_runs} trap checks per setup, against
+{n_setup} runs per setup.</p>
+<h3 style="margin-top:20px">Secondary metric: {e(OW_LABEL.lower())}</h3>
+<p class="muted">Runs that set warning=true on a question whose answer key expects a plain answer.
+Most of these cite stored filing dates or retrieval metadata (keyword match, counts in the table).
+The dataset keeps the latest-filed value, so prior-year figures carry later filings' dates; the
+models flagged that. These are not scored as errors, and the metric does not show that any setup
+hedges more or less well.</p>
+{bars(ow_rows, False)}
+<p class="small muted">The keyword match is a heuristic over each run's final text
+(<code>report/analyze_over_warnings.py</code>, pattern and run lists in
+<code>report/over_warning_reasons.json</code>); it does not judge each caveat.</p>"""
 
 
 def render_steps(rec):
@@ -365,8 +429,10 @@ def remedy(r):
             if text else "")
 
 
-def section_replays(runs, questions, vlog, replays):
+def section_replays(runs, questions, vlog, replays, tags):
     items = need(replays, "replays")
+    dedupe = need(tags.get("fundamentals.revenue") or die("tags.yaml has no fundamentals.revenue"),
+                  "lineage", "dedupe")
     if len(items) != len(CATEGORY_NAMES):
         die(f"replays.yaml lists {len(items)} replays; SPEC §13.1 asks for one per category")
     cats = [questions[need(r, "question_id")]["category"] for r in items]
@@ -399,6 +465,11 @@ def section_replays(runs, questions, vlog, replays):
 <h2>Compare recorded answers.</h2>
 <p class="muted">{len(items)} questions, one per category. Compare A, B or C with D. Answers and scores
 appear first; expand recorded steps for the original model text and tool responses.</p>
+<p class="small muted"><b>Filing dates in the replays.</b> The dataset rule, from the tags' lineage
+and the SPEC decisions log: “{e(dedupe)}” So a stored prior-year figure for revenue, income or cash
+flow can carry the accession number and filing date of a later filing that repeated it as a
+comparative. This is by design. Replay text in which a model remarks on odd filing dates is
+describing that rule, not corrupt data.</p>
 <div class="picker js-only">{''.join(buttons)}</div>
 {''.join(blocks)}"""
 
@@ -420,7 +491,24 @@ which methods are allowed.</p>
 <div class="cards">{''.join(cards)}</div>"""
 
 
-def section_b_vs_c(summary, questions):
+def warning_line(runs, questions, qid):
+    """For a B/C difference on an answer-with-warning question: who warned, and that every number was right."""
+    q = questions[qid]
+    if q["expected_behavior"] != "answer_with_warning":
+        die(f"{qid}: B/C difference is not on an answer_with_warning question; no wording for it")
+    counts = {}
+    for s in score.SETUPS:
+        keys = sorted(k for k in runs if k[0] == qid and k[1] == s) or die(f"no runs for {qid} {s}")
+        scs = [score.score_run(runs[k], q) for k in keys]
+        if not all(sc["number_ok"] for sc in scs):
+            die(f"{qid} {s}: not every run's number is correct; the page says it is")
+        counts[s] = (sum(bool(sc["final"]["warning"]) for sc in scs), len(scs))
+    w = {s: f"{counts[s][0]}/{counts[s][1]}" for s in counts}
+    return (f"B warned in {w['B']} runs, C in {w['C']} (A in {w['A']}, D in {w['D']}). "
+            "The numbers were correct in all runs; only the warning differed.")
+
+
+def section_b_vs_c(summary, questions, runs):
     bc = need(summary, "b_vs_c")
     n = need(bc, "questions")
     diff_b, diff_c = need(bc, "b_right_c_wrong"), need(bc, "c_right_b_wrong")
@@ -428,25 +516,70 @@ def section_b_vs_c(summary, questions):
     if same + len(diff_b) + len(diff_c) != n:
         die("b_vs_c counts do not add up")
     n_runs = len(need(summary, "runs_per_question"))
-    diffs = "".join(f"<li><b>{e(q)}</b>: {e(questions[q]['question'])} ({side})</li>"
-                    for qs, side in ((diff_b, "B right, C wrong"), (diff_c, "C right, B wrong")) for q in qs)
+    majority = n_runs // 2 + 1
+    diffs = "".join(f"<li><b>{e(q)}</b>: {e(questions[q]['question'])} {e(warning_line(runs, questions, q))}</li>"
+                    for q in diff_b + diff_c)
+    n_diff = len(diff_b) + len(diff_c)
     return f"""
 <div class="box">
 <h2>Prose and tags gave similar results.</h2>
 <p>B and C receive the same facts in different formats: sentences and structured tags.
-By majority vote across {n_runs} runs, their scored outcomes agree on
+<b>Majority vote</b> means a setup counts as right on a question when more than half of its runs on
+that question are correct ({majority} of {n_runs}). By majority vote, their scored outcomes agree on
 <b>{same} of {n}</b> questions. The difference:</p>
 <ul>{diffs or "<li>None.</li>"}</ul>
-<p class="muted">This small sample does not establish that one format is better. No statistical
-significance test was performed.</p>
+<p class="muted">The difference is {n_diff} question{"" if n_diff == 1 else "s"}, {n_runs} runs each.
+This small sample does not establish that one format is better. No statistical significance test was
+performed.</p>
 </div>"""
 
 
-def section_checks(summary, questions, vlog, replays):
+HAND_RE = re.compile(r"hand-read by|hand spot-check by")
+
+
+def source_kind(url):
+    if "sec.gov" in url:
+        return "SEC"
+    if "census.gov" in url:
+        return "Census"
+    if "pageviews" in url or "wikimedia" in url:
+        return "pageviews"
+    if "bls.gov" in url:
+        return "BLS"
+    return "other"
+
+
+def verification_breakdown(vlog, tags):
+    """Hand-checked rows (by their notes) split by source, and whether the Census check is independent."""
+    hand = [r for r in vlog if HAND_RE.search(r["notes"])]
+    by_kind = {}
+    for r in hand:
+        by_kind.setdefault(source_kind(r["source_url"]), []).append(r)
+    if set(by_kind) - {"SEC", "Census", "pageviews"}:
+        die(f"hand-checked rows from unexpected sources {sorted(by_kind)}")
+    sec = by_kind.get("SEC", [])
+    census_file = need(tags.get("macro.food_services_sales") or die("no macro.food_services_sales tag"),
+                       "lineage", "file")
+    census = [r for r in vlog if source_kind(r["source_url"]) == "Census"]
+    if not census or not all(census_file in r["notes"] for r in census):
+        die("Census verification notes do not all name the ingested workbook; page wording needs review")
+    b = {"total": len(vlog), "hand": len(hand), "hand_sec": len(sec),
+         "hand_sec_questions": len({r["question_id"] for r in sec}),
+         "hand_census": len(by_kind.get("Census", [])), "hand_pageviews": len(by_kind.get("pageviews", [])),
+         "census_rows": len(census), "census_file": census_file}
+    b["hand_non_sec"] = b["hand_census"] + b["hand_pageviews"]
+    b["rest"] = b["total"] - b["hand"]
+    print(f"verification_log.csv: {b['total']} rows; hand-checked per notes: {b['hand']} "
+          f"(SEC {b['hand_sec']} rows across {b['hand_sec_questions']} questions; non-SEC "
+          f"{b['hand_non_sec']}: Census {b['hand_census']}, pageviews {b['hand_pageviews']}); "
+          f"rest {b['rest']}. Census rows: {b['census_rows']}, all compared against {census_file}")
+    return b
+
+
+def section_checks(summary, questions, vlog, replays, tags):
     n_rows = len(vlog)
     n_yes = sum(r["matches"].strip().lower() == "yes" for r in vlog)
-    hand = [r for r in vlog if "hand-read by" in r["notes"]]
-    hand_q = len({r["question_id"] for r in hand})
+    vb = verification_breakdown(vlog, tags)
     verified_q = len({r["question_id"] for r in vlog if r["matches"].strip().lower() == "yes"})
     per_cat = {}
     for q in questions.values():
@@ -465,8 +598,7 @@ def section_checks(summary, questions, vlog, replays):
 <h3>Scorer bug, found and fixed before publishing</h3>
 <p>{e(need(n, "description"))}</p>
 <p>The fix (commit <code>{e(need(n, "fix_commit"))}</code>) changed {need(n, "runs_flipped")} runs
-({e(by)}), all on {e(", ".join(need(n, "flipped_questions")))}, all from incorrect to correct. The
-scoring rule did not change.</p>
+({e(by)}), all on {e(", ".join(need(n, "flipped_questions")))}, all from incorrect to correct.</p>
 <div class="table-wrap"><table><tr><th>Setup</th><th>Correct runs before the fix</th><th>After</th></tr>{rows}</table></div>""")
     links = need(replays, "links")
     repo = need(links, "repo")
@@ -478,9 +610,15 @@ scoring rule did not change.</p>
 <ul>
 <li>The answer key was computed with direct SQL in <code>eval/make_questions.py</code>, never with
 <code>semantics.py</code>, so the code being tested did not grade itself.</li>
-<li>{n_yes} of {n_rows} source values behind the {verified_q} questions were checked against the
-filings and agency data and marked as matching in <code>eval/verification_log.csv</code>; {len(hand)}
-of them, across {hand_q} questions, were read by hand from the filing HTML by the author.</li>
+<li><code>eval/verification_log.csv</code> has {n_rows} rows covering the {verified_q} questions;
+{n_yes} are marked as matching. The author read {vb["hand"]} of them by hand: {vb["hand_sec"]} SEC
+rows across {vb["hand_sec_questions"]} questions from the filing HTML, {vb["hand_pageviews"]} pageview
+totals in Pageviews Analysis and {vb["hand_census"]} Census months in the live table. The remaining
+{vb["rest"]} rows were compared by script or with AI assistance (SPEC §15, “Verification
+provenance”).</li>
+<li>The {vb["census_rows"]} Census rows were compared against <code>{e(vb["census_file"])}</code>, the
+same downloaded workbook that was ingested, so that comparison is not independent; {vb["hand_census"]}
+Census months were checked by hand in the live table.</li>
 <li>The questions were frozen (git tag <code>questions-frozen</code>) before any evaluation run.</li>
 <li>Total model cost of the run: ${need(summary, "total_cost_usd"):.2f}.</li>
 </ul>
@@ -491,16 +629,17 @@ of them, across {hand_q} questions, were read by hand from the filing HTML by th
 
 
 def main():
-    summary, questions, tags, vlog, runs, replays, template = load()
+    summary, questions, tags, vlog, runs, replays, template, ow = load()
     check_template(template)
     model = ", ".join(need(summary, "model"))
     parts = {
+        "INTRO": section_intro(questions, tags, replays),
         "SECTION_PROBLEM": section_problem(questions, runs, vlog, replays),
-        "SECTION_RESULTS": section_results(summary, questions),
-        "SECTION_REPLAYS": section_replays(runs, questions, vlog, replays),
+        "SECTION_RESULTS": section_results(summary, questions, ow),
+        "SECTION_REPLAYS": section_replays(runs, questions, vlog, replays, tags),
         "SECTION_TAGS": section_tags(tags, replays),
-        "SECTION_B_VS_C": section_b_vs_c(summary, questions),
-        "SECTION_CHECKS": section_checks(summary, questions, vlog, replays),
+        "SECTION_B_VS_C": section_b_vs_c(summary, questions, runs),
+        "SECTION_CHECKS": section_checks(summary, questions, vlog, replays, tags),
         "FOOTER": e(f"Generated by report/build_report.py from the recorded runs of {model}. "
                     "A static page: no model is called."),
     }
