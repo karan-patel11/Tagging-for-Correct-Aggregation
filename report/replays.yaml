@@ -44,18 +44,20 @@ replays:
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: unparsed}
     note: >-
-      D's run shown here failed because of a tool-coverage gap, not an aggregation error: the
-      pageview tool accepts only calendar quarters, so D's full-year requests were rejected and it
-      ran out of output tokens before giving a final answer. A, B and C answered with SQL.
+      D's run shown here ended without a final answer after its full-year pageview requests were
+      rejected and it hit the output-token limit. The tool accepts calendar quarters; D recovered
+      by composing quarterly calls in its other runs. This is a tool-interface and recovery failure,
+      not evidence that annual views are unavailable. A, B and C answered with SQL.
 
   - question_id: q034
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: incorrect}
     note: >-
-      D's run shown here failed because of a tool-coverage gap: get_metric does not cover
-      comparable sales and the comps tag allows no aggregation method, so D found no way to read the
-      two values and refused. D answered correctly in its other runs. A, B and C read the two rows
-      with SQL and added the warning that the companies define comps differently.
+      D's run shown here refused an answerable question after unsuccessful get_metric and
+      single-company aggregate calls. The interface has no direct comps lookup, but a multi-company
+      aggregate call returns both values and definitions in a warning envelope; D used that route
+      successfully in its other runs. This is a tool-discovery failure, not missing data. A, B and C
+      read the two rows with SQL and warned that the companies define comps differently.
 
 tag_cards:
   - id: fundamentals.total_assets
@@ -72,9 +74,9 @@ limitations:
   - "Small sample: {questions_per_category} questions per category, {companies} companies."
   - "One model."
   - >-
-    The author wrote both the questions and the system, a source of bias. Mitigation: questions were
-    drafted before the core logic existed, written from an analyst's point of view, and frozen (git
-    tag questions-frozen) before any run.
+    The author wrote both the questions and the system, a source of bias. Most questions were
+    drafted before the core logic existed; replacement questions were added after it existed.
+    All questions were frozen (git tag questions-frozen) before any evaluation run.
   - "In setup D, the interface and the enforcement change together."
   - >-
     D's tools cover the question categories closely, so D's advantage on answerable questions is

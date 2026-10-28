@@ -137,7 +137,7 @@ quarters of a year runs without error and gives a confident, wrong number.</p>
 WHERE ticker = 'YUM' AND metric = 'total_assets' AND fiscal_year = 2025</pre></div>
   <div class="stat"><div class="muted small">Total assets at fiscal year end, as filed (the right answer)</div>
     <div class="big">8,197,000,000 USD</div>
-    <p class="small"><a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">Yum! Brands 10-K on SEC EDGAR</a></p></div>
+    <p class="small"><a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">Yum! Brands 10-K on SEC EDGAR</a></p></div>
 </div>
 <p class="muted">In this experiment no setup fell for it: all 12 runs on this question returned the year-end balance. The question tests whether a model knows which rule applies, and the
 same kind of rule governs year-to-date cash flows, ratios, price indices and brand hierarchies.</p>
@@ -147,7 +147,7 @@ same kind of rule governs year-to-date cash flows, ratios, price indices and bra
   <div class="kicker">Results at a glance</div>
   
 <h2>Accuracy was close across all four setups.</h2>
-<p class="muted">42 questions × 3 runs, claude-haiku-5-5, run on 2026-10-28. Bars show mean accuracy across runs; the line on each bar shows the lowest
+<p class="muted">42 questions × 3 runs, claude-haiku-5-5, run on 2026-10-28 (UTC). Bars show mean accuracy across runs; the line on each bar shows the lowest
 and highest single run. The axis starts at zero.</p>
 <div class="bars" role="list">
 <div class="bar-row" role="listitem"><span class="bar-label">A · Schema only</span><span class="track"><span class="fill" style="width:96.83%"></span><span class="rng" style="left:92.86%;width:7.14%" title="lowest to highest run"></span></span><span class="bar-val">96.8%</span></div>
@@ -174,7 +174,7 @@ is not scored as wrong, but it is noise an analyst has to read past.</p>
 <section id="replays">
   <div class="kicker">Side-by-side replay</div>
   
-<h2>Six recorded runs, replayed step by step.</h2>
+<h2>6 questions, replayed step by step.</h2>
 <p class="muted">One question per category. Setup D is on the right; A, B and C are on the left as
 tabs. Every step is shown as recorded: long text is shortened with a "show full" toggle and never
 edited. Each pane also gives that setup's record on the question across all its runs.</p>
@@ -207,7 +207,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
 </div>
 <div class="pane" data-setup="B">
 <h3>B · Prose descriptions <span class="muted small">run 1</span></h3>
@@ -227,7 +227,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
 </div>
 <div class="pane" data-setup="C">
 <h3>C · Tags file <span class="muted small">run 1</span></h3>
@@ -247,7 +247,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
 </div></div>
   <div class="col">
 <div class="pane" data-setup="D">
@@ -264,7 +264,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
 </div></div>
 </div>
 </div>
@@ -368,7 +368,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <div class="final"><div><span class="badge bad">wrong: missing warning</span></div>
 <p class="small"><b>Final answer:</b> 18.23 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 18.2271 percent with a warning</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/0001058090-26-000009-index.htm">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a></p></div>
 </div>
 <div class="pane" data-setup="B">
 <h3>B · Prose descriptions <span class="muted small">run 1</span></h3>
@@ -436,7 +436,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 18.23 percent · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 18.2271 percent with a warning</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/0001058090-26-000009-index.htm">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a></p></div>
 </div>
 <div class="pane" data-setup="C">
 <h3>C · Tags file <span class="muted small">run 1</span></h3>
@@ -539,7 +539,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <div class="final"><div><span class="badge bad">wrong: missing warning</span></div>
 <p class="small"><b>Final answer:</b> 18.23 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 18.2271 percent with a warning</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/0001058090-26-000009-index.htm">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a></p></div>
 </div></div>
   <div class="col">
 <div class="pane" data-setup="D">
@@ -580,7 +580,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 18.23 percent · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 18.2271 percent with a warning</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/0001058090-26-000009-index.htm">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a></p></div>
 </div></div>
 </div>
 </div>
@@ -618,7 +618,7 @@ FINAL: {&quot;answer&quot;: 13210900000, &quot;unit&quot;: &quot;USD&quot;, &quo
 <div class="final"><div><span class="badge bad">wrong: trap used_fy_value</span></div>
 <p class="small"><b>Final answer:</b> 13,210,900,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">SEC filing 0000940944-26-000009</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
 </div>
 <div class="pane" data-setup="B">
 <h3>B · Prose descriptions <span class="muted small">run 1</span></h3>
@@ -656,7 +656,7 @@ FINAL: {&quot;answer&quot;: 3718800000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 3,718,800,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">SEC filing 0000940944-26-000009</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
 </div>
 <div class="pane" data-setup="C">
 <h3>C · Tags file <span class="muted small">run 1</span></h3>
@@ -691,7 +691,7 @@ FINAL: {&quot;answer&quot;: 3718800000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 3,718,800,000 USD · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">SEC filing 0000940944-26-000009</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
 </div></div>
   <div class="col">
 <div class="pane" data-setup="D">
@@ -711,7 +711,7 @@ FINAL: {&quot;answer&quot;: 3718800000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <div class="final"><div><span class="badge ok">correct</span></div>
 <p class="small"><b>Final answer:</b> 3,718,800,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
-<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">SEC filing 0000940944-26-000009</a></p></div>
+<p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
 </div></div>
 </div>
 </div>
@@ -819,7 +819,7 @@ FINAL: {&quot;answer&quot;: 4.07, &quot;unit&quot;: &quot;percent&quot;, &quot;w
 </div>
 <div class="replay" data-q="q030">
 <h3>Brand hierarchy: What share of the combined English Wikipedia views of Yum! Brands&#x27; four brand articles (KFC, Taco Bell, Pizza Hut, and Habit Burger Grill under both its current and former titles) went to KFC in calendar 2025, in percent?</h3>
-<div class="note small">D&#x27;s run shown here failed because of a tool-coverage gap, not an aggregation error: the pageview tool accepts only calendar quarters, so D&#x27;s full-year requests were rejected and it ran out of output tokens before giving a final answer. A, B and C answered with SQL.</div>
+<div class="note small">D&#x27;s run shown here ended without a final answer after its full-year pageview requests were rejected and it hit the output-token limit. The tool accepts calendar quarters; D recovered by composing quarterly calls in its other runs. This is a tool-interface and recovery failure, not evidence that annual views are unavailable. A, B and C answered with SQL.</div>
 <div class="replay-cols">
   <div class="col"><div class="tabs js-only"><button type="button" data-setup="A">A · Schema only</button><button type="button" data-setup="B">B · Prose descriptions</button><button type="button" data-setup="C">C · Tags file</button></div>
 <div class="pane" data-setup="A">
@@ -1006,7 +1006,7 @@ FINAL: {&quot;answer&quot;: 47.44, &quot;unit&quot;: &quot;percent&quot;, &quot;
 </div>
 <div class="replay" data-q="q034">
 <h3>Comparability and refusals: By how many percentage points did Chipotle&#x27;s comparable sales growth exceed Wingstop&#x27;s in fiscal Q4 2025?</h3>
-<div class="note small">D&#x27;s run shown here failed because of a tool-coverage gap: get_metric does not cover comparable sales and the comps tag allows no aggregation method, so D found no way to read the two values and refused. D answered correctly in its other runs. A, B and C read the two rows with SQL and added the warning that the companies define comps differently.</div>
+<div class="note small">D&#x27;s run shown here refused an answerable question after unsuccessful get_metric and single-company aggregate calls. The interface has no direct comps lookup, but a multi-company aggregate call returns both values and definitions in a warning envelope; D used that route successfully in its other runs. This is a tool-discovery failure, not missing data. A, B and C read the two rows with SQL and warned that the companies define comps differently.</div>
 <div class="replay-cols">
   <div class="col"><div class="tabs js-only"><button type="button" data-setup="A">A · Schema only</button><button type="button" data-setup="B">B · Prose descriptions</button><button type="button" data-setup="C">C · Tags file</button></div>
 <div class="pane" data-setup="A">
@@ -1177,8 +1177,8 @@ describe_column, and its aggregate tool refuses methods the tag does not allow.<
 comparison tests only the format. By majority vote across 3 runs, B and C got the same result on
 <b>41 of 42</b> questions. The difference:</p>
 <ul><li><b>q010</b>: What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), in percent? (B right, C wrong)</li></ul>
-<p class="muted">A difference this small is within noise for a sample this size. It is not evidence
-that one format is better.</p>
+<p class="muted">This small sample does not establish that one format is better. No statistical
+significance test was performed.</p>
 </div>
 </section>
 
@@ -1203,8 +1203,8 @@ of them, across 7 questions, were read by hand from the filing HTML by the autho
 scoring rule did not change.</p>
 <div class="table-wrap"><table><tr><th>Setup</th><th>Correct runs before the fix</th><th>After</th></tr><tr><td>A</td><td>122</td><td>122</td></tr><tr><td>B</td><td>118</td><td>126</td></tr><tr><td>C</td><td>120</td><td>124</td></tr><tr><td>D</td><td>124</td><td>124</td></tr></table></div>
 <h3>Limits of this experiment</h3>
-<ul><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Mitigation: questions were drafted before the core logic existed, written from an analyst&#x27;s point of view, and frozen (git tag questions-frozen) before any run.</li><li>In setup D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so D&#x27;s advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No 10-K or 10-Q amendments are included.</li><li>A short window of recent filings.</li></ul>
-<p><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a> · Error analysis: not written yet (docs/error_analysis.md).</p>
+<ul><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Most questions were drafted before the core logic existed; replacement questions were added after it existed. All questions were frozen (git tag questions-frozen) before any evaluation run.</li><li>In setup D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so D&#x27;s advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No 10-K or 10-Q amendments are included.</li><li>A short window of recent filings.</li></ul>
+<p><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a> · <a href="error_analysis.md">Error analysis</a></p>
 </section>
 
 <footer class="small muted">Generated by report/build_report.py from the recorded runs of claude-haiku-5-5. A static page: no model is called.</footer>
