@@ -106,6 +106,10 @@ details summary { cursor: pointer; color: var(--accent); font-size: 0.85rem; }
 .card dt { color: var(--muted); }
 .card dd { margin: 0; overflow-wrap: anywhere; }
 .box { border: 2px solid var(--accent); border-radius: 12px; padding: 18px; }
+.defs { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 14px 0 0;
+  max-width: 82ch; font-size: 0.9rem; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--muted); }
 ul { margin: 0 0 12px; padding-left: 20px; }
 li { margin: 4px 0; }
 footer { margin-top: 24px; }
@@ -116,6 +120,8 @@ footer { margin-top: 24px; }
   h1 { font-size: 1.5rem; }
   section { padding: 16px; }
   .compare, .replay-cols, .cards { grid-template-columns: 1fr; }
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
   header.top { flex-direction: column; }
   .bar-row { grid-template-columns: 1fr 56px; gap: 4px 8px; }
   .bar-label { grid-column: 1 / -1; }
@@ -130,9 +136,7 @@ footer { margin-top: 24px; }
   <div>
     <div class="kicker">A small experiment</div>
     <h1>Tagging for Correct Aggregation</h1>
-    <p class="lede">One model answered the same restaurant-finance questions in four setups: table
-    schema only, prose descriptions, a tags file, and semantic tools with no SQL. This page replays
-    the recorded runs. It does not call a model.</p>
+    {{INTRO}}
   </div>
   <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
 </header>

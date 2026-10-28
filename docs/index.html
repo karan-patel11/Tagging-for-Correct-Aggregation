@@ -106,6 +106,10 @@ details summary { cursor: pointer; color: var(--accent); font-size: 0.85rem; }
 .card dt { color: var(--muted); }
 .card dd { margin: 0; overflow-wrap: anywhere; }
 .box { border: 2px solid var(--accent); border-radius: 12px; padding: 18px; }
+.defs { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 14px 0 0;
+  max-width: 82ch; font-size: 0.9rem; }
+.defs dt { font-weight: 600; }
+.defs dd { margin: 0; color: var(--muted); }
 ul { margin: 0 0 12px; padding-left: 20px; }
 li { margin: 4px 0; }
 footer { margin-top: 24px; }
@@ -116,6 +120,8 @@ footer { margin-top: 24px; }
   h1 { font-size: 1.5rem; }
   section { padding: 16px; }
   .compare, .replay-cols, .cards { grid-template-columns: 1fr; }
+  .defs { grid-template-columns: 1fr; gap: 2px; }
+  .defs dd { margin-bottom: 8px; }
   header.top { flex-direction: column; }
   .bar-row { grid-template-columns: 1fr 56px; gap: 4px 8px; }
   .bar-label { grid-column: 1 / -1; }
@@ -130,9 +136,24 @@ footer { margin-top: 24px; }
   <div>
     <div class="kicker">A small experiment</div>
     <h1>Tagging for Correct Aggregation</h1>
-    <p class="lede">One model answered the same restaurant-finance questions in four setups: table
-    schema only, prose descriptions, a tags file, and semantic tools with no SQL. This page replays
-    the recorded runs. It does not call a model.</p>
+    
+<p class="lede">One model answered the same restaurant-finance questions in four setups. This page
+replays the recorded runs. It does not call a model.</p>
+<dl class="defs">
+<dt>Tag</dt><dd>A rule attached to a metric, kept in <code>tags/tags.yaml</code>. For example, the
+<code>total_assets</code> tag sets <code>additive_over_time: false, time_rollup: last</code> and reads: “Balance at the period end; the yearly value is the balance at the last quarter end.” In
+plain terms: a balance; never sum it across quarters.</dd>
+<dt>Setups</dt><dd>A sees only the table schema. B gets prose sentences generated from the tags. C
+gets the tags file itself. D gets semantic tools that apply the tags, and no SQL.</dd>
+<dt>Expected behaviour</dt><dd>Each question's answer key expects one of three: <b>answer</b> (34 questions), <b>answer with warning</b> (4 questions), <b>refuse</b> (4 questions).</dd>
+<dt>FINAL line</dt><dd>Every run ends with a FINAL line: the number, its unit and two flags.
+<code>warning=true</code> means the model attached a caveat to its number;
+<code>refused=true</code> means it declined to give a number.</dd>
+<dt>Stored trap</dt><dd>A specific wrong answer computed in advance for a question, such as the sum
+of four quarter-end balances. A run hits the trap when its number lands within tolerance of it.</dd>
+<dt>Correct</dt><dd>The run's behaviour matches the key and, unless the key expects a refusal, its
+number is within a per-unit tolerance defined in <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/score.py">eval/score.py</a>.</dd>
+</dl>
   </div>
   <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
 </header>
@@ -163,8 +184,8 @@ brand rollups.</p>
 <h2>Accuracy was close across all four setups.</h2>
 <p class="muted">42 questions × 3 runs, claude-haiku-5-5, run on 2026-10-28 (UTC). Bars show mean accuracy; markers show the lowest and highest run.
 The axis starts at zero.</p>
-<p>The setups differ by a few runs each. That is too few to rank them on this sample. The larger
-observed difference is in extra warnings, shown below.</p>
+<p>The setups differ by a few runs each. That is too few to rank them on this sample. Warning rates
+differ more than accuracy; they are shown below.</p>
 <div class="bars" role="list">
 <div class="bar-row" role="listitem"><span class="bar-label">A · Schema only</span><span class="track"><span class="fill" style="width:96.83%"></span><span class="rng" style="left:92.86%;width:7.14%" title="lowest to highest run"></span></span><span class="bar-val">96.8%</span></div>
 <div class="bar-row" role="listitem"><span class="bar-label">B · Prose descriptions</span><span class="track"><span class="fill" style="width:100.00%"></span><span class="rng" style="left:100.00%;width:0.00%" title="lowest to highest run"></span></span><span class="bar-val">100.0%</span></div>
@@ -173,18 +194,28 @@ observed difference is in extra warnings, shown below.</p>
 <div class="bar-row axis"><span></span><span class="ticks"><span>0%</span><span>50%</span><span>100%</span></span><span></span></div></div>
 <div class="table-wrap"><table>
 <tr><th>Setup</th><th>Tools</th><th>Correct runs</th><th>Accuracy (run range)</th>
-<th>Stored-trap hits / runs</th><th>Over-warning / answer-question runs</th></tr>
-<tr><td>A · Schema only</td><td>SQL</td><td>122 / 126</td><td>96.8% <span class='muted'>(runs 92.9%–100.0%)</span></td><td>1 / 153</td><td>34 / 102 (33.3%)</td></tr><tr><td>B · Prose descriptions</td><td>SQL</td><td>126 / 126</td><td>100.0% <span class='muted'>(runs 100.0%–100.0%)</span></td><td>0 / 153</td><td>9 / 102 (8.8%)</td></tr><tr><td>C · Tags file</td><td>SQL</td><td>124 / 126</td><td>98.4% <span class='muted'>(runs 97.6%–100.0%)</span></td><td>0 / 153</td><td>19 / 102 (18.6%)</td></tr><tr><td>D · Semantic tools</td><td>Semantic tools, no SQL</td><td>124 / 126</td><td>98.4% <span class='muted'>(runs 95.2%–100.0%)</span></td><td>0 / 153</td><td>7 / 102 (6.9%)</td></tr>
+<th>Stored-trap hits / trap checks<sup>*</sup></th><th>Warnings on questions whose key expects no caveat / runs on those questions</th>
+<th>Of those warnings, cite filing dates or metadata (keyword match)</th></tr>
+<tr><td>A · Schema only</td><td>SQL</td><td>122 / 126</td><td>96.8% <span class='muted'>(runs 92.9%–100.0%)</span></td><td>1 / 153</td><td>34 / 102 (33.3%)</td><td>25 / 34</td></tr><tr><td>B · Prose descriptions</td><td>SQL</td><td>126 / 126</td><td>100.0% <span class='muted'>(runs 100.0%–100.0%)</span></td><td>0 / 153</td><td>9 / 102 (8.8%)</td><td>9 / 9</td></tr><tr><td>C · Tags file</td><td>SQL</td><td>124 / 126</td><td>98.4% <span class='muted'>(runs 97.6%–100.0%)</span></td><td>0 / 153</td><td>19 / 102 (18.6%)</td><td>18 / 19</td></tr><tr><td>D · Semantic tools</td><td>Semantic tools, no SQL</td><td>124 / 126</td><td>98.4% <span class='muted'>(runs 95.2%–100.0%)</span></td><td>0 / 153</td><td>7 / 102 (6.9%)</td><td>5 / 7</td></tr>
 </table></div>
-<h3 style="margin-top:20px">Secondary metric: over-warning</h3>
-<p class="muted">Warnings on questions labelled as needing an answer without a caveat. These count
-separately from accuracy; the measure does not judge the wording of each caveat.</p>
+<p class="small muted"><sup>*</sup> A run on a question with several stored traps is checked once per
+trap: 51 stored traps × 3 runs = 153 trap checks per setup, against
+126 runs per setup.</p>
+<h3 style="margin-top:20px">Secondary metric: warnings on questions whose key expects no caveat</h3>
+<p class="muted">Runs that set warning=true on a question whose answer key expects a plain answer.
+Most of these cite stored filing dates or retrieval metadata (keyword match, counts in the table).
+The dataset keeps the latest-filed value, so prior-year figures carry later filings' dates; the
+models flagged that. These are not scored as errors, and the metric does not show that any setup
+hedges more or less well.</p>
 <div class="bars" role="list">
 <div class="bar-row" role="listitem"><span class="bar-label">A · Schema only</span><span class="track"><span class="fill secondary" style="width:33.33%"></span></span><span class="bar-val">33.3%</span></div>
 <div class="bar-row" role="listitem"><span class="bar-label">B · Prose descriptions</span><span class="track"><span class="fill secondary" style="width:8.82%"></span></span><span class="bar-val">8.8%</span></div>
 <div class="bar-row" role="listitem"><span class="bar-label">C · Tags file</span><span class="track"><span class="fill secondary" style="width:18.63%"></span></span><span class="bar-val">18.6%</span></div>
 <div class="bar-row" role="listitem"><span class="bar-label">D · Semantic tools</span><span class="track"><span class="fill secondary" style="width:6.86%"></span></span><span class="bar-val">6.9%</span></div>
 <div class="bar-row axis"><span></span><span class="ticks"><span>0%</span><span>50%</span><span>100%</span></span><span></span></div></div>
+<p class="small muted">The keyword match is a heuristic over each run's final text
+(<code>report/analyze_over_warnings.py</code>, pattern and run lists in
+<code>report/over_warning_reasons.json</code>); it does not judge each caveat.</p>
 </section>
 
 <section id="replays">
@@ -193,6 +224,11 @@ separately from accuracy; the measure does not judge the wording of each caveat.
 <h2>Compare recorded answers.</h2>
 <p class="muted">6 questions, one per category. Compare A, B or C with D. Answers and scores
 appear first; expand recorded steps for the original model text and tool responses.</p>
+<p class="small muted"><b>Filing dates in the replays.</b> The dataset rule, from the tags' lineage
+and the SPEC decisions log: “Duration facts keep the latest-filed row; balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives.” So a stored prior-year figure for revenue, income or cash
+flow can carry the accession number and filing date of a later filing that repeated it as a
+comparative. This is by design. Replay text in which a model remarks on odd filing dates is
+describing that rule, not corrupt data.</p>
 <div class="picker js-only"><button type="button" data-q="q003">Balances over time</button><button type="button" data-q="q010">Ratios</button><button type="button" data-q="q017">Year-to-date and fiscal calendars</button><button type="button" data-q="q018">Price indices</button><button type="button" data-q="q030">Brand hierarchy</button><button type="button" data-q="q034">Comparability and refusals</button></div>
 
 <div class="replay" data-q="q003">
@@ -617,7 +653,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 </div>
 <div class="replay" data-q="q017">
 <h3>Year-to-date and fiscal calendars: What was Darden&#x27;s total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?</h3>
-<div class="note small">A calculated the quarter in its explanation, then returned annual revenue in its final answer. This was the only stored-trap hit. A&#x27;s other runs answered correctly.</div>
+<div class="note small">A read the question as asking for the full year, although the question names the 14-week quarter. It wrote that &quot;the full year is the figure you asked about&quot;, gave the derived fourth quarter only as a cross-check, and put the full-year figure in FINAL. The full-year row is stored with fiscal_quarter set to the fourth quarter. This was the only stored-trap hit. A&#x27;s other runs answered correctly.</div>
 <div class="replay-cols">
   <div class="col"><div class="tabs js-only"><button type="button" data-setup="A">A · Schema only</button><button type="button" data-setup="B">B · Prose descriptions</button><button type="button" data-setup="C">C · Tags file</button></div>
 <div class="pane" data-setup="A">
@@ -1237,11 +1273,13 @@ which methods are allowed.</p>
 <div class="box">
 <h2>Prose and tags gave similar results.</h2>
 <p>B and C receive the same facts in different formats: sentences and structured tags.
-By majority vote across 3 runs, their scored outcomes agree on
+<b>Majority vote</b> means a setup counts as right on a question when more than half of its runs on
+that question are correct (2 of 3). By majority vote, their scored outcomes agree on
 <b>41 of 42</b> questions. The difference:</p>
-<ul><li><b>q010</b>: What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), in percent? (B right, C wrong)</li></ul>
-<p class="muted">This small sample does not establish that one format is better. No statistical
-significance test was performed.</p>
+<ul><li><b>q010</b>: What was the combined operating margin of Chipotle (fiscal 2025), Yum! Brands (fiscal 2025) and Darden (fiscal 2025, year ended May 25, 2025), in percent? B warned in 3/3 runs, C in 1/3 (A in 1/3, D in 3/3). The numbers were correct in all runs; only the warning differed.</li></ul>
+<p class="muted">The difference is 1 question, 3 runs each.
+This small sample does not establish that one format is better. No statistical significance test was
+performed.</p>
 </div>
 </section>
 
@@ -1252,9 +1290,15 @@ significance test was performed.</p>
 <ul>
 <li>The answer key was computed with direct SQL in <code>eval/make_questions.py</code>, never with
 <code>semantics.py</code>, so the code being tested did not grade itself.</li>
-<li>134 of 134 source values behind the 42 questions were checked against the
-filings and agency data and marked as matching in <code>eval/verification_log.csv</code>; 17
-of them, across 7 questions, were read by hand from the filing HTML by the author.</li>
+<li><code>eval/verification_log.csv</code> has 134 rows covering the 42 questions;
+134 are marked as matching. The author read 25 of them by hand: 17 SEC
+rows across 7 questions from the filing HTML, 5 pageview
+totals in Pageviews Analysis and 3 Census months in the live table. The remaining
+109 rows were compared by script or with AI assistance (SPEC §15, “Verification
+provenance”).</li>
+<li>The 9 Census rows were compared against <code>data/raw/macro/census_naics722_sa.xlsx</code>, the
+same downloaded workbook that was ingested, so that comparison is not independent; 3
+Census months were checked by hand in the live table.</li>
 <li>The questions were frozen (git tag <code>questions-frozen</code>) before any evaluation run.</li>
 <li>Total model cost of the run: $0.43.</li>
 </ul>
@@ -1262,8 +1306,7 @@ of them, across 7 questions, were read by hand from the filing HTML by the autho
 <h3>Scorer bug, found and fixed before publishing</h3>
 <p>The scale-word pattern used \b, which treats &quot;_&quot; as part of a word, so a FINAL unit of &quot;USD_millions&quot; was read as unscaled while the question unit &quot;USD millions&quot; was read as millions, and correct answers were divided by 1,000,000. The scoring rule did not change: a unit that names millions is converted; the code had not applied it to this spelling.</p>
 <p>The fix (commit <code>4977d48</code>) changed 12 runs
-(B 8, C 4), all on q022, q023, q024, all from incorrect to correct. The
-scoring rule did not change.</p>
+(B 8, C 4), all on q022, q023, q024, all from incorrect to correct.</p>
 <div class="table-wrap"><table><tr><th>Setup</th><th>Correct runs before the fix</th><th>After</th></tr><tr><td>A</td><td>122</td><td>122</td></tr><tr><td>B</td><td>118</td><td>126</td></tr><tr><td>C</td><td>120</td><td>124</td></tr><tr><td>D</td><td>124</td><td>124</td></tr></table></div>
 <h3>Limits of this experiment</h3>
 <ul><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Most questions were drafted before the core logic existed; replacement questions were added after it existed. All questions were frozen (git tag questions-frozen) before any evaluation run.</li><li>In setup D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so D&#x27;s advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No 10-K or 10-Q amendments are included.</li><li>A short window of recent filings.</li></ul>

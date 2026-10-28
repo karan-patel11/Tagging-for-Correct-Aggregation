@@ -1,0 +1,431 @@
+{
+ "method": "Keyword heuristic, not a judgement of each caveat. Runs: warning = true on a question whose expected_behavior is 'answer'. Text: the run's last non-empty model text block (it holds the FINAL line). A run is 'matched' if that text matches the pattern (case-insensitive).",
+ "pattern": "accession|filing date|filed date|filing metadata|dated (after|later|in 2026)|later filing|comparative|restat|lineage|source metadata|retrieved_on",
+ "setups": {
+  "A": {
+   "warning_runs": 34,
+   "matched": 25,
+   "unmatched": 9,
+   "matched_runs": [
+    {
+     "question_id": "q007",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "Some quarterly filing dates in the source are dated in 2026 and look inconsistent."
+    },
+    {
+     "question_id": "q008",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the table are inconsistent."
+    },
+    {
+     "question_id": "q011",
+     "run": 2,
+     "keyword": "restat",
+     "sentence": "Each company has one record per period, so there were no duplicate or restated values to choose between."
+    },
+    {
+     "question_id": "q011",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "Some of the filing dates in the source data look inconsistent (for example, Wingstop's Q1 10-Q shows a 2026 filing date, later than its 10-K)."
+    },
+    {
+     "question_id": "q012",
+     "run": 1,
+     "keyword": "accession",
+     "sentence": "Two data-quality issues to be aware of: the 2025 nine-month row shares an accession number and filing date with the 2024 nine-month row, and the 2025 filing dates are later than I'd expect."
+    },
+    {
+     "question_id": "q012",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the table also look inconsistent: the Q2 10-Q shows a filed date of 2026-07-31, while the Q3 10-Q shows 2025-10-30."
+    },
+    {
+     "question_id": "q012",
+     "run": 3,
+     "keyword": "filing metadata",
+     "sentence": "The filing metadata looks unreliable."
+    },
+    {
+     "question_id": "q013",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "Caveats: the filing dates in the table look inconsistent."
+    },
+    {
+     "question_id": "q013",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "Two things to be aware of: the figure is derived rather than reported directly, and some filing dates in the table look inconsistent (for example, the six-month 10-Q is dated August 2026), so the source metadata should be checked against the filings."
+    },
+    {
+     "question_id": "q014",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the table look inconsistent (some 10-Q filings are dated after the 10-K, and some are in 2026), so the source metadata should be checked before relying on this."
+    },
+    {
+     "question_id": "q014",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "Some filing dates in the table look inconsistent (e.g., a Q2 2025 10-Q filed in July 2026), so the source metadata should be checked."
+    },
+    {
+     "question_id": "q014",
+     "run": 3,
+     "keyword": "dated in 2026",
+     "sentence": "The data also has an oddity: the Q1 and Q2 2025 10-Q filings are dated in 2026, after the 10-K, which doesn't look right."
+    },
+    {
+     "question_id": "q015",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "Some filing dates in the table look inconsistent (for example, the Q2 2025 10-Q shows a filed date in July 2026), so the underlying data may need checking against the filings."
+    },
+    {
+     "question_id": "q015",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "The FY2024 10-K shares the same accession number as the FY2025 10-K, and two 10-Q filings carry filing dates in 2026 that look inconsistent with their periods."
+    },
+    {
+     "question_id": "q015",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the table look inconsistent (some 10-Qs show filing dates after the 10-K), so the source data should be checked before relying on this figure."
+    },
+    {
+     "question_id": "q016",
+     "run": 1,
+     "keyword": "filing metadata",
+     "sentence": "Caveat: some filing metadata looks inconsistent."
+    },
+    {
+     "question_id": "q016",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "- Nine months ended February 23, 2025 (YTD9): $1,250.0 million (10-Q, accession 0000940944-26-000009)"
+    },
+    {
+     "question_id": "q016",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the table look inconsistent (for example, the Q2 10-Q is marked as filed 2025-12-30 and the Q3 10-Q as 2026-03-27), so the source data may need checking before this is relied on."
+    },
+    {
+     "question_id": "q017",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "Some filing dates in the table also look unusual (for example, a Q1 filing dated October 2026), so the source metadata may be worth checking against the actual filings."
+    },
+    {
+     "question_id": "q022",
+     "run": 1,
+     "keyword": "retrieved_on",
+     "sentence": "The `retrieved_on` date of 2026-10-24 is also unusual, so the data's provenance is worth checking."
+    },
+    {
+     "question_id": "q024",
+     "run": 2,
+     "keyword": "retrieved_on",
+     "sentence": "The `retrieved_on` dates (late 2026) are unusual, so the figures may not be the latest vintage."
+    },
+    {
+     "question_id": "q041",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the database (February 2026) are later than I'd expect for FY2024 10-Ks, which normally come out in early 2025."
+    },
+    {
+     "question_id": "q042",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "Some filing dates in the source look inconsistent (for example, the Q2 2025 10-Q is dated 2026-08-05), so the underlying data may need checking against the original filings."
+    },
+    {
+     "question_id": "q042",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "The derivation is sound, but the filing dates in the table look inconsistent (the Q1 and Q2 10-Qs show filing dates in 2026, after the 10-K), so the underlying data may need checking against the SEC filings."
+    },
+    {
+     "question_id": "q042",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The warning is for the filing dates on some rows."
+    }
+   ],
+   "unmatched_runs": [
+    {
+     "question_id": "q007",
+     "run": 1
+    },
+    {
+     "question_id": "q013",
+     "run": 3
+    },
+    {
+     "question_id": "q022",
+     "run": 2
+    },
+    {
+     "question_id": "q022",
+     "run": 3
+    },
+    {
+     "question_id": "q023",
+     "run": 1
+    },
+    {
+     "question_id": "q023",
+     "run": 2
+    },
+    {
+     "question_id": "q023",
+     "run": 3
+    },
+    {
+     "question_id": "q028",
+     "run": 1
+    },
+    {
+     "question_id": "q040",
+     "run": 3
+    }
+   ]
+  },
+  "B": {
+   "warning_runs": 9,
+   "matched": 9,
+   "unmatched": 0,
+   "matched_runs": [
+    {
+     "question_id": "q012",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The caveat is that the Q1 2025 and YTD6 2025 rows carry SEC filing dates in 2026 (2026-04-30 and 2026-07-31), while the 2024 and YTD9 2025 rows were filed in their expected periods."
+    },
+    {
+     "question_id": "q012",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "- **Six months ended June 30, 2025 (YTD6):** $1,118,402,000 (filed 2026-07-31, accession 0001058090-26-000066)"
+    },
+    {
+     "question_id": "q013",
+     "run": 1,
+     "keyword": "lineage",
+     "sentence": "The six-month YTD figure for 2025 is lineage-tagged to a filing dated 2026-08-05, which is later than the Q3 filing (2025-11-07) it should precede."
+    },
+    {
+     "question_id": "q013",
+     "run": 2,
+     "keyword": "comparative",
+     "sentence": "The six-month figure is the prior-year comparative in the 2026 Q2 10-Q (filed 2026-08-05), so it may reflect a later restatement."
+    },
+    {
+     "question_id": "q013",
+     "run": 3,
+     "keyword": "comparative",
+     "sentence": "The caveat is that the six-month figure ($850M) comes from a 2026 10-Q, filed as a comparative, not from the original Q2 2025 filing."
+    },
+    {
+     "question_id": "q014",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "Two of the source rows have filing dates that look out of sequence for their periods (Q1 2025 filed 2026-04-30, YTD6 filed 2026-07-31)."
+    },
+    {
+     "question_id": "q016",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the source look inconsistent."
+    },
+    {
+     "question_id": "q016",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "Caveat: the filing dates look off."
+    },
+    {
+     "question_id": "q016",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "Caveat: both source rows carry filing dates that look late for these periods (YTD6 filed 2025-12-30, YTD9 filed 2026-03-27), and each period has only one row, so I could not cross-check against an earlier filing."
+    }
+   ],
+   "unmatched_runs": []
+  },
+  "C": {
+   "warning_runs": 19,
+   "matched": 18,
+   "unmatched": 1,
+   "matched_runs": [
+    {
+     "question_id": "q003",
+     "run": 3,
+     "keyword": "accession",
+     "sentence": "This comes from the 10-K filed 2026-02-20 (accession 0001041061-26-000084)."
+    },
+    {
+     "question_id": "q007",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "Caveat: some filing dates in the source look inconsistent."
+    },
+    {
+     "question_id": "q009",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The filing dates on some 2025 10-Q rows (for example, Chipotle's Q1 2025 filed 2026-04-30, after its 10-K) look inconsistent, so those rows may be mis-dated."
+    },
+    {
+     "question_id": "q011",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "Caveat: several 2025 quarterly rows for both companies carry SEC filing dates in 2026 (for example, WING's Q1 and Q2 2025 10-Qs), which is after their FY2025 10-K filings."
+    },
+    {
+     "question_id": "q012",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The filing dates on the Q1 and YTD6 rows (2026-04-30 and 2026-07-31) look inconsistent with a Q2 2025 filing, so the source rows may be misdated."
+    },
+    {
+     "question_id": "q012",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "The filing dates look inconsistent."
+    },
+    {
+     "question_id": "q012",
+     "run": 3,
+     "keyword": "accession",
+     "sentence": "The FY2025 row also shares an accession number with the FY2024 10-K."
+    },
+    {
+     "question_id": "q013",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The warning is because the source filing dates look unusual."
+    },
+    {
+     "question_id": "q013",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "The filing dates for the Q1, six-month and full-year rows (2026 dates) look inconsistent with their 2025 periods, so the underlying values should be checked against the original filings."
+    },
+    {
+     "question_id": "q013",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the table look inconsistent: the Q1 and Q2 2025 10-Q rows are dated in 2026, and the FY2024 and FY2025 10-K rows share one accession number."
+    },
+    {
+     "question_id": "q014",
+     "run": 2,
+     "keyword": "filing date",
+     "sentence": "The filing dates look inconsistent."
+    },
+    {
+     "question_id": "q015",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "The Q1 and six-month filing dates in the source (filed in 2026) look out of sequence, but they don't feed this calculation."
+    },
+    {
+     "question_id": "q015",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "Warning: the FY2024 and FY2025 10-K rows share an accession number, and the FY2024 YTD9 row shares one with the FY2025 YTD9 row."
+    },
+    {
+     "question_id": "q015",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The Q1 2025 and Q2 2025 rows show filing dates in 2026, after the 10-K."
+    },
+    {
+     "question_id": "q016",
+     "run": 3,
+     "keyword": "filing date",
+     "sentence": "The filing dates in the source rows look unusual."
+    },
+    {
+     "question_id": "q017",
+     "run": 1,
+     "keyword": "filing date",
+     "sentence": "However, the filing dates look inconsistent: the Q1 FY2026 10-Q is dated 2026-10-02, after the FY2026 10-K (2026-07-24)."
+    },
+    {
+     "question_id": "q042",
+     "run": 1,
+     "keyword": "accession",
+     "sentence": "The derivation is sound, but two source rows share accession numbers with their 2024 counterparts (FY2025 with FY2024, and YTD9 2025 with YTD9 2024), and the 2024 filing dates look shifted."
+    },
+    {
+     "question_id": "q042",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "The source accession numbers don't line up cleanly with the periods."
+    }
+   ],
+   "unmatched_runs": [
+    {
+     "question_id": "q016",
+     "run": 2
+    }
+   ]
+  },
+  "D": {
+   "warning_runs": 7,
+   "matched": 5,
+   "unmatched": 2,
+   "matched_runs": [
+    {
+     "question_id": "q013",
+     "run": 1,
+     "keyword": "accession",
+     "sentence": "The six-month value is from the 10-Q with accession 0001041061-26-000160, which appears to be a 2026 filing, while the nine-month value is from accession 0001041061-25-000109."
+    },
+    {
+     "question_id": "q013",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "One source is inconsistent: the six-month figure cites a 10-Q with accession number 0001041061-26-000160, which carries a 2026 prefix even though it covers the period ended June 30, 2025."
+    },
+    {
+     "question_id": "q016",
+     "run": 3,
+     "keyword": "accession",
+     "sentence": "One caveat: the nine-month figure is cited to an SEC accession number (0000940944-26-000009) that suggests a 2026 filing."
+    },
+    {
+     "question_id": "q017",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "The FY2026 annual figure cites the same accession number as the FY2025 10-K, which I could not verify, so the annual figure should be checked against the filing before relying on it."
+    },
+    {
+     "question_id": "q042",
+     "run": 2,
+     "keyword": "accession",
+     "sentence": "The one caveat is that the YTD6 filing's accession number looks inconsistent with its 2025 period."
+    }
+   ],
+   "unmatched_runs": [
+    {
+     "question_id": "q040",
+     "run": 1
+    },
+    {
+     "question_id": "q040",
+     "run": 3
+    }
+   ]
+  }
+ }
+}
