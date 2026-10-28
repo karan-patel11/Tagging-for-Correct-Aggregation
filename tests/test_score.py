@@ -54,6 +54,14 @@ def test_scale_relative_to_question_unit():
     assert r["scaled"] and r["correct"]
 
 
+def test_scale_words_joined_by_underscore():
+    c = QS["q022"]["correct"]
+    r = s(run("q022", c, "USD_millions"))
+    assert r["correct"] and not r["scaled"]
+    assert score.unit_scale("USD_millions") == 1e6
+    assert score.unit_scale("millionaire") == 1.0
+
+
 def test_unscaled_wrong_magnitude_is_wrong():
     assert not s(run("q016", 588.2, "USD"))["correct"]
 
