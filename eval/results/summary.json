@@ -15,6 +15,7 @@
  "setups": {
   "A": {
    "n": 126,
+   "correct_runs": 122,
    "accuracy": {
     "mean": 0.9682539682539683,
     "min": 0.9285714285714286,
@@ -55,6 +56,7 @@
    "behavior_accuracy": 0.9841269841269841,
    "over_warning_rate": 0.3333333333333333,
    "over_warning_runs": 34,
+   "answer_question_runs": 102,
    "scaled_runs": 8,
    "trap_hits": {
     "average_instead_of_sum": {
@@ -126,14 +128,185 @@
     "cache_read_input_tokens": 2438.4761904761904,
     "output_tokens": 905.8015873015873
    },
-   "cost_usd": 0.099913
+   "cost_usd": 0.099913,
+   "per_question": {
+    "q001": {
+     "tool_calls": 1.0,
+     "tokens": 2954.0
+    },
+    "q002": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 3105.3333333333335
+    },
+    "q003": {
+     "tool_calls": 1.0,
+     "tokens": 3111.6666666666665
+    },
+    "q004": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 3132.6666666666665
+    },
+    "q005": {
+     "tool_calls": 1.0,
+     "tokens": 3035.6666666666665
+    },
+    "q006": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 2904.3333333333335
+    },
+    "q007": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 10105.333333333334
+    },
+    "q008": {
+     "tool_calls": 2.0,
+     "tokens": 10243.666666666666
+    },
+    "q009": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 13736.333333333334
+    },
+    "q010": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 9650.666666666666
+    },
+    "q011": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 9819.0
+    },
+    "q012": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 7541.666666666667
+    },
+    "q013": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 7303.666666666667
+    },
+    "q014": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 4497.333333333333
+    },
+    "q015": {
+     "tool_calls": 1.0,
+     "tokens": 3682.3333333333335
+    },
+    "q016": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 7137.333333333333
+    },
+    "q017": {
+     "tool_calls": 1.0,
+     "tokens": 4257.333333333333
+    },
+    "q018": {
+     "tool_calls": 2.0,
+     "tokens": 4752.0
+    },
+    "q019": {
+     "tool_calls": 2.0,
+     "tokens": 4488.666666666667
+    },
+    "q020": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 5351.666666666667
+    },
+    "q021": {
+     "tool_calls": 2.0,
+     "tokens": 4433.0
+    },
+    "q022": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 4651.666666666667
+    },
+    "q023": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 5120.333333333333
+    },
+    "q024": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 3910.6666666666665
+    },
+    "q025": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 6783.0
+    },
+    "q026": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 7156.0
+    },
+    "q027": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 7848.0
+    },
+    "q028": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 5301.666666666667
+    },
+    "q029": {
+     "tool_calls": 3.0,
+     "tokens": 7867.333333333333
+    },
+    "q030": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 7008.333333333333
+    },
+    "q031": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 5037.333333333333
+    },
+    "q032": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 3659.0
+    },
+    "q033": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 3808.6666666666665
+    },
+    "q034": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 5689.333333333333
+    },
+    "q035": {
+     "tool_calls": 4.333333333333333,
+     "tokens": 6836.666666666667
+    },
+    "q036": {
+     "tool_calls": 5.0,
+     "tokens": 10049.0
+    },
+    "q037": {
+     "tool_calls": 4.0,
+     "tokens": 13149.0
+    },
+    "q038": {
+     "tool_calls": 5.333333333333333,
+     "tokens": 8455.333333333334
+    },
+    "q039": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 4008.6666666666665
+    },
+    "q040": {
+     "tool_calls": 3.0,
+     "tokens": 14766.0
+    },
+    "q041": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 11465.666666666666
+    },
+    "q042": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 5098.333333333333
+    }
+   }
   },
   "B": {
    "n": 126,
+   "correct_runs": 126,
    "accuracy": {
-    "mean": 0.9365079365079364,
-    "min": 0.9285714285714286,
-    "max": 0.9523809523809523
+    "mean": 1.0,
+    "min": 1.0,
+    "max": 1.0
    },
    "accuracy_by_category": {
     "comparability_unanswerable": {
@@ -147,9 +320,9 @@
      "max": 1.0
     },
     "indices": {
-     "mean": 0.6190476190476191,
-     "min": 0.5714285714285714,
-     "max": 0.7142857142857143
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
     },
     "ratios": {
      "mean": 1.0,
@@ -170,7 +343,8 @@
    "behavior_accuracy": 1.0,
    "over_warning_rate": 0.08823529411764706,
    "over_warning_runs": 9,
-   "scaled_runs": 10,
+   "answer_question_runs": 102,
+   "scaled_runs": 2,
    "trap_hits": {
     "average_instead_of_sum": {
      "hits": 0,
@@ -241,14 +415,185 @@
     "cache_read_input_tokens": 20342.309523809523,
     "output_tokens": 803.8809523809524
    },
-   "cost_usd": 0.094657
+   "cost_usd": 0.094657,
+   "per_question": {
+    "q001": {
+     "tool_calls": 1.0,
+     "tokens": 19159.333333333332
+    },
+    "q002": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 19347.333333333332
+    },
+    "q003": {
+     "tool_calls": 1.0,
+     "tokens": 19214.333333333332
+    },
+    "q004": {
+     "tool_calls": 1.0,
+     "tokens": 19084.0
+    },
+    "q005": {
+     "tool_calls": 1.0,
+     "tokens": 19210.666666666668
+    },
+    "q006": {
+     "tool_calls": 1.0,
+     "tokens": 19129.333333333332
+    },
+    "q007": {
+     "tool_calls": 1.0,
+     "tokens": 21591.333333333332
+    },
+    "q008": {
+     "tool_calls": 1.0,
+     "tokens": 21632.333333333332
+    },
+    "q009": {
+     "tool_calls": 1.0,
+     "tokens": 21802.0
+    },
+    "q010": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 29981.0
+    },
+    "q011": {
+     "tool_calls": 1.0,
+     "tokens": 21176.666666666668
+    },
+    "q012": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 23886.333333333332
+    },
+    "q013": {
+     "tool_calls": 2.0,
+     "tokens": 31539.333333333332
+    },
+    "q014": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 20243.666666666668
+    },
+    "q015": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 19802.0
+    },
+    "q016": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 20145.666666666668
+    },
+    "q017": {
+     "tool_calls": 1.0,
+     "tokens": 19990.0
+    },
+    "q018": {
+     "tool_calls": 1.0,
+     "tokens": 19126.666666666668
+    },
+    "q019": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 22169.333333333332
+    },
+    "q020": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 19299.0
+    },
+    "q021": {
+     "tool_calls": 1.0,
+     "tokens": 19004.333333333332
+    },
+    "q022": {
+     "tool_calls": 1.0,
+     "tokens": 19047.333333333332
+    },
+    "q023": {
+     "tool_calls": 1.0,
+     "tokens": 19017.0
+    },
+    "q024": {
+     "tool_calls": 1.0,
+     "tokens": 19084.666666666668
+    },
+    "q025": {
+     "tool_calls": 1.0,
+     "tokens": 19754.333333333332
+    },
+    "q026": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 19963.0
+    },
+    "q027": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 20028.666666666668
+    },
+    "q028": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 32832.666666666664
+    },
+    "q029": {
+     "tool_calls": 1.0,
+     "tokens": 19415.0
+    },
+    "q030": {
+     "tool_calls": 1.0,
+     "tokens": 20018.666666666668
+    },
+    "q031": {
+     "tool_calls": 2.6666666666666665,
+     "tokens": 33874.666666666664
+    },
+    "q032": {
+     "tool_calls": 1.0,
+     "tokens": 19738.333333333332
+    },
+    "q033": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 19911.333333333332
+    },
+    "q034": {
+     "tool_calls": 1.0,
+     "tokens": 19632.0
+    },
+    "q035": {
+     "tool_calls": 3.0,
+     "tokens": 30188.0
+    },
+    "q036": {
+     "tool_calls": 3.0,
+     "tokens": 33055.0
+    },
+    "q037": {
+     "tool_calls": 3.6666666666666665,
+     "tokens": 47955.0
+    },
+    "q038": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 26979.333333333332
+    },
+    "q039": {
+     "tool_calls": 1.0,
+     "tokens": 19134.666666666668
+    },
+    "q040": {
+     "tool_calls": 1.0,
+     "tokens": 20941.333333333332
+    },
+    "q041": {
+     "tool_calls": 1.0,
+     "tokens": 21124.666666666668
+    },
+    "q042": {
+     "tool_calls": 1.0,
+     "tokens": 20420.0
+    }
+   }
   },
   "C": {
    "n": 126,
+   "correct_runs": 124,
    "accuracy": {
-    "mean": 0.9523809523809524,
-    "min": 0.9285714285714286,
-    "max": 0.9761904761904762
+    "mean": 0.9841269841269842,
+    "min": 0.9761904761904762,
+    "max": 1.0
    },
    "accuracy_by_category": {
     "comparability_unanswerable": {
@@ -262,9 +607,9 @@
      "max": 1.0
     },
     "indices": {
-     "mean": 0.8095238095238094,
-     "min": 0.7142857142857143,
-     "max": 0.8571428571428571
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
     },
     "ratios": {
      "mean": 0.9047619047619048,
@@ -285,7 +630,8 @@
    "behavior_accuracy": 0.9841269841269841,
    "over_warning_rate": 0.18627450980392157,
    "over_warning_runs": 19,
-   "scaled_runs": 6,
+   "answer_question_runs": 102,
+   "scaled_runs": 2,
    "trap_hits": {
     "average_instead_of_sum": {
      "hits": 0,
@@ -356,10 +702,181 @@
     "cache_read_input_tokens": 19005.492063492064,
     "output_tokens": 818.8015873015873
    },
-   "cost_usd": 0.094858
+   "cost_usd": 0.094858,
+   "per_question": {
+    "q001": {
+     "tool_calls": 1.0,
+     "tokens": 18350.333333333332
+    },
+    "q002": {
+     "tool_calls": 1.0,
+     "tokens": 18276.333333333332
+    },
+    "q003": {
+     "tool_calls": 1.0,
+     "tokens": 18470.0
+    },
+    "q004": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 18442.0
+    },
+    "q005": {
+     "tool_calls": 1.0,
+     "tokens": 18321.0
+    },
+    "q006": {
+     "tool_calls": 1.0,
+     "tokens": 18271.333333333332
+    },
+    "q007": {
+     "tool_calls": 1.0,
+     "tokens": 20438.0
+    },
+    "q008": {
+     "tool_calls": 1.0,
+     "tokens": 20305.0
+    },
+    "q009": {
+     "tool_calls": 1.0,
+     "tokens": 21032.333333333332
+    },
+    "q010": {
+     "tool_calls": 1.0,
+     "tokens": 22397.0
+    },
+    "q011": {
+     "tool_calls": 1.0,
+     "tokens": 20472.333333333332
+    },
+    "q012": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 22681.333333333332
+    },
+    "q013": {
+     "tool_calls": 2.0,
+     "tokens": 26910.0
+    },
+    "q014": {
+     "tool_calls": 1.0,
+     "tokens": 19385.333333333332
+    },
+    "q015": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 23059.0
+    },
+    "q016": {
+     "tool_calls": 1.0,
+     "tokens": 18966.666666666668
+    },
+    "q017": {
+     "tool_calls": 1.0,
+     "tokens": 19239.333333333332
+    },
+    "q018": {
+     "tool_calls": 1.0,
+     "tokens": 18152.0
+    },
+    "q019": {
+     "tool_calls": 1.0,
+     "tokens": 18186.0
+    },
+    "q020": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 18421.0
+    },
+    "q021": {
+     "tool_calls": 1.0,
+     "tokens": 18166.666666666668
+    },
+    "q022": {
+     "tool_calls": 1.0,
+     "tokens": 18232.0
+    },
+    "q023": {
+     "tool_calls": 1.0,
+     "tokens": 18280.0
+    },
+    "q024": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 21389.333333333332
+    },
+    "q025": {
+     "tool_calls": 2.0,
+     "tokens": 25741.333333333332
+    },
+    "q026": {
+     "tool_calls": 2.0,
+     "tokens": 22665.666666666668
+    },
+    "q027": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 22274.0
+    },
+    "q028": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 26318.0
+    },
+    "q029": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 18678.666666666668
+    },
+    "q030": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 25768.0
+    },
+    "q031": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 25681.0
+    },
+    "q032": {
+     "tool_calls": 1.0,
+     "tokens": 18818.333333333332
+    },
+    "q033": {
+     "tool_calls": 1.0,
+     "tokens": 18947.666666666668
+    },
+    "q034": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 19140.0
+    },
+    "q035": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 25318.0
+    },
+    "q036": {
+     "tool_calls": 2.0,
+     "tokens": 28435.0
+    },
+    "q037": {
+     "tool_calls": 3.0,
+     "tokens": 38997.333333333336
+    },
+    "q038": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 21653.0
+    },
+    "q039": {
+     "tool_calls": 1.0,
+     "tokens": 18333.666666666668
+    },
+    "q040": {
+     "tool_calls": 1.0,
+     "tokens": 20126.666666666668
+    },
+    "q041": {
+     "tool_calls": 1.0,
+     "tokens": 20079.666666666668
+    },
+    "q042": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 23519.666666666668
+    }
+   }
   },
   "D": {
    "n": 126,
+   "correct_runs": 124,
    "accuracy": {
     "mean": 0.9841269841269842,
     "min": 0.9523809523809523,
@@ -398,8 +915,9 @@
     }
    },
    "behavior_accuracy": 0.9841269841269841,
-   "over_warning_rate": 0.06930693069306931,
+   "over_warning_rate": 0.06862745098039216,
    "over_warning_runs": 7,
+   "answer_question_runs": 102,
    "scaled_runs": 1,
    "trap_hits": {
     "average_instead_of_sum": {
@@ -473,7 +991,177 @@
     "cache_read_input_tokens": 3764.4444444444443,
     "output_tokens": 810.468253968254
    },
-   "cost_usd": 0.137975
+   "cost_usd": 0.137975,
+   "per_question": {
+    "q001": {
+     "tool_calls": 1.0,
+     "tokens": 2898.0
+    },
+    "q002": {
+     "tool_calls": 1.0,
+     "tokens": 2918.0
+    },
+    "q003": {
+     "tool_calls": 1.0,
+     "tokens": 2905.3333333333335
+    },
+    "q004": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 3288.3333333333335
+    },
+    "q005": {
+     "tool_calls": 2.3333333333333335,
+     "tokens": 5565.666666666667
+    },
+    "q006": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 4083.3333333333335
+    },
+    "q007": {
+     "tool_calls": 3.6666666666666665,
+     "tokens": 10606.0
+    },
+    "q008": {
+     "tool_calls": 4.0,
+     "tokens": 10658.0
+    },
+    "q009": {
+     "tool_calls": 3.0,
+     "tokens": 12401.333333333334
+    },
+    "q010": {
+     "tool_calls": 4.666666666666667,
+     "tokens": 13242.333333333334
+    },
+    "q011": {
+     "tool_calls": 3.0,
+     "tokens": 8931.333333333334
+    },
+    "q012": {
+     "tool_calls": 3.0,
+     "tokens": 9370.666666666666
+    },
+    "q013": {
+     "tool_calls": 1.6666666666666667,
+     "tokens": 5505.0
+    },
+    "q014": {
+     "tool_calls": 4.0,
+     "tokens": 9074.333333333334
+    },
+    "q015": {
+     "tool_calls": 4.333333333333333,
+     "tokens": 10925.0
+    },
+    "q016": {
+     "tool_calls": 2.0,
+     "tokens": 5247.0
+    },
+    "q017": {
+     "tool_calls": 4.666666666666667,
+     "tokens": 14140.666666666666
+    },
+    "q018": {
+     "tool_calls": 3.6666666666666665,
+     "tokens": 12011.333333333334
+    },
+    "q019": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 11858.666666666666
+    },
+    "q020": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 11962.666666666666
+    },
+    "q021": {
+     "tool_calls": 3.0,
+     "tokens": 11699.333333333334
+    },
+    "q022": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 11853.666666666666
+    },
+    "q023": {
+     "tool_calls": 3.0,
+     "tokens": 11585.666666666666
+    },
+    "q024": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 11768.0
+    },
+    "q025": {
+     "tool_calls": 3.6666666666666665,
+     "tokens": 15849.666666666666
+    },
+    "q026": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 14418.0
+    },
+    "q027": {
+     "tool_calls": 3.6666666666666665,
+     "tokens": 15889.666666666666
+    },
+    "q028": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 13681.333333333334
+    },
+    "q029": {
+     "tool_calls": 4.0,
+     "tokens": 16484.0
+    },
+    "q030": {
+     "tool_calls": 11.666666666666666,
+     "tokens": 23603.333333333332
+    },
+    "q031": {
+     "tool_calls": 8.666666666666666,
+     "tokens": 20241.0
+    },
+    "q032": {
+     "tool_calls": 6.333333333333333,
+     "tokens": 22918.0
+    },
+    "q033": {
+     "tool_calls": 6.333333333333333,
+     "tokens": 20753.666666666668
+    },
+    "q034": {
+     "tool_calls": 7.333333333333333,
+     "tokens": 22534.0
+    },
+    "q035": {
+     "tool_calls": 2.0,
+     "tokens": 7247.666666666667
+    },
+    "q036": {
+     "tool_calls": 2.0,
+     "tokens": 7216.333333333333
+    },
+    "q037": {
+     "tool_calls": 3.3333333333333335,
+     "tokens": 8744.666666666666
+    },
+    "q038": {
+     "tool_calls": 1.0,
+     "tokens": 4225.666666666667
+    },
+    "q039": {
+     "tool_calls": 1.3333333333333333,
+     "tokens": 3534.6666666666665
+    },
+    "q040": {
+     "tool_calls": 6.333333333333333,
+     "tokens": 13171.333333333334
+    },
+    "q041": {
+     "tool_calls": 5.0,
+     "tokens": 12845.0
+    },
+    "q042": {
+     "tool_calls": 3.0,
+     "tokens": 8099.0
+    }
+   }
   }
  },
  "b_vs_c": {
@@ -481,12 +1169,40 @@
   "b_right_c_wrong": [
    "q010"
   ],
-  "c_right_b_wrong": [
-   "q022",
-   "q023"
-  ],
-  "both_right": 38,
-  "both_wrong": 1,
+  "c_right_b_wrong": [],
+  "both_right": 41,
+  "both_wrong": 0,
   "note": "Majority vote across runs (more than half correct). With this sample, a difference of a few questions is within noise."
- }
+ },
+ "scorer_notes": [
+  {
+   "id": "underscore_scale_word",
+   "found": "2026-10-28",
+   "fix_commit": "4977d48",
+   "description": "The scale-word pattern used \\b, which treats \"_\" as part of a word, so a FINAL unit of \"USD_millions\" was read as unscaled while the question unit \"USD millions\" was read as millions, and correct answers were divided by 1,000,000. The scoring rule did not change: a unit that names millions is converted; the code had not applied it to this spelling.",
+   "runs_flipped": 12,
+   "flipped_by_setup": {
+    "B": 8,
+    "C": 4
+   },
+   "flipped_questions": [
+    "q022",
+    "q023",
+    "q024"
+   ],
+   "flip_direction": "incorrect to correct; no other field changed except number_ok on the same runs",
+   "correct_before": {
+    "A": 122,
+    "B": 118,
+    "C": 120,
+    "D": 124
+   },
+   "correct_after": {
+    "A": 122,
+    "B": 126,
+    "C": 124,
+    "D": 124
+   }
+  }
+ ]
 }
