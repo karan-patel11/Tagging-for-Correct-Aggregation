@@ -87,6 +87,14 @@ def answer_text(value, unit):
     return f"{num(value)} {unit}" if value is not None else "no number (refuse)"
 
 
+def filing_url(url):
+    """Link SEC archive folders to their filing index; preserve other source URLs."""
+    m = re.fullmatch(r"(https://www\.sec\.gov/Archives/edgar/data/\d+/)(\d{10})(\d{2})(\d{6})/", url)
+    if m:
+        return f"{url}{m[2]}-{m[3]}-{m[4]}-index.htm"
+    return url
+
+
 # ---------- load ----------
 
 def load():
@@ -182,7 +190,7 @@ def section_problem(questions, runs, vlog, replays):
     n = sum(1 for k in runs if k[0] == qid)
     if not n:
         die(f"no runs for {qid}")
-    link = sources_for(vlog, qid)[0]
+    link = filing_url(sources_for(vlog, qid)[0])
     result = (f"In this experiment no setup fell for it: all {n} runs on this question returned the "
               f"year-end balance." if n_ok == n else
               f"In this experiment {n_ok} of {n} runs on this question returned the year-end balance.")
@@ -249,7 +257,7 @@ def section_results(summary, questions):
                      f"<td>{need(v, 'correct_runs')} / {need(v, 'n')}</td>"
                      f"<td>{e(pct(mean))} <span class='muted'>(runs {e(pct(lo))}–{e(pct(hi))})</span></td>"
                      f"<td>{hits} / {trap_runs}</td><td>{ow_n} / {ow_d} ({e(pct(ow))})</td></tr>")
-    sample = f"{n_q} questions × {n_runs} runs, {model}, run on {' and '.join(dates)}"
+    sample = f"{n_q} questions × {n_runs} runs, {model}, run on {' and '.join(dates)} (UTC)"
     return f"""
 <h2>Accuracy was close across all four setups.</h2>
 <p class="muted">{e(sample)}. Bars show mean accuracy across runs; the line on each bar shows the lowest
@@ -297,7 +305,7 @@ def source_links(urls):
     def label(u):
         if "sec.gov" in u:
             m = re.search(r"/(\d{10})(\d{2})(\d{6})(?:/|$)", u)
-            doc = "SEC exhibit" if u.endswith(".htm") else "SEC filing"
+            doc = "SEC exhibit" if u.endswith(".htm") and not u.endswith("-index.htm") else "SEC filing"
             return f"{doc} {m.group(1)}-{m.group(2)}-{m.group(3)}" if m else doc
         if "pageviews.wmcloud.org" in u:
             qs = urllib.parse.parse_qs(urllib.parse.urlparse(u).query)
@@ -307,7 +315,7 @@ def source_links(urls):
             m = re.search(r"/per-article/en\.wikipedia/[^/]+/[^/]+/([^/]+)/", u)
             return f"Wikimedia pageviews: {m.group(1)}" if m else "Wikimedia pageviews"
         return re.sub(r"^https?://", "", u).split("/")[0]
-    items = [f'<a href="{e(u)}">{e(label(u))}</a>' for u in urls]
+    items = [f'<a href="{e(filing_url(u))}">{e(label(u))}</a>' for u in urls]
     if len(items) <= 3:
         return "Answer-key sources: " + " · ".join(items)
     return (f"<details><summary>Answer-key sources ({len(items)})</summary>"
@@ -373,7 +381,7 @@ def section_replays(runs, questions, vlog, replays):
 </div>
 </div>""")
     return f"""
-<h2>Six recorded runs, replayed step by step.</h2>
+<h2>{len(items)} questions, replayed step by step.</h2>
 <p class="muted">One question per category. Setup D is on the right; A, B and C are on the left as
 tabs. Every step is shown as recorded: long text is shortened with a "show full" toggle and never
 edited. Each pane also gives that setup's record on the question across all its runs.</p>
@@ -415,8 +423,8 @@ def section_b_vs_c(summary, questions):
 comparison tests only the format. By majority vote across {n_runs} runs, B and C got the same result on
 <b>{same} of {n}</b> questions. The difference:</p>
 <ul>{diffs or "<li>None.</li>"}</ul>
-<p class="muted">A difference this small is within noise for a sample this size. It is not evidence
-that one format is better.</p>
+<p class="muted">This small sample does not establish that one format is better. No statistical
+significance test was performed.</p>
 </div>"""
 
 
@@ -449,7 +457,7 @@ scoring rule did not change.</p>
     links = need(replays, "links")
     repo = need(links, "repo")
     ea_path = need(links, "error_analysis")
-    ea = (f'<a href="{e(repo)}/blob/main/{e(ea_path)}">Error analysis</a>' if ERROR_ANALYSIS.exists()
+    ea = (f'<a href="{e(Path(ea_path).name)}">Error analysis</a>' if ERROR_ANALYSIS.exists()
           else f"Error analysis: not written yet ({e(ea_path)}).")
     return f"""
 <h2>How the answers were checked</h2>
