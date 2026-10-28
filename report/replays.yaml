@@ -15,59 +15,53 @@ replays:
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: correct}
     note: >-
-      The trap is adding up quarter-end balances. No setup fell for it here: every run read the
-      year-end balance.
+      Total assets is a balance, not a flow. Every recorded run used the year-end balance correctly.
 
   - question_id: q010
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: incorrect, B: correct, C: incorrect, D: correct}
     note: >-
-      Every run got the arithmetic right. What differs is the caveat: Darden's fiscal year ends in
-      May, so the combined margin mixes different periods and needs a warning. D's aggregate tool
-      returned the warning itself. This is the only question where B and C differ.
+      The arithmetic is correct across all runs. The missing caveat matters: Darden ends its fiscal
+      year in May; Chipotle and Yum end in December. D's tool flagged the mismatch. This is the only
+      question where B and C differ by majority vote.
 
   - question_id: q017
     runs: {A: 2, B: 1, C: 1, D: 1}
     expect: {A: trap, B: correct, C: correct, D: correct}
     note: >-
-      A's run shown here is the only stored-trap hit in the full run: it answered with Darden's
-      full-year revenue instead of the single quarter. A answered correctly in its other runs; its
-      record is shown beside the run.
+      A calculated the quarter in its explanation, then returned annual revenue in its final answer.
+      This was the only stored-trap hit. A's other runs answered correctly.
 
   - question_id: q018
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: correct}
     note: >-
-      A percent change in a price index, not a difference in index points. All setups got it right.
+      The question asks for percent change in the index. Every setup used the correct calculation.
 
   - question_id: q030
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: unparsed}
     note: >-
-      D's run shown here ended without a final answer after its full-year pageview requests were
-      rejected and it hit the output-token limit. The tool accepts calendar quarters; D recovered
-      by composing quarterly calls in its other runs. This is a tool-interface and recovery failure,
-      not evidence that annual views are unavailable. A, B and C answered with SQL.
+      D requested annual views from a tool that accepts calendar quarters. After the requests were
+      rejected, it hit the token limit without a final answer. Its other runs recovered by combining
+      quarterly calls. A, B and C answered with SQL.
 
   - question_id: q034
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: incorrect}
     note: >-
-      D's run shown here refused an answerable question after unsuccessful get_metric and
-      single-company aggregate calls. The interface has no direct comps lookup, but a multi-company
-      aggregate call returns both values and definitions in a warning envelope; D used that route
-      successfully in its other runs. This is a tool-discovery failure, not missing data. A, B and C
-      read the two rows with SQL and warned that the companies define comps differently.
+      D refused after trying unsupported comps lookups. The data was available: a multi-company
+      aggregate call returns each value and its definition with a warning. D found that route in its
+      other runs. A, B and C queried the rows and warned that the definitions differ.
 
 tag_cards:
   - id: fundamentals.total_assets
     sentence: >-
-      Total assets is a balance at a point in time: a year's value is the last quarter-end balance,
-      never a sum of quarters.
+      Use the last quarter-end balance for the year. Do not sum balances across quarters.
   - id: fundamentals.op_cash_flow
     sentence: >-
-      Quarterly cash-flow filings are year-to-date, so a single quarter has to be derived by
-      subtracting the previous year-to-date value.
+      Cash-flow statements report year-to-date totals. Derive later quarters by subtracting the
+      preceding year-to-date total.
 
 # SPEC §11.8. Sample-size figures are filled in from the data at build time.
 limitations:

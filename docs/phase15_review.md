@@ -43,3 +43,11 @@ The six distinct SEC links on the rebuilt page were opened and matched to their 
 - Open `docs/index.html` at laptop width and on a real phone, and check wrapping, horizontal scrolling, theme contrast and controls. The attempted local browser launch failed with SIGABRT; no rendered screenshots or physical-phone check were obtained. The responsive CSS was inspected, but visual acceptance remains pending.
 - GitHub's file endpoint confirms the HTML exists on the PR branch. The GitHub file view could not be loaded through the available web reader, so GitHub rendering was not verified. A source-code view is not an HTML preview.
 - Karan Patel should read the assisted error-analysis draft before attributing it as his own analysis or approving the page.
+
+## Follow-up: shorter replays and copy
+
+Karan confirmed the phone preview worked, then requested less scrolling and clearer explanations. Each replay pane now leads with its score, answer, expected answer and sources. Original model text and tool inputs/outputs sit inside a closed native `details` disclosure labelled "View recorded steps"; A/B/C use the same layout as D. Per-run outcomes have a separate disclosure, with the correct-run count always visible. D's failure badges and the replay notes remain outside the collapsed trace.
+
+The introduction, replay notes and section explanations were shortened without changing the selected runs or claiming performance gains. The error-analysis draft, questions, tags, tool descriptions, scoring code and evaluation outputs were not edited.
+
+Validation: 59 tests pass. The existing DOM checks pass; additional checks confirm all 24 traces start closed, results sit outside the disclosures, and all 48 tool calls and 23 nonempty model-text entries are preserved verbatim. All 20 protected analysis/data/code files match the previous commit. No new rendered-browser check was obtained; the changed layout should be reopened on the Mac and phone.

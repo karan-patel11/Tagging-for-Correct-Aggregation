@@ -195,9 +195,9 @@ def section_problem(questions, runs, vlog, replays):
               f"year-end balance." if n_ok == n else
               f"In this experiment {n_ok} of {n} runs on this question returned the year-end balance.")
     return f"""
-<h2>Valid SQL can still give the wrong answer.</h2>
-<p>A balance sheet number like total assets is a snapshot at one date. Adding it up over the
-quarters of a year runs without error and gives a confident, wrong number.</p>
+<h2>SQL can run correctly and answer the wrong question.</h2>
+<p>Total assets is a balance at a point in time. Summing quarter-end balances produces a valid SQL
+result, but not annual total assets.</p>
 <div class="compare">
   <div class="stat"><div class="muted small">Sum of Yum! Brands' four fiscal-year quarter-end balances
     (the trap; an illustration, not a recorded run)</div>
@@ -208,8 +208,8 @@ WHERE ticker = 'YUM' AND metric = 'total_assets' AND fiscal_year = {e(q_fiscal_y
     <div class="big">{e(num(correct))} {e(q["unit"])}</div>
     <p class="small"><a href="{e(link)}">Yum! Brands 10-K on SEC EDGAR</a></p></div>
 </div>
-<p class="muted">{e(result)} The question tests whether a model knows which rule applies, and the
-same kind of rule governs year-to-date cash flows, ratios, price indices and brand hierarchies.</p>"""
+<p class="muted">{e(result)} Other questions test quarter derivation, ratios, price indices and
+brand rollups.</p>"""
 
 
 def q_fiscal_year(q):
@@ -260,8 +260,8 @@ def section_results(summary, questions):
     sample = f"{n_q} questions × {n_runs} runs, {model}, run on {' and '.join(dates)} (UTC)"
     return f"""
 <h2>Accuracy was close across all four setups.</h2>
-<p class="muted">{e(sample)}. Bars show mean accuracy across runs; the line on each bar shows the lowest
-and highest single run. The axis starts at zero.</p>
+<p class="muted">{e(sample)}. Bars show mean accuracy; markers show the lowest and highest run.
+The axis starts at zero.</p>
 {bars(acc_rows, True)}
 <div class="table-wrap"><table>
 <tr><th>Setup</th><th>Tools</th><th>Correct runs</th><th>Accuracy (run range)</th>
@@ -269,8 +269,8 @@ and highest single run. The axis starts at zero.</p>
 {''.join(table)}
 </table></div>
 <h3 style="margin-top:20px">Secondary metric: over-warning</h3>
-<p class="muted">How often a setup flagged a caveat on a question that needed none. An extra warning
-is not scored as wrong, but it is noise an analyst has to read past.</p>
+<p class="muted">Warnings on questions labelled as needing an answer without a caveat. These count
+separately from accuracy; the measure does not judge the wording of each caveat.</p>
 {bars(ow_rows, False)}"""
 
 
@@ -341,12 +341,14 @@ def pane(runs, questions, vlog, qid, setup, run):
     return f"""
 <div class="pane" data-setup="{e(setup)}">
 <h3>{e(setup)} · {e(SETUP_NAMES[setup])} <span class="muted small">run {run}</span></h3>
-<div class="record">This setup on this question: {n_ok} of {n} runs correct ({e(detail)}).</div>
-{render_steps(rec)}
+<details class="run-record"><summary>{n_ok} of {n} runs correct · view run results</summary>
+<p class="record">{e(detail)}.</p></details>
 <div class="final"><div>{badge(sc, q)}</div>
 <p class="small"><b>Final answer:</b> {final}</p>
 <p class="small"><b>Correct answer:</b> {e(expected)}</p>
 <p class="small">{links}</p></div>
+<details class="trace"><summary>View recorded steps · {len(rec.get('tool_calls') or [])} tool calls</summary>
+<div class="trace-body">{render_steps(rec)}</div></details>
 </div>"""
 
 
@@ -381,10 +383,9 @@ def section_replays(runs, questions, vlog, replays):
 </div>
 </div>""")
     return f"""
-<h2>{len(items)} questions, replayed step by step.</h2>
-<p class="muted">One question per category. Setup D is on the right; A, B and C are on the left as
-tabs. Every step is shown as recorded: long text is shortened with a "show full" toggle and never
-edited. Each pane also gives that setup's record on the question across all its runs.</p>
+<h2>Compare recorded answers.</h2>
+<p class="muted">{len(items)} questions, one per category. Compare A, B or C with D. Answers and scores
+appear first; expand recorded steps for the original model text and tool responses.</p>
 <div class="picker js-only">{''.join(buttons)}</div>
 {''.join(blocks)}"""
 
@@ -400,9 +401,9 @@ def section_tags(tags, replays):
         cards.append(f'<div class="card"><h3><code>{e(t["id"])}</code></h3>'
                      f'<p>{e(need(c, "sentence"))}</p><dl>{rows}</dl></div>')
     return f"""
-<h2>A tag is a few lines of rules per column.</h2>
-<p class="muted">Setup C gets the whole tags file in its prompt. Setup D can read a tag only by calling
-describe_column, and its aggregate tool refuses methods the tag does not allow.</p>
+<h2>Rules attached to each metric.</h2>
+<p class="muted">C receives the full tags file. D reads tags through describe_column; aggregate checks
+which methods are allowed.</p>
 <div class="cards">{''.join(cards)}</div>"""
 
 
@@ -418,9 +419,9 @@ def section_b_vs_c(summary, questions):
                     for qs, side in ((diff_b, "B right, C wrong"), (diff_c, "C right, B wrong")) for q in qs)
     return f"""
 <div class="box">
-<h2>Prose and tags did about the same.</h2>
-<p>Setups B and C were given the same facts, one as plain sentences and one as the tags file, so this
-comparison tests only the format. By majority vote across {n_runs} runs, B and C got the same result on
+<h2>Prose and tags gave similar results.</h2>
+<p>B and C receive the same facts in different formats: sentences and structured tags.
+By majority vote across {n_runs} runs, their scored outcomes agree on
 <b>{same} of {n}</b> questions. The difference:</p>
 <ul>{diffs or "<li>None.</li>"}</ul>
 <p class="muted">This small sample does not establish that one format is better. No statistical
