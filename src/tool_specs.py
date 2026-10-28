@@ -68,3 +68,19 @@ TOOL_SPECS = [
 
 TOOL_NAMES = [t["name"] for t in TOOL_SPECS]
 DESCRIPTIONS = {t["name"]: t["description"] for t in TOOL_SPECS}
+
+# The SQL tool for evaluation setups A, B and C (SPEC §11.4). Not served by the MCP server.
+RUN_SQL_SPEC = {
+    "name": "run_sql",
+    "description": (
+        "Run one read-only SQL query against the DuckDB warehouse. Returns at most 200 rows as text. "
+        "Errors are returned as text. Queries time out after 10 seconds."
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "sql": {**_STR, "description": "A single DuckDB SQL query."},
+        },
+        "required": ["sql"],
+    },
+}
