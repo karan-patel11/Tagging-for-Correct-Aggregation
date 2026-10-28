@@ -1,0 +1,492 @@
+{
+ "model": [
+  "claude-haiku-5-5"
+ ],
+ "run_dates": [
+  "2026-10-28"
+ ],
+ "total_cost_usd": 0.427403,
+ "n_runs": 504,
+ "runs_per_question": [
+  1,
+  2,
+  3
+ ],
+ "setups": {
+  "A": {
+   "n": 126,
+   "accuracy": {
+    "mean": 0.9682539682539683,
+    "min": 0.9285714285714286,
+    "max": 1.0
+   },
+   "accuracy_by_category": {
+    "comparability_unanswerable": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "hierarchy": {
+     "mean": 0.9523809523809524,
+     "min": 0.8571428571428571,
+     "max": 1.0
+    },
+    "indices": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "ratios": {
+     "mean": 0.9047619047619048,
+     "min": 0.8571428571428571,
+     "max": 1.0
+    },
+    "time_additivity": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "ytd_calendar": {
+     "mean": 0.9523809523809524,
+     "min": 0.8571428571428571,
+     "max": 1.0
+    }
+   },
+   "behavior_accuracy": 0.9841269841269841,
+   "over_warning_rate": 0.3333333333333333,
+   "over_warning_runs": 34,
+   "scaled_runs": 8,
+   "trap_hits": {
+    "average_instead_of_sum": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "included_parent_rows": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "index_point_difference": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "mean_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "mean_of_margins": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_index_levels": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2025": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2026": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fy_value": {
+     "hits": 1,
+     "runs": 21,
+     "rate": 0.047619047619047616
+    },
+    "used_ytd6_value": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_ytd9_value": {
+     "hits": 0,
+     "runs": 18,
+     "rate": 0.0
+    }
+   },
+   "unparsed": [],
+   "avg_tool_calls": 2.2063492063492065,
+   "avg_tokens": {
+    "input_tokens": 3139.5714285714284,
+    "cache_creation_input_tokens": 14.095238095238095,
+    "cache_read_input_tokens": 2438.4761904761904,
+    "output_tokens": 905.8015873015873
+   },
+   "cost_usd": 0.099913
+  },
+  "B": {
+   "n": 126,
+   "accuracy": {
+    "mean": 0.9365079365079364,
+    "min": 0.9285714285714286,
+    "max": 0.9523809523809523
+   },
+   "accuracy_by_category": {
+    "comparability_unanswerable": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "hierarchy": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "indices": {
+     "mean": 0.6190476190476191,
+     "min": 0.5714285714285714,
+     "max": 0.7142857142857143
+    },
+    "ratios": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "time_additivity": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "ytd_calendar": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    }
+   },
+   "behavior_accuracy": 1.0,
+   "over_warning_rate": 0.08823529411764706,
+   "over_warning_runs": 9,
+   "scaled_runs": 10,
+   "trap_hits": {
+    "average_instead_of_sum": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "included_parent_rows": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "index_point_difference": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "mean_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "mean_of_margins": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_index_levels": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2025": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2026": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fy_value": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "used_ytd6_value": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_ytd9_value": {
+     "hits": 0,
+     "runs": 18,
+     "rate": 0.0
+    }
+   },
+   "unparsed": [],
+   "avg_tool_calls": 1.3888888888888888,
+   "avg_tokens": {
+    "input_tokens": 1368.8412698412699,
+    "cache_creation_input_tokens": 71.88095238095238,
+    "cache_read_input_tokens": 20342.309523809523,
+    "output_tokens": 803.8809523809524
+   },
+   "cost_usd": 0.094657
+  },
+  "C": {
+   "n": 126,
+   "accuracy": {
+    "mean": 0.9523809523809524,
+    "min": 0.9285714285714286,
+    "max": 0.9761904761904762
+   },
+   "accuracy_by_category": {
+    "comparability_unanswerable": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "hierarchy": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "indices": {
+     "mean": 0.8095238095238094,
+     "min": 0.7142857142857143,
+     "max": 0.8571428571428571
+    },
+    "ratios": {
+     "mean": 0.9047619047619048,
+     "min": 0.8571428571428571,
+     "max": 1.0
+    },
+    "time_additivity": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "ytd_calendar": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    }
+   },
+   "behavior_accuracy": 0.9841269841269841,
+   "over_warning_rate": 0.18627450980392157,
+   "over_warning_runs": 19,
+   "scaled_runs": 6,
+   "trap_hits": {
+    "average_instead_of_sum": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "included_parent_rows": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "index_point_difference": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "mean_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "mean_of_margins": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_index_levels": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2025": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2026": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fy_value": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "used_ytd6_value": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_ytd9_value": {
+     "hits": 0,
+     "runs": 18,
+     "rate": 0.0
+    }
+   },
+   "unparsed": [],
+   "avg_tool_calls": 1.3333333333333333,
+   "avg_tokens": {
+    "input_tokens": 1448.7698412698412,
+    "cache_creation_input_tokens": 68.36507936507937,
+    "cache_read_input_tokens": 19005.492063492064,
+    "output_tokens": 818.8015873015873
+   },
+   "cost_usd": 0.094858
+  },
+  "D": {
+   "n": 126,
+   "accuracy": {
+    "mean": 0.9841269841269842,
+    "min": 0.9523809523809523,
+    "max": 1.0
+   },
+   "accuracy_by_category": {
+    "comparability_unanswerable": {
+     "mean": 0.9523809523809524,
+     "min": 0.8571428571428571,
+     "max": 1.0
+    },
+    "hierarchy": {
+     "mean": 0.9523809523809524,
+     "min": 0.8571428571428571,
+     "max": 1.0
+    },
+    "indices": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "ratios": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "time_additivity": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "ytd_calendar": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    }
+   },
+   "behavior_accuracy": 0.9841269841269841,
+   "over_warning_rate": 0.06930693069306931,
+   "over_warning_runs": 7,
+   "scaled_runs": 1,
+   "trap_hits": {
+    "average_instead_of_sum": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "included_parent_rows": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "index_point_difference": {
+     "hits": 0,
+     "runs": 9,
+     "rate": 0.0
+    },
+    "mean_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "mean_of_margins": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_4_quarter_ends": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "sum_of_index_levels": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2025": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fiscal_2026": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_fy_value": {
+     "hits": 0,
+     "runs": 21,
+     "rate": 0.0
+    },
+    "used_ytd6_value": {
+     "hits": 0,
+     "runs": 3,
+     "rate": 0.0
+    },
+    "used_ytd9_value": {
+     "hits": 0,
+     "runs": 18,
+     "rate": 0.0
+    }
+   },
+   "unparsed": [
+    "q030 run 1"
+   ],
+   "avg_tool_calls": 3.611111111111111,
+   "avg_tokens": {
+    "input_tokens": 6510.738095238095,
+    "cache_creation_input_tokens": 8.555555555555555,
+    "cache_read_input_tokens": 3764.4444444444443,
+    "output_tokens": 810.468253968254
+   },
+   "cost_usd": 0.137975
+  }
+ },
+ "b_vs_c": {
+  "questions": 42,
+  "b_right_c_wrong": [
+   "q010"
+  ],
+  "c_right_b_wrong": [
+   "q022",
+   "q023"
+  ],
+  "both_right": 38,
+  "both_wrong": 1,
+  "note": "Majority vote across runs (more than half correct). With this sample, a difference of a few questions is within noise."
+ }
+}
