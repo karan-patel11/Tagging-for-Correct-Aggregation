@@ -72,7 +72,11 @@ th { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
   border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 0.85rem; cursor: pointer; }
 .picker button[aria-selected="true"], .tabs button[aria-selected="true"] { background: var(--accent-soft);
   border-color: var(--accent); color: var(--accent); font-weight: 600; }
-.tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.picker button, .tabs button { white-space: nowrap; }
+button:focus-visible, summary:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.note.remedy { background: var(--surface); border: 1px dashed var(--muted); }
 .replay-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .col { border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
 .step { border-left: 3px solid var(--line); padding: 4px 0 4px 10px; margin: 10px 0; }
@@ -126,8 +130,9 @@ footer { margin-top: 24px; }
   <div>
     <div class="kicker">A small experiment</div>
     <h1>Tagging for Correct Aggregation</h1>
-    <p class="lede">Compare schema, prose, tags and semantic tools on restaurant-finance questions.
-    Explore the recorded answers, calculations and sources.</p>
+    <p class="lede">One model answered the same restaurant-finance questions in four setups: table
+    schema only, prose descriptions, a tags file, and semantic tools with no SQL. This page replays
+    the recorded runs. It does not call a model.</p>
   </div>
   <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
 </header>

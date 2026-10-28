@@ -7,6 +7,8 @@
 # all of its runs, so a single run is never presented as the whole story.
 # expect: what each shown run must have scored (correct, incorrect, trap, unparsed). The build fails
 # if the recorded run differs, so a note can never describe a failure that did not happen.
+# untested_remedy: optional. A fix proposed for an observed failure. It was not implemented or
+# measured, and the page labels it that way.
 
 problem_question: q003   # section 1 explainer; must not imply any setup failed it
 
@@ -44,7 +46,11 @@ replays:
     note: >-
       D requested annual views from a tool that accepts calendar quarters. After the requests were
       rejected, it hit the token limit without a final answer. Its other runs recovered by combining
-      quarterly calls. A, B and C answered with SQL.
+      quarterly calls. A, B and C answered with SQL. The data was available; the failure came from
+      the tool interface.
+    untested_remedy: >-
+      Let the pageview tool accept a calendar year, or say in its error that a year can be built
+      from quarterly calls.
 
   - question_id: q034
     runs: {A: 1, B: 1, C: 1, D: 1}
@@ -53,6 +59,9 @@ replays:
       D refused after trying unsupported comps lookups. The data was available: a multi-company
       aggregate call returns each value and its definition with a warning. D found that route in its
       other runs. A, B and C queried the rows and warned that the definitions differ.
+    untested_remedy: >-
+      Add a single-company comps lookup, or make the rejection point to the multi-company aggregate
+      call.
 
 tag_cards:
   - id: fundamentals.total_assets

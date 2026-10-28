@@ -72,7 +72,11 @@ th { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
   border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 0.85rem; cursor: pointer; }
 .picker button[aria-selected="true"], .tabs button[aria-selected="true"] { background: var(--accent-soft);
   border-color: var(--accent); color: var(--accent); font-weight: 600; }
-.tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.picker button, .tabs button { white-space: nowrap; }
+button:focus-visible, summary:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.note.remedy { background: var(--surface); border: 1px dashed var(--muted); }
 .replay-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .col { border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
 .step { border-left: 3px solid var(--line); padding: 4px 0 4px 10px; margin: 10px 0; }
@@ -126,8 +130,9 @@ footer { margin-top: 24px; }
   <div>
     <div class="kicker">A small experiment</div>
     <h1>Tagging for Correct Aggregation</h1>
-    <p class="lede">Compare schema, prose, tags and semantic tools on restaurant-finance questions.
-    Explore the recorded answers, calculations and sources.</p>
+    <p class="lede">One model answered the same restaurant-finance questions in four setups: table
+    schema only, prose descriptions, a tags file, and semantic tools with no SQL. This page replays
+    the recorded runs. It does not call a model.</p>
   </div>
   <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
 </header>
@@ -158,6 +163,8 @@ brand rollups.</p>
 <h2>Accuracy was close across all four setups.</h2>
 <p class="muted">42 questions × 3 runs, claude-haiku-5-5, run on 2026-10-28 (UTC). Bars show mean accuracy; markers show the lowest and highest run.
 The axis starts at zero.</p>
+<p>The setups differ by a few runs each. That is too few to rank them on this sample. The larger
+observed difference is in extra warnings, shown below.</p>
 <div class="bars" role="list">
 <div class="bar-row" role="listitem"><span class="bar-label">A · Schema only</span><span class="track"><span class="fill" style="width:96.83%"></span><span class="rng" style="left:92.86%;width:7.14%" title="lowest to highest run"></span></span><span class="bar-val">96.8%</span></div>
 <div class="bar-row" role="listitem"><span class="bar-label">B · Prose descriptions</span><span class="track"><span class="fill" style="width:100.00%"></span><span class="rng" style="left:100.00%;width:0.00%" title="lowest to highest run"></span></span><span class="bar-val">100.0%</span></div>
@@ -201,7 +208,7 @@ appear first; expand recorded steps for the original model text and tool respons
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, concept, value, unit, period_start, period_end, period_basis, fiscal_year, fiscal_quarter, form, filed FROM fundamentals WHERE ticker IN (&#x27;YUM&#x27;) AND lower(metric) LIKE &#x27;%asset%&#x27; ORDER BY period_end DESC LIMIT 50</pre><div class="muted small">returned</div><pre>ticker	metric	concept	value	unit	period_start	period_end	period_basis	fiscal_year	fiscal_quarter	form	filed
 YUM	total_assets	Assets	8197000000.0	USD	NULL	2025-12-31	instant	2025	4	10-K	2026-02-20
 YUM	total_assets	Assets	7193000000.0	USD	NULL	2025-09-30	instant	2025	3	10-Q	2025-11-07
@@ -227,7 +234,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, period_basis, period_start, period_end, fiscal_year, fiscal_quarter, value, accession, filed, form FROM fundamentals WHERE ticker=&#x27;YUM&#x27; AND metric=&#x27;total_assets&#x27; AND fiscal_year=2025 ORDER BY period_end</pre><div class="muted small">returned</div><pre>ticker	metric	period_basis	period_start	period_end	fiscal_year	fiscal_quarter	value	accession	filed	form
 YUM	total_assets	instant	NULL	2025-03-31	2025	1	6659000000.0	0001041061-25-000025	2025-05-07	10-Q
 YUM	total_assets	instant	NULL	2025-06-30	2025	2	6917000000.0	0001041061-25-000057	2025-08-07	10-Q
@@ -249,7 +256,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, fiscal_year, fiscal_quarter, period_basis, period_end, value, unit, form, filed, accession FROM fundamentals WHERE ticker = &#x27;YUM&#x27; AND metric = &#x27;total_assets&#x27; AND fiscal_year IN (2025, 2026) ORDER BY period_end</pre><div class="muted small">returned</div><pre>ticker	metric	fiscal_year	fiscal_quarter	period_basis	period_end	value	unit	form	filed	accession
 YUM	total_assets	2025	1	instant	2025-03-31	6659000000.0	USD	10-Q	2025-05-07	0001041061-25-000025
 YUM	total_assets	2025	2	instant	2025-06-30	6917000000.0	USD	10-Q	2025-08-07	0001041061-25-000057
@@ -272,7 +279,7 @@ FINAL: {&quot;answer&quot;: 8197000000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <p class="small"><b>Final answer:</b> 8,197,000,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 8,197,000,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">get_metric</div><pre>{
  &quot;ticker&quot;: &quot;YUM&quot;,
  &quot;metric&quot;: &quot;total_assets&quot;,
@@ -396,7 +403,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <p class="small"><b>Final answer:</b> 18.23 percent · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 18.2271 percent with a warning</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/0001058090-26-000009-index.htm">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, fiscal_year, fiscal_quarter, period_basis, period_start, period_end, value, accession, filed, concept FROM fundamentals WHERE metric IN (&#x27;revenue&#x27;,&#x27;operating_income&#x27;) AND ticker IN (&#x27;CMG&#x27;,&#x27;YUM&#x27;,&#x27;DRI&#x27;) AND fiscal_year = 2025 ORDER BY ticker, metric, period_end, period_basis</pre><div class="muted small">returned</div><pre>ticker	metric	fiscal_year	fiscal_quarter	period_basis	period_start	period_end	value	accession	filed	concept
 CMG	operating_income	2025	1	Q	2025-01-01	2025-03-31	479250000.0	0001058090-26-000028	2026-04-30	OperatingIncomeLoss
 CMG	operating_income	2025	2	Q	2025-04-01	2025-06-30	559057000.0	0001058090-26-000066	2026-07-31	OperatingIncomeLoss
@@ -466,7 +473,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <p class="small"><b>Final answer:</b> 18.23 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 18.2271 percent with a warning</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/0001058090-26-000009-index.htm">SEC filing 0001058090-26-000009</a> · <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/0001041061-26-000084-index.htm">SEC filing 0001041061-26-000084</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, fiscal_year, fiscal_quarter, period_basis, period_start, period_end, value, form, filed, accession FROM fundamentals WHERE ticker IN (&#x27;CMG&#x27;,&#x27;YUM&#x27;,&#x27;DRI&#x27;) AND metric IN (&#x27;revenue&#x27;,&#x27;operating_income&#x27;) AND period_basis IN (&#x27;FY&#x27;,&#x27;YTD9&#x27;,&#x27;YTD6&#x27;,&#x27;Q&#x27;) AND fiscal_year IN (2024,2025,2026) ORDER BY ticker, metric, period_end</pre><div class="muted small">returned</div><pre>ticker	metric	fiscal_year	fiscal_quarter	period_basis	period_start	period_end	value	form	filed	accession
 CMG	operating_income	2024	1	Q	2024-01-01	2024-03-31	441292000.0	10-Q	2025-04-24	0001058090-25-000031
 CMG	operating_income	2024	2	YTD6	2024-01-01	2024-06-30	1027345000.0	10-Q	2025-07-24	0001058090-25-000056
@@ -621,7 +628,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <p class="small"><b>Final answer:</b> 13,210,900,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, concept, value, unit, period_start, period_end, period_basis, fiscal_year, fiscal_quarter, form, filed FROM fundamentals WHERE ticker IN (&#x27;DRI&#x27;) AND (metric ILIKE &#x27;%revenue%&#x27; OR concept ILIKE &#x27;%revenue%&#x27;) ORDER BY period_end DESC LIMIT 50</pre><div class="muted small">returned</div><pre>ticker	metric	concept	value	unit	period_start	period_end	period_basis	fiscal_year	fiscal_quarter	form	filed
 DRI	revenue	RevenueFromContractWithCustomerExcludingAssessedTax	13210900000.0	USD	2025-05-26	2026-05-31	FY	2026	4	10-K	2026-07-24
 DRI	revenue	RevenueFromContractWithCustomerExcludingAssessedTax	9492100000.0	USD	2025-05-26	2026-02-22	YTD9	2026	3	10-Q	2026-03-27
@@ -654,7 +661,7 @@ FINAL: {&quot;answer&quot;: 13210900000, &quot;unit&quot;: &quot;USD&quot;, &quo
 <p class="small"><b>Final answer:</b> 3,718,800,000 USD · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, metric, period_start, period_end, period_basis, fiscal_year, fiscal_quarter, form, accession, filed, value FROM fundamentals WHERE ticker=&#x27;DRI&#x27; AND metric=&#x27;revenue&#x27; AND period_end BETWEEN &#x27;2025-06-01&#x27; AND &#x27;2026-06-30&#x27; ORDER BY period_end, period_basis</pre><div class="muted small">returned</div><pre>ticker	metric	period_start	period_end	period_basis	fiscal_year	fiscal_quarter	form	accession	filed	value
 DRI	revenue	2025-05-26	2025-08-24	Q	2026	1	10-Q	0000940944-26-000042	2026-10-02	3044700000.0
 DRI	revenue	2025-08-25	2025-11-23	Q	2026	2	10-Q	0000940944-25-000071	2025-12-30	3102100000.0
@@ -694,7 +701,7 @@ FINAL: {&quot;answer&quot;: 3718800000, &quot;unit&quot;: &quot;USD&quot;, &quot
 <p class="small"><b>Final answer:</b> 3,718,800,000 USD · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 3,718,800,000 USD</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm">SEC filing 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/0000940944-26-000009-index.htm">SEC filing 0000940944-26-000009</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT ticker, period_basis, period_start, period_end, fiscal_year, fiscal_quarter, form, accession, filed, value, unit FROM fundamentals WHERE ticker=&#x27;DRI&#x27; AND metric=&#x27;revenue&#x27; AND period_end &gt;= &#x27;2025-05-01&#x27; ORDER BY period_end, period_basis</pre><div class="muted small">returned</div><pre>ticker	period_basis	period_start	period_end	fiscal_year	fiscal_quarter	form	accession	filed	value	unit
 DRI	FY	2024-05-27	2025-05-25	2025	4	10-K	0000940944-26-000025	2026-07-24	12076700000.0	USD
 DRI	Q	2025-05-26	2025-08-24	2026	1	10-Q	0000940944-26-000042	2026-10-02	3044700000.0	USD
@@ -801,7 +808,7 @@ FINAL: {&quot;answer&quot;: 4.07, &quot;unit&quot;: &quot;percent&quot;, &quot;w
 <p class="small"><b>Final answer:</b> 4.07 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 4.0692 percent</p>
 <p class="small">Answer-key sources: <a href="https://data.bls.gov/timeseries/CUSR0000SEFV">data.bls.gov</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT date, value, retrieved_on FROM macro_monthly WHERE series_id = &#x27;CUSR0000SEFV&#x27; AND date IN (&#x27;2024-12-01&#x27;, &#x27;2025-12-01&#x27;) ORDER BY date</pre><div class="muted small">returned</div><pre>date	value	retrieved_on
 2024-12-01	374.644	2026-10-23
 2025-12-01	389.889	2026-10-23</pre></div>
@@ -819,7 +826,7 @@ FINAL: {&quot;answer&quot;: 4.07, &quot;unit&quot;: &quot;percent&quot;, &quot;w
 <p class="small"><b>Final answer:</b> 4.07 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 4.0692 percent</p>
 <p class="small">Answer-key sources: <a href="https://data.bls.gov/timeseries/CUSR0000SEFV">data.bls.gov</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT date, value FROM macro_monthly WHERE series_id = &#x27;CUSR0000SEFV&#x27; AND date IN (&#x27;2024-12-01&#x27;, &#x27;2025-12-01&#x27;) ORDER BY date</pre><div class="muted small">returned</div><pre>date	value
 2024-12-01	374.644
 2025-12-01	389.889</pre></div>
@@ -859,7 +866,7 @@ FINAL: {&quot;answer&quot;: 4.07, &quot;unit&quot;: &quot;percent&quot;, &quot;w
 </div>
 <div class="replay" data-q="q030">
 <h3>Brand hierarchy: What share of the combined English Wikipedia views of Yum! Brands&#x27; four brand articles (KFC, Taco Bell, Pizza Hut, and Habit Burger Grill under both its current and former titles) went to KFC in calendar 2025, in percent?</h3>
-<div class="note small">D requested annual views from a tool that accepts calendar quarters. After the requests were rejected, it hit the token limit without a final answer. Its other runs recovered by combining quarterly calls. A, B and C answered with SQL.</div>
+<div class="note small">D requested annual views from a tool that accepts calendar quarters. After the requests were rejected, it hit the token limit without a final answer. Its other runs recovered by combining quarterly calls. A, B and C answered with SQL. The data was available; the failure came from the tool interface.</div><div class="note small remedy"><b>Possible fix, not tested:</b> Let the pageview tool accept a calendar year, or say in its error that a year can be built from quarterly calls.</div>
 <div class="replay-cols">
   <div class="col"><div class="tabs js-only"><button type="button" data-setup="A">A · Schema only</button><button type="button" data-setup="B">B · Prose descriptions</button><button type="button" data-setup="C">C · Tags file</button></div>
 <div class="pane" data-setup="A">
@@ -921,7 +928,7 @@ FINAL: {&quot;answer&quot;: 47.4, &quot;unit&quot;: &quot;percent&quot;, &quot;w
 <p class="small"><b>Final answer:</b> 47.4 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 47.445 percent</p>
 <p class="small"><details><summary>Answer-key sources (20)</summary><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=KFC">Pageviews Analysis: KFC, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=KFC">Pageviews Analysis: KFC, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=KFC">Pageviews Analysis: KFC, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=KFC">Pageviews Analysis: KFC, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-10-01 to 2025-12-31</a></details></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT brand, article_title, grain, parent_ticker, COUNT(*) AS n, MIN(date) AS dmin, MAX(date) AS dmax, SUM(views) AS total_views FROM brand_attention_daily WHERE parent_ticker = &#x27;YUM&#x27; AND date &gt;= &#x27;2025-01-01&#x27; AND date &lt;= &#x27;2025-12-31&#x27; GROUP BY ALL ORDER BY brand, article_title, grain</pre><div class="muted small">returned</div><pre>brand	article_title	grain	parent_ticker	n	dmin	dmax	total_views
 Habit Burger Grill	Habit_Burger_&amp;_Grill	brand	YUM	365	2025-01-01	2025-12-31	76215
 Habit Burger Grill	The_Habit_Burger_Grill	brand	YUM	365	2025-01-01	2025-12-31	4111
@@ -969,7 +976,7 @@ FINAL: {&quot;answer&quot;: 47.4, &quot;unit&quot;: &quot;percent&quot;, &quot;w
 <p class="small"><b>Final answer:</b> 47.44 percent · warning false · refused false</p>
 <p class="small"><b>Correct answer:</b> 47.445 percent</p>
 <p class="small"><details><summary>Answer-key sources (20)</summary><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=KFC">Pageviews Analysis: KFC, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-01-01&amp;end=2025-03-31&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-01-01 to 2025-03-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=KFC">Pageviews Analysis: KFC, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-04-01&amp;end=2025-06-30&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-04-01 to 2025-06-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=KFC">Pageviews Analysis: KFC, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-07-01&amp;end=2025-09-30&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-07-01 to 2025-09-30</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=KFC">Pageviews Analysis: KFC, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=Taco_Bell">Pageviews Analysis: Taco_Bell, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=Pizza_Hut">Pageviews Analysis: Pizza_Hut, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=Habit_Burger_%26_Grill">Pageviews Analysis: Habit_Burger_&amp;_Grill, 2025-10-01 to 2025-12-31</a><br><a href="https://pageviews.wmcloud.org/?project=en.wikipedia.org&amp;platform=all-access&amp;agent=user&amp;redirects=0&amp;start=2025-10-01&amp;end=2025-12-31&amp;pages=The_Habit_Burger_Grill">Pageviews Analysis: The_Habit_Burger_Grill, 2025-10-01 to 2025-12-31</a></details></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT brand, article_title, grain, parent_ticker, COUNT(*) AS n_days, SUM(views) AS total_views, MIN(date) AS min_d, MAX(date) AS max_d FROM brand_attention_daily WHERE parent_ticker = &#x27;YUM&#x27; AND date &gt;= &#x27;2025-01-01&#x27; AND date &lt;= &#x27;2025-12-31&#x27; GROUP BY 1,2,3,4 ORDER BY 1,2,3</pre><div class="muted small">returned</div><pre>brand	article_title	grain	parent_ticker	n_days	total_views	min_d	max_d
 Habit Burger Grill	Habit_Burger_&amp;_Grill	brand	YUM	365	76215	2025-01-01	2025-12-31
 Habit Burger Grill	The_Habit_Burger_Grill	brand	YUM	365	4111	2025-01-01	2025-12-31
@@ -1054,7 +1061,7 @@ FINAL: {&quot;answer&quot;: 47.44, &quot;unit&quot;: &quot;percent&quot;, &quot;
 </div>
 <div class="replay" data-q="q034">
 <h3>Comparability and refusals: By how many percentage points did Chipotle&#x27;s comparable sales growth exceed Wingstop&#x27;s in fiscal Q4 2025?</h3>
-<div class="note small">D refused after trying unsupported comps lookups. The data was available: a multi-company aggregate call returns each value and its definition with a warning. D found that route in its other runs. A, B and C queried the rows and warned that the definitions differ.</div>
+<div class="note small">D refused after trying unsupported comps lookups. The data was available: a multi-company aggregate call returns each value and its definition with a warning. D found that route in its other runs. A, B and C queried the rows and warned that the definitions differ.</div><div class="note small remedy"><b>Possible fix, not tested:</b> Add a single-company comps lookup, or make the rejection point to the multi-company aggregate call.</div>
 <div class="replay-cols">
   <div class="col"><div class="tabs js-only"><button type="button" data-setup="A">A · Schema only</button><button type="button" data-setup="B">B · Prose descriptions</button><button type="button" data-setup="C">C · Tags file</button></div>
 <div class="pane" data-setup="A">
@@ -1098,7 +1105,7 @@ FINAL: {&quot;answer&quot;: 3.3, &quot;unit&quot;: &quot;percentage points&quot;
 <p class="small"><b>Final answer:</b> 3.3 percentage points · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 3.3 percentage_points with a warning</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000007/cmg-20260203xex991.htm">SEC exhibit 0001058090-26-000007</a> · <a href="https://www.sec.gov/Archives/edgar/data/1636222/000163622226000006/a991wingearningsrelease.htm">SEC exhibit 0001636222-26-000006</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT c.ticker, c.fiscal_year, c.fiscal_quarter, c.comp_sales_pct, c.definition_id, c.source_url, d.definition_text, d.notes FROM comps_quarterly c LEFT JOIN comps_definitions d ON c.definition_id = d.definition_id WHERE c.ticker IN (&#x27;CMG&#x27;,&#x27;WING&#x27;) AND c.fiscal_year = 2025 AND c.fiscal_quarter = 4</pre><div class="muted small">returned</div><pre>ticker	fiscal_year	fiscal_quarter	comp_sales_pct	definition_id	source_url	definition_text	notes
 CMG	2025	4	-2.5	CMG_10K	https://www.sec.gov/Archives/edgar/data/1058090/000105809026000007/cmg-20260203xex991.htm	Comparable restaurant sales represent the change in period-over-period total revenue for company-owned restaurants in operation for at least 13 full calendar months.	Restaurants must be open at least 13 full ca…</pre><details><summary>show full</summary><pre>ticker	fiscal_year	fiscal_quarter	comp_sales_pct	definition_id	source_url	definition_text	notes
 CMG	2025	4	-2.5	CMG_10K	https://www.sec.gov/Archives/edgar/data/1058090/000105809026000007/cmg-20260203xex991.htm	Comparable restaurant sales represent the change in period-over-period total revenue for company-owned restaurants in operation for at least 13 full calendar months.	Restaurants must be open at least 13 full calendar months. Company-owned restaurants only; the 10-K says so explicitly, while the Q1 2025 earnings release omitted the words company-owned. Fiscal year ends December 31, so there is no 53rd-week adjustment. Source: Item 7 MD&amp;A, Overview, Sales Trends.
@@ -1119,7 +1126,7 @@ FINAL: {&quot;answer&quot;: 3.3, &quot;unit&quot;: &quot;percentage points&quot;
 <p class="small"><b>Final answer:</b> 3.3 percentage points · warning true · refused false <span class="badge warn">warning</span></p>
 <p class="small"><b>Correct answer:</b> 3.3 percentage_points with a warning</p>
 <p class="small">Answer-key sources: <a href="https://www.sec.gov/Archives/edgar/data/1058090/000105809026000007/cmg-20260203xex991.htm">SEC exhibit 0001058090-26-000007</a> · <a href="https://www.sec.gov/Archives/edgar/data/1636222/000163622226000006/a991wingearningsrelease.htm">SEC exhibit 0001636222-26-000006</a></p></div>
-<details class="trace"><summary>View recorded steps · 1 tool calls</summary>
+<details class="trace"><summary>View recorded steps · 1 tool call</summary>
 <div class="trace-body"><div class="step"><div class="tool">run_sql</div><pre>SELECT c.ticker, c.fiscal_year, c.fiscal_quarter, c.comp_sales_pct, c.definition_id, d.definition_text, c.source_url FROM comps_quarterly c LEFT JOIN comps_definitions d ON c.definition_id = d.definition_id WHERE c.ticker IN (&#x27;CMG&#x27;,&#x27;WING&#x27;) AND c.fiscal_year = 2025 AND c.fiscal_quarter = 4</pre><div class="muted small">returned</div><pre>ticker	fiscal_year	fiscal_quarter	comp_sales_pct	definition_id	definition_text	source_url
 CMG	2025	4	-2.5	CMG_10K	Comparable restaurant sales represent the change in period-over-period total revenue for company-owned restaurants in operation for at least 13 full calendar months.	https://www.sec.gov/Archives/edgar/data/1058090/000105809026000007/cmg-20260203xex991.htm
 WING	2025	4	-5.8	WING_10K	Domestic same store sale…</pre><details><summary>show full</summary><pre>ticker	fiscal_year	fiscal_quarter	comp_sales_pct	definition_id	definition_text	source_url
