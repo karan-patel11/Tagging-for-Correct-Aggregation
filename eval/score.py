@@ -19,7 +19,8 @@ Scoring rules (fixed on 2026-10-27, before any full-run result existed):
             refuse:              refused = true and answer = null.
   Correct   behavior matches and, except for refuse questions, the number is within tolerance.
   Warnings  warning = true on an answer question is not incorrect; it is reported separately as the
-            over-warning rate (over-warned runs / parsed runs on answer questions).
+            over-warning rate (over-warned runs / all runs on answer questions; an unparsed run
+            counts as not over-warned).
   Traps     The converted number is compared with each stored trap answer using the question's
             tolerance; the closest match within tolerance is recorded, whatever the behavior.
   Parsing   A run whose FINAL line could not be parsed is incorrect and listed.
@@ -44,6 +45,26 @@ ROOT = Path(__file__).resolve().parent.parent
 QUESTIONS = ROOT / "eval" / "questions.yaml"
 RESULTS = ROOT / "eval" / "results"
 SETUPS = ["A", "B", "C", "D"]
+
+# Scorer bug found while checking the full run (commit 4977d48). Its counts come from scoring
+# eval/results/*.jsonl at commit 4ded7d0 with the score.py before and after the fix; they cannot be
+# recomputed from the fixed code, so they are recorded here and copied into the full-run summary.
+SCORER_NOTES = [{
+    "id": "underscore_scale_word",
+    "found": "2026-10-28",
+    "fix_commit": "4977d48",
+    "description": ('The scale-word pattern used \\b, which treats "_" as part of a word, so a FINAL unit '
+                    'of "USD_millions" was read as unscaled while the question unit "USD millions" was '
+                    "read as millions, and correct answers were divided by 1,000,000. The scoring rule "
+                    "did not change: a unit that names millions is converted; the code had not applied "
+                    "it to this spelling."),
+    "runs_flipped": 12,
+    "flipped_by_setup": {"B": 8, "C": 4},
+    "flipped_questions": ["q022", "q023", "q024"],
+    "flip_direction": "incorrect to correct; no other field changed except number_ok on the same runs",
+    "correct_before": {"A": 122, "B": 118, "C": 120, "D": 124},
+    "correct_after": {"A": 122, "B": 126, "C": 124, "D": 124},
+}]
 
 # §11.6 tolerances; relative ones are fractions of the correct value.
 TOLERANCES = {"USD": ("relative", 0.005), "percent": ("absolute", 0.1), "EPS": ("absolute", 0.01),
@@ -142,6 +163,9 @@ def load_runs(results_dir):
     return runs, dupes
 
 
+TOKEN_KEYS = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens")
+
+
 def _mean(xs):
     return sum(xs) / len(xs) if xs else None
 
@@ -165,7 +189,10 @@ def summarize(scored, records, qs):
 
     for setup in SETUPS:
         rows = by.get(setup, [])
-        answer_parsed = [r for r in rows if r["expected"] == "answer" and r["parsed"]]
+        answer_runs = [r for r in rows if r["expected"] == "answer"]
+        per_q = defaultdict(list)
+        for r in rows:
+            per_q[r["question_id"]].append(r)
         traps = defaultdict(lambda: [0, 0])
         for r in rows:
             if r["expected"] == "refuse":
@@ -175,20 +202,23 @@ def summarize(scored, records, qs):
                 traps[name][0] += r["trap_hit"] == name
         s["setups"][setup] = {
             "n": len(rows),
+            "correct_runs": sum(r["correct"] for r in rows),
             "accuracy": acc_by_run(rows),
             "accuracy_by_category": {c: acc_by_run([r for r in rows if r["category"] == c])
                                      for c in categories},
             "behavior_accuracy": _mean([r["behavior_ok"] for r in rows]),
-            "over_warning_rate": _mean([r["over_warning"] for r in answer_parsed]),
-            "over_warning_runs": sum(r["over_warning"] for r in answer_parsed),
+            "over_warning_rate": _mean([r["over_warning"] for r in answer_runs]),
+            "over_warning_runs": sum(r["over_warning"] for r in answer_runs),
+            "answer_question_runs": len(answer_runs),
             "scaled_runs": sum(r["scaled"] for r in rows),
             "trap_hits": {k: {"hits": h, "runs": n, "rate": h / n} for k, (h, n) in sorted(traps.items())},
             "unparsed": [f"{r['question_id']} run {r['run']}" for r in rows if not r["parsed"]],
             "avg_tool_calls": _mean([r["tool_calls"] for r in rows]),
-            "avg_tokens": {k: _mean([r["tokens"].get(k, 0) for r in rows])
-                           for k in ("input_tokens", "cache_creation_input_tokens",
-                                     "cache_read_input_tokens", "output_tokens")},
+            "avg_tokens": {k: _mean([r["tokens"].get(k, 0) for r in rows]) for k in TOKEN_KEYS},
             "cost_usd": round(sum(r["cost_usd"] for r in rows), 6),
+            "per_question": {q: {"tool_calls": _mean([r["tool_calls"] for r in rs]),
+                                 "tokens": _mean([sum(r["tokens"].get(k, 0) for k in TOKEN_KEYS) for r in rs])}
+                             for q, rs in sorted(per_q.items())},
         }
 
     def majority(setup):
@@ -235,15 +265,32 @@ def write_md(s, path):
     L = [f"# Results summary", "",
          f"Model: {', '.join(m for m in s['model'] if m)}. Run date(s): "
          f"{', '.join(s['run_dates']) if isinstance(s['run_dates'], list) else s['run_dates']}. "
-         f"Runs scored: {s['n_runs']}. Total cost: ${s['total_cost_usd']:.4f}.", "",
-         "## Accuracy by setup (mean across runs, lowest and highest run)", "",
-         "| Setup | Mean | Min | Max | Behavior accuracy | Over-warning rate | Scaled runs | Unparsed |",
-         "|---|---|---|---|---|---|---|---|"]
-    pct = lambda x: "n/a" if x is None else f"{x:.0%}"
+         f"Runs scored: {s['n_runs']}. Total cost: ${s['total_cost_usd']:.4f}.", ""]
+    for n in s.get("scorer_notes", []):
+        L += ["## Scorer bug (fixed before this summary)", "", n["description"], "",
+              f"Fixed in commit {n['fix_commit']}. {n['runs_flipped']} runs flipped "
+              f"({', '.join(f'{k} {v}' for k, v in n['flipped_by_setup'].items())}), all on "
+              f"{', '.join(n['flipped_questions'])}, {n['flip_direction']}.", "",
+              "| Setup | Correct before fix | Correct after fix |", "|---|---|---|"]
+        L += [f"| {k} | {n['correct_before'][k]} | {n['correct_after'][k]} |" for k in n["correct_before"]]
+        L.append("")
+    L += ["## Accuracy by setup (mean across runs, lowest and highest run)", "",
+          "| Setup | Correct runs | Mean | Min | Max | Behavior accuracy | Unparsed |",
+          "|---|---|---|---|---|---|---|"]
+    pct = lambda x: "n/a" if x is None else f"{x:.1%}"
     for k, v in s["setups"].items():
         a = v["accuracy"]
-        L.append(f"| {k} | {pct(a['mean'])} | {pct(a['min'])} | {pct(a['max'])} | {pct(v['behavior_accuracy'])} "
-                 f"| {pct(v['over_warning_rate'])} ({v['over_warning_runs']}) | {v['scaled_runs']} | {len(v['unparsed'])} |")
+        L.append(f"| {k} | {v['correct_runs']} / {v['n']} | {pct(a['mean'])} | {pct(a['min'])} | {pct(a['max'])} "
+                 f"| {pct(v['behavior_accuracy'])} | {len(v['unparsed'])} |")
+    L += ["", "## Over-warning and scale conversion by setup", "",
+          "Over-warning: warning = true on a question whose expected behavior is answer, as a fraction of all "
+          "runs on those questions (not scored incorrect). Scale-converted: runs whose FINAL unit named "
+          "thousands, millions or billions relative to the question's unit and was converted before scoring.", "",
+          "| Setup | Over-warned runs / answer-question runs | Over-warning rate | Scale-converted runs |",
+          "|---|---|---|---|"]
+    for k, v in s["setups"].items():
+        L.append(f"| {k} | {v['over_warning_runs']} / {v['answer_question_runs']} | {pct(v['over_warning_rate'])} "
+                 f"| {v['scaled_runs']} |")
     cats = sorted({c for v in s["setups"].values() for c in v["accuracy_by_category"]})
     L += ["", "## Accuracy by setup and category (mean [min, max])", "",
           "| Category | " + " | ".join(s["setups"]) + " |", "|---|" + "---|" * len(s["setups"])]
@@ -268,6 +315,17 @@ def write_md(s, path):
         t = v["avg_tokens"]
         L.append(f"| {k} | {v['avg_tool_calls']:.1f} | {t['input_tokens']:.0f} | {t['cache_creation_input_tokens']:.0f} "
                  f"| {t['cache_read_input_tokens']:.0f} | {t['output_tokens']:.0f} | ${v['cost_usd']:.4f} |")
+    qids = sorted({q for v in s["setups"].values() for q in v["per_question"]})
+    L += ["", "## Mean tool calls and tokens per question (mean across runs; tokens = input + cache write "
+          "+ cache read + output)", "",
+          "| Question | " + " | ".join(f"{k} tools | {k} tokens" for k in s["setups"]) + " |",
+          "|---|" + "---|---|" * len(s["setups"])]
+    for q in qids:
+        cells = []
+        for v in s["setups"].values():
+            pq = v["per_question"].get(q)
+            cells += ["n/a", "n/a"] if pq is None else [f"{pq['tool_calls']:.1f}", f"{pq['tokens']:,.0f}"]
+        L.append(f"| {q} | " + " | ".join(cells) + " |")
     unparsed = [f"{k}: {u}" for k, v in s["setups"].items() for u in v["unparsed"]]
     L += ["", "## Unparseable FINAL lines (scored incorrect)", ""] + ([f"- {u}" for u in unparsed] or ["None."])
     path.write_text("\n".join(L) + "\n")
@@ -291,9 +349,11 @@ def main():
 
     print_table(scored)
     s = summarize(scored, list(runs.values()), qs)
+    if results_dir.resolve() == RESULTS.resolve():
+        s["scorer_notes"] = SCORER_NOTES
     print()
     for k, v in s["setups"].items():
-        print(f"{k}: correct {sum(r['correct'] for r in scored if r['setup'] == k)}/{v['n']} | behavior "
+        print(f"{k}: correct {v['correct_runs']}/{v['n']} | behavior "
               f"{v['behavior_accuracy']:.0%} | over-warning {v['over_warning_runs']} | scaled {v['scaled_runs']} "
               f"| unparsed {len(v['unparsed'])} {v['unparsed'] or ''}")
     (results_dir / "summary.json").write_text(json.dumps(s, indent=1) + "\n")
