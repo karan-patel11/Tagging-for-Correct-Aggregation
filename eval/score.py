@@ -53,7 +53,8 @@ UNIT_KIND = {"USD": "USD", "USD millions": "USD", "percent": "percent",
              "percentage_points": "percent", "views": "views", "index_points": "index_points",
              "USD/shares": "EPS"}
 SCALES = {"thousand": 1e3, "million": 1e6, "billion": 1e9}
-SCALE_RE = re.compile(r"\b(thousand|million|billion)s?\b", re.IGNORECASE)
+# Letters may not touch the word, but "_" may: "USD_millions" names millions.
+SCALE_RE = re.compile(r"(?<![a-z])(thousand|million|billion)s?(?![a-z])", re.IGNORECASE)
 
 
 def tolerance_kind(q):
