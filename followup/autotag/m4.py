@@ -40,8 +40,10 @@ def classify(rec):
     return SILENT
 
 
-def named_tag_ids(rec, short_to_id):
-    """Tag ids named by a run's tool calls: metric_id, or metric (a short fundamentals name)."""
+def named_tag_ids(rec, short_to_id, include_denominator=False):
+    """Tag ids named by a run's tool calls: metric_id, or metric (a short fundamentals name). With
+    include_denominator, also aggregate's denominator_id (the secondary count declared in
+    PREREG_DEVIATIONS.md; the pre-registered count leaves it out)."""
     out = []
     for tc in rec.get("tool_calls", []):
         args = tc.get("input") or {}
@@ -49,6 +51,8 @@ def named_tag_ids(rec, short_to_id):
             out.append(args["metric_id"])
         if isinstance(args.get("metric"), str):
             out.append(short_to_id.get(args["metric"], args["metric"]))
+        if include_denominator and isinstance(args.get("denominator_id"), str):
+            out.append(args["denominator_id"])
     return sorted(set(out))
 
 
@@ -57,12 +61,12 @@ def short_metric_map(hand_entries):
             if e["table"] == "fundamentals" and isinstance((e.get("filter") or {}).get("metric"), str)}
 
 
-def linked_fields(rec, hand_entries, draft_entries):
+def linked_fields(rec, hand_entries, draft_entries, include_denominator=False):
     """{tag id: [differing scored fields]} for the tag ids the run named that differ."""
     hand = {e["id"]: e for e in hand_entries}
     draft = {e["id"]: e for e in draft_entries if isinstance(e, dict) and "id" in e}
     out = {}
-    for tid in named_tag_ids(rec, short_metric_map(hand_entries)):
+    for tid in named_tag_ids(rec, short_metric_map(hand_entries), include_denominator):
         if tid not in hand:
             continue  # a name the run made up; it has no tag in either file
         diff = score_tags.scored_fields_differ(hand[tid], draft.get(tid))
