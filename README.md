@@ -1,18 +1,22 @@
 # Tagging for Correct Aggregation
 
-SQL that runs without error can still answer the wrong question about financial data, for example by summing four quarter-end balances into a meaningless "annual" total assets. This small experiment asks one model (claude-haiku-5-5) the same 42 restaurant-sector questions in four setups (A: table schema only; B: prose descriptions; C: a tags file; D: semantic tools, no SQL) and scores 504 recorded runs against an answer key computed with direct SQL and checked against the filings and agency data (25 of 134 source rows read by hand; see the results page).
+SQL that runs without error can still answer the wrong question about financial data, for example by summing four quarter-end balances into a meaningless "annual" total assets. Tags (rules attached to each metric, such as "a balance; never sum it over time") are one fix. This project tests them in three steps:
 
-**Headline result** (from [eval/results/summary.md](eval/results/summary.md)):
-
-- Accuracy was close across setups: A 96.8%, B 100.0%, C 98.4%, D 98.4% of 126 runs each. The sample is too small to rank them.
-- One stored-trap hit in 504 runs (A, q017 run 2).
-- Runs that set warning=true on questions whose answer key expects no caveat: A 34, B 9, C 19, D 7 of 102 each. Most cite stored filing dates or retrieval metadata (keyword match plus 4 manual corrections, listed in the JSON: [report/over_warning_reasons.json](report/over_warning_reasons.json)); they are not scored as errors, and the metric does not show that any setup hedges more or less well.
+1. **Measure (main study).** One model (claude-haiku-5-5) answered the same 42 restaurant-sector questions in four setups (A: table schema only; B: prose descriptions; C: a tags file; D: semantic tools, no SQL), 504 recorded runs scored against an answer key computed with direct SQL and checked against the filings and agency data (25 of 134 source rows read by hand). Accuracy was close: A 96.8%, B 100.0%, C 98.4%, D 98.4% of 126 runs each; the sample is too small to rank them. One stored-trap hit in 504 runs (A, q017 run 2).
+2. **Auto-tag (follow-up, pre-registered).** A second model (claude-sonnet-5-5) drafted the tags three times from vendor-side inputs only. All 3 drafts passed the existing validator, yet setup D on draft-1 tags fell from 124/126 to 62/126 correct runs. None of the 64 lost runs was a silent wrong answer on the questions tested: each ended in a tool refusal or with no answer (permissive methods the drafts allowed were not exercised). Root causes: 20 a tagging judgment (time_rollup on flows), 21 a missing source URL in the inputs (an input gap, not a model error), 21 a missing hierarchy that crashed the engine, 2 with no tag involved. Each draft took about 6 minutes and $0.59–$0.60.
+3. **Harden (engine fix).** The engine now refuses methods a code path does not implement and tag metadata it lacks: on draft 1's recorded tool calls, engine exceptions went from 171 to 0; numbers for a wrong or disallowed method went from 5 to 1 (the remaining one is a correctly labelled mean the draft tag allowed). Re-executing the main study's 455 recorded setup D tool calls gave identical outputs for 455 of 455, so the main results stand. Details: [follow-up section of the results page](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/#followup).
 
 **Links:** [results page (docs/index.html)](docs/index.html) · [live page](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/) · video: TODO: video link · [results summary](eval/results/summary.md) · [error analysis](docs/error_analysis.md) · [terms and question texts](docs/key.md)
 
 Question IDs: q017 means question 17 in [eval/questions.yaml](eval/questions.yaml); [docs/key.md](docs/key.md) lists the text of every ID mentioned here and in the error analysis. q017 is "What was Darden's total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?"
 
 Companies: CMG, WING, YUM, DRI. Sources: SEC XBRL filings, BLS, Census, Wikipedia pageviews, earnings releases. No model calls are made by the results page.
+
+## Main study: detailed results
+
+From [eval/results/summary.md](eval/results/summary.md):
+
+- Runs that set warning=true on questions whose answer key expects no caveat: A 34, B 9, C 19, D 7 of 102 each. Most cite stored filing dates or retrieval metadata (keyword match plus 4 manual corrections, listed in the JSON: [report/over_warning_reasons.json](report/over_warning_reasons.json)); they are not scored as errors, and the metric does not show that any setup hedges more or less well.
 
 ## Limitations
 
