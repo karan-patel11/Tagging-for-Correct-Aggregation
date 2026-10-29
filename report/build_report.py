@@ -1,79 +1,115 @@
 """Phase 15a: build the static results page docs/index.html (SPEC §13.1).
 
-Data comes only from eval/results/summary.json, eval/results/{A,B,C,D}.jsonl, eval/questions.yaml,
-tags/tags.yaml, eval/verification_log.csv, report/over_warning_reasons.json (written by
-report/analyze_over_warnings.py from the same runs) and followup/engine_fix/replay.json (written by
-followup/engine_fix/replay.py, for the engine-hardening line under "Limits"). report/replays.yaml picks the replays and holds the
-plain-language notes; report/template.html holds the layout. Runs are scored with eval/score.py's
-score_run, the same code that produced summary.json, so a replay badge always matches the summary.
+The page is one argument in ten sections (SECTIONS below). Every number, model ID, date, count and
+source link on it is read at build time from these inputs, and nothing else:
 
-The build fails loudly when an input file, a field or a number is missing, when a replay's recorded
-result differs from what replays.yaml says it shows, or when the template contains a digit in its
-text (numbers belong in the data, not the template).
+  eval/results/summary.json, eval/results/{A,B,C,D}.jsonl, eval/questions.yaml, tags/tags.yaml,
+  src/tool_specs.py, eval/verification_log.csv, docs/error_analysis.md, report/replays.yaml,
+  and git metadata (commit dates, the questions-frozen tag, pytest collection).
 
-The page is static: no backend, no API calls, no external scripts, and it opens from the file system.
+eval/make_questions.py is also read, only to confirm that the answer key does not import
+semantics.py. Runs are scored with eval/score.py's score_run, the same code that produced
+summary.json, so a badge always matches the summary.
 
-Run: python report/build_report.py
+The build fails, naming what is missing, when a file, key, replay question or run is missing; when a
+replay's recorded outcome differs from what replays.yaml says; when setup A answered the default
+replay correctly in every run; when the template or replays.yaml prose contains a digit; when the
+page contains a banned word; when a section has no reader question, evidence or bridge (the story
+audit); or when the page is over 2 MB.
+
+Run:  python report/build_report.py            build docs/index.html and report/links_to_check.txt
+      python report/build_report.py --check    build to a temp dir, validate, print the audit only
 """
 
+import argparse
 import csv
 import html
 import io
 import json
+import math
 import re
+import subprocess
 import sys
-import urllib.parse
+import tempfile
+from dataclasses import dataclass, replace
+from functools import lru_cache
 from pathlib import Path
 
 import yaml
+from html.parser import HTMLParser
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "eval"))
+sys.path.insert(0, str(ROOT / "src"))
 
 import score  # noqa: E402  (scoring rules only; reads no files on import)
+import tool_specs  # noqa: E402  (tool names and descriptions; no I/O)
 
-SUMMARY = ROOT / "eval" / "results" / "summary.json"
-RESULTS = ROOT / "eval" / "results"
-QUESTIONS = ROOT / "eval" / "questions.yaml"
-TAGS = ROOT / "tags" / "tags.yaml"
-VERIFICATION = ROOT / "eval" / "verification_log.csv"
-REPLAYS = ROOT / "report" / "replays.yaml"
-TEMPLATE = ROOT / "report" / "template.html"
-OUT = ROOT / "docs" / "index.html"
-ERROR_ANALYSIS = ROOT / "docs" / "error_analysis.md"
-OVER_WARNINGS = ROOT / "report" / "over_warning_reasons.json"
-ENGINE_REPLAY = ROOT / "followup" / "engine_fix" / "replay.json"
-OW_LABEL = "Warnings on questions whose key expects no caveat"
-
-SETUP_NAMES = {"A": "Schema only", "B": "Prose descriptions", "C": "Tags file", "D": "Semantic tools"}
-SETUP_TOOLS = {"A": "SQL", "B": "SQL", "C": "SQL", "D": "Semantic tools, no SQL"}
-EXCERPT_CHARS = 420
+MAX_BYTES = 2_000_000
+EXCERPT_CHARS = 360
+BANNED = ["solves", "eliminates", "production", "state-of-the-art", "significantly",
+          "Jefferies", "Databricks", "your team"]
 CATEGORY_NAMES = {"time_additivity": "Balances over time", "ratios": "Ratios",
                   "ytd_calendar": "Year-to-date and fiscal calendars", "indices": "Price indices",
                   "hierarchy": "Brand hierarchy", "comparability_unanswerable": "Comparability and refusals"}
+SETUP_NAMES = {"A": "Schema only", "B": "Prose", "C": "Structured tags", "D": "Enforcing tools"}
+SETUP_TOOLS = {"A": [tool_specs.RUN_SQL_SPEC], "B": [tool_specs.RUN_SQL_SPEC],
+               "C": [tool_specs.RUN_SQL_SPEC], "D": tool_specs.TOOL_SPECS}
+NUMBER_WORDS = {n: w for n, w in enumerate(
+    "zero one two three four five six seven eight nine ten eleven twelve".split())}
+BADGES = {  # outcome code -> (label, colour class)
+    "correct": ("Correct", "ok"), "correct_refusal": ("Correct refusal", "ok"),
+    "trap": ("Trap", "bad"), "missing_warning": ("Missing warning", "warn"),
+    "wrong_other": ("Wrong (other)", "bad"), "unparsed": ("Unparseable", "bad")}
+
+
+class BuildError(Exception):
+    pass
 
 
 def die(msg):
-    sys.exit(f"build_report: {msg}")
+    raise BuildError(msg)
+
+
+@dataclass(frozen=True)
+class Paths:
+    results: Path = ROOT / "eval" / "results"
+    questions: Path = ROOT / "eval" / "questions.yaml"
+    tags: Path = ROOT / "tags" / "tags.yaml"
+    tool_specs: Path = ROOT / "src" / "tool_specs.py"
+    vlog: Path = ROOT / "eval" / "verification_log.csv"
+    error_analysis: Path = ROOT / "docs" / "error_analysis.md"
+    replays: Path = ROOT / "report" / "replays.yaml"
+    template: Path = ROOT / "report" / "template.html"
+    make_questions: Path = ROOT / "eval" / "make_questions.py"
+    out: Path = ROOT / "docs" / "index.html"
+    links: Path = ROOT / "report" / "links_to_check.txt"
+
+
+def rel(p):
+    try:
+        return str(Path(p).resolve().relative_to(ROOT))
+    except ValueError:
+        return str(p)
+
+
+def read(path):
+    if not Path(path).exists():
+        die(f"missing file {rel(path)}")
+    return Path(path).read_text()
+
+
+def e(x):
+    return html.escape(str(x), quote=True)
 
 
 def need(d, *path):
     cur = d
     for k in path:
         if not isinstance(cur, dict) or k not in cur or cur[k] is None:
-            die(f"missing value {'.'.join(map(str, path))}")
+            die(f"missing key {'.'.join(map(str, path))}")
         cur = cur[k]
     return cur
-
-
-def read(path):
-    if not path.exists():
-        die(f"missing file {path.relative_to(ROOT)}")
-    return path.read_text()
-
-
-def e(x):
-    return html.escape(str(x), quote=True)
 
 
 def num(v):
@@ -88,51 +124,161 @@ def pct(x, digits=1):
     return f"{x * 100:.{digits}f}%"
 
 
-def answer_text(value, unit):
-    return f"{num(value)} {unit}" if value is not None else "no number (refuse)"
+def word(n):
+    return NUMBER_WORDS.get(n) or die(f"no number word for {n}")
 
 
-def filing_url(url):
-    """Link SEC archive folders to their filing index; preserve other source URLs."""
-    m = re.fullmatch(r"(https://www\.sec\.gov/Archives/edgar/data/\d+/)(\d{10})(\d{2})(\d{6})/", url)
-    if m:
-        return f"{url}{m[2]}-{m[3]}-{m[4]}-index.htm"
-    return url
+def inline_md(text):
+    """Escape, then render `code` spans and **bold** from error_analysis.md text."""
+    t = e(text)
+    t = re.sub(r"`([^`]+)`", r"<code>\1</code>", t)
+    return re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", t)
 
 
-# ---------- load ----------
+# ---------- evidence tracking (the story audit) ----------
 
-def load():
-    summary = json.loads(read(SUMMARY))
-    questions = {q["id"]: q for q in yaml.safe_load(read(QUESTIONS))}
-    tags = {t["id"]: t for t in yaml.safe_load(read(TAGS))}
-    vlog = list(csv.DictReader(io.StringIO(read(VERIFICATION))))
+class Evidence:
+    """Holds the loaded inputs. Reading one through `ev` records its file for the current section."""
+
+    def __init__(self, data, files):
+        self._data, self._files = data, files
+        self.section = None
+        self.used = {}
+
+    def __call__(self, name):
+        if name not in self._data:
+            die(f"internal: unknown input {name}")
+        self.used.setdefault(self.section, set()).add(self._files[name])
+        return self._data[name]
+
+
+# ---------- git ----------
+
+def git(*args):
+    r = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+    if r.returncode != 0 or not r.stdout.strip():
+        die(f"git {' '.join(args)} failed: {r.stderr.strip() or 'no output'}"
+            + (" (run git fetch --tags)" if "questions-frozen" in args else ""))
+    return r.stdout.strip()
+
+
+def commit_date(rev):
+    """UTC date of a commit."""
+    return git("log", "-1", "--format=%cd", "--date=format-local:%Y-%m-%d", rev)
+
+
+def first_commit_date(path):
+    return git("log", "--reverse", "--format=%cd", "--date=format-local:%Y-%m-%d", "--", path).splitlines()[0]
+
+
+@lru_cache(maxsize=1)
+def pytest_count():
+    """Number of tests pytest collects (collection only; nothing runs). None if it can't be read."""
+    try:
+        r = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q"], cwd=ROOT,
+                           capture_output=True, text=True, timeout=180)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    m = re.search(r"^(\d+) tests? collected", r.stdout, re.M)
+    return int(m.group(1)) if m else None
+
+
+# ---------- load and validate ----------
+
+SUMMARY_TOP = ["model", "run_dates", "total_cost_usd", "n_runs", "runs_per_question", "setups",
+               "b_vs_c", "scorer_notes"]
+SETUP_KEYS = ["n", "correct_runs", "accuracy", "accuracy_by_category", "behavior_accuracy",
+              "over_warning_rate", "over_warning_runs", "answer_question_runs", "scaled_runs",
+              "trap_hits", "unparsed", "avg_tool_calls", "avg_tokens", "cost_usd", "per_question"]
+RANGE_KEYS = ["mean", "min", "max"]
+TOKEN_KEYS = ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"]
+BVC_KEYS = ["questions", "b_right_c_wrong", "c_right_b_wrong", "both_right", "both_wrong", "note"]
+NOTE_KEYS = ["id", "found", "fix_commit", "description", "runs_flipped", "flipped_by_setup",
+             "flipped_questions", "flip_direction", "correct_before", "correct_after"]
+
+
+def has(d, path, keys):
+    if not isinstance(d, dict):
+        die(f"summary.json: {path} is not an object")
+    for k in keys:
+        if k not in d or d[k] is None:
+            die(f"summary.json: missing key {path + '.' if path else ''}{k}")
+
+
+def validate_summary(s, questions):
+    has(s, "", SUMMARY_TOP)
+    if not isinstance(s["run_dates"], list) or not s["run_dates"]:
+        die("summary.json: run_dates not recorded")
+    if not isinstance(s["model"], list) or not s["model"]:
+        die("summary.json: model not recorded")
+    setups = s["setups"]
+    has(setups, "setups", score.SETUPS)
+    covered = set()
+    for st in score.SETUPS:
+        has(setups[st], f"setups.{st}", ["per_question"])
+        covered |= set(setups[st]["per_question"])
+    if not covered or covered - set(questions):
+        die(f"summary.json: per_question has unknown questions {sorted(covered - set(questions))}")
+    cats = {questions[q]["category"] for q in covered}
+    traps = {t for q in covered if questions[q]["expected_behavior"] != "refuse"
+             for t in (questions[q].get("trap_answers") or {})}
+    for st in score.SETUPS:
+        p, v = f"setups.{st}", setups[st]
+        has(v, p, SETUP_KEYS)
+        has(v["accuracy"], f"{p}.accuracy", RANGE_KEYS)
+        has(v["accuracy_by_category"], f"{p}.accuracy_by_category", sorted(cats))
+        for c in cats:
+            has(v["accuracy_by_category"][c], f"{p}.accuracy_by_category.{c}", RANGE_KEYS)
+        has(v["trap_hits"], f"{p}.trap_hits", sorted(traps))
+        for t in traps:
+            has(v["trap_hits"][t], f"{p}.trap_hits.{t}", ["hits", "runs", "rate"])
+        has(v["avg_tokens"], f"{p}.avg_tokens", TOKEN_KEYS)
+        has(v["per_question"], f"{p}.per_question", sorted(covered))
+        for q in covered:
+            has(v["per_question"][q], f"{p}.per_question.{q}", ["tool_calls", "tokens"])
+    has(s["b_vs_c"], "b_vs_c", BVC_KEYS)
+    for i, n in enumerate(s["scorer_notes"]):
+        has(n, f"scorer_notes.{i}", NOTE_KEYS)
+    if sum(setups[st]["n"] for st in score.SETUPS) != s["n_runs"]:
+        die("summary.json: n_runs does not equal the sum of the setups' n")
+    return covered
+
+
+def load(paths):
+    summary = json.loads(read(paths.results / "summary.json"))
+    questions = {q["id"]: q for q in yaml.safe_load(read(paths.questions))}
+    covered = validate_summary(summary, questions)
+    tags = {t["id"]: t for t in yaml.safe_load(read(paths.tags))}
+    read(paths.tool_specs)  # imported above; must exist as a file
+    vlog = list(csv.DictReader(io.StringIO(read(paths.vlog))))
+    for col in ["question_id", "source_url", "where_in_source", "matches", "notes"]:
+        if vlog and col not in vlog[0]:
+            die(f"verification_log.csv has no column {col}")
     runs = {}
-    for s in score.SETUPS:
-        for line in read(RESULTS / f"{s}.jsonl").splitlines():
+    for st in score.SETUPS:
+        for line in read(paths.results / f"{st}.jsonl").splitlines():
             if line.strip():
                 r = json.loads(line)
                 runs[(r["question_id"], r["setup"], r["run"])] = r
-    replays = yaml.safe_load(read(REPLAYS))
-    template = read(TEMPLATE)
-    ow = json.loads(read(OVER_WARNINGS))
-    return summary, questions, tags, vlog, runs, replays, template, ow
+    replays = yaml.safe_load(read(paths.replays))
+    ea = read(paths.error_analysis)
+    template = read(paths.template)
+    data = {"summary": summary, "questions": questions, "tags": tags, "vlog": vlog, "runs": runs,
+            "replays": replays, "error_analysis": ea, "tool_specs": tool_specs,
+            "make_questions": read(paths.make_questions), "git": git}
+    files = {"summary": rel(paths.results / "summary.json"), "questions": rel(paths.questions),
+             "tags": rel(paths.tags), "vlog": rel(paths.vlog), "runs": rel(paths.results / "{A,B,C,D}.jsonl"),
+             "replays": rel(paths.replays), "error_analysis": rel(paths.error_analysis),
+             "tool_specs": rel(paths.tool_specs), "make_questions": rel(paths.make_questions),
+             "git": "git metadata"}
+    return Evidence(data, files), template, covered
 
 
-def check_template(template):
-    text = re.sub(r"<style.*?</style>|<script.*?</script>", "", template, flags=re.S)
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"\{\{[A-Z_]+\}\}", " ", text)
-    digits = re.findall(r"\S*\d\S*", text)
-    if digits:
-        die(f"template text contains numbers {digits}; numbers must come from the data")
+# ---------- scoring ----------
 
-
-# ---------- scoring helpers ----------
-
-def scored(runs, questions, qid, setup, run):
-    rec = runs.get((qid, setup, run)) or die(f"no recorded run {qid} {setup} run {run}")
-    return rec, score.score_run(rec, questions[qid])
+def scored(ev, qid, setup, run):
+    rec = ev("runs").get((qid, setup, run)) or die(f"no recorded run {qid} setup {setup} run {run}")
+    return rec, score.score_run(rec, ev("questions")[qid])
 
 
 def outcome(sc):
@@ -140,539 +286,931 @@ def outcome(sc):
         return "unparsed"
     if sc["trap_hit"]:
         return "trap"
-    return "correct" if sc["correct"] else "incorrect"
-
-
-def badge(sc, q):
-    o = outcome(sc)
-    if o == "correct":
-        return '<span class="badge ok">correct</span>'
-    if o == "trap":
-        return f'<span class="badge bad">wrong: trap {e(sc["trap_hit"])}</span>'
-    if o == "unparsed":
-        return '<span class="badge bad">wrong: no final answer</span>'
     f = sc["final"]
-    if q["expected_behavior"] == "answer_with_warning" and sc["number_ok"] and not f["warning"]:
-        why = "missing warning"
-    elif q["expected_behavior"] != "refuse" and f["refused"]:
-        why = "refused an answerable question"
-    elif q["expected_behavior"] == "refuse":
-        why = "answered an unanswerable question"
-    else:
-        why = "wrong number"
-    return f'<span class="badge bad">wrong: {why}</span>'
+    if sc["correct"]:
+        return "correct_refusal" if sc["expected"] == "refuse" else "correct"
+    if sc["expected"] == "answer_with_warning" and sc["number_ok"] and not f["warning"] and not f["refused"]:
+        return "missing_warning"
+    return "wrong_other"
 
 
-def record(runs, questions, qid, setup):
-    keys = sorted(k for k in runs if k[0] == qid and k[1] == setup)
-    if not keys:
-        die(f"no runs for {qid} {setup}")
-    outs = [outcome(score.score_run(runs[k], questions[qid])) for k in keys]
-    n_ok = outs.count("correct")
-    detail = ", ".join(f"run {k[2]} {o}" for k, o in zip(keys, outs))
-    return n_ok, len(keys), detail
+def is_ok(o):
+    return o in ("correct", "correct_refusal")
 
 
-def sources_for(vlog, qid):
+def badge(sc):
+    o = outcome(sc)
+    label, cls = BADGES[o]
+    if o == "trap":
+        label = f"Trap: {sc['trap_hit'].replace('_', ' ')}"
+    return f'<span class="badge {cls}">{e(label)}</span>'
+
+
+def run_keys(ev, qid, setup):
+    keys = sorted(k for k in ev("runs") if k[0] == qid and k[1] == setup)
+    return keys or die(f"no runs for {qid} setup {setup}")
+
+
+def record(ev, qid, setup):
+    outs = [(k[2], outcome(score.score_run(ev("runs")[k], ev("questions")[qid]))) for k in run_keys(ev, qid, setup)]
+    return sum(is_ok(o) for _, o in outs), len(outs), outs
+
+
+# ---------- sources ----------
+
+SEC_RE = re.compile(r"https://www\.sec\.gov/Archives/edgar/data/(\d+)/(\d{18})(?:/.*)?$")
+
+
+def sec_link(url):
+    """SPEC §9.2: https://www.sec.gov/Archives/edgar/data/{CIK without leading zeros}/{accession without dashes}/"""
+    m = SEC_RE.fullmatch(url)
+    return f"https://www.sec.gov/Archives/edgar/data/{int(m[1])}/{m[2]}/" if m else None
+
+
+def sources(ev, qid):
+    """(label, url or None) per distinct answer-key source in verification_log.csv."""
     seen, out = set(), []
-    for r in vlog:
-        if r["question_id"] == qid and r["source_url"] not in seen:
-            seen.add(r["source_url"])
-            out.append(r["source_url"])
-    if not out:
-        die(f"no verification_log rows for {qid}")
-    return out
+    for r in ev("vlog"):
+        if r["question_id"] != qid:
+            continue
+        u = r["source_url"].strip()
+        link = sec_link(u) or (u if u.startswith("https://") else None)
+        key = link or u
+        if key in seen:
+            continue
+        seen.add(key)
+        if link and "sec.gov" in link:
+            acc = SEC_RE.fullmatch(u)[2]
+            form = re.search(r"\b(10-K|10-Q|8-K)\b", r["where_in_source"])
+            label = f"{form[1] + ' · ' if form else 'SEC filing · '}{acc[:10]}-{acc[10:12]}-{acc[12:]}"
+        elif link and "pageviews" in link:
+            label = "Wikimedia Pageviews Analysis"
+        elif link and "bls.gov" in link:
+            label = "BLS series page"
+        elif link and "census.gov" in link:
+            label = "Census retail trade"
+        elif link:
+            label = re.sub(r"^https://", "", link).split("/")[0]
+        else:
+            label = u
+        out.append((label, link))
+    return out or die(f"no verification_log rows for {qid}")
+
+
+def source_html(ev, qid, limit=3):
+    items = [f'<a href="{e(u)}">{e(l)}</a>' if u else f"<span>{e(l)}</span>" for l, u in sources(ev, qid)]
+    if len(items) <= limit:
+        return " · ".join(items)
+    return (f'{" · ".join(items[:limit])} <details class="more"><summary>all {len(items)} sources</summary>'
+            + "<br>".join(items[limit:]) + "</details>")
+
+
+# ---------- charts ----------
+
+def hidden_table(caption, heads, rows):
+    body = "".join("<tr>" + "".join(f"<td>{e(c)}</td>" for c in r) + "</tr>" for r in rows)
+    return (f'<table class="sr-only"><caption>{e(caption)}</caption><tr>'
+            + "".join(f"<th scope='col'>{e(h)}</th>" for h in heads) + f"</tr>{body}</table>")
+
+
+def svg_bars(rows, label, ranges):
+    """rows: (setup label, value, lo, hi). Zero-based 0–100% axis; whiskers mark lo–hi when ranges."""
+    w, left, right, bar_h, gap, top = 560, 150, 70, 18, 12, 6
+    plot = w - left - right
+    h = top + len(rows) * (bar_h + gap) + 22
+    x = lambda v: left + v * plot  # noqa: E731
+    out = [f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="{e(label)}" class="chart">']
+    for t in (0, 0.5, 1):
+        out.append(f'<line x1="{x(t):.1f}" x2="{x(t):.1f}" y1="{top}" y2="{h - 18}" class="grid"/>'
+                   f'<text x="{x(t):.1f}" y="{h - 4}" class="tick" text-anchor="middle">{e(pct(t, 0))}</text>')
+    for i, (name, v, lo, hi) in enumerate(rows):
+        y = top + i * (bar_h + gap)
+        out.append(f'<text x="{left - 8}" y="{y + bar_h - 4}" class="lab" text-anchor="end">{e(name)}</text>'
+                   f'<rect x="{left}" y="{y}" width="{max(v * plot, 1):.1f}" height="{bar_h}" class="bar" rx="2"/>')
+        if ranges:
+            cy = y + bar_h / 2
+            out.append(f'<line x1="{x(lo):.1f}" x2="{x(hi):.1f}" y1="{cy}" y2="{cy}" class="whisker"/>'
+                       f'<line x1="{x(lo):.1f}" x2="{x(lo):.1f}" y1="{y + 3}" y2="{y + bar_h - 3}" class="whisker"/>'
+                       f'<line x1="{x(hi):.1f}" x2="{x(hi):.1f}" y1="{y + 3}" y2="{y + bar_h - 3}" class="whisker"/>')
+        out.append(f'<text x="{x(1) + 8:.1f}" y="{y + bar_h - 4}" class="val">{e(pct(v))}</text>')
+    out.append("</svg>")
+    return "".join(out)
+
+
+# ---------- claims ----------
+
+def mcnemar_p(b, c):
+    """Exact two-sided sign test on discordant pairs: 2 × P(X ≤ min(b, c)), X ~ Bin(b + c, ½), capped at 1."""
+    n = b + c
+    if n == 0:
+        return 1.0
+    k = min(b, c)
+    return min(1.0, 2 * sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n)
+
+
+def b_vs_c_verdict(b_right_c_wrong, c_right_b_wrong):
+    """(verdict sentence, p). Rule §3: p < 0.05 names the better format; otherwise no detectable difference."""
+    b, c = b_right_c_wrong, c_right_b_wrong
+    p = mcnemar_p(b, c)
+    if p < 0.05:
+        if c > b:
+            return (f"C (structured tags) outperformed B (prose with the same facts) on {c} of {b + c} "
+                    "questions where they disagreed."), p
+        return (f"B (prose with the same facts) outperformed C (structured tags) on {b} of {b + c} "
+                "questions where they disagreed."), p
+    return (f"No detectable difference between structured tags and prose with the same facts "
+            f"({b} vs {c} discordant questions; too few to separate from noise)."), p
+
+
+def overlaps(r1, r2):
+    return r1[0] <= r2[1] and r2[0] <= r1[1]
+
+
+def _ends(vals):
+    """(lowest value, setups at it, highest value, setups at it), ties named together."""
+    lo, hi = min(vals.values()), max(vals.values())
+    at = lambda v: ", ".join(s for s in sorted(vals) if vals[s] == v)  # noqa: E731
+    return lo, at(lo), hi, at(hi)
+
+
+def accuracy_claim(acc):
+    """acc: setup -> (mean, lo, hi). Rule §3: a difference is real only if the run ranges don't overlap."""
+    order = sorted(acc, key=lambda s: (acc[s][0], s))
+    apart = [(a, b) for i, a in enumerate(order) for b in order[i + 1:]
+             if not overlaps(acc[a][1:], acc[b][1:]) and acc[b][0] > acc[a][0]]
+    if not apart:
+        lo, lo_s, hi, hi_s = _ends({s: v[0] for s, v in acc.items()})
+        return f"Accuracy ran from {pct(lo)} ({lo_s}) to {pct(hi)} ({hi_s}), with overlapping run-to-run ranges."
+    parts = [f"{b} above {a} ({pct(acc[b][0])} vs {pct(acc[a][0])})" for a, b in apart]
+    return "Run ranges do not overlap for " + "; ".join(parts) + "; every other pair has overlapping run-to-run ranges."
+
+
+def trap_claim(trap_totals):
+    """trap_totals: setup -> {trap: (hits, runs)}."""
+    hits = {(s, t): h for s, d in trap_totals.items() for t, (h, _) in d.items() if h}
+    checks = sum(r for d in trap_totals.values() for _, r in d.values())
+    total = sum(hits.values())
+    if not total:
+        return f"No setup hit a stored trap in {checks:,} trap checks."
+    where = "; ".join(f"setup {s}, {t.replace('_', ' ')}: {h}" for (s, t), h in sorted(hits.items()))
+    return f"Stored traps were hit in {total} of {checks:,} trap checks across all setups ({where})."
+
+
+def d_claim(d_answerable, d_refuse):
+    """d_answerable / d_refuse: (correct runs, runs). Rule §3 for a perfect D on answerable questions."""
+    ok, n = d_answerable
+    if n and ok == n:
+        rok, rn = d_refuse
+        return ("D's tools were built for these categories; its real test is the unanswerable and "
+                f"out-of-coverage questions, where D's behavior was correct in {rok} of {rn} runs.")
+    return None
+
+
+def behavior_claim(beh):
+    lo, lo_s, hi, hi_s = _ends(beh)
+    return (f"Behavior accuracy (a warning when one is needed, a refusal when the data doesn't exist) "
+            f"ran from {pct(lo)} ({lo_s}) to {pct(hi)} ({hi_s}).")
 
 
 # ---------- sections ----------
 
-def section_intro(questions, tags, replays):
-    t = tags.get("fundamentals.total_assets") or die("tags.yaml has no fundamentals.total_assets")
-    rule = f"additive_over_time: {str(need(t, 'additive_over_time')).lower()}, time_rollup: {need(t, 'time_rollup')}"
-    counts = {}
-    for q in questions.values():
-        counts[q["expected_behavior"]] = counts.get(q["expected_behavior"], 0) + 1
-    names = {"answer": "answer", "answer_with_warning": "answer with warning", "refuse": "refuse"}
-    if set(counts) != set(names):
-        die(f"unexpected expected_behavior values {sorted(counts)}")
-    behaviours = ", ".join(f"<b>{e(names[k])}</b> ({counts[k]} questions)" for k in names)
-    score_link = need(need(replays, "links"), "repo") + "/blob/main/eval/score.py"
-    return f"""
-<p class="lede">One model answered the same restaurant-finance questions in four setups. This page
-replays the recorded runs. It does not call a model.</p>
-<p class="lede"><b>Tag:</b> a rule attached to a metric, kept in <code>tags/tags.yaml</code>. For
-example, the <code>total_assets</code> tag sets <code>{e(rule)}</code> and reads: “{e(need(t, "derivation"))}”
-In plain terms: a balance; never sum it across quarters.</p>
-<details class="glossary"><summary>Terms used on this page</summary>
-<dl class="defs">
-<dt>Setups</dt><dd>A sees only the table schema. B gets prose sentences generated from the tags. C
-gets the tags file itself. D gets semantic tools that apply the tags, and no SQL.</dd>
-<dt>Expected behaviour</dt><dd>Each question's answer key expects one of three: {behaviours}.</dd>
-<dt>FINAL line</dt><dd>Every run ends with a FINAL line: the number, its unit and two flags.
-<code>warning=true</code> means the model attached a caveat to its number;
-<code>refused=true</code> means it declined to give a number.</dd>
-<dt>Stored trap</dt><dd>A specific wrong answer computed in advance for a question, such as the sum
-of four quarter-end balances. A run hits the trap when its number lands within tolerance of it.</dd>
-<dt>Correct</dt><dd>The run's behaviour matches the key and, unless the key expects a refusal, its
-number is within a per-unit tolerance defined in <a href="{e(score_link)}">eval/score.py</a>.</dd>
-</dl></details>"""
+SECTIONS = [  # id, rail name, reader question, bridge into the next section
+    ("problem", "Problem", "What's the problem?", "This isn't one edge case. Here are {n_traps}."),
+    ("traps", "{n_traps} traps", "How common or broad is this?", "So what would a model need to know to avoid these?"),
+    ("fix", "The fix", "What's the proposed solution?", "Does any of this actually change what the model gets right?"),
+    ("experiment", "Experiment", "How was it tested fairly?", "Here's what happened."),
+    ("results", "Results", "Did it work, and where?", "Numbers hide how. Watch the same question go wrong and right."),
+    ("replay", "Replay", "What does failure actually look like?",
+     "The headline question was format: prose vs. structured tags."),
+    ("b-vs-c", "B vs C", "Should tagging effort go into structure, or is good documentation enough?",
+     "Where it still breaks."),
+    ("failures", "Failures", "Is this honest?", "How the answers were checked."),
+    ("checks", "Checks", "How were the answers checked?", "What this would mean on real research data."),
+    ("next", "Next steps", "What would this mean on real research data?", "{closing}"),
+]
 
 
-def section_problem(questions, runs, vlog, replays):
-    qid = need(replays, "problem_question")
-    q = questions.get(qid) or die(f"unknown problem_question {qid}")
-    traps = need(q, "trap_answers")
-    total = need(traps, "sum_of_4_quarter_ends")
-    correct = need(q, "correct")
-    n_ok = sum(score.score_run(r, q)["correct"] for k, r in runs.items() if k[0] == qid)
-    n = sum(1 for k in runs if k[0] == qid)
-    if not n:
-        die(f"no runs for {qid}")
-    link = filing_url(sources_for(vlog, qid)[0])
-    result = (f"In this experiment no setup fell for it: all {n} runs on this question returned the "
-              f"year-end balance." if n_ok == n else
-              f"In this experiment {n_ok} of {n} runs on this question returned the year-end balance.")
-    return f"""
-<h2>SQL can run correctly and answer the wrong question.</h2>
-<p>Total assets is a balance at a point in time. Summing quarter-end balances produces a valid SQL
-result, but not annual total assets.</p>
+class Page:
+    def __init__(self, ev):
+        self.ev = ev
+        self.claims = []  # (section, rule, sentence)
+        self.notes = []   # build warnings
+
+    def claim(self, rule, text):
+        self.claims.append((self.ev.section, rule, text))
+        return text
+
+    # S1
+    def problem(self):
+        ev = self.ev
+        r = ev("replays")
+        hero = need(r, "hero")
+        qid = need(hero, "question_id")
+        q = ev("questions").get(qid) or die(f"replays.yaml hero.question_id {qid} not in questions.yaml")
+        trap_name = need(hero, "trap")
+        trap = need(q, "trap_answers", trap_name)
+        fy = re.search(r"fiscal (\d{4})", q["question"]) or die(f"no fiscal year in {qid} question text")
+        sql = (f"SELECT SUM(value) FROM fundamentals\nWHERE ticker = '{need(hero, 'ticker')}'\n"
+               f"  AND metric = '{need(hero, 'metric')}'\n  AND fiscal_year = {fy[1]};")
+        link = next((u for l, u in sources(ev, qid) if u and "sec.gov" in u), None) \
+            or die(f"no SEC source for {qid} in verification_log.csv")
+        form = next(l for l, u in sources(ev, qid) if u == link)
+        n_ok = n = 0
+        for st in score.SETUPS:
+            k, m, _ = record(ev, qid, st)
+            n_ok, n = n_ok + k, n + m
+        rec = self.claim("hero record: runs on the hero question scored correct / all runs",
+                         f"No model made this mistake on this question: {n_ok} of {n} recorded runs used the year-end balance."
+                         if n_ok == n else
+                         f"{n - n_ok} of {n} recorded runs on this question did not return the year-end balance.")
+        return f"""
+<h1>Valid SQL, wrong answer.</h1>
+<p class="lede">A query can run without error and still return the wrong number, because the schema
+doesn't say how each column may be combined.</p>
+<p class="q">“{e(q["question"])}”</p>
 <div class="compare">
-  <div class="stat"><div class="muted small">Sum of Yum! Brands' four fiscal-year quarter-end balances
-    (the trap; an illustration, not a recorded run)</div>
-    <div class="big">{e(num(total))} {e(q["unit"])}</div>
-    <pre>SELECT SUM(value) FROM fundamentals
-WHERE ticker = 'YUM' AND metric = 'total_assets' AND fiscal_year = {e(q_fiscal_year(q))}</pre></div>
-  <div class="stat"><div class="muted small">Total assets at fiscal year end, as filed (the right answer)</div>
-    <div class="big">{e(num(correct))} {e(q["unit"])}</div>
-    <p class="small"><a href="{e(link)}">Yum! Brands 10-K on SEC EDGAR</a></p></div>
+  <div class="stat bad-edge"><div class="stat-k">Sum of the four quarter-end balances</div>
+    <div class="big">{e(num(trap))} <span class="unit">{e(q["unit"])}</span></div>
+    <pre class="sql">{e(sql)}</pre>
+    <div class="small muted">Runs without error. Counts the same balance four times.</div></div>
+  <div class="stat ok-edge"><div class="stat-k">Balance at fiscal year end</div>
+    <div class="big">{e(num(q["correct"]))} <span class="unit">{e(q["unit"])}</span></div>
+    <div class="small">Source: <a href="{e(link)}">{e(form)} on SEC EDGAR</a></div>
+    <div class="small muted">The correct answer, from the hand-checked answer key.</div></div>
 </div>
-<p class="muted">{e(result)} Other questions test quarter derivation, ratios, price indices and
-brand rollups.</p>"""
+<p class="punch">Connecting a model to data isn't enough; it has to know how each number may be combined.</p>
+<p class="small muted">Both numbers come from the answer key. {e(rec)}</p>"""
 
+    # S2
+    def traps(self):
+        ev = self.ev
+        r = ev("replays")
+        tags = ev("tags")
+        cards = []
+        replay_by_cat = {ev("questions")[x["question_id"]]["category"]: x for x in need(r, "replays")}
+        for t in need(r, "traps"):
+            cat = need(t, "category")
+            rp = replay_by_cat.get(cat) or die(f"no replay for category {cat} (trap card {t.get('name')})")
+            srcs = []
+            for tid in need(t, "tags"):
+                tag = tags.get(tid) or die(f"trap card {t['name']}: unknown tag {tid}")
+                srcs.append(need(tag, "lineage", "source"))
+            wrong = runs = 0
+            for qid, q in ev("questions").items():
+                if q["category"] != cat:
+                    continue
+                for st in score.SETUPS:
+                    k, m, _ = record(ev, qid, st)
+                    wrong, runs = wrong + m - k, runs + m
+            failing = [st for st in score.SETUPS
+                       if not is_ok(outcome(scored(ev, rp["question_id"], st, need(rp, "runs", st))[1]))]
+            left = next((s for s in failing if s != "D"), "A")
+            right = "D" if left != "D" else "A"
+            href = f"#replay?q={rp['question_id']}&left={left}&right={right}"
+            link = ("see it fail" if failing else "see the replay (no setup failed it)")
+            cards.append(f"""
+<article class="card trap">
+  <h3>{e(need(t, "name"))}</h3>
+  <p>{e(need(t, "rule"))}</p>
+  <p class="small"><span class="pill">{e(need(t, "source"))}</span> <span class="muted">{e(" · ".join(dict.fromkeys(srcs)))}</span></p>
+  <p class="small muted">{e(CATEGORY_NAMES[cat])}: {wrong} of {runs} runs wrong across all setups.</p>
+  <a class="jump" href="{e(href)}">{e(link)} →</a>
+</article>""")
+        return f"""
+<h2>{word(len(need(r, "traps"))).capitalize()} traps in real data</h2>
+<p class="muted">Each trap is a rule the schema doesn't state. The questions cover {word(len(CATEGORY_NAMES))}
+categories; year-to-date basis and fiscal calendars share one.</p>
+<div class="grid-traps">{"".join(cards)}</div>
+<p class="caption">{e(need(r, "proxy_caption"))}</p>"""
 
-def q_fiscal_year(q):
-    m = re.search(r"fiscal (\d{4})", q["question"])
-    return m.group(1) if m else die(f"no fiscal year in {q['id']} question text")
+    # S3
+    def fix(self):
+        ev = self.ev
+        r, tags, ts = ev("replays"), ev("tags"), ev("tool_specs")
+        fields = ["semantic_type", "additive_over_time", "additive_over_entities", "time_rollup",
+                  "period_basis", "derivation", "calendar"]
+        cards = []
+        for c in need(r, "tag_cards"):
+            t = tags.get(need(c, "id")) or die(f"tags.yaml has no {c['id']}")
+            rows = "".join(f"<dt>{e(k)}</dt><dd>{e(str(need(t, k)).lower() if isinstance(t[k], bool) else t[k])}</dd>"
+                           for k in fields)
+            lin = need(t, "lineage")
+            rows += (f"<dt>lineage</dt><dd>{e(need(lin, 'source'))}; retrieved {e(need(lin, 'retrieved_on'))}. "
+                     f"{e(need(lin, 'dedupe'))}</dd>")
+            cards.append(f'<article class="card tag"><h3><code>{e(t["id"])}</code></h3>'
+                         f'<p class="prevents">{e(need(c, "prevents"))}</p><dl class="fields">{rows}</dl></article>')
+        desc = ts.DESCRIPTIONS
+        for n in ("describe_column", "get_metric", "aggregate"):
+            if n not in desc:
+                die(f"src/tool_specs.py has no tool {n}")
+        flow = f"""
+<ol class="flow" aria-label="How setup D answers a question">
+  <li class="node"><b>Analyst question</b><span class="small muted">in plain language</span></li>
+  <li class="node"><code>describe_column</code><span class="small">{e(desc["describe_column"])}</span></li>
+  <li class="node"><span><code>get_metric</code> / <code>aggregate</code></span><span class="small">{e(desc["get_metric"])}</span>
+    <span class="small">{e(desc["aggregate"])}</span></li>
+  <li class="node"><b>Answer + filing links</b><span class="small muted">every value carries its source</span></li>
+</ol>"""
+        return f"""
+<h2>The fix: tag each metric, then enforce the tags</h2>
+<p class="muted">A tag states what a metric is and how it may be combined. Two of the tags from
+<code>tags/tags.yaml</code>, as stored:</p>
+<div class="grid-tags">{"".join(cards)}</div>
+<h3 class="sub">Enforcement: the tools read the tags and refuse what they forbid</h3>
+{flow}
+<p class="small muted">This is a minimal semantic layer (Kimball semi-additive measures, dbt MetricFlow,
+metric views). The contribution is the measurement.</p>"""
 
+    # S4
+    def experiment(self):
+        ev = self.ev
+        s, r = ev("summary"), ev("replays")
+        steps = []
+        for i, st in enumerate(score.SETUPS):
+            cfg = need(r, "setups", st)
+            names = [t["name"] for t in SETUP_TOOLS[st]]
+            tools = ", ".join(f"<code>{e(n)}</code>" for n in names)
+            used = {c["name"] for k, rec in ev("runs").items() if k[1] == st for c in rec.get("tool_calls") or []}
+            if used - set(names):
+                die(f"setup {st} called tools {sorted(used - set(names))} outside its tool list")
+            steps.append(f"""
+<li class="step-card{' last' if st == 'D' else ''}">
+  <div class="step-head"><span class="setup-tag">{e(st)}</span> {e(SETUP_NAMES[st])}</div>
+  <p class="small"><b>Receives:</b> {e(need(cfg, "receives"))}</p>
+  <p class="small"><b>Tools:</b> {tools}</p>
+  <p class="small changed"><b>{"Starting point" if i == 0 else "Changes from " + score.SETUPS[i - 1]}:</b> {e(need(cfg, "changed"))}</p>
+</li>""")
+        n_q = len({q for v in s["setups"].values() for q in v["per_question"]})
+        n_r = len(s["runs_per_question"])
+        sample = self.claim("sample line: summary.json per_question, runs_per_question, model, run_dates, total_cost_usd",
+                            f"{n_q} questions × {n_r} runs per setup, {', '.join(s['model'])}, run on "
+                            f"{' and '.join(s['run_dates'])} (UTC), total cost ${s['total_cost_usd']:.2f}.")
+        return f"""
+<h2>The experiment: four setups, each adds one thing</h2>
+<p class="muted">Same model, same instructions, same final-answer format. Only the context and tools change.</p>
+<ol class="ladder">{"".join(steps)}</ol>
+<p class="sample">{e(sample)}</p>"""
 
-def bars(rows, with_range):
-    """rows: (label, value, lo, hi, value_text), values 0..1. HTML bars on a zero-based scale."""
-    out = ['<div class="bars" role="list">']
-    for label, v, lo, hi, txt in rows:
-        rng = (f'<span class="rng" style="left:{lo * 100:.2f}%;width:{(hi - lo) * 100:.2f}%" '
-               f'title="lowest to highest run"></span>') if with_range and lo is not None else ""
-        out.append(f'<div class="bar-row" role="listitem"><span class="bar-label">{e(label)}</span>'
-                   f'<span class="track"><span class="fill{"" if with_range else " secondary"}" '
-                   f'style="width:{v * 100:.2f}%"></span>{rng}</span><span class="bar-val">{e(txt)}</span></div>')
-    out.append(f'<div class="bar-row axis"><span></span><span class="ticks"><span>{e(pct(0, 0))}</span>'
-               f'<span>{e(pct(0.5, 0))}</span><span>{e(pct(1, 0))}</span></span><span></span></div></div>')
-    return "\n".join(out)
+    # S5
+    def results(self):
+        ev = self.ev
+        s, questions, r = ev("summary"), ev("questions"), ev("replays")
+        st_ = s["setups"]
+        acc = {x: (st_[x]["accuracy"]["mean"], st_[x]["accuracy"]["min"], st_[x]["accuracy"]["max"])
+               for x in score.SETUPS}
+        acc_rows = [(f"{x} · {SETUP_NAMES[x]}", *acc[x]) for x in score.SETUPS]
+        acc_svg = svg_bars(acc_rows, "Accuracy by setup with lowest and highest run: " + "; ".join(
+            f"{x} {pct(m)} (runs {pct(lo)} to {pct(hi)})" for x, (m, lo, hi) in acc.items()), True)
+        acc_tab = hidden_table("Accuracy by setup", ["Setup", "Mean", "Lowest run", "Highest run"],
+                               [[x, pct(m), pct(lo), pct(hi)] for x, (m, lo, hi) in acc.items()])
+        beh = {x: st_[x]["behavior_accuracy"] for x in score.SETUPS}
+        beh_svg = svg_bars([(f"{x} · {SETUP_NAMES[x]}", beh[x], None, None) for x in score.SETUPS],
+                           "Behavior accuracy by setup: " + "; ".join(f"{x} {pct(v)}" for x, v in beh.items()), False)
+        beh_tab = hidden_table("Behavior accuracy by setup", ["Setup", "Behavior accuracy"],
+                               [[x, pct(v)] for x, v in beh.items()])
+        # heatmap: rows = stored traps grouped by category, columns = setups
+        replay_q = {questions[x["question_id"]]["category"]: x["question_id"] for x in need(r, "replays")}
+        trap_cat = {}
+        for q in questions.values():
+            if q["id"] in st_["A"]["per_question"] and q["expected_behavior"] != "refuse":
+                for t in q.get("trap_answers") or {}:
+                    trap_cat.setdefault(t, q["category"])
+        order = sorted(trap_cat, key=lambda t: (list(CATEGORY_NAMES).index(trap_cat[t]), t))
+        rows, totals = [], {x: {} for x in score.SETUPS}
+        for t in order:
+            cells = []
+            for x in score.SETUPS:
+                th = st_[x]["trap_hits"][t]
+                totals[x][t] = (th["hits"], th["runs"])
+                left, right = (x, "D") if x != "D" else ("A", "D")
+                href = f"#replay?q={replay_q[trap_cat[t]]}&left={left}&right={right}"
+                hot = th["hits"] > 0
+                cells.append(f'<td><a class="cell{" hot" if hot else ""}" style="--a:{min(1, th["rate"] * 4):.2f}" '
+                             f'href="{e(href)}" aria-label="Setup {e(x)}, {e(t.replace("_", " "))}: {th["hits"]} of '
+                             f'{th["runs"]} runs ({e(pct(th["rate"]))}); open the {e(CATEGORY_NAMES[trap_cat[t]])} replay">'
+                             f'{th["hits"]}/{th["runs"]}</a></td>')
+            rows.append(f'<tr><th scope="row"><span class="cat">{e(CATEGORY_NAMES[trap_cat[t]])}</span>'
+                        f'{e(t.replace("_", " "))}</th>{"".join(cells)}</tr>')
+        heat = (f'<table class="heat"><caption class="sr-only">Stored-trap hits by setup: hits / runs. '
+                f'Each cell opens that category\'s replay.</caption><thead><tr><th scope="col">Trap</th>'
+                + "".join(f'<th scope="col">{e(x)}</th>' for x in score.SETUPS)
+                + f'</tr></thead><tbody>{"".join(rows)}</tbody></table>')
+        cost_rows = []
+        for x in score.SETUPS:
+            tok = sum(st_[x]["avg_tokens"][k] for k in TOKEN_KEYS)
+            cost_rows.append(f"<tr><th scope='row'>{e(x)} · {e(SETUP_NAMES[x])}</th><td>{st_[x]['avg_tool_calls']:.1f}</td>"
+                             f"<td>{tok:,.0f}</td><td>${st_[x]['cost_usd']:.3f}</td></tr>")
+        cost = ("<table class='cost'><thead><tr><th scope='col'>Setup</th><th scope='col'>Tool calls per question</th>"
+                "<th scope='col'>Tokens per question</th><th scope='col'>Total cost</th></tr></thead><tbody>"
+                + "".join(cost_rows) + "</tbody></table>")
+        # takeaway, by rule
+        take = [self.claim("§3 accuracy: a difference is real only if the setups' run ranges don't overlap",
+                           accuracy_claim(acc)),
+                self.claim("trap total: summary.json trap_hits summed over setups and traps", trap_claim(totals))]
+        d_ans = [0, 0]
+        d_ref = [0, 0]
+        for (qid, st, _), rec in ev("runs").items():
+            if st != "D":
+                continue
+            ok = score.score_run(rec, questions[qid])["correct"]
+            tgt = d_ref if questions[qid]["expected_behavior"] == "refuse" else d_ans
+            tgt[0] += ok
+            tgt[1] += 1
+        dc = d_claim(tuple(d_ans), tuple(d_ref))
+        take.append(self.claim("§3 D rule: D at 100% on answerable questions", dc) if dc else
+                    self.claim("behavior range: summary.json behavior_accuracy, lowest to highest", behavior_claim(beh)))
+        return f"""
+<h2>Results</h2>
+<p class="takeaway">{" ".join(e(t) for t in take)}</p>
+<div class="results-grid">
+  <div class="panel"><h3>Accuracy by setup <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3>{acc_svg}{acc_tab}
+    <h3>Behavior accuracy <span class="muted small">warn when needed, refuse when unanswerable</span></h3>{beh_svg}{beh_tab}
+    <h3>Cost per setup <span class="muted small">means per question</span></h3>{cost}</div>
+  <div class="panel"><h3>Stored-trap hits <span class="muted small">hits / runs; select a cell to open its replay</span></h3>{heat}</div>
+</div>"""
 
+    # S6
+    def replay(self):
+        ev = self.ev
+        r, questions = ev("replays"), ev("questions")
+        items = need(r, "replays")
+        default = need(r, "default_replay")
+        cats = [(questions.get(need(x, "question_id")) or die(f"replay question {x['question_id']} not in questions.yaml"))["category"]
+                for x in items]
+        if sorted(cats) != sorted(CATEGORY_NAMES):
+            die(f"replays.yaml must list one replay per category, got {cats}")
+        if default not in [x["question_id"] for x in items]:
+            die(f"default_replay {default} is not one of the replays")
+        for x in items:
+            qid = x["question_id"]
+            for st in score.SETUPS:
+                run = need(x, "runs", st)
+                o = outcome(scored(ev, qid, st, run)[1])
+                exp = need(x, "expect", st)
+                if exp not in BADGES:
+                    die(f"replays.yaml {qid} {st}: unknown expected outcome {exp}")
+                if o != exp:
+                    die(f"replays.yaml says {qid} setup {st} run {run} is '{exp}', but the recorded score is '{o}'")
+        a_ok, a_n, _ = record(ev, default, "A")
+        if a_ok == a_n:
+            die(f"setup A answered the default replay {default} correctly in all {a_n} runs; "
+                "pick a different default_replay in report/replays.yaml")
+        d_item = next(x for x in items if x["question_id"] == default)
+        if is_ok(outcome(scored(ev, default, "A", d_item["runs"]["A"])[1])):
+            die(f"the default replay shows a correct setup A run ({default} run {d_item['runs']['A']}); "
+                "show one of A's failed runs")
+        ordered = sorted(items, key=lambda x: list(CATEGORY_NAMES).index(questions[x["question_id"]]["category"]))
+        picker = "".join(
+            f'<button type="button" role="radio" aria-checked="{"true" if x["question_id"] == default else "false"}" '
+            f'tabindex="{0 if x["question_id"] == default else -1}" data-q="{e(x["question_id"])}">'
+            f'{e(CATEGORY_NAMES[questions[x["question_id"]]["category"]])}</button>' for x in ordered)
+        blocks = []
+        for x in ordered:
+            qid = x["question_id"]
+            q = questions[qid]
+            cols = []
+            for side, start in (("left", "A"), ("right", "D")):
+                tabs = "".join(
+                    f'<button type="button" role="tab" data-setup="{st}" aria-selected="{"true" if st == start else "false"}" '
+                    f'tabindex="{0 if st == start else -1}">{st} · {e(SETUP_NAMES[st])}</button>' for st in score.SETUPS)
+                panes = "".join(self.pane(qid, st, x["runs"][st], st != start) for st in score.SETUPS)
+                cols.append(f'<div class="col" data-side="{side}"><div class="tabs" role="tablist" '
+                            f'aria-label="Setup shown in the {side} column">{tabs}</div>{panes}</div>')
+            expected = ("refuse (the data isn't there)" if q["expected_behavior"] == "refuse" else
+                        f"{num(q['correct'])} {q['unit']}"
+                        + (", with a warning" if q["expected_behavior"] == "answer_with_warning" else ""))
+            blocks.append(f"""
+<div class="replay" data-q="{e(qid)}"{"" if qid == default else " hidden"}>
+  <p class="q"><span class="muted">{e(qid)} · {e(CATEGORY_NAMES[q["category"]])}</span><br>“{e(q["question"])}”</p>
+  <p class="small"><b>Correct answer:</b> {e(expected)} · <b>Sources:</b> {source_html(ev, qid)}</p>
+  <p class="small muted">{e(need(x, "note"))}</p>
+  <div class="cols">{"".join(cols)}</div>
+</div>""")
+        return f"""
+<h2>Side-by-side replay</h2>
+<p class="muted">Recorded runs, shown as recorded. Pick a question, then a setup for each column.</p>
+<div class="picker" role="radiogroup" aria-label="Replay question">{picker}</div>
+{"".join(blocks)}"""
 
-def section_results(summary, questions, ow):
-    setups = need(summary, "setups")
-    model = ", ".join(need(summary, "model"))
-    dates = need(summary, "run_dates")
-    if not isinstance(dates, list) or not dates:
-        die("summary.run_dates not recorded")
-    n_runs = len(need(summary, "runs_per_question"))
-    qids = {q for v in setups.values() for q in need(v, "per_question")}
-    n_q = len(qids)
-    if n_q != len(questions):
-        die(f"summary covers {n_q} questions, questions.yaml has {len(questions)}")
-    # score.py checks every stored trap of every non-refuse question, so one run is checked once per trap.
-    n_traps = sum(len(q.get("trap_answers") or {}) for q in questions.values()
-                  if q["expected_behavior"] != "refuse")
-    ow_setups = need(ow, "setups")
-    n_corr = need(ow, "n_manual_corrections")
-    if n_corr != len(need(ow, "manual_corrections")):
-        die("over_warning_reasons.json: n_manual_corrections does not match its list")
-    method = f"keyword match plus {n_corr} manual correction{'' if n_corr == 1 else 's'}"
-    heads = ["Setup", "Tools", "Correct runs", "Accuracy (run range)", "Stored-trap hits / trap checks*",
-             f"{OW_LABEL} / runs on those questions",
-             f"Of those warnings, cite filing dates or metadata ({method})"]
-    acc_rows, ow_rows, table = [], [], []
-    matched_total = ow_total = 0
-    for s in score.SETUPS:
-        v = setups.get(s) or die(f"summary has no setup {s}")
-        a = need(v, "accuracy")
-        mean, lo, hi = need(a, "mean"), need(a, "min"), need(a, "max")
-        hits = sum(need(t, "hits") for t in need(v, "trap_hits").values())
-        trap_checks = sum(need(t, "runs") for t in v["trap_hits"].values())
-        if trap_checks != n_traps * n_runs:
-            die(f"{s}: {trap_checks} trap checks in summary.json, questions.yaml gives "
-                f"{n_traps} stored traps x {n_runs} runs")
-        ow_r, ow_n, ow_d = need(v, "over_warning_rate"), need(v, "over_warning_runs"), need(v, "answer_question_runs")
-        o = ow_setups.get(s) or die(f"over_warning_reasons.json has no setup {s}")
-        if need(o, "warning_runs") != ow_n:
-            die(f"{s}: over_warning_reasons.json counts {o['warning_runs']} runs, summary.json {ow_n}")
-        matched = need(o, "matched")
-        matched_total += matched
-        ow_total += ow_n
-        label = f"{s} · {SETUP_NAMES[s]}"
-        acc_rows.append((label, mean, lo, hi, pct(mean)))
-        ow_rows.append((label, ow_r, None, None, pct(ow_r)))
-        cells = [f"{e(SETUP_TOOLS[s])}", f"{need(v, 'correct_runs')} / {need(v, 'n')}",
-                 f"{e(pct(mean))} <span class='muted'>(runs {e(pct(lo))}–{e(pct(hi))})</span>",
-                 f"{hits} / {trap_checks}", f"{ow_n} / {ow_d} ({e(pct(ow_r))})", f"{matched} / {ow_n}"]
-        table.append(f"<tr><th scope='row'>{e(label)}</th>"
-                     + "".join(f'<td data-label="{e(h)}"><span>{c}</span></td>' for h, c in zip(heads[1:], cells))
-                     + "</tr>")
-    if 2 * matched_total <= ow_total:
-        die(f"only {matched_total} of {ow_total} warning runs match the keyword pattern; "
-            "the page text says most do")
-    n_setup = need(setups["A"], "n")
-    sample = f"{n_q} questions × {n_runs} runs, {model}, run on {' and '.join(dates)} (UTC)"
-    return f"""
-<h2>Accuracy was close across all four setups.</h2>
-<p class="muted">{e(sample)}. Bars show mean accuracy; markers show the lowest and highest run.
-The axis starts at zero.</p>
-<p>The setups differ by a few runs each. That is too few to rank them on this sample. Warning rates
-differ more than accuracy; they are shown below.</p>
-{bars(acc_rows, True)}
-<div class="table-wrap"><table class="stack">
-<thead><tr>{"".join(f'<th scope="col">{e(h)}</th>' for h in heads)}</tr></thead>
-<tbody>{''.join(table)}</tbody>
-</table></div>
-<p class="small muted"><sup>*</sup> A run on a question with several stored traps is checked once per
-trap: {n_traps} stored traps × {n_runs} runs = {n_traps * n_runs} trap checks per setup, against
-{n_setup} runs per setup.</p>
-<h3 style="margin-top:20px">Secondary metric: {e(OW_LABEL.lower())}</h3>
-<p class="muted">Runs that set warning=true on a question whose answer key expects a plain answer.
-Most of these cite stored filing dates or retrieval metadata ({e(method)}, listed in the JSON;
-counts in the table).
-The dataset keeps the latest-filed value, so prior-year figures carry later filings' dates; the
-models flagged that. These are not scored as errors, and the metric does not show that any setup
-hedges more or less well.</p>
-{bars(ow_rows, False)}
-<p class="small muted">Classification: {e(method)} (listed in the JSON). The keyword match is a
-heuristic over each run's final text (<code>report/analyze_over_warnings.py</code>); the manual
-corrections are runs whose full text was read and found misclassified
-(<code>report/over_warning_overrides.json</code>). Pattern, corrections and run lists are in
-<code>report/over_warning_reasons.json</code>. It does not judge each caveat.</p>"""
+    def pane(self, qid, setup, run, hidden):
+        ev = self.ev
+        rec, sc = scored(ev, qid, setup, run)
+        k, n, outs = record(ev, qid, setup)
+        f = sc["final"]
+        if f:
+            final = (f"{num(f['answer']) if f['answer'] is not None else 'no number'} {f['unit'] or ''}".strip()
+                     + f" · warning {str(f['warning']).lower()} · refused {str(f['refused']).lower()}")
+        else:
+            final = f"no FINAL line (stopped: {rec.get('stop_reason')})"
+        runs_line = ", ".join(f"run {i}: {BADGES[o][0].lower()}" for i, o in outs)
+        return f"""
+<div class="pane" data-setup="{e(setup)}" role="tabpanel"{" hidden" if hidden else ""}>
+  <div class="pane-head">{badge(sc)} <span class="small muted">setup {e(setup)}, run {run} · {k} of {n} runs correct ({e(runs_line)})</span></div>
+  <p class="small"><b>Final answer:</b> {e(final)}</p>
+  <div class="steps" data-verbatim>{render_steps(rec)}</div>
+</div>"""
+
+    # S7
+    def b_vs_c(self):
+        s = self.ev("summary")
+        bc = s["b_vs_c"]
+        b, c = len(bc["b_right_c_wrong"]), len(bc["c_right_b_wrong"])
+        if b + c + bc["both_right"] + bc["both_wrong"] != bc["questions"]:
+            die("summary.json b_vs_c counts do not add up to b_vs_c.questions")
+        verdict, p = b_vs_c_verdict(b, c)
+        self.claim("§3 B vs C: exact two-sided sign test (McNemar) on discordant questions, p < 0.05", verdict)
+        n_runs = len(s["runs_per_question"])
+        lst = lambda ids: f" ({', '.join(ids)})" if ids else ""  # noqa: E731
+        return f"""
+<div class="box">
+<h2>B vs. C, paired by question</h2>
+<p class="verdict">{e(verdict)}</p>
+<dl class="counts">
+  <div><dt>B right, C wrong</dt><dd>{b}<span class="small muted">{e(lst(bc["b_right_c_wrong"]))}</span></dd></div>
+  <div><dt>C right, B wrong</dt><dd>{c}<span class="small muted">{e(lst(bc["c_right_b_wrong"]))}</span></dd></div>
+  <div><dt>Both right</dt><dd>{bc["both_right"]}</dd></div>
+  <div><dt>Both wrong</dt><dd>{bc["both_wrong"]}</dd></div>
+</dl>
+<p class="small muted">B and C receive the same facts; only the format differs. A setup is right on a question
+when more than half of its {n_runs} runs are correct (majority vote). Exact two-sided sign test (McNemar) on
+the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
+</div>"""
+
+    # S8
+    def failures(self):
+        ev = self.ev
+        entries = parse_error_analysis(ev("error_analysis"))
+        r = ev("replays")
+        shown = {(x["question_id"], st, x["runs"][st]) for x in need(r, "replays") for st in score.SETUPS}
+        groups = []
+        for st in score.SETUPS:
+            es = entries.get(st) or die(f"docs/error_analysis.md has no entries for setup {st}")
+            if len(es) != 2:
+                die(f"docs/error_analysis.md lists {len(es)} entries for setup {st}; expected 2")
+            k = sum(record(ev, q, st)[0] for q in ev("questions"))
+            n = sum(record(ev, q, st)[1] for q in ev("questions"))
+            items = []
+            failed = 0
+            for qid, run, title, happened, fix in es:
+                if qid not in ev("questions"):
+                    die(f"docs/error_analysis.md cites unknown question {qid}")
+                rec, sc = scored(ev, qid, st, run)
+                failed += not is_ok(outcome(sc))
+                if (qid, st, run) in shown:
+                    left, right = (st, "D") if st != "D" else ("A", "D")
+                    more = f'<a class="jump" href="#replay?q={e(qid)}&amp;left={left}&amp;right={right}">open its replay →</a>'
+                else:
+                    more = (f'<details class="transcript"><summary>show transcript (setup {e(st)}, run {run})</summary>'
+                            f'<p class="small"><b>Final answer:</b> {e(json.dumps(sc["final"]))}</p>'
+                            f'<div class="steps" data-verbatim>{render_steps(rec)}</div></details>')
+                items.append(f"""
+<li class="fail">
+  <div>{badge(sc)} <b>{e(qid)}, run {run}</b>{" — " + e(title) if title else ""}</div>
+  <p class="small"><b>What happened:</b> {inline_md(happened)}</p>
+  <p class="small"><b>What would fix it:</b> {inline_md(fix)}</p>
+  {more}
+</li>""")
+            if st == "D" and not failed:
+                die("docs/error_analysis.md: no D entry is a scored failure; SPEC §11.7 needs one from D")
+            head = ""
+            if not failed:
+                head = self.claim("no-failure note: setup's scored runs, all correct",
+                                  f"{st} had no incorrect runs ({k} of {n} correct); the error analysis lists two "
+                                  "over-warning examples instead, which are scored correct.")
+            groups.append(f'<div class="fail-group"><h3>{e(st)} · {e(SETUP_NAMES[st])} '
+                          f'<span class="muted small">{n - k} of {n} runs wrong</span></h3>'
+                          + (f'<p class="small muted">{e(head)}</p>' if head else "")
+                          + f'<ul class="fails">{"".join(items)}</ul></div>')
+        n_cat = {}
+        for q in ev("questions").values():
+            n_cat[q["category"]] = n_cat.get(q["category"], 0) + 1
+        qpc = str(min(n_cat.values())) if len(set(n_cat.values())) == 1 else f"{min(n_cat.values())}–{max(n_cat.values())}"
+        ciks = {SEC_RE.fullmatch(x["source_url"])[1] for x in ev("vlog") if SEC_RE.fullmatch(x["source_url"])}
+        fmt = {"questions_per_category": qpc, "companies": len(ciks)}
+        lims = "".join(f"<li>{e(lim.format(**fmt))}</li>" for lim in need(r, "limitations"))
+        return f"""
+<h2>Where it fails</h2>
+<p class="muted">Two instructive runs per setup, from <code>docs/error_analysis.md</code>. Each badge is
+recomputed from the recorded score.</p>
+<div class="fail-grid">{"".join(groups)}</div>
+<h3 class="sub">Limits</h3>
+<ul class="limits">{lims}</ul>"""
+
+    # S9
+    def checks(self):
+        ev = self.ev
+        s, vlog, questions, r = ev("summary"), ev("vlog"), ev("questions"), ev("replays")
+        if re.search(r"^\s*(from|import)\s+semantics\b", ev("make_questions"), re.M):
+            die("eval/make_questions.py imports semantics; the page says the answer key is independent")
+        by_q = {}
+        for row in vlog:
+            by_q.setdefault(row["question_id"], []).append(row["matches"].strip().lower() == "yes")
+        n_q = len(questions)
+        all_yes = sum(1 for q in questions if by_q.get(q) and all(by_q[q]))
+        hand = sum(bool(re.search(r"hand-read by|hand spot-check by", row["notes"])) for row in vlog)
+        verified = self.claim(
+            "verification: questions whose verification_log rows all say matches=yes; rows whose notes record a hand check",
+            f"{all_yes} of {n_q} questions have every row in the verification log marked matches = yes "
+            f"({len(vlog)} rows). The author checked {hand} of those rows by hand against the source; the rest were "
+            "compared by script or with AI assistance.")
+        g = ev("git")
+        draft_rev = need(r, "provenance", "draft_commit")
+        repl_rev = need(r, "provenance", "replacement_commit")
+        repl = need(r, "provenance", "replacement_questions")
+        for q in repl:
+            if q not in questions:
+                die(f"replays.yaml provenance.replacement_questions: {q} not in questions.yaml")
+        if "questions_draft.md" not in g("show", "--name-only", "--format=", draft_rev):
+            die(f"draft_commit {draft_rev} does not touch eval/questions_draft.md")
+        d_draft, d_engine = commit_date(draft_rev), first_commit_date("src/semantics.py")
+        d_repl, d_frozen = commit_date(repl_rev), commit_date("questions-frozen")
+        first_run = min(s["run_dates"])
+        if not (d_draft <= d_engine <= d_repl <= d_frozen <= first_run):
+            die(f"provenance dates out of order: draft {d_draft}, engine {d_engine}, replacements {d_repl}, "
+                f"frozen {d_frozen}, first run {first_run}")
+        frozen = self.claim(
+            "provenance: git commit dates of the draft, src/semantics.py's first commit, the replacement commit and tag questions-frozen",
+            f"Most questions were written before the rule engine, and all were frozen before any run: drafted {d_draft} (commit {draft_rev}), "
+            f"before semantics.py was first committed ({d_engine}); {word(len(repl))} replacements "
+            f"({', '.join(repl)}) were added {d_repl}, after it; all frozen {d_frozen} (git tag questions-frozen), "
+            f"before the first run ({first_run}).")
+        tests = pytest_count()
+        test_li = ""
+        if tests is None:
+            self.notes.append("pytest collection could not be read; the tests item is omitted from S9")
+        else:
+            test_li = "<li>" + e(self.claim("tests: pytest --collect-only at build time",
+                                            f"{tests} tests collected by pytest at build time.")) + "</li>"
+        bug = []
+        for n in s["scorer_notes"]:
+            fl = n["flipped_by_setup"]
+            bug.append(self.claim(
+                "scorer disclosure: summary.json scorer_notes",
+                f"A scorer bug (unit spelling) was found and fixed before publishing (commit {n['fix_commit']}); "
+                f"the fix changed {n['runs_flipped']} runs ({', '.join(f'{k} {v}' for k, v in fl.items())}), all from "
+                "incorrect to correct."))
+        repo = need(r, "links", "repo")
+        return f"""
+<h2>How it was checked</h2>
+<ul class="checks">
+  <li>The answer key was computed by <code>eval/make_questions.py</code> with direct SQL, independent of
+  <code>semantics.py</code>, so the code being tested does not grade itself.</li>
+  <li>{e(verified)}</li>
+  <li>{e(frozen)}</li>
+  {test_li}
+  {"".join(f"<li>{e(b)}</li>" for b in bug)}
+</ul>
+<p><a href="{e(repo)}">Repository</a> · <a href="{e(repo)}/blob/main/eval/verification_log.csv">Verification log</a> ·
+<a href="{e(repo)}/blob/main/docs/error_analysis.md">Error analysis</a></p>"""
+
+    # S10
+    def next(self):
+        ev = self.ev
+        r, s = ev("replays"), ev("summary")
+        items = "".join(f"<li>{e(x)}</li>" for x in need(r, "next_steps"))
+        if len(need(r, "next_steps")) != 3:
+            die("replays.yaml next_steps must have exactly three items")
+        repo = need(r, "links", "repo")
+        video = (r.get("links") or {}).get("video")
+        if not video:
+            self.notes.append("replays.yaml links.video is absent; the footer omits the video link")
+        self.closing = f"A small experiment. All numbers generated from recorded runs on {' and '.join(s['run_dates'])} (UTC)."
+        return f"""
+<h2>Next steps</h2>
+<ol class="next">{items}</ol>
+<footer class="foot"><a href="{e(repo)}">Repository</a>{f' · <a href="{e(video)}">Video</a>' if video else ""}
+<p class="small muted">{e(self.closing)}</p></footer>"""
 
 
 def render_steps(rec):
+    """Every step in order: model text, then each tool call with its input and an excerpt of what came back."""
     texts = rec.get("text") or []
     calls = rec.get("tool_calls") or []
     out = []
-    for t in range(max(len(texts), 1 + max([c["turn"] for c in calls], default=-1))):
+    turns = max(len(texts), 1 + max([c["turn"] for c in calls], default=-1))
+    for t in range(turns):
         txt = texts[t] if t < len(texts) else ""
         if txt.strip():
-            out.append(f'<div class="step"><div class="tool muted">model text</div>{excerpt(txt)}</div>')
+            out.append(f'<div class="step"><div class="step-k">model</div>{excerpt(txt, "prose")}</div>')
         for c in (c for c in calls if c["turn"] == t):
-            inp = c["input"].get("sql") if isinstance(c["input"], dict) and "sql" in c["input"] else \
-                json.dumps(c["input"], indent=1)
+            inp = c["input"]
+            body = inp["sql"] if isinstance(inp, dict) and set(inp) == {"sql"} else json.dumps(inp, indent=1)
             err = ' <span class="badge bad">tool error</span>' if c.get("is_error") else ""
-            out.append(f'<div class="step"><div class="tool">{e(c["name"])}{err}</div>'
-                       f'<pre>{e(inp)}</pre><div class="muted small">returned</div>{excerpt(c["output"])}</div>')
-    if not out:
-        out.append('<p class="muted">No steps recorded.</p>')
-    return "\n".join(out)
+            out.append(f'<div class="step"><div class="step-k"><code>{e(c["name"])}</code>{err}</div>'
+                       f'{excerpt(body, "code")}<div class="step-k">returned</div>{excerpt(str(c["output"]), "code")}</div>')
+    return "".join(out) or '<p class="muted small">No steps recorded.</p>'
 
 
-def excerpt(text):
+def excerpt(text, kind):
+    tag = "pre" if kind == "code" else "div"
+    cls = ' class="txt"' if kind != "code" else ""
     if len(text) <= EXCERPT_CHARS:
-        return f"<pre>{e(text)}</pre>"
-    return (f"<pre>{e(text[:EXCERPT_CHARS])}…</pre><details><summary>show full</summary>"
-            f"<pre>{e(text)}</pre></details>")
+        return f"<{tag}{cls}>{e(text)}</{tag}>"
+    return (f"<{tag}{cls}>{e(text[:EXCERPT_CHARS])}…</{tag}><details class=\"full\"><summary>show full</summary>"
+            f"<{tag}{cls}>{e(text)}</{tag}></details>")
 
 
-def source_links(urls):
-    """Answer-key sources from verification_log.csv, labelled by where they point."""
-    def label(u):
-        if "sec.gov" in u:
-            m = re.search(r"/(\d{10})(\d{2})(\d{6})(?:/|$)", u)
-            doc = "SEC exhibit" if u.endswith(".htm") and not u.endswith("-index.htm") else "SEC filing"
-            return f"{doc} {m.group(1)}-{m.group(2)}-{m.group(3)}" if m else doc
-        if "pageviews.wmcloud.org" in u:
-            qs = urllib.parse.parse_qs(urllib.parse.urlparse(u).query)
-            pages = qs.get("pages", ["?"])[0].replace("|", ", ")
-            return f"Pageviews Analysis: {pages}, {qs.get('start', ['?'])[0]} to {qs.get('end', ['?'])[0]}"
-        if "wikimedia" in u:
-            m = re.search(r"/per-article/en\.wikipedia/[^/]+/[^/]+/([^/]+)/", u)
-            return f"Wikimedia pageviews: {m.group(1)}" if m else "Wikimedia pageviews"
-        return re.sub(r"^https?://", "", u).split("/")[0]
-    items = [f'<a href="{e(filing_url(u))}">{e(label(u))}</a>' for u in urls]
-    if len(items) <= 3:
-        return "Answer-key sources: " + " · ".join(items)
-    return (f"<details><summary>Answer-key sources ({len(items)})</summary>"
-            + "<br>".join(items) + "</details>")
+EA_HEAD = re.compile(r"^## ([ABCD]):", re.M)
+EA_ITEM = re.compile(r"^- \*\*(q\d{3}), run (\d+)(?: — (.+?))?\.\*\* (.+)$", re.M)
+FIX_RE = re.compile(r"remedy|refinement|\bcould\b|\bwould\b|\bapplies\b", re.I)
 
 
-def calls_label(n):
-    return f"{n} tool call" + ("" if n == 1 else "s")
+def split_clauses(text):
+    return [c.strip() for c in re.split(r"(?<=[.;])\s+(?=[A-Za-z`])", text) if c.strip()]
 
 
-def pane(runs, questions, vlog, qid, setup, run):
-    q = questions[qid]
-    rec, sc = scored(runs, questions, qid, setup, run)
-    n_ok, n, detail = record(runs, questions, qid, setup)
-    f = sc["final"]
-    if f:
-        final = (f"{e(answer_text(f['answer'], f['unit']))} · warning {str(f['warning']).lower()} · "
-                 f"refused {str(f['refused']).lower()}")
-        if f["warning"]:
-            final += ' <span class="badge warn">warning</span>'
-    else:
-        final = f"no final answer (stopped: {e(rec.get('stop_reason'))})"
-    expected = ("refuse" if q["expected_behavior"] == "refuse" else
-                f"{answer_text(q['correct'], q['unit'])}"
-                + (" with a warning" if q["expected_behavior"] == "answer_with_warning" else ""))
-    links = source_links(sources_for(vlog, qid))
-    return f"""
-<div class="pane" data-setup="{e(setup)}">
-<h3>{e(setup)} · {e(SETUP_NAMES[setup])} <span class="muted small">run {run}</span></h3>
-<details class="run-record"><summary>{n_ok} of {n} runs correct · view run results</summary>
-<p class="record">{e(detail)}.</p></details>
-<div class="final"><div>{badge(sc, q)}</div>
-<p class="small"><b>Final answer:</b> {final}</p>
-<p class="small"><b>Correct answer:</b> {e(expected)}</p>
-<p class="small">{links}</p></div>
-<details class="trace"><summary>View recorded steps · {calls_label(len(rec.get('tool_calls') or []))}</summary>
-<div class="trace-body">{render_steps(rec)}</div></details>
-</div>"""
+def parse_error_analysis(text):
+    """setup -> [(qid, run, title, what happened, what would fix it)] from the '## X:' sections' bullets."""
+    heads = list(EA_HEAD.finditer(text))
+    if not heads:
+        die("docs/error_analysis.md has no '## A:' style setup sections")
+    out = {}
+    for i, h in enumerate(heads):
+        body = text[h.end():heads[i + 1].start() if i + 1 < len(heads) else len(text)]
+        body = body.split("\n## ")[0]
+        for m in EA_ITEM.finditer(body):
+            clauses = split_clauses(m[4])
+            fix_i = next((j for j, c in enumerate(clauses) if FIX_RE.search(c)), None)
+            if fix_i is None or fix_i == 0:
+                die(f"docs/error_analysis.md {h[1]} {m[1]} run {m[2]}: can't find separate "
+                    "'what happened' and 'what would fix it' sentences")
+            happened = clauses[0].rstrip(";").rstrip(".") + "."
+            fix = clauses[fix_i].rstrip(";").rstrip(".") + "."
+            out.setdefault(h[1], []).append((m[1], int(m[2]), m[3], happened, fix[0].upper() + fix[1:]))
+    return out
 
 
-def remedy(r):
-    """An optional fix the author proposes for an observed failure. It was not run or measured."""
-    text = r.get("untested_remedy")
-    return (f'<div class="note small remedy"><b>Possible fix, not tested:</b> {e(text)}</div>'
-            if text else "")
+# ---------- checks on the template, prose and output ----------
+
+def template_digits(template):
+    text = re.sub(r"<style.*?</style>|<script.*?</script>", "", template, flags=re.S)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\{\{[A-Z_0-9]+\}\}", " ", text)
+    text = re.sub(r"&#?\w+;", " ", text)
+    return re.findall(r"\S*\d\S*", text)
 
 
-def section_replays(runs, questions, vlog, replays, tags):
-    items = need(replays, "replays")
-    dedupe = need(tags.get("fundamentals.revenue") or die("tags.yaml has no fundamentals.revenue"),
-                  "lineage", "dedupe")
-    if len(items) != len(CATEGORY_NAMES):
-        die(f"replays.yaml lists {len(items)} replays; SPEC §13.1 asks for one per category")
-    cats = [questions[need(r, "question_id")]["category"] for r in items]
-    if sorted(cats) != sorted(CATEGORY_NAMES):
-        die(f"replays must cover each category once, got {cats}")
-    buttons, blocks = [], []
-    for r in items:
-        qid = r["question_id"]
-        q = questions.get(qid) or die(f"unknown replay question {qid}")
-        shown = need(r, "runs")
-        expect = need(r, "expect")
-        for s in score.SETUPS:
-            _, sc = scored(runs, questions, qid, s, need(shown, s))
-            if outcome(sc) != need(expect, s):
-                die(f"{qid} {s} run {shown[s]} scored {outcome(sc)}, replays.yaml expects {expect[s]}")
-        cat = CATEGORY_NAMES[q["category"]]
-        buttons.append(f'<button type="button" data-q="{e(qid)}">{e(cat)}</button>')
-        left = "".join(pane(runs, questions, vlog, qid, s, shown[s]) for s in "ABC")
-        tabs = "".join(f'<button type="button" data-setup="{s}">{s} · {e(SETUP_NAMES[s])}</button>' for s in "ABC")
-        blocks.append(f"""
-<div class="replay" data-q="{e(qid)}">
-<h3>{e(cat)}: {e(q["question"])}</h3>
-<div class="note small">{e(need(r, "note"))}</div>{remedy(r)}
-<div class="replay-cols">
-  <div class="col"><div class="tabs js-only">{tabs}</div>{left}</div>
-  <div class="col">{pane(runs, questions, vlog, qid, "D", shown["D"])}</div>
-</div>
-</div>""")
-    return f"""
-<h2>Compare recorded answers.</h2>
-<p class="muted">{len(items)} questions, one per category. Compare A, B or C with D. Answers and scores
-appear first; expand recorded steps for the original model text and tool responses.</p>
-<p class="small muted"><b>Filing dates in the replays.</b> The dataset rule, from the tags' lineage
-and the SPEC decisions log: “{e(dedupe)}” So a stored prior-year figure for revenue, income or cash
-flow can carry the accession number and filing date of a later filing that repeated it as a
-comparative. This is by design. Replay text in which a model remarks on odd filing dates is
-describing that rule, not corrupt data.</p>
-<div class="picker js-only">{''.join(buttons)}</div>
-{''.join(blocks)}"""
+def prose_digits(replays):
+    """Digits in replays.yaml prose (rules, notes, sentences); question IDs and URLs are data, not copy."""
+    bad = []
+
+    def walk(x, path):
+        if isinstance(x, dict):
+            for k, v in x.items():
+                if k not in ("question_id", "runs", "links", "provenance", "hero", "default_replay", "tags", "id"):
+                    walk(v, f"{path}.{k}")
+        elif isinstance(x, list):
+            for i, v in enumerate(x):
+                walk(v, f"{path}[{i}]")
+        elif isinstance(x, str):
+            t = re.sub(r"\bq\d{3}\b|\{[a-z_]+\}", "", x)
+            if re.search(r"\d", t):
+                bad.append(f"{path}: {x[:60]}")
+    walk(replays, "replays.yaml")
+    return bad
 
 
-def section_tags(tags, replays):
-    cards = []
-    fields = ["semantic_type", "additive_over_time", "time_rollup", "valid_methods", "period_basis",
-              "derivation", "calendar"]
-    for c in need(replays, "tag_cards"):
-        t = tags.get(need(c, "id")) or die(f"unknown tag {c['id']}")
-        rows = "".join(f"<dt>{e(k)}</dt><dd>{e(', '.join(t[k]) if isinstance(t[k], list) else t[k])}</dd>"
-                       for k in fields if k in t)
-        cards.append(f'<div class="card"><h3><code>{e(t["id"])}</code></h3>'
-                     f'<p>{e(need(c, "sentence"))}</p><dl>{rows}</dl></div>')
-    return f"""
-<h2>Rules attached to each metric.</h2>
-<p class="muted">C receives the full tags file. D reads tags through describe_column; aggregate checks
-which methods are allowed.</p>
-<div class="cards">{''.join(cards)}</div>"""
+class _Text(HTMLParser):
+    """Visible text, skipping style, script and (optionally) recorded transcripts marked data-verbatim."""
+    VOID = {"br", "img", "hr", "meta", "input", "link", "line", "rect", "path", "circle", "wbr"}
+
+    def __init__(self, skip_verbatim):
+        super().__init__(convert_charrefs=True)
+        self.skip_verbatim, self.depth, self.out = skip_verbatim, 0, []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self.VOID:
+            return
+        if self.depth or tag in ("style", "script") or (self.skip_verbatim and "data-verbatim" in dict(attrs)):
+            self.depth += 1
+
+    def handle_endtag(self, tag):
+        if tag not in self.VOID and self.depth:
+            self.depth -= 1
+
+    def handle_data(self, data):
+        if not self.depth:
+            self.out.append(data)
 
 
-def warning_line(runs, questions, qid):
-    """For a B/C difference on an answer-with-warning question: who warned, and that every number was right."""
-    q = questions[qid]
-    if q["expected_behavior"] != "answer_with_warning":
-        die(f"{qid}: B/C difference is not on an answer_with_warning question; no wording for it")
-    counts = {}
-    for s in score.SETUPS:
-        keys = sorted(k for k in runs if k[0] == qid and k[1] == s) or die(f"no runs for {qid} {s}")
-        scs = [score.score_run(runs[k], q) for k in keys]
-        if not all(sc["number_ok"] for sc in scs):
-            die(f"{qid} {s}: not every run's number is correct; the page says it is")
-        counts[s] = (sum(bool(sc["final"]["warning"]) for sc in scs), len(scs))
-    w = {s: f"{counts[s][0]}/{counts[s][1]}" for s in counts}
-    return (f"B warned in {w['B']} runs, C in {w['C']} (A in {w['A']}, D in {w['D']}). "
-            "The numbers were correct in all runs; only the warning differed.")
+def page_text(page, skip_verbatim=True):
+    p = _Text(skip_verbatim)
+    p.feed(page)
+    return " ".join(p.out)
 
 
-def section_b_vs_c(summary, questions, runs):
-    bc = need(summary, "b_vs_c")
-    n = need(bc, "questions")
-    diff_b, diff_c = need(bc, "b_right_c_wrong"), need(bc, "c_right_b_wrong")
-    same = need(bc, "both_right") + need(bc, "both_wrong")
-    if same + len(diff_b) + len(diff_c) != n:
-        die("b_vs_c counts do not add up")
-    n_runs = len(need(summary, "runs_per_question"))
-    majority = n_runs // 2 + 1
-    diffs = "".join(f"<li><b>{e(q)}</b>: {e(questions[q]['question'])} {e(warning_line(runs, questions, q))}</li>"
-                    for q in diff_b + diff_c)
-    n_diff = len(diff_b) + len(diff_c)
-    return f"""
-<div class="box">
-<h2>Prose and tags gave similar results.</h2>
-<p>B and C receive the same facts in different formats: sentences and structured tags.
-<b>Majority vote</b> means a setup counts as right on a question when more than half of its runs on
-that question are correct ({majority} of {n_runs}). By majority vote, their scored outcomes agree on
-<b>{same} of {n}</b> questions. The difference:</p>
-<ul>{diffs or "<li>None.</li>"}</ul>
-<p class="muted">The difference is {n_diff} question{"" if n_diff == 1 else "s"}, {n_runs} runs each.
-This small sample does not establish that one format is better. No statistical significance test was
-performed.</p>
-</div>"""
+def banned_words(page):
+    text = page_text(page)
+    return [w for w in BANNED if re.search(rf"\b{re.escape(w)}\b", text, re.I)]
 
 
-HAND_RE = re.compile(r"hand-read by|hand spot-check by")
+def external_links(fragment):
+    return sorted(set(html.unescape(u) for u in re.findall(r'href="(https?://[^"]+)"', fragment)))
 
 
-def source_kind(url):
-    if "sec.gov" in url:
-        return "SEC"
-    if "census.gov" in url:
-        return "Census"
-    if "pageviews" in url or "wikimedia" in url:
-        return "pageviews"
-    if "bls.gov" in url:
-        return "BLS"
-    return "other"
+# ---------- build ----------
+
+@dataclass
+class Result:
+    page: str
+    audit: list
+    links: dict
+    claims: list
+    notes: list
+    pilot: bool
 
 
-def verification_breakdown(vlog, tags):
-    """Hand-checked rows (by their notes) split by source, and whether the Census check is independent."""
-    hand = [r for r in vlog if HAND_RE.search(r["notes"])]
-    by_kind = {}
-    for r in hand:
-        by_kind.setdefault(source_kind(r["source_url"]), []).append(r)
-    if set(by_kind) - {"SEC", "Census", "pageviews"}:
-        die(f"hand-checked rows from unexpected sources {sorted(by_kind)}")
-    sec = by_kind.get("SEC", [])
-    census_file = need(tags.get("macro.food_services_sales") or die("no macro.food_services_sales tag"),
-                       "lineage", "file")
-    census = [r for r in vlog if source_kind(r["source_url"]) == "Census"]
-    if not census or not all(census_file in r["notes"] for r in census):
-        die("Census verification notes do not all name the ingested workbook; page wording needs review")
-    b = {"total": len(vlog), "hand": len(hand), "hand_sec": len(sec),
-         "hand_sec_questions": len({r["question_id"] for r in sec}),
-         "hand_census": len(by_kind.get("Census", [])), "hand_pageviews": len(by_kind.get("pageviews", [])),
-         "census_rows": len(census), "census_file": census_file}
-    b["hand_non_sec"] = b["hand_census"] + b["hand_pageviews"]
-    b["rest"] = b["total"] - b["hand"]
-    print(f"verification_log.csv: {b['total']} rows; hand-checked per notes: {b['hand']} "
-          f"(SEC {b['hand_sec']} rows across {b['hand_sec_questions']} questions; non-SEC "
-          f"{b['hand_non_sec']}: Census {b['hand_census']}, pageviews {b['hand_pageviews']}); "
-          f"rest {b['rest']}. Census rows: {b['census_rows']}, all compared against {census_file}")
-    return b
-
-
-def section_checks(summary, questions, vlog, replays, tags):
-    n_rows = len(vlog)
-    n_yes = sum(r["matches"].strip().lower() == "yes" for r in vlog)
-    vb = verification_breakdown(vlog, tags)
-    verified_q = len({r["question_id"] for r in vlog if r["matches"].strip().lower() == "yes"})
-    per_cat = {}
-    for q in questions.values():
-        per_cat[q["category"]] = per_cat.get(q["category"], 0) + 1
-    qpc = min(per_cat.values()) if len(set(per_cat.values())) == 1 else \
-        f"{min(per_cat.values())}–{max(per_cat.values())}"
-    ciks = {m.group(1) for r in vlog for m in [re.search(r"edgar/data/(\d+)/", r["source_url"])] if m}
-    if not ENGINE_REPLAY.exists():
-        die(f"missing {ENGINE_REPLAY.relative_to(ROOT)}; run followup/engine_fix/replay.py")
-    rp = json.loads(ENGINE_REPLAY.read_text())
-    fmt = {"questions_per_category": qpc, "companies": len(ciks),
-           "results_commit": need(rp, "results_commit"), "replay_calls": need(rp, "hand", "calls"),
-           "replay_identical": need(rp, "hand", "identical")}
-    lims = "".join(f"<li>{e(l.format(**fmt))}</li>" for l in need(replays, "limitations"))
-    notes = []
-    for n in need(summary, "scorer_notes"):
-        by = ", ".join(f"{k} {v}" for k, v in need(n, "flipped_by_setup").items())
-        before, after = need(n, "correct_before"), need(n, "correct_after")
-        rows = "".join(f"<tr><td>{e(k)}</td><td>{before[k]}</td><td>{after[k]}</td></tr>" for k in before)
-        notes.append(f"""
-<h3>Scorer bug, found and fixed before publishing</h3>
-<p>{e(need(n, "description"))}</p>
-<p>The fix (commit <code>{e(need(n, "fix_commit"))}</code>) changed {need(n, "runs_flipped")} runs
-({e(by)}), all on {e(", ".join(need(n, "flipped_questions")))}, all from incorrect to correct.</p>
-<div class="table-wrap"><table><tr><th>Setup</th><th>Correct runs before the fix</th><th>After</th></tr>{rows}</table></div>""")
-    links = need(replays, "links")
-    repo = need(links, "repo")
-    ea_path = need(links, "error_analysis")
-    ea = (f'<a href="{e(Path(ea_path).name)}">Error analysis</a>' if ERROR_ANALYSIS.exists()
-          else f"Error analysis: not written yet ({e(ea_path)}).")
-    return f"""
-<h2>How the answers were checked</h2>
-<ul>
-<li>The answer key was computed with direct SQL in <code>eval/make_questions.py</code>, never with
-<code>semantics.py</code>, so the code being tested did not grade itself.</li>
-<li><code>eval/verification_log.csv</code> has {n_rows} rows covering the {verified_q} questions;
-{n_yes} are marked as matching. The author read {vb["hand"]} of them by hand: {vb["hand_sec"]} SEC
-rows across {vb["hand_sec_questions"]} questions from the filing HTML, {vb["hand_pageviews"]} pageview
-totals in Pageviews Analysis and {vb["hand_census"]} Census months in the live table. The remaining
-{vb["rest"]} rows were compared by script or with AI assistance (SPEC §15, “Verification
-provenance”).</li>
-<li>The {vb["census_rows"]} Census rows were compared against <code>{e(vb["census_file"])}</code>, the
-same downloaded workbook that was ingested, so that comparison is not independent; {vb["hand_census"]}
-Census months were checked by hand in the live table.</li>
-<li>The questions were frozen (git tag <code>questions-frozen</code>) before any evaluation run.</li>
-<li>Total model cost of the run: ${need(summary, "total_cost_usd"):.2f}.</li>
-</ul>
-{''.join(notes)}
-<h3>Limits of this experiment</h3>
-<ul>{lims}</ul>
-<p><a href="{e(repo)}">Repository</a> · {ea}</p>"""
-
-
-def main():
-    summary, questions, tags, vlog, runs, replays, template, ow = load()
-    check_template(template)
-    model = ", ".join(need(summary, "model"))
-    parts = {
-        "INTRO": section_intro(questions, tags, replays),
-        "SECTION_PROBLEM": section_problem(questions, runs, vlog, replays),
-        "SECTION_RESULTS": section_results(summary, questions, ow),
-        "SECTION_REPLAYS": section_replays(runs, questions, vlog, replays, tags),
-        "SECTION_TAGS": section_tags(tags, replays),
-        "SECTION_B_VS_C": section_b_vs_c(summary, questions, runs),
-        "SECTION_CHECKS": section_checks(summary, questions, vlog, replays, tags),
-        "FOOTER": e(f"Generated by report/build_report.py from the recorded runs of {model}. "
-                    "A static page: no model is called."),
-    }
-    page = template
-    for k, v in parts.items():
-        if "{{" + k + "}}" not in page:
+def build(paths=Paths()):
+    ev, template, covered = load(paths)
+    bad = template_digits(template)
+    if bad:
+        die(f"template text contains digits {bad}; numbers must come from the data")
+    bad = prose_digits(ev._data["replays"])
+    if bad:
+        die("replays.yaml prose contains digits: " + "; ".join(bad))
+    summary = ev._data["summary"]
+    pilot = summary.get("pilot") is True or len(covered) < len(ev._data["questions"])
+    page = Page(ev)
+    n_traps = len(need(ev._data["replays"], "traps"))
+    sections = [(sid, name.format(n_traps=word(n_traps).capitalize()), q, b) for sid, name, q, b in SECTIONS]
+    parts, audit, links = {}, [], {}
+    banner = '<div class="pilot-banner" role="alert">PILOT DATA — NOT FINAL</div>' if pilot else ""
+    for sid, name, question, bridge in sections:
+        ev.section = sid
+        body = getattr(page, sid.replace("-", "_"))()
+        bridge = bridge.format(n_traps=word(n_traps), closing=getattr(page, "closing", ""))
+        bridge_html = "" if sid == "next" else f'<p class="bridge">{e(bridge)}</p>'
+        parts[sid] = f'<section id="{sid}" aria-label="{e(name)}">{banner}{body}{bridge_html}</section>'
+        for u in external_links(body):
+            links.setdefault(u, []).append(name)
+        audit.append((name, question, ", ".join(sorted(ev.used.get(sid, []))), bridge))
+    for name, q, files, bridge in audit:
+        if not (name and q and files and bridge):
+            die(f"story audit: section '{name}' has an empty cell")
+    rail = "".join(f'<li><a href="#{sid}">{e(name)}</a></li>' for sid, name, _, _ in sections)
+    out = template
+    fills = {"RAIL": rail, "SECTIONS": "\n".join(parts[s[0]] for s in sections),
+             "PILOT": '<div class="pilot-fixed" aria-hidden="true">PILOT DATA — NOT FINAL</div>' if pilot else "",
+             "DESCRIPTION": e(f"A small experiment: {len(covered)} restaurant-finance questions, four setups, "
+                              f"{', '.join(summary['model'])}."),
+             "DEFAULT_REPLAY": e(ev._data["replays"]["default_replay"])}
+    for k, v in fills.items():
+        if "{{" + k + "}}" not in out:
             die(f"template has no {{{{{k}}}}} placeholder")
-        page = page.replace("{{" + k + "}}", v)
-    left = re.findall(r"\{\{[A-Z_]+\}\}", page)
+        out = out.replace("{{" + k + "}}", v)
+    left = re.findall(r"\{\{[A-Z_]+\}\}", out)
     if left:
         die(f"unfilled placeholders {left}")
-    OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(page)
-    if not ERROR_ANALYSIS.exists():
-        print("note: docs/error_analysis.md does not exist yet; the page says so instead of linking it")
-    print(f"wrote {OUT.relative_to(ROOT)} ({len(page):,} bytes)")
+    found = banned_words(out)
+    if found:
+        die(f"page contains banned words {found}")
+    if re.search(r'(?:href|src)="(?:/|file:|[A-Za-z]:\\)', out) or str(ROOT) in out:
+        die("page contains a local absolute path")
+    if re.search(r"<script[^>]+src=|<link[^>]+href=\"http|fetch\(|XMLHttpRequest", out):
+        die("page loads an external resource or calls fetch")
+    size = len(out.encode())
+    if size > MAX_BYTES:
+        die(f"page is {size:,} bytes, over the {MAX_BYTES:,} byte limit")
+    return Result(out, audit, links, page.claims, page.notes, pilot)
+
+
+def links_text(links):
+    lines = ["# Every distinct external link on docs/index.html, with the section(s) it appears in.",
+             "# Generated by report/build_report.py. Open each one by hand.", ""]
+    for u in sorted(links):
+        lines.append(f"{u}\t{', '.join(dict.fromkeys(links[u]))}")
+    return "\n".join(lines) + "\n"
+
+
+def audit_table(audit):
+    rows = [("Section", "Reader question", "Evidence", "Bridge into next section")] + [tuple(a) for a in audit]
+    out = ["| " + " | ".join(rows[0]) + " |", "|" + "---|" * 4]
+    return "\n".join(out + ["| " + " | ".join(r) + " |" for r in rows[1:]])
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--check", action="store_true", help="build to a temp dir, validate, print the audit")
+    args = ap.parse_args(argv)
+    paths = Paths()
+    try:
+        if args.check:
+            tmp = Path(tempfile.mkdtemp(prefix="build_report_"))
+            paths = replace(paths, out=tmp / "index.html", links=tmp / "links_to_check.txt")
+        res = build(paths)
+    except BuildError as exc:
+        sys.exit(f"build_report: FAILED: {exc}")
+    paths.out.parent.mkdir(parents=True, exist_ok=True)
+    paths.out.write_text(res.page)
+    paths.links.write_text(links_text(res.links))
+    for n in res.notes:
+        print(f"warning: {n}")
+    if res.pilot:
+        print("warning: summary.json is pilot data; every section carries the PILOT DATA banner")
+    print("\nStory audit")
+    print(audit_table(res.audit))
+    print(f"\nwrote {rel(paths.out)} ({len(res.page.encode()):,} bytes) and {rel(paths.links)} "
+          f"({len(res.links)} links)")
 
 
 if __name__ == "__main__":
