@@ -1,6 +1,40 @@
 {
- "method": "Keyword heuristic, not a judgement of each caveat. Runs: warning = true on a question whose expected_behavior is 'answer'. Text: the run's last non-empty model text block (it holds the FINAL line). A run is 'matched' if that text matches the pattern (case-insensitive).",
+ "method": "Keyword heuristic, not a judgement of each caveat. Runs: warning = true on a question whose expected_behavior is 'answer'. Text: the run's last non-empty model text block (it holds the FINAL line). A run is 'matched' if that text matches the pattern (case-insensitive), unless a manual correction in manual_corrections overrides it after reading the full text.",
  "pattern": "accession|filing date|filed date|filing metadata|dated (after|later|in 2026)|later filing|comparative|restat|lineage|source metadata|retrieved_on",
+ "manual_corrections": [
+  {
+   "setup": "A",
+   "question_id": "q011",
+   "run": 2,
+   "matched": false,
+   "reason": "Keyword hit is a negation ('no duplicate or restated values'); the caveat is that the two fiscal year-ends differ by four days.",
+   "keyword_result": true
+  },
+  {
+   "setup": "A",
+   "question_id": "q013",
+   "run": 3,
+   "matched": true,
+   "reason": "Caveat: 'the six-month filing is dated 2026-08-05, which is after the Q3 filing and looks like a data error'; the pattern misses 'filing is dated'.",
+   "keyword_result": false
+  },
+  {
+   "setup": "C",
+   "question_id": "q003",
+   "run": 3,
+   "matched": false,
+   "reason": "Keyword hit is an accession citation; the caveat is that the year-end jump in total assets is larger than the prior trend.",
+   "keyword_result": true
+  },
+  {
+   "setup": "C",
+   "question_id": "q016",
+   "run": 2,
+   "matched": true,
+   "reason": "Caveat: 'the source filings were filed in late 2025 and March 2026, which is later than a normal filing schedule would suggest'.",
+   "keyword_result": false
+  }
+ ],
  "setups": {
   "A": {
    "warning_runs": 34,
@@ -18,12 +52,6 @@
      "run": 3,
      "keyword": "filing date",
      "sentence": "The filing dates in the table are inconsistent."
-    },
-    {
-     "question_id": "q011",
-     "run": 2,
-     "keyword": "restat",
-     "sentence": "Each company has one record per period, so there were no duplicate or restated values to choose between."
     },
     {
      "question_id": "q011",
@@ -60,6 +88,11 @@
      "run": 2,
      "keyword": "filing date",
      "sentence": "Two things to be aware of: the figure is derived rather than reported directly, and some filing dates in the table look inconsistent (for example, the six-month 10-Q is dated August 2026), so the source metadata should be checked against the filings."
+    },
+    {
+     "question_id": "q013",
+     "run": 3,
+     "manual_correction": "Caveat: 'the six-month filing is dated 2026-08-05, which is after the Q3 filing and looks like a data error'; the pattern misses 'filing is dated'."
     },
     {
      "question_id": "q014",
@@ -164,8 +197,11 @@
      "run": 1
     },
     {
-     "question_id": "q013",
-     "run": 3
+     "question_id": "q011",
+     "run": 2,
+     "keyword": "restat",
+     "sentence": "Each company has one record per period, so there were no duplicate or restated values to choose between.",
+     "manual_correction": "Keyword hit is a negation ('no duplicate or restated values'); the caveat is that the two fiscal year-ends differ by four days."
     },
     {
      "question_id": "q022",
@@ -265,12 +301,6 @@
    "unmatched": 1,
    "matched_runs": [
     {
-     "question_id": "q003",
-     "run": 3,
-     "keyword": "accession",
-     "sentence": "This comes from the 10-K filed 2026-02-20 (accession 0001041061-26-000084)."
-    },
-    {
      "question_id": "q007",
      "run": 1,
      "keyword": "filing date",
@@ -350,6 +380,11 @@
     },
     {
      "question_id": "q016",
+     "run": 2,
+     "manual_correction": "Caveat: 'the source filings were filed in late 2025 and March 2026, which is later than a normal filing schedule would suggest'."
+    },
+    {
+     "question_id": "q016",
      "run": 3,
      "keyword": "filing date",
      "sentence": "The filing dates in the source rows look unusual."
@@ -375,8 +410,11 @@
    ],
    "unmatched_runs": [
     {
-     "question_id": "q016",
-     "run": 2
+     "question_id": "q003",
+     "run": 3,
+     "keyword": "accession",
+     "sentence": "This comes from the 10-K filed 2026-02-20 (accession 0001041061-26-000084).",
+     "manual_correction": "Keyword hit is an accession citation; the caveat is that the year-end jump in total assets is larger than the prior trend."
     }
    ]
   },
@@ -427,5 +465,6 @@
     }
    ]
   }
- }
+ },
+ "n_manual_corrections": 4
 }

@@ -6,9 +6,13 @@ last non-empty text block, which holds the FINAL line) matches PATTERN, a fixed 
 refer to filing dates, accession numbers, comparatives or retrieval metadata.
 
 This is a keyword heuristic, not a judgement of each caveat: a match means the text mentions one of
-these words, not that the warning is about them alone, and a non-match is not checked further.
+these words, not that the warning is about them alone. report/over_warning_overrides.json lists
+manual corrections: runs whose full final text was read and found to be misclassified by the
+pattern. Each correction is applied and recorded in the output; a correction that does not change
+the keyword result, or names a run that is not a warning run, fails the script.
 
-Reads eval/results/{A,B,C,D}.jsonl and eval/questions.yaml. Writes report/over_warning_reasons.json.
+Reads eval/results/{A,B,C,D}.jsonl, eval/questions.yaml and report/over_warning_overrides.json.
+Writes report/over_warning_reasons.json.
 Fails if its run counts differ from the over_warning_runs recorded in eval/results/summary.json.
 
 Run: python report/analyze_over_warnings.py
@@ -26,6 +30,7 @@ RESULTS = ROOT / "eval" / "results"
 QUESTIONS = ROOT / "eval" / "questions.yaml"
 SUMMARY = RESULTS / "summary.json"
 OUT = ROOT / "report" / "over_warning_reasons.json"
+OVERRIDES = ROOT / "report" / "over_warning_overrides.json"
 SETUPS = ["A", "B", "C", "D"]
 
 PATTERN = (r"accession|filing date|filed date|filing metadata|dated (after|later|in 2026)|later filing"
@@ -51,11 +56,14 @@ def matched_sentence(text):
 def main():
     questions = {q["id"]: q for q in yaml.safe_load(QUESTIONS.read_text())}
     summary = json.loads(SUMMARY.read_text())
+    overrides = {(o["setup"], o["question_id"], o["run"]): o for o in json.loads(OVERRIDES.read_text())}
+    used = set()
     out = {"method": ("Keyword heuristic, not a judgement of each caveat. Runs: warning = true on a "
                       "question whose expected_behavior is 'answer'. Text: the run's last non-empty "
                       "model text block (it holds the FINAL line). A run is 'matched' if that text "
-                      "matches the pattern (case-insensitive)."),
-           "pattern": PATTERN, "setups": {}}
+                      "matches the pattern (case-insensitive), unless a manual correction in "
+                      "manual_corrections overrides it after reading the full text."),
+           "pattern": PATTERN, "manual_corrections": [], "setups": {}}
     for s in SETUPS:
         runs = {}
         for line in (RESULTS / f"{s}.jsonl").read_text().splitlines():
@@ -71,16 +79,29 @@ def main():
             sentence, word = matched_sentence(final_text(r))
             row = {"question_id": qid, "run": run}
             if sentence:
-                matched.append({**row, "keyword": word, "sentence": sentence})
-            else:
-                unmatched.append(row)
+                row.update(keyword=word, sentence=sentence)
+            is_match = sentence is not None
+            o = overrides.get((s, qid, run))
+            if o:
+                if o["matched"] == is_match:
+                    sys.exit(f"override {s} {qid} run {run} does not change the keyword result")
+                used.add((s, qid, run))
+                is_match = o["matched"]
+                row.update(manual_correction=o["reason"])
+                out["manual_corrections"].append({**o, "keyword_result": sentence is not None})
+            (matched if is_match else unmatched).append(row)
         n = len(matched) + len(unmatched)
         recorded = summary["setups"][s]["over_warning_runs"]
         if n != recorded:
             sys.exit(f"{s}: {n} warning runs on answer questions, summary.json records {recorded}")
         out["setups"][s] = {"warning_runs": n, "matched": len(matched), "unmatched": len(unmatched),
                             "matched_runs": matched, "unmatched_runs": unmatched}
-        print(f"{s}: {len(matched)} of {n} warning runs match the pattern")
+        print(f"{s}: {len(matched)} of {n} warning runs matched (keyword match plus manual corrections)")
+    unused = set(overrides) - used
+    if unused:
+        sys.exit(f"overrides name runs that are not warning runs on answer questions: {sorted(unused)}")
+    out["n_manual_corrections"] = len(out["manual_corrections"])
+    print(f"manual corrections applied: {out['n_manual_corrections']}")
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")
     print(f"wrote {OUT.relative_to(ROOT)}")
 

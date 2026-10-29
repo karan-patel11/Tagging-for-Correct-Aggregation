@@ -198,10 +198,11 @@ def section_intro(questions, tags, replays):
     return f"""
 <p class="lede">One model answered the same restaurant-finance questions in four setups. This page
 replays the recorded runs. It does not call a model.</p>
+<p class="lede"><b>Tag:</b> a rule attached to a metric, kept in <code>tags/tags.yaml</code>. For
+example, the <code>total_assets</code> tag sets <code>{e(rule)}</code> and reads: “{e(need(t, "derivation"))}”
+In plain terms: a balance; never sum it across quarters.</p>
+<details class="glossary"><summary>Terms used on this page</summary>
 <dl class="defs">
-<dt>Tag</dt><dd>A rule attached to a metric, kept in <code>tags/tags.yaml</code>. For example, the
-<code>total_assets</code> tag sets <code>{e(rule)}</code> and reads: “{e(need(t, "derivation"))}” In
-plain terms: a balance; never sum it across quarters.</dd>
 <dt>Setups</dt><dd>A sees only the table schema. B gets prose sentences generated from the tags. C
 gets the tags file itself. D gets semantic tools that apply the tags, and no SQL.</dd>
 <dt>Expected behaviour</dt><dd>Each question's answer key expects one of three: {behaviours}.</dd>
@@ -212,7 +213,7 @@ gets the tags file itself. D gets semantic tools that apply the tags, and no SQL
 of four quarter-end balances. A run hits the trap when its number lands within tolerance of it.</dd>
 <dt>Correct</dt><dd>The run's behaviour matches the key and, unless the key expects a refusal, its
 number is within a per-unit tolerance defined in <a href="{e(score_link)}">eval/score.py</a>.</dd>
-</dl>"""
+</dl></details>"""
 
 
 def section_problem(questions, runs, vlog, replays):
@@ -281,6 +282,13 @@ def section_results(summary, questions, ow):
     n_traps = sum(len(q.get("trap_answers") or {}) for q in questions.values()
                   if q["expected_behavior"] != "refuse")
     ow_setups = need(ow, "setups")
+    n_corr = need(ow, "n_manual_corrections")
+    if n_corr != len(need(ow, "manual_corrections")):
+        die("over_warning_reasons.json: n_manual_corrections does not match its list")
+    method = f"keyword match plus {n_corr} manual correction{'' if n_corr == 1 else 's'}"
+    heads = ["Setup", "Tools", "Correct runs", "Accuracy (run range)", "Stored-trap hits / trap checks*",
+             f"{OW_LABEL} / runs on those questions",
+             f"Of those warnings, cite filing dates or metadata ({method})"]
     acc_rows, ow_rows, table = [], [], []
     matched_total = ow_total = 0
     for s in score.SETUPS:
@@ -302,11 +310,12 @@ def section_results(summary, questions, ow):
         label = f"{s} · {SETUP_NAMES[s]}"
         acc_rows.append((label, mean, lo, hi, pct(mean)))
         ow_rows.append((label, ow_r, None, None, pct(ow_r)))
-        table.append(f"<tr><td>{e(label)}</td><td>{e(SETUP_TOOLS[s])}</td>"
-                     f"<td>{need(v, 'correct_runs')} / {need(v, 'n')}</td>"
-                     f"<td>{e(pct(mean))} <span class='muted'>(runs {e(pct(lo))}–{e(pct(hi))})</span></td>"
-                     f"<td>{hits} / {trap_checks}</td><td>{ow_n} / {ow_d} ({e(pct(ow_r))})</td>"
-                     f"<td>{matched} / {ow_n}</td></tr>")
+        cells = [f"{e(SETUP_TOOLS[s])}", f"{need(v, 'correct_runs')} / {need(v, 'n')}",
+                 f"{e(pct(mean))} <span class='muted'>(runs {e(pct(lo))}–{e(pct(hi))})</span>",
+                 f"{hits} / {trap_checks}", f"{ow_n} / {ow_d} ({e(pct(ow_r))})", f"{matched} / {ow_n}"]
+        table.append(f"<tr><th scope='row'>{e(label)}</th>"
+                     + "".join(f'<td data-label="{e(h)}"><span>{c}</span></td>' for h, c in zip(heads[1:], cells))
+                     + "</tr>")
     if 2 * matched_total <= ow_total:
         die(f"only {matched_total} of {ow_total} warning runs match the keyword pattern; "
             "the page text says most do")
@@ -319,25 +328,26 @@ The axis starts at zero.</p>
 <p>The setups differ by a few runs each. That is too few to rank them on this sample. Warning rates
 differ more than accuracy; they are shown below.</p>
 {bars(acc_rows, True)}
-<div class="table-wrap"><table>
-<tr><th>Setup</th><th>Tools</th><th>Correct runs</th><th>Accuracy (run range)</th>
-<th>Stored-trap hits / trap checks<sup>*</sup></th><th>{e(OW_LABEL)} / runs on those questions</th>
-<th>Of those warnings, cite filing dates or metadata (keyword match)</th></tr>
-{''.join(table)}
+<div class="table-wrap"><table class="stack">
+<thead><tr>{"".join(f'<th scope="col">{e(h)}</th>' for h in heads)}</tr></thead>
+<tbody>{''.join(table)}</tbody>
 </table></div>
 <p class="small muted"><sup>*</sup> A run on a question with several stored traps is checked once per
 trap: {n_traps} stored traps × {n_runs} runs = {n_traps * n_runs} trap checks per setup, against
 {n_setup} runs per setup.</p>
 <h3 style="margin-top:20px">Secondary metric: {e(OW_LABEL.lower())}</h3>
 <p class="muted">Runs that set warning=true on a question whose answer key expects a plain answer.
-Most of these cite stored filing dates or retrieval metadata (keyword match, counts in the table).
+Most of these cite stored filing dates or retrieval metadata ({e(method)}, listed in the JSON;
+counts in the table).
 The dataset keeps the latest-filed value, so prior-year figures carry later filings' dates; the
 models flagged that. These are not scored as errors, and the metric does not show that any setup
 hedges more or less well.</p>
 {bars(ow_rows, False)}
-<p class="small muted">The keyword match is a heuristic over each run's final text
-(<code>report/analyze_over_warnings.py</code>, pattern and run lists in
-<code>report/over_warning_reasons.json</code>); it does not judge each caveat.</p>"""
+<p class="small muted">Classification: {e(method)} (listed in the JSON). The keyword match is a
+heuristic over each run's final text (<code>report/analyze_over_warnings.py</code>); the manual
+corrections are runs whose full text was read and found misclassified
+(<code>report/over_warning_overrides.json</code>). Pattern, corrections and run lists are in
+<code>report/over_warning_reasons.json</code>. It does not judge each caveat.</p>"""
 
 
 def render_steps(rec):

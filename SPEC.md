@@ -1011,7 +1011,7 @@ Rules for this repo:
 - 2026-10-28: Runs: 3 per question per setup (504 in total); cost $0.4274.
 - 2026-10-28: Scoring rules fixed before results: a warning on an "answer" question is not scored incorrect; units naming thousands, millions or billions are converted before comparison; answer_with_warning also requires refused=false.
 - 2026-10-28: Null-result rule: if setups are close, report per-category results, failures, warning rates and cost, and claim neither that tags help nor that they do not.
-- 2026-10-28: Warnings on "answer" questions (over-warning): by a keyword heuristic (report/analyze_over_warnings.py, counts in report/over_warning_reasons.json), most cite stored filing dates, accession numbers or retrieval metadata (A 25/34, B 9/9, C 18/19, D 5/7). The dataset keeps the latest-filed row for duration facts, so prior-year values carry later filings' dates; the models flagged that. These are not scored as errors; the metric does not show that any setup hedges more or less well. q017 (A run 2, the only stored-trap hit): A read the question as asking for the full year, although the question names the 14-week quarter; it wrote that "the full year is the figure you asked about", gave the derived Q4 only as a cross-check, and put the full-year figure in FINAL. The full-year row is stored with fiscal_quarter 4.
+- 2026-10-28: Warnings on "answer" questions (over-warning): by keyword match plus 4 manual corrections (listed in the JSON; report/analyze_over_warnings.py, report/over_warning_overrides.json, counts in report/over_warning_reasons.json), most cite stored filing dates, accession numbers or retrieval metadata (A 25/34, B 9/9, C 18/19, D 5/7). The dataset keeps the latest-filed row for duration facts, so prior-year values carry later filings' dates; the models flagged that. These are not scored as errors; the metric does not show that any setup hedges more or less well. q017 (A run 2, the only stored-trap hit): A read the question as asking for the full year, although the question names the 14-week quarter; it wrote that "the full year is the figure you asked about", gave the derived Q4 only as a cross-check, and put the full-year figure in FINAL. The full-year row is stored with fiscal_quarter 4.
 
 
 **Open questions to decide during the build (record answers here):**
@@ -1022,7 +1022,7 @@ Rules for this repo:
 - Whether Darden's fiscal 2026 is a 53-week year.
 - 3 runs or 2, after the pilot.
 
-**Pre-send checklist (<SEND_DATE>):**
+**Pre-send checklist (Friday, October 30, 2026):**
 
 - [ ] Recipient's name spelled correctly (check the calendar invite or the recruiter's email).
 - [ ] Every number in the email matches `summary.md`.
@@ -1034,4 +1034,4 @@ Rules for this repo:
 - [ ] Video is under 2:30 and the filing link works on camera.
 - [ ] Language is modest: a small experiment, no claims about Jefferies' internal systems.
 - [ ] You have re-run the quickstart from a fresh clone.
-- [ ] Sent once, on <SEND_DATE>, Eastern Time.
+- [ ] Sent once, on Friday, October 30, 2026, Eastern Time.

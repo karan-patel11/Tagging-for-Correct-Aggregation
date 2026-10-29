@@ -32,3 +32,11 @@ def test_over_warning_counts_match_summary():
 
 def test_key_expands_id_ranges():
     assert build_key.mentioned_ids("see q022–q024 and q030") == {"q022", "q023", "q024", "q030"}
+
+
+def test_manual_corrections_are_recorded():
+    data = json.loads((ROOT / "report" / "over_warning_reasons.json").read_text())
+    overrides = json.loads((ROOT / "report" / "over_warning_overrides.json").read_text())
+    assert data["n_manual_corrections"] == len(overrides) == len(data["manual_corrections"])
+    for c in data["manual_corrections"]:
+        assert c["matched"] != c["keyword_result"]
