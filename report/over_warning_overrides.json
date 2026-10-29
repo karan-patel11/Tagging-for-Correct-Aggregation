@@ -1,0 +1,10 @@
+[
+ {"setup": "A", "question_id": "q011", "run": 2, "matched": false,
+  "reason": "Keyword hit is a negation ('no duplicate or restated values'); the caveat is that the two fiscal year-ends differ by four days."},
+ {"setup": "C", "question_id": "q003", "run": 3, "matched": false,
+  "reason": "Keyword hit is an accession citation; the caveat is that the year-end jump in total assets is larger than the prior trend."},
+ {"setup": "A", "question_id": "q013", "run": 3, "matched": true,
+  "reason": "Caveat: 'the six-month filing is dated 2026-08-05, which is after the Q3 filing and looks like a data error'; the pattern misses 'filing is dated'."},
+ {"setup": "C", "question_id": "q016", "run": 2, "matched": true,
+  "reason": "Caveat: 'the source filings were filed in late 2025 and March 2026, which is later than a normal filing schedule would suggest'."}
+]

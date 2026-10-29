@@ -6,7 +6,7 @@ SQL that runs without error can still answer the wrong question about financial 
 
 - Accuracy was close across setups: A 96.8%, B 100.0%, C 98.4%, D 98.4% of 126 runs each. The sample is too small to rank them.
 - One stored-trap hit in 504 runs (A, q017 run 2).
-- Runs that set warning=true on questions whose answer key expects no caveat: A 34, B 9, C 19, D 7 of 102 each. Most cite stored filing dates or retrieval metadata (keyword match); they are not scored as errors, and the metric does not show that any setup hedges more or less well.
+- Runs that set warning=true on questions whose answer key expects no caveat: A 34, B 9, C 19, D 7 of 102 each. Most cite stored filing dates or retrieval metadata (keyword match plus 4 manual corrections, listed in the JSON: [report/over_warning_reasons.json](report/over_warning_reasons.json)); they are not scored as errors, and the metric does not show that any setup hedges more or less well.
 
 **Links:** [results page (docs/index.html)](docs/index.html) · [live page](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/) · video: TODO: video link · [results summary](eval/results/summary.md) · [error analysis](docs/error_analysis.md) · [terms and question texts](docs/key.md)
 
