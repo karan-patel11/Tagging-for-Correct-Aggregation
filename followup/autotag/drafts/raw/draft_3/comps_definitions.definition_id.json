@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.definition_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:02:10+00:00",
+ "seconds": 6.17,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1459,
+  "output_tokens": 744,
+  "output_tokens_details": {
+   "thinking_tokens": 344
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010431,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrztsRvgeZKiXdMPriQ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company metric definition (one per ticker)\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"Company 10-K filings (SEC EDGAR)\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}\"\n  },\n  \"description\": \"Key identifying which company's 10-K definition of its comparable/same-store sales metric applies (e.g., WING_10K, DRI_10K, CMG_10K). Each value links to a definition_text and source filing. The definitions differ in store-base criteria (52 weeks, 16 months, 13 months), scope (domestic vs. company-owned) and exclusions, so metrics should only be compared within the same definition_id.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1459,
+   "output_tokens": 744,
+   "output_tokens_details": {
+    "thinking_tokens": 344
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

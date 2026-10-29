@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.date",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:44+00:00",
+ "seconds": 7.72,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1158,
+  "output_tokens": 894,
+  "output_tokens_details": {
+   "thinking_tokens": 514
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.011329,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqWvDPeBgGCc8U9ijD3",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau Monthly Retail Trade (series CENSUS_722_SA) and BLS CPI-U (series CUSR0000SEFV), as listed in the vendor source file headers\"\n  },\n  \"description\": \"Reference month of each observation, stored as the first day of the calendar month (for example 2026-01-01 means January 2026). It is a time dimension shared by all series in macro_monthly. It has 33 distinct months, from 2024-01-01 to 2026-09-01, and no nulls. It is not a measure and should not be aggregated. Use it only to order, filter or group observations by month.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1158,
+   "output_tokens": 894,
+   "output_tokens_details": {
+    "thinking_tokens": 514
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

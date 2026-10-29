@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.date",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:55+00:00",
+ "seconds": 6.71,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1158,
+  "output_tokens": 779,
+  "output_tokens_details": {
+   "thinking_tokens": 442
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010179,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVruLZqm9khx36xqbJE3",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Reference month of each observation in the macro_monthly table, stored as a DATE on the first day of the month (e.g. 2026-01-01 means January 2026). It is the time key for each series_id, which here includes the Census Bureau monthly retail trade series CENSUS_722_SA and the CPI-U series CUSR0000SEFV. Values span 2024-01-01 to 2026-09-01, with no nulls. It is a label for grouping or ordering observations and should not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1158,
+   "output_tokens": 779,
+   "output_tokens_details": {
+    "thinking_tokens": 442
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

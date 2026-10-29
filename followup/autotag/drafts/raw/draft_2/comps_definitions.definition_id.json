@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.definition_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:56:25+00:00",
+ "seconds": 7.14,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1459,
+  "output_tokens": 829,
+  "output_tokens_details": {
+   "thinking_tokens": 418
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.011281,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrZV42134mqjXizND1f",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company comparable-sales definition (one row per ticker and 10-K definition)\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}.htm\"\n  },\n  \"description\": \"Key for a company's same-store or comparable-sales definition, as written in its 10-K (e.g. WING_10K, DRI_10K, CMG_10K). Each value is unique and links a comps metric to the definition text in comps_definitions. The definitions differ by company in store-eligibility window (52 weeks, 16 months, 13 months), scope and exclusions. Use it only as a join key or label. Do not aggregate it, and do not compare comps across different definition_ids as if they were the same measure.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1459,
+   "output_tokens": 829,
+   "output_tokens_details": {
+    "thinking_tokens": 418
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

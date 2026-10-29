@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.definition_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:02:57+00:00",
+ "seconds": 7.56,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2161,
+  "output_tokens": 765,
+  "output_tokens_details": {
+   "thinking_tokens": 448
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012045,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs4Kqgz2PQ4y71jUEfH",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {},\n  \"description\": \"Key identifying which company-specific definition of comparable/same-restaurant sales (CMG_10K, DRI_10K, WING_10K) applies to each comp_sales_pct row. The definitions differ by company, for example in the minimum restaurant age and the restaurant base. Values are comparable only between rows that share the same definition_id. The definition text and its source filing URL are in the vendor's company_metric_definitions.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2161,
+   "output_tokens": 765,
+   "output_tokens_details": {
+    "thinking_tokens": 448
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

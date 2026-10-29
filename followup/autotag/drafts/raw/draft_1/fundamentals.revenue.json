@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.revenue",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:41:55+00:00",
+ "seconds": 9.79,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2384,
+  "output_tokens": 1332,
+  "output_tokens_details": {
+   "thinking_tokens": 728
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.018161,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqTHwVkf8Zj6BvTsnB2",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQSzRMKEAgTGAI4AUIIdGhpbmtpbmcSDE5spYpRvhvvP34FaxoMHPzdva/zc41yRDzHIjAWrVOdgbMvwuLe5yZ0/amblDGPrP3bqf8iXYnSz3vF3fn9XozWpC3632TUa8cBMM8q6hL/vSue6nHy6NDwNY2zNkgdjBQlcyUROinCtfTNukRFxXC5tWMCQ7ZZmn9HpD1DFkO/J2taB6DL+MMet/QlHhupJT1fnCtVuXKlI336z7rSWm623oLrwS2A9vF69RjsOUIwMlwbLQZgosuPmcIpGtja9DZdKjPC7SA3vcRkMNieQg+go/sGoPFB89oMBG6KTSzhhfyDK4CwB3XeJx6ijXfYXPCrn/yyyyBt55NB9zJy8SW5Bo2NNEtvNA4cw2YuJipv5+QEn3t8HTPh9U07vH6lCXbsYShZPQLXrXGoaXtUNCGECVXFAEIpaYnQr6qC2kTcldzB6XpvygPQ0xBv2s4y9QkHNiuhfag9011X/QS0+Wee3LDFXjLtkbpr8frbje8IGupi72kDm50YbOiGYybHoPYk7Cx8XoW1Xxa2LP4vUcDCPHtwaqhloE9uTb9okGZ1Dd2C4EB9iBYQQXTd9M3uE6ojDrzJ3ftn3D5JaKBWCMyWDVd98agWlP6CUUuYmBRXe1bvOJfvs8qGNLXY5qnHdTggvll8cKk5+oWXKs32KRxV0kDykbaNpE3w84uuCu1PF7rhmCYWV8iy2CpnCqutYyDUpnYaIsZ8UWx5BIMxmdFzoxLJZX+wlJcwmc+MfOpzvsRCXRkXMssLpMR3tIaxhXPvyNToM0O6EklGotCUlCJnEjfajzC3zi57RUPh1JZogU3SxbO8AGwWeXxr5EN9w6Zs/5GJfuVBepoizNSea+sVSYzEpLRX4ISUphCVZ1VYewPTLzEhFpem1glHM/zx93aestWJTSTS6w2a5caHdrxyKAG1cOg2mVrex5Zo/P8DGTjEsesS4JMTxxQWvohdNgKx/vwoeMq1bBULS37fCv5GqtBk2xNHbew4qAb9nsYvjcJtlx5I8cnoHgndRih/eAbHhRycJlo6L1nTSsVpxZt8xMueiL00Z7ThtlCKqPevQZRc0uHKQ/MIThvWmtOfp27sqnXqyCgDlJVHnE3zcK5wF8fRY37dxoPuFdHDVK2nl2i9ePFG+DSZczWBEOLfuOE9VkfVR1RCS7sYiFY1/xFeffBXf0StZUChYW4lU9qKItukOUrNO1hhx2/yYz6EwkOB3SlQVNbGcCLWIUjSn2y2XX4Zzc/nrE35BM7+t676JorhHw6OfFz3fFExwvWUtrUjT4/sKOQEKoPvF7/Mxtklv84ii0KzEG9kqNEqE5zklvduU6ygNrz0PG5TKE6JkGPsprIdCu1gutJEMtKE3jiBBGGnfNJRVlp6oL6ZKvAlvp2qULfGi8cpAnsusLrO8ZCeh4lh2VsOe0pXRIw8i3yq3rv6bFbtUmXfPR4sdgriV4NG6FeCtllBSFkwvgoE/oza9Oc/cOYq7C+qDrd3oHHa/5PApNVDO0N9tKojCbLdKcVkmDMPxUIwO0XZUeo8sfxEeSxJsrlS02lP2EOLgNt0ArHt8oUZNkoBS/nJIafKvbnCWKF+Ur5rMnLFG4cMjITZcbxA0SQ81pO4mN50BNFcAxQypzgjo7SKfEDzOAkKbbl3rsgeMbT4a3x25xoZaP9e0MLp7QXmmlPcagrzkxvVPlEaCke0MuwDvqOErqmtwZOac21spMWNHT/G4QpZ1B7DwL6aQZEKq0pWs75pQKeQwSFDTvZP+cynfZtCba/l575aP5qGqlcJxGy43cmOpOnbZJw0HGT6booRrhzaxualUKJQbJ/LWDmqUSfixV9hJD9GfJdfaE8/xyiGTIkB3u+SSdihM5WMlXz5udD/OQlt+zg2EuvZz73GaGLAUSGIRXwGjHrcbtehpdthhOWCaUwnSyKpr+1N1UCsdR/NdYU5Xuda9xWi5uladb2Zo/HHWYir9JklAWsxAykqHS1zU0LbpovNYNwAcjsQ19THw/nAjoLTpkbiqF3UUXn/pUE/pqZ0CmAYrEF4rnFB4Ce14iIQ6ZcqoShBU0aQx5XJFZY6GaPWqJN1AzpmsFBFOEwvH45p4+8wc+MdJf8MMDIA/c2PDZAl3W/ZfvzEf3PKllmVsXwBjym/Nz1K05ZAxCP76g0LEC86mQ5QXgxcfgJGZXdA3zDVyvhZKv1gHdFMiq1VeqhkJCXYDsnFKGqWlmVgOSsc9N2dk2nyvPcPjBY/NlxAr4TkTgwqPDxZ2UXFzLA9CjTJlNyxEYgBaZ+tPI/kuGpKGq8x3/ILUSNmQakNkLihCxouoytqRaikMwx/rroJpoqnP695vLQuJ7oqgu78lfqW5lixOVZoxNCfKf5LZwoxsqmik9K+z2Ue2Z5TW33nntBMqGgPq761J9E5qpycEZeNQ7b06weMQRzXgtI0Ysw7LQMqo0PNQOCpgbs2F1wmsX82BzHOt3JZuVkT4vX0bH3AtvwoJAvpO/gjHUR+/Uksebr53iERBoTJmMgOIQC2MQf1fBFTbGq857RiMXlt9NGDejF/F85DrQ6PWS37iR+IxJC53DjkVbQdxyJV3rPxRzvLp/CNzpGTjVkoQ7F+tVzqvwx3jB79JLlacURlQNi3jciPLEPVj03HDCLlxhJKmHRpwYzVEUV2ndjNzOpPlhZ1opKVqNlCwyOn/FWKV58JkBe/W28M6+bpXG8D03qVvVXLiWwId9uVmvq87egiC01VeqYEqnnQz5UMsHa+sol3xKNhs6A5c9Sgn2w6oi9S9rVbEUUS58sSvK0Fz28/1rxiry1G+sIOszOzOy+cuRpYpto0YfRZHLEUrizRcjXSekyn3J0b/g8ohGbzoSn/n7aUZXzGxTCkhgCIwjQcRIstxJCTGOmZSkib3C1mnHYYz3TQyCkjE9XhQaRanKEvLILhKSCEl7c0Cy8y4hn1/ghA9zNiUkZlh8MnhyE/Q9nHGN9eDjEcLXPzCWhNjp5B0hmNRira6A3yf+pyhP3hQMxxna0TlY1jbaHpPNTq+F17Hy7VO/S07kwwa4d3lLHJ1xmpm6y+6nRXn2F8Oi/GwhZCqQL9CQSbl9pr+Odv5qKop+GBr0eIlVADyfbbllgcTCpWifkTEapcNFUVBTX/UzPVq/zu/9Hl1fjR17zCLoiGx63JqcMwGqOxw1GgnvyK78OunchJwsGvwuF2tJEw11cL3m52xylY1rq+L78XEIMV/Rda3/BogJ28jbmbnvciLXa8Jgr4Vcoe1agTS0aZA6hmSoO1oospDQGPf6+5iqukl2HCfFYm3sqNik4VHVvgq8xGHrZRsTlGGAE=",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Taken as reported from SEC XBRL company facts (us-gaap Revenues or RevenueFromContractWithCustomerExcludingAssessedTax, depending on filer). Rows are discrete quarters (Q), cumulative year-to-date values (YTD6, YTD9) and full-year values (FY) from 10-K filings. The YTD and FY rows overlap the quarterly rows, so summing across all rows would double count. Sum over time only after filtering to a single period_basis.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Reported revenue in USD per company and fiscal period, from SEC filings (10-Q and 10-K). The period_basis field (Q, YTD6, YTD9, FY) shows whether a value covers one quarter, a cumulative year-to-date span or a full year. Fiscal calendars differ by company (e.g. DRI's year ends in May), and the XBRL concept differs by filer, so compare values only across rows with the same concept and period_basis.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2384,
+   "output_tokens": 1332,
+   "output_tokens_details": {
+    "thinking_tokens": 728
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

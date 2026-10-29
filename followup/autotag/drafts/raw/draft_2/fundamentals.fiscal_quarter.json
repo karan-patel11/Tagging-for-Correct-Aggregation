@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.fiscal_quarter",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:58:32+00:00",
+ "seconds": 7.45,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2468,
+  "output_tokens": 910,
+  "output_tokens_details": {
+   "thinking_tokens": 484
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014109,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrioxZ2vkU1xaNsKQBw",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": \"fiscal_quarter -> fiscal_year\",\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Fiscal quarter number (1-4) of the filing company's own fiscal year, to be read together with fiscal_year. It is a categorical label for grouping and filtering, not a measure, so it should not be summed or averaged. Quarter 4 also appears on full-year (FY) facts from 10-K filings. Fiscal calendars differ by company (for example DRI's fiscal year ends in May), so the same quarter number does not cover the same calendar months across tickers.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2468,
+   "output_tokens": 910,
+   "output_tokens_details": {
+    "thinking_tokens": 484
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

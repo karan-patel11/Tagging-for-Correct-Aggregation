@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.concept",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:51+00:00",
+ "seconds": 10.33,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2605,
+  "output_tokens": 1008,
+  "output_tokens_details": {
+   "thinking_tokens": 501
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015363,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqJBo9Jnm6uWPucwaVC",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"US-GAAP XBRL concept name taken from the SEC companyfacts record for each fact. The warehouse 'metric' column is mapped to it.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label holding the XBRL concept (tag) name under which each fundamentals value was reported, for example NetIncomeLoss, EarningsPerShareDiluted or OperatingIncomeLoss. It has 9 distinct values and no nulls. It is a grouping and filtering key, not a measure, so it should never be aggregated. Some metrics can be reported under more than one concept: Revenues and RevenueFromContractWithCustomerExcludingAssessedTax, and the operating cash flow concept with or without ContinuingOperations. Check which concept a value comes from before combining values across companies or periods.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2605,
+   "output_tokens": 1008,
+   "output_tokens_details": {
+    "thinking_tokens": 501
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

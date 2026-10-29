@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.date",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:01:31+00:00",
+ "seconds": 7.01,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2326,
+  "output_tokens": 804,
+  "output_tokens_details": {
+   "thinking_tokens": 402
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012765,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrx15QTZ2cd2uxTsJYr",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"daily\",\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user, daily)\",\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/{start_date}/{end_date}\"\n  },\n  \"description\": \"Day on which the page views were recorded, as a DATE. It is the daily time key of brand_attention_daily and has one row per article per day. The data runs from 2024-01-01 to 2025-12-31, with 731 distinct dates and no nulls. It is a dimension for grouping and filtering. It is not a measure and is not aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2326,
+   "output_tokens": 804,
+   "output_tokens_details": {
+    "thinking_tokens": 402
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

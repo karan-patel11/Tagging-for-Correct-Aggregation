@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_end",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:41:37+00:00",
+ "seconds": 8.2,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2407,
+  "output_tokens": 1012,
+  "output_tokens_details": {
+   "thinking_tokens": 542
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015007,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqRy3RA73pM3f4rZY7Y",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"End date of the reporting period for each XBRL fact, as reported in the SEC companyfacts filing. It is the balance-sheet date for instant facts and the last day of the quarter or year-to-date window for duration facts.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\"\n  },\n  \"description\": \"Date on which the reporting period of a fundamentals fact ends. It is a time dimension and is not meant to be aggregated. Rows mix instant, quarterly (Q) and year-to-date (YTD6, YTD9) period bases. Fiscal calendars differ by company: Darden (DRI) uses fiscal quarter-ends that fall on dates such as 2026-02-22, while Yum (YUM) and Chipotle (CMG) report on calendar quarter-ends. Use it together with period_start and period_basis to tell periods apart.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2407,
+   "output_tokens": 1012,
+   "output_tokens_details": {
+    "thinking_tokens": 542
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

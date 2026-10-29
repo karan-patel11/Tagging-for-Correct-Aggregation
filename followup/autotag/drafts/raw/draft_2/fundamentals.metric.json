@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.metric",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:58:54+00:00",
+ "seconds": 9.04,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2480,
+  "output_tokens": 1128,
+  "output_tokens_details": {
+   "thinking_tokens": 547
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016313,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrkTDgX3Y1UiYkuRHuC",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Normalized label mapped from the XBRL concept in the SEC companyfacts feed, for example diluted_eps from EarningsPerShareDiluted, revenue from Revenues, and total_assets from Assets.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label that says which financial statement measure each row's value holds. There are 7 distinct values: capex, diluted_eps, net_income, op_cash_flow, operating_income, revenue and total_assets. Use it only to filter or group rows, never to aggregate. The measures differ in kind and unit. Revenue, income, cash flow and capex are USD flows over a period. total_assets is a USD balance at an instant. diluted_eps is USD per share. Rows for different metrics must not be summed together, and the unit and period_basis columns should be checked within each metric. The underlying XBRL concept can differ by company for the same metric. For example, DRI's op_cash_flow uses a continuing-operations variant concept. Rows can also be quarterly, year-to-date or full-year.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2480,
+   "output_tokens": 1128,
+   "output_tokens_details": {
+    "thinking_tokens": 547
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

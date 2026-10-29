@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:16+00:00",
+ "seconds": 6.37,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2419,
+  "output_tokens": 873,
+  "output_tokens_details": {
+   "thinking_tokens": 464
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013641,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrrUocG2VatkxPpDGUo",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQShA4KEAgTGAI4AUIIdGhpbmtpbmcSDIjhmag06dro6GjQzBoMgE42cIJ++8OUUmKcIjAXTHK8RpcRPtzrI5Wpx2PoqhodRhVBrCumKxA3TZgqR9JQjGD0v+6eYpjWvRy02q0qoQ3Llvb1WKsW6i78OcGbUjFNclkcRr0RnhgtuBmXTDi/3PN6B+CgdiPiHy1cRf1fQ50T7YIXwenj0CCPoilNa6SVjsEksEXNAoQQU3ZyXeQwI2Cxu6QKhnR8P8YQLFh0+PmZNxNpndaetVAdWGhDBQSKeK393gd+EJpJTD1C/mcQZSqMeto3ARznzX7JzJ+zXi9IEjcBirid83HK6kpG0qwTeQ+FUHS/WF0Lf7HDqgwlVTs2UcQQS2rL+JqLSNNoyyOJJt0CEbhUNcJCYIJAvVkmsHz8rtifd9kc/4HDpb+n5TooE5qC4Lzc19GKyGaaFXjHke9Ek4GXgjvZnr3MwZlFY5mS3JYWg6UwziqaSLxCe57elCQg6WH4ID3mbhZa/R8Av1G/GZh1yUrvuqIdU0M3WPAzCeJl9CO7fwfWdMDpCiuK/lUrwgKPvHZXw1XnXtejFqIpAuebCbHWVCF+4DtKziXkfr+CBBFBoj2Bc3OTlRxFMaKowU50Mvow1wSKvelg/cC5617I7sbuWGJ4FNHqFvkRC7I0ENw8BT1ahNQT3O+1VUzckjIPyd7EQHBxnF/jcZofX1ebXYqaWWCAT7R2K1CTpN4yTKDz38syWfFaLuPZG3dpVTlGesO9ovH8zAC5HEqD43Xb+MJ4NmnSMrpniKMtfqeDOzp+eqBoEm0QmeurbAX9nrHbARRW4tsDhjpsSC4nuAiefkzuQxlkYjyUX5OrpXzGMzWcIkRE8SaF+KmIRRvHpw4APTAz1iiiSM78qJWEn5B3acjtEwuQDopgU33eEHQjo31Y/Amiv+Bqz7M59BGWhEezuA5Q1+3yfgcwV4w+x1BFJDOqys/T4Mr+svzXJsaXn4/4Iswzdbzkut1zAvDBd9CAFusW7ghk6uACmbCI8bnrJkNGzGVrySCmCuZlnZXeU/hkfBCg+tV+gY3OY60O/B0+4XKrOGd/G4sbcCLCnHev4/H0mIu2qS5jI1mrPGr9I/PIVs2/wDv5oSsmlHaX3Usd8jgWjUuqnaKMd+UYM24IrGslsiIPPg8ji63jVhUNvpi+bht5W/ESRTUpXyhPXaj05nUtL8lCPbdkxi/15RCzMEr6QZOUaYtSWTll1I9g+2c+g/t27KYAFXEnycLvBBcIbKcJGHE+awChK2Y+nKuiRUhKNAmi6ZaxzeT2K9IbH+9WujPNiCH2cNHzRAQiHJjNeDzlrbprkmvsDWgHlpSnc74l3AFlDoJk2YjhYVORHtyP1X579LhuXBXmCraSDWadcst+X5rPoWSdmZAJ7rMgg+PHIQllQQuHwYEYYjaH4pwdoPCzWHY7W3VnqJm+5eUN+ZD1tBUBso6K/f1zeqVcVhpewNhQqFendJYR3FYOcfy5oQiu1eHkfyQ88MYrnXXtJdvHws3c+vzgGuil5etetgvFYY2n+3pxYQ5/Fh0jkf+cbzdUBvjfDOO1XvWsqaLbq9++0beU1vs2DvWfz0gCctTT2YpFBBmhmNUROizeDB0BM+UDz7EFLVDC84mcKnvgZumbAvORaSMtAfdgXS2tHHEjH3dDxQSL0k1dZ25chltFoSMwjsUmxfaznP6Tjs+L1md6+t5lrSaINhVINSqk0OXd4yns0pTx1NzXvRdHeFCszWIUp0wJwSByx65u6I2tBfm84lgF4iPRKAgADC81Fwi8VvUmOChRkxR/CauzF8gas9mBMUFfchkWTcBD4tlQTJQQuayMYACshjYzcuvW/9+cURibIYkuRRSsAZlSBvumaTWRheTx4MjKheeoMqqY1iAZbG2eJxP1vbakYTVGTtrhEFT6mVIqqirpGpRELt1KaJg8zOIbH7R7l3MnkE+kGkrzZr1jUGmskJaNd8goH4kydccSf9MDyWkK7+8WMa/rb9q+5n/GOcM6gjYviq9f01FF2yZESCSDLyNAUEdM2v6j7yrKxV19PfYgepI9frrseGA+FljBV8q1uNOwjjO0YIVDYMg3EY8WSVoP/7/0yDKD1cyjloIknwjEsnf9N4pLBBy5G0ceID+4Pu/Qb6/5nLpUUgr+NRzvtT5gEQyvU+XufJmq90UCci8ceinBJwbfHsrntg+QytrPeTcVhM+iQmO4YwdHiWldeA4KYRHa/FqkZD/cl16GK6OMd7/bpIPsYo7ZVdSiaEq8vJf6Zw6jyn3Q0FL9OO0uJnaQ0fnsdESE4MUddIdp+q7ZkXpx17T/RPtll8b3aTjsQF87TOGuFXE/0hlCtrtCzTOxcDuA+NcqdG0qPhOIMBgB",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Stock ticker symbol identifying the company that each fundamentals row belongs to. It is a non-null VARCHAR with 4 distinct values in this table (CMG, DRI, WING, YUM), and in the sample each ticker pairs with a single cik. Use it only as a key or grouping label, never for aggregation. The SEC companyfacts source is keyed by 10-digit zero-padded CIK, and the packet does not document how ticker is derived from it.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2419,
+   "output_tokens": 873,
+   "output_tokens_details": {
+    "thinking_tokens": 464
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

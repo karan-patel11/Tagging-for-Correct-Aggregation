@@ -1,0 +1,66 @@
+{
+ "id": "macro.food_services_sales",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:42+00:00",
+ "seconds": 12.39,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1006,
+  "output_tokens": 1122,
+  "output_tokens_details": {
+   "thinking_tokens": 651
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013305,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrtRLZGvXkzJsPU5nyx",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQSgBMKEAgTGAI4AUIIdGhpbmtpbmcSDBGQ3PSgHi3qkY6zIBoMcPea3nIGMYHGKGWTIjCEKGVOYVADbB2rttmW8YXU9ra6eftsDr7l6oGVrDRlw+2myV/mKK+5HK/pk+Bd++YqnRJC9UifpayvE/Y4U4NFxP/iVxIfA8ef33HFJ1MLirTb0OtFuqozZuhZZ2j5WFNzVAre767aumQUS3fkoJryxRYC1EHE28FqB8YZv8HMqTNupJ0rGCFnv8hH7bK/Zc5yalibpmHWJQ7Altt5fVzVsSLmdGQ//fs8MBH2lI4fVzAxEhaN/jJz2zwRlnO+VM00ZuwZU8OyGmOgMAEiJsfuuLQWH+lEV3qDIc2mZmxmUN38jeI4d5SaRqZZiv3jvZ/nqjYDaLs6CULK8FHfRDVu3ef+FfrIeIJr2vMJG0s9L+w7UEafRg08cCZ7paKQWdZj2UDtPkXS3tBY+NLPNUdlL+6+ZRWMaWEEWNrrgJB2NSDjDqVCzZDPTfKzWuyUQ+e+FMJR/jMh+RhaawGzCCc/P1JdIQsUBjFimHrr6ykhkZuCUSnQZdMQo2qZ759d1VVzvf2STeyX9MTdVIeWhy8fROFWE48w0A8ZAvNxQEN08h2C9UGM9F2jGa36LPEp+uF3mw+T8GKpMh24qM/t5jHF/KfKd3wSm4MctXfCcrr6zRWmNzGY9ka6iaKwGB/RhYMRYH6VqsIcljwN9DoSuKqrdwyTYVh1vBk5mZhShMnOfvn8ak2FFOgFQU51Bo84mu6s8/ZIwwcL1r+wWiKhkKYk89GhJT8dtwi+49FCx0cbVfYZSrFG9DdXq2p/1XvzKC+Zco4KigN0aKxhqCYs57qwXJiB0W50PpE2U9SeFsjOUohbUzZHM5T/j2g1/UoeUZmvd1d4MTEaLAn7lM0bFuMbJ5y3WE4+QD2NXs/bBC9piI7gazo248E01/M9Q7x7t+iONoL9etLKWmnNbSjHq55bfGYd199NU6XNtvydBNbOjO5h6FsoXhiRgWAkgm42CVG6TQrSfAMBHMT94W89rTRIr/5JNv5nXWm2bgx1fs8irvMXuxQ03e4nmeFv0aMLwlc13WyJTmE03ppIBNaJJ1QFV0L8f1AnJfcgch0vgrr+8L//CvvetrdbeKVN+dmApNSQPMM7H9iNt/FrNmB4iBo+OCT+3PZ6Qk4IzvbUcE0ewAijdyh1YGGS/bV9U0LzbxFdiu5m46uo+LNjDovxUcoAn5b16zdTZ/sEcH5JWB59kP1DDtw8IX9BtzfkIVbyVFFpKPbAcdXn4cj+C8oS3UFF67BhP0IxeIdPAfrcZcWg/nTwEUg9Z0fdXofrmUa/Se5cw4Sbpi4+A372JiW0SsEGjlYkeAXntYyrsYIoMsVPTexGIHouQIu62pgudNMP61H8DDE8eyi6mRO+rJQeZKRlNjNZQSqEbldN2IDuHVRWLPH0bsCZ+55Mt+FWaydMpNZfA5dRCZLIFgBJ+ZwpFVEsMMfAxx8tFM5dhDDyVwBmX6+3vwZngF1ashwEN2Tq+DxDpjV3bASeT/MlTz4AvO63bKBD56+ojXuhG5TbZzGx4i4GFyZQNYxKDmB9hAPzB62RgZLNhKAtMC7bo8bRPtxUcXv4wo9czDLm7zvFAlEfGPTyWyk6RkeC7rgdYM1Z6JQ40vVQDKf31yzoMdgt5ZCHCt497onuPSecJqC1K+GEdA8a5SdLw0mSjtjAEnmIND7b0Du9X3Wb4sN84WZgFoXU8Myc5Eba8vkOneMVpspk/BHID0QvysRb3ojXOtby3Ldo6jXoB+QyrzOQ2BgS5e+bloC8reuuLQdiR4me033j6tLmXGQa8KgUI/mqv3bycXx/4nMg1ynYN/tRkkLfDlRDYB0sP8I5T29MTRBG8YI/W63T/S5c+MV9o5ROeU6DiH0Z2onPm49FbEu8fJ5COZWXnc5eMOPP84QlmsMM/Z/Ql/z93LIiKbPjm6QV8OsGMW2FWeKvgzOJEquOeKYLOz+cbCEuK/H03j3QOcEUUkuNxYFEf+vyojg3Hbhx/MLOjlPp4k9zq7bh1qOTUYqhTpxeW0zzpB26T3YpoIToAbWvxCuppQLtSVJ577FxnAmeZhZUMvVo48suuRjDjDTWVw22DtKyjFT6tEHq3Um+y/dn9InPWDY4wC30khMvZLwjNeYn/+jPzZWE26YFni8Z1c3MDkecWyZ6jWcFo7VFk2xrOHjAn7PWmoanxxXwWWs3k39h8/vUA7HtjE4oRDdXDMCQgo0RPEA/k3btgeLb19tLyZrnMYvcy5R50H3oKRP45uv4klP2cK6uIQNvFtdYABT04b5S//1zyAP0x3LF0JmzClC2Y5GaT+5iX4ruf8mmvWUUX5hJm8Brw74nPqOyNIZoR1sLAfsUXj+bcXtycUUk3NboyVS6d5uYEH6OIBJAIlGD+MmP718Ph+VrHcHzG62z+xBOmEpTEKvy93FQLb+C+UFcGTkIBhhUmUeATwBrhI7guishO2ZxtGIrsV56TdZGjJhT71WBZtDENNCZDpCsJqHHjPxgzd82C4QbRDCn//Tg6yAenSu61GuBzQ/YxRhtv8mRBLBg4OvCZJrC7Jid5I1pxoNM5lnZ/8iHsbwpcjS0blGHB4nb4ezjSko/fQSoiZTBcyLWNx8Ckos3Ce/f1RtgSyG/EklVsHlKxiScGZPnfsV5Cs/YyZZS7fnpyVBTa1VvccNqOpyXW4eKcztL8IWuqH7zc+sKuvZLQVqzmAJCCZ4VNfOzTP3lDEzGumVGpgU0O8fqLGEDlNVWqN2IvZK5tDnrmR1CrGNniXqF6u7gv85VDyxGugyEqBC0V07IznBz8sgqJ6UbLGEahWZz5KP6QO3v0IWBnL8TAr+eWjGpu4wV7WVTSUyrMx4uej53eznS7cy3WBpLegXH+z5yU9hpjwAW54dSbttRwZQiJqItzlpXB3NPGOXb1Tjudj3Ome1ANyeUYoN+CKEHUHawGDRKcaX/Hk5fUaM8jCGkuxTm3Nd8plH3rZ4qaG0sFc6zNVRjepiSZlyT2ZZsrVncAZPK8QP5MbD1ILlQ8pMGteVWdf0fwY8DyclTwBzDDDFbltQkHm6M9YMxGLKY/rrA9gm2O02oZRZ35MxfB52r1eN2bwoZ+5GkAI7Z9fxdy8KqHlYGHv+vyjoJ0XSjUAyQx1CUla2gTx3WbgsogtAsZlzDoTcj0C292HEirSgetpSUaSM+cSnbKzuEcbU+KR/lthgB",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"millions of USD\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": true,\n  \"time_rollup\": \"sum\",\n  \"valid_methods\": [\"sum_over_time\", \"mean_over_time\", \"pct_change\", \"last\"],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": \"SA\",\n  \"annualized\": false,\n  \"entity_grain\": \"U.S. total, NAICS 722 (Food Services and Drinking Places)\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau\",\n    \"dataset\": \"Monthly Retail Trade and Food Services\",\n    \"series\": \"722: Food Services and Drinking Places: U.S. Total\",\n    \"measure\": \"Seasonally Adjusted Sales - Monthly [Millions of Dollars]\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Seasonally adjusted monthly sales of food services and drinking places (NAICS 722), U.S. total, in millions of dollars, from the Census Bureau Monthly Retail Trade and Food Services survey. Each value is a monthly amount, not annualized. It is a single national total series, so it should not be summed with other series that overlap it.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1006,
+   "output_tokens": 1122,
+   "output_tokens_details": {
+    "thinking_tokens": 651
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

@@ -1,0 +1,195 @@
+{
+ "table": "fundamentals",
+ "column": "value",
+ "filter": {
+  "metric": "operating_income"
+ },
+ "duckdb_dtype": "DOUBLE",
+ "row_count": 48,
+ "null_count": 0,
+ "distinct_count": 48,
+ "sample_rows": [
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 1038307000.0,
+   "unit": "USD",
+   "period_start": "2025-01-01",
+   "period_end": "2025-06-30",
+   "period_basis": "YTD6",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001058090-26-000066",
+   "filed": "2026-07-31"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 559057000.0,
+   "unit": "USD",
+   "period_start": "2025-04-01",
+   "period_end": "2025-06-30",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001058090-26-000066",
+   "filed": "2026-07-31"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 520000000.0,
+   "unit": "USD",
+   "period_start": "2024-01-01",
+   "period_end": "2024-03-31",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001041061-25-000025",
+   "filed": "2025-05-07"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 479250000.0,
+   "unit": "USD",
+   "period_start": "2025-01-01",
+   "period_end": "2025-03-31",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001058090-26-000028",
+   "filed": "2026-04-30"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 83958000.0,
+   "unit": "USD",
+   "period_start": "2023-12-31",
+   "period_end": "2024-06-29",
+   "period_basis": "YTD6",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001636222-25-000099",
+   "filed": "2025-07-30"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 83495000.0,
+   "unit": "USD",
+   "period_start": "2024-12-29",
+   "period_end": "2025-06-28",
+   "period_basis": "YTD6",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001628280-26-050580",
+   "filed": "2026-07-29"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 41220000.0,
+   "unit": "USD",
+   "period_start": "2024-03-31",
+   "period_end": "2024-06-29",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001636222-25-000099",
+   "filed": "2025-07-30"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 619000000.0,
+   "unit": "USD",
+   "period_start": "2024-07-01",
+   "period_end": "2024-09-30",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001041061-25-000109",
+   "filed": "2025-11-07"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 622000000.0,
+   "unit": "USD",
+   "period_start": "2025-04-01",
+   "period_end": "2025-06-30",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001041061-26-000160",
+   "filed": "2026-08-05"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 418200000.0,
+   "unit": "USD",
+   "period_start": "2024-11-25",
+   "period_end": "2025-02-23",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0000940944-26-000009",
+   "filed": "2026-03-27"
+  }
+ ],
+ "min": 38261000.0,
+ "max": 2574000000.0,
+ "vendor_documentation": {
+  "sec_companyfacts": {
+   "CMG": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001058090.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "WING": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001636222.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "YUM": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001041061.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "DRI": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000940944.json",
+    "retrieved_on": "2026-10-24"
+   }
+  }
+ }
+}

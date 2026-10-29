@@ -1,0 +1,31 @@
+{
+ "table": "comps_definitions",
+ "column": "notes",
+ "duckdb_dtype": "VARCHAR",
+ "row_count": 3,
+ "null_count": 0,
+ "distinct_count": 3,
+ "values_withheld": true,
+ "vendor_documentation": {
+  "company_metric_definitions": [
+   {
+    "definition_id": "CMG_10K",
+    "ticker": "CMG",
+    "definition_text": "Comparable restaurant sales represent the change in period-over-period total revenue for company-owned restaurants in operation for at least 13 full calendar months.",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/cmg-20251231.htm"
+   },
+   {
+    "definition_id": "DRI_10K",
+    "ticker": "DRI",
+    "definition_text": "Same-restaurant sales is a year-over-year comparison of each period\u2019s sales volumes for a 52-week year, and is limited to restaurants that have been open and operated by Darden for at least 16 months, and excludes the impact of Chuy\u2019s, as they were not owned and operated by Darden for a 16-month period prior to the beginning of fiscal 2026, as well as Bahama Breeze as all locations are expected to be closed or converted to other brands (between Q3 fiscal 2026 and Q4 fiscal 2027).",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/dri-20260531.htm"
+   },
+   {
+    "definition_id": "WING_10K",
+    "ticker": "WING",
+    "definition_text": "Domestic same store sales reflects the change in year-over-year sales for the same store base. We define the same store base to include those restaurants open for at least 52 full weeks. This measure highlights the performance of existing restaurants, while excluding the impact of new restaurant openings and permanent closures. We review same store sales for domestic company-owned restaurants as well as system-wide domestic restaurants.",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1636222/000163622226000008/wing-20251227.htm"
+   }
+  ]
+ }
+}

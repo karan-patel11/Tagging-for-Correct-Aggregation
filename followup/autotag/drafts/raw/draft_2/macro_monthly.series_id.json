@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.series_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:01:07+00:00",
+ "seconds": 6.0,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1208,
+  "output_tokens": 740,
+  "output_tokens_details": {
+   "thinking_tokens": 330
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.009889,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrvE9ebyPDLdh2eP5oo",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"sources\": [\n      \"U.S. Census Bureau, Monthly Retail Trade and Food Services (series CENSUS_722_SA)\",\n      \"Consumer Price Index for All Urban Consumers (CPI-U), series CUSR0000SEFV\"\n    ]\n  },\n  \"description\": \"Key naming the monthly macro series that each row's value belongs to. It has two values: CENSUS_722_SA, seasonally adjusted monthly sales for food services and drinking places (NAICS 722) in millions of dollars, and CUSR0000SEFV, the seasonally adjusted CPI-U index for food away from home (1982-84=100). The two series have different units and meanings, so use this column to separate them and never to aggregate across them.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1208,
+   "output_tokens": 740,
+   "output_tokens_details": {
+    "thinking_tokens": 330
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

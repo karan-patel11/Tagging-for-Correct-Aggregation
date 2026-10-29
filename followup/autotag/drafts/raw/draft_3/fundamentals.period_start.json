@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_start",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:06:01+00:00",
+ "seconds": 7.56,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2601,
+  "output_tokens": 932,
+  "output_tokens_details": {
+   "thinking_tokens": 546
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014595,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsHvg3DHiWLpW4TNp5p",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"First date of the reporting period covered by a fundamentals value, taken from SEC company-facts filings. It is populated for duration facts such as revenue, operating income, EPS and capex, and is null for point-in-time (instant) facts such as total assets, which have only a period_end. For year-to-date facts (YTD6, YTD9) it marks the start of the fiscal year, not the start of the latest quarter. It is a date label for grouping and filtering only and must not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2601,
+   "output_tokens": 932,
+   "output_tokens_details": {
+    "thinking_tokens": 546
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

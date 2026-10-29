@@ -1,0 +1,66 @@
+{
+ "id": "macro.CUSR0000SEFV",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:06:48+00:00",
+ "seconds": 8.06,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1023,
+  "output_tokens": 886,
+  "output_tokens_details": {
+   "thinking_tokens": 518
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010979,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsMMiXCV6UbJaBSyxoF",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"index\",\n  \"unit\": \"index points (1982-84=100)\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"mean\",\n  \"valid_methods\": [\"last\", \"mean_over_time\", \"pct_change\"],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": \"SA\",\n  \"annualized\": false,\n  \"entity_grain\": \"series_id\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"CPI-U, Consumer Price Index for All Urban Consumers (vendor source file)\",\n    \"series_id\": \"CUSR0000SEFV\",\n    \"retrieved_on\": \"2026-10-23\"\n  },\n  \"description\": \"CPI-U Food away from home, U.S. city average, all urban consumers, seasonally adjusted. Monthly price index with base period 1982-84=100. Index levels should not be summed across series or months. Use the last value, a mean over time, or percent change.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1023,
+   "output_tokens": 886,
+   "output_tokens_details": {
+    "thinking_tokens": 518
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

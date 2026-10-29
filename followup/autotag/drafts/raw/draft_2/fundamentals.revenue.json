@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.revenue",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:04+00:00",
+ "seconds": 11.87,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2384,
+  "output_tokens": 1573,
+  "output_tokens_details": {
+   "thinking_tokens": 930
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.020571,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrqbwh78f89YpcwyDY9",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "```json\n{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"ratio_of_sums\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Value of the XBRL revenue concept (Revenues or RevenueFromContractWithCustomerExcludingAssessedTax, shown in the concept column) as reported in 10-Q and 10-K filings. Rows hold discrete quarters (Q), cumulative year-to-date amounts (YTD6, YTD9) and full-year amounts (FY), so rows overlap in time.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"company (ticker/cik) x reporting period\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Reported revenue in USD for restaurant companies (CMG, DRI, WING, YUM), taken from SEC XBRL filings. It is a flow measure, and companies' values can be summed across entities for the same period and period_basis. The column mixes quarterly, YTD6, YTD9 and full-year rows, so summing over time double-counts. For an annual figure use the reported FY row, or rebuild quarters from the cumulative rows. Compare percentage changes only between rows with the same period_basis. Companies may tag revenue with different XBRL concepts, so check the concept column before comparing.\"\n}\n```",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2384,
+   "output_tokens": 1573,
+   "output_tokens_details": {
+    "thinking_tokens": 930
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

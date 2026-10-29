@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:32+00:00",
+ "seconds": 6.41,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1443,
+  "output_tokens": 763,
+  "output_tokens_details": {
+   "thinking_tokens": 433
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010589,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqCKwsYwhBEQ4mQqWzN",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}.htm\"\n  },\n  \"description\": \"Stock ticker symbol (e.g., CMG, DRI, WING) that identifies the restaurant company whose same-store or comparable sales definition appears in each row. The definitions come from the companies' SEC 10-K filings. It is a categorical key for joining and labeling, not a numeric measure, so it cannot be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1443,
+   "output_tokens": 763,
+   "output_tokens_details": {
+    "thinking_tokens": 433
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

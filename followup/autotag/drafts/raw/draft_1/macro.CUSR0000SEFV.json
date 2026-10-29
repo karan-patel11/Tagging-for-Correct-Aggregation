@@ -1,0 +1,66 @@
+{
+ "id": "macro.CUSR0000SEFV",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:25+00:00",
+ "seconds": 9.2,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1023,
+  "output_tokens": 865,
+  "output_tokens_details": {
+   "thinking_tokens": 451
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010769,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqVYpzo4ggLY9Sue3hf",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"index\",\n  \"unit\": \"index (1982-84=100)\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"mean\",\n  \"valid_methods\": [\"last\", \"mean_over_time\", \"pct_change\"],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": \"SA\",\n  \"annualized\": false,\n  \"entity_grain\": \"U.S. city average\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"Consumer Price Index for All Urban Consumers (CPI-U)\",\n    \"series_id\": \"CUSR0000SEFV\",\n    \"series_title\": \"Food away from home in U.S. city average, all urban consumers, seasonally adjusted\",\n    \"retrieved_on\": \"2026-10-23\"\n  },\n  \"description\": \"Monthly seasonally adjusted CPI-U index level for food away from home, U.S. city average, all urban consumers, with base period 1982-84=100. Index levels are not additive across time or entities. Use pct_change for inflation rates, and last or mean_over_time for rollups.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1023,
+   "output_tokens": 865,
+   "output_tokens_details": {
+    "thinking_tokens": 451
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

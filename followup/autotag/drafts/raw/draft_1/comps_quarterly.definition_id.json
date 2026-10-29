@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.definition_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:48+00:00",
+ "seconds": 7.26,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2161,
+  "output_tokens": 836,
+  "output_tokens_details": {
+   "thinking_tokens": 456
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012755,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqDZ1TXXprEsu5CPCTA",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}\"\n  },\n  \"description\": \"Key identifying which company-specific definition of comparable/same-store sales (CMG_10K, DRI_10K, WING_10K) applies to each comp_sales_pct row. Each ID maps to the company's own 10-K wording, which differs in store-eligibility criteria (13 months, 16 months, 52 weeks) and scope. It is a label for joining to the definitions, not a measure, and should not be aggregated. Comp sales values should only be compared directly when the definition_id is the same.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2161,
+   "output_tokens": 836,
+   "output_tokens_details": {
+    "thinking_tokens": 456
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

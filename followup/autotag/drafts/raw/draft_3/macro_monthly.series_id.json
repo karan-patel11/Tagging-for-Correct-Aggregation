@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.series_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:07:14+00:00",
+ "seconds": 6.23,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1208,
+  "output_tokens": 781,
+  "output_tokens_details": {
+   "thinking_tokens": 358
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010299,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsPH3n4BMmqrdjZsirq",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQS8wwKEAgTGAI4AUIIdGhpbmtpbmcSDF+pQlBvQW88ic03EhoM/ngN03xTFnSQG2X1IjAbL1rmRwjFkwU3H/TFp8VUhFvt+oge45cJEl1jaFjaUAZutHdqReOn0I1Pz4HDr14qkAxdsEgBiLDhf3dNrJdFCfZxJeJAbBcIGM7GDnRsMjIqiA2ENBBkIBWAVZiLV1tDXgqd5lI2av5Z5OPv5/h+/SmboiaMqRtL+lOasqZICrFl5F7fW2xfhxWpfk2YyoxwosU6wi0lpWTCemfoA7dxpn/ddya5x2cu7VwjW155nlOSXH5i+tKpen4mZWhShlOfqdoFVH6jsYvlGTlTHDliVHg6tFLteiVRsVdpzOFlTnS4q62EJUUekaHHHVOPc//alFXi2K26qHHr4PjG89Bg6MASBJB0nhuCarNIrAfucRdVURHhu8JjwCgvKrfqTAFyzjBbE0dFfZabYzEClEpEKPJDC8ci94ip3SPZKehF7eUgi3mo5AgX2VzzmnPl/9UQeljOnyKBS2aoKqi8iWVrI7hJmTybuqUliAz72Z7ZeDTugVk/kxEqgYfAFiKrCBz0GK+YGYEqpzwvqXFhyVwGpElFeup2gCyWQAyJGqNyWuuhPBk03IImf5Fhbumzho4LyQ1hatSOryyZ9O1GGf1p4mR+OxBfkvGsoIp+fRuqUYKLuFJQgpjOpTEGHL0EhfGlmwoTWvRimgBqKYeGjgw1wxH1EL3fWkCJOMgLSckN7TPiZOvs3yDMS+5+rT3+k9GATJnWX4FOA5b0fQ/XBot/2kwv0NwnPMwDXsQFTZTk7TPGq0lddLuLRU8UiONxR597XlaxD/xQm+NtTBNkw+RcvOZKIwidUlxNPQptdC08oyZqXtpXej1SjeYk16IzE97/Pauo8QFBtYcMcMLUBFZyPuuqZuJfyUVJ6ocxnTvdKYHT5fsvmjYE8pUUx9EUr52lXwCV2SAuqdPWc30Ox1wP4wMTXk9TRnI+m+OiZiYY1udV5kteWCMzH4j1BTY/ZYaCb4DWT2ARz4aMsvfmJqx2+LyE4dHcewzdMflr1v1R3w8QxYa4H5enpPrI5akKa6REmn+nFqHxTYyyXZGrqBquVaTdNcA6et+zu/D7ebefhXq7i8sPj4AFh8kyCpQjAik3JTEx0Df36v+Rlw8S+1oWU4ti/jCuAGQvSWbPrMpJm3wQLYOlBxCyAFfw3WCFSGkd3q5orsVqxj97dM9F4q2P+oW/7nFhIruAnmikImUK+ekAmy3YfZ6lvqt0txZ+q8wLcdpKVknW4YKuoBo9kjaGZxKdYcb+Z/y5TjO9gxgC6ENBKXwFIXX4+KiCf4DiyOQLLNPSL0aFjGAWu4v5JIhgWq5fE99X4zr2Als+qRR8jYrn6J65yGW0LFZK7rCNXQRgOavbnGTnLMu5WmYcVgMu9govjIbzez49OsmIUgVbGcLNfNSgYzHbzuY0Ybtx0edRmG4SIgJu/zSPsQQon80BiH2y8LcZwOdc9RKSNrcGDcpvmIBRPDzFduY6N8xcjRGvwQ/dW+s8y5GRXe/asDc1FaS0RMIO9D4M32AAUggD7n2n1ojcRqOnEcVI6qInpB4TSF92VDSFlzvt8/LwDw2oLAu9VoEyuiB1K7l+rzGGphEPAZpAeb0ONTyeFcaPQ3PnTojLxdnJMgWW177bDyCUOQxYkWja0tNB1nhyNtPuxjlaZflkw7YUI39gdUmW9zLw32o+OZg9WbwT9rFpJaR6dxRWAoPqXUbhVwO4ifmulM8+4Uww7rsvk4LtyeJIVxZvTF1kfxW70LQXz5OoQ7k75G9blUzl/taf2xbdP5xPjTDi9UeZzjCyVDHYqmh0iIzrRiWHA+cyQwZoDH1Nwo3QbdBAlqVGkt8xu3Pf6QB2bzqYlO5fU5Toi1ayQF/2eduxmDhQUE3SU4uxCYTGQr5HgXXs24cGFUegh9n+PPjUcxNORpBZi/NijhZOZm4zBDzEY6urdRvYlPbsmwUrAEa97et9Q1G5z+uRfPbrbCEsmQL0ZwcQkuZVtLSoO+lj8PRmhsAETOcbA+J6/366CSJ68QN/j1V2BdBWUMbBc0eJLxcempB2uZTSHg0MZJdUTb3gV6YM25uCWigBjPWNXOzegEv3Tw7QJP80JDwgV57/K6lwt0mCTTws1qCfV+KbVVUn7WF08zfM/Qpg65g6iPJ3Fx5+GAE=",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"series\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau Monthly Retail Trade and Food Services (CENSUS_722_SA); U.S. Bureau of Labor Statistics CPI-U (CUSR0000SEFV)\"\n  },\n  \"description\": \"Key naming the macroeconomic time series each row belongs to. It has two values: CENSUS_722_SA, seasonally adjusted monthly sales of food services and drinking places (NAICS 722, U.S. total, millions of dollars), and CUSR0000SEFV, the seasonally adjusted CPI-U index for food away from home (U.S. city average, 1982-84=100). It is a label for grouping and filtering, not a measure. The two series have different units and meanings, so their values should not be combined across series_id.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1208,
+   "output_tokens": 781,
+   "output_tokens_details": {
+    "thinking_tokens": 358
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

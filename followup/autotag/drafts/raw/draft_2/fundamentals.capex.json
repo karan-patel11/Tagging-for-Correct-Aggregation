@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.capex",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:53+00:00",
+ "seconds": 12.56,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2508,
+  "output_tokens": 1559,
+  "output_tokens_details": {
+   "thinking_tokens": 944
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.020679,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrfuAkP3auwC5T8LEFE",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"As-filed XBRL value of us-gaap PaymentsToAcquirePropertyPlantAndEquipment. Rows carry different period bases: Q (single quarter), YTD6 and YTD9 (cumulative within the fiscal year) and FY (full year). Because the rows overlap, they must not be summed across periods. Single-quarter values for Q2-Q4 can be derived by differencing consecutive YTD values.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"PaymentsToAcquirePropertyPlantAndEquipment\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Capital expenditures (cash paid to acquire property, plant and equipment) in USD for CMG, DRI, WING and YUM, as reported in 10-Q and 10-K filings. It is a cash-flow amount over a period, and each row's period_basis (Q, YTD6, YTD9, FY) shows how much of the fiscal year it covers. Use the FY value for annual totals. Compare or sum across companies only for the same period and period basis.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2508,
+   "output_tokens": 1559,
+   "output_tokens_details": {
+    "thinking_tokens": 944
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

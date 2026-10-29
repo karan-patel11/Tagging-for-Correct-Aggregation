@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.concept",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:04:09+00:00",
+ "seconds": 7.01,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2605,
+  "output_tokens": 876,
+  "output_tokens_details": {
+   "thinking_tokens": 349
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014043,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs9cpXdXEYhDVjj5kFU",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Taken as-is from the US-GAAP XBRL element name that the SEC companyfacts API reports for each fact. Each row's metric label maps to one of these concept names.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label holding the US-GAAP XBRL concept (element) name behind each fundamentals row, for example NetIncomeLoss, EarningsPerShareDiluted or OperatingIncomeLoss. It has 9 distinct values and no nulls. It identifies which reported line item the value belongs to and is used for grouping and filtering, not for aggregation. Several concepts can map to similar economic items, for example Revenues and RevenueFromContractWithCustomerExcludingAssessedTax, and NetCashProvidedByUsedInOperatingActivities and its ContinuingOperations variant, so check the concept before comparing across companies.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2605,
+   "output_tokens": 876,
+   "output_tokens_details": {
+    "thinking_tokens": 349
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

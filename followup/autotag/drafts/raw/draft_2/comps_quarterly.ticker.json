@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:34+00:00",
+ "seconds": 5.53,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2145,
+  "output_tokens": 614,
+  "output_tokens_details": {
+   "thinking_tokens": 319
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010503,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVreXL5Npt33x7JDDkrk",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Stock ticker symbol identifying the restaurant company that reported each quarterly comparable-sales row (values in the sample: CMG, DRI, WING). It is a key for grouping and joining, not a measure, and should not be aggregated. Each ticker maps to its own comparable-sales definition through definition_id, so metrics should not be compared across tickers without checking those definitions.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2145,
+   "output_tokens": 614,
+   "output_tokens_details": {
+    "thinking_tokens": 319
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

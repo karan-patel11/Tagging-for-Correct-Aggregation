@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.definition_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:03+00:00",
+ "seconds": 7.35,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1459,
+  "output_tokens": 894,
+  "output_tokens_details": {
+   "thinking_tokens": 501
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.011931,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqAD1MuKDYqewkh4VXM",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company comparable-sales definition (one row per ticker)\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Company 10-K filings on SEC EDGAR; each row's filing URL is stored in comps_definitions.source_url\"\n  },\n  \"description\": \"Key for a company's own definition of its comparable or same-store sales metric, in the form <TICKER>_10K (e.g. WING_10K, DRI_10K, CMG_10K). It is unique per row, with 3 distinct values and no nulls. Companies define the metric differently (for example, 52 weeks open for WING, 16 months for DRI, 13 months for CMG), so the key identifies which definition applies. It is a label for joining and filtering, and must not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1459,
+   "output_tokens": 894,
+   "output_tokens_details": {
+    "thinking_tokens": 501
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

@@ -1,0 +1,61 @@
+{
+ "id": "macro.food_services_sales",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:06:56+00:00",
+ "seconds": 3.76,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1006,
+  "output_tokens": 398,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.006065,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsMxW3fuuoLvy5j1unw",
+  "container": null,
+  "content": [
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"millions of USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": true,\n  \"time_rollup\": \"sum\",\n  \"valid_methods\": [\"sum_over_time\", \"mean_over_time\", \"pct_change\", \"last\"],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": \"SA\",\n  \"annualized\": false,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau, Monthly Retail Trade and Food Services\",\n    \"series\": \"722: Food Services and Drinking Places: U.S. Total, Seasonally Adjusted Sales - Monthly\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Seasonally adjusted monthly sales of food services and drinking places (NAICS 722) for the U.S. total, in millions of dollars, from the Census Bureau Monthly Retail Trade survey. Each value is the sales flow for one calendar month, not annualized.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1006,
+   "output_tokens": 398,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

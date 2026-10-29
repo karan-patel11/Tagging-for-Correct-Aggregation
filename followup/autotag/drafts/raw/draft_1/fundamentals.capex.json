@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.capex",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:39+00:00",
+ "seconds": 9.11,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2508,
+  "output_tokens": 1262,
+  "output_tokens_details": {
+   "thinking_tokens": 672
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.017709,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqHHmneCHs1rqJz5v96",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported as-is from the XBRL concept PaymentsToAcquirePropertyPlantAndEquipment. Rows are discrete quarters (Q), year-to-date cumulatives (YTD6, YTD9) or full fiscal years (FY).\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts\",\n    \"concept\": \"PaymentsToAcquirePropertyPlantAndEquipment\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Capital expenditures (cash paid to acquire property, plant and equipment) in USD for restaurant companies (CMG, DRI, WING, YUM), taken from 10-Q and 10-K filings. Values are positive cash outflows. Each row covers a different period (Q, YTD6, YTD9 or FY), and the YTD rows overlap the quarterly rows. Summing rows over time therefore double counts. Use the FY row for annual totals, or compare rows with the same period_basis. Values can be summed across companies only when the period and fiscal calendar match.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2508,
+   "output_tokens": 1262,
+   "output_tokens_details": {
+    "thinking_tokens": 672
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

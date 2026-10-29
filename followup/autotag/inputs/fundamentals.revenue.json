@@ -1,0 +1,195 @@
+{
+ "table": "fundamentals",
+ "column": "value",
+ "filter": {
+  "metric": "revenue"
+ },
+ "duckdb_dtype": "DOUBLE",
+ "row_count": 48,
+ "null_count": 0,
+ "distinct_count": 48,
+ "sample_rows": [
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "revenue",
+   "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+   "value": 2890000000.0,
+   "unit": "USD",
+   "period_start": "2024-08-26",
+   "period_end": "2024-11-24",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0000940944-25-000071",
+   "filed": "2025-12-30"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 1933000000.0,
+   "unit": "USD",
+   "period_start": "2025-04-01",
+   "period_end": "2025-06-30",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001041061-26-000160",
+   "filed": "2026-08-05"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 5187000000.0,
+   "unit": "USD",
+   "period_start": "2024-01-01",
+   "period_end": "2024-09-30",
+   "period_basis": "YTD9",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001041061-25-000109",
+   "filed": "2025-11-07"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "revenue",
+   "concept": "RevenueFromContractWithCustomerExcludingAssessedTax",
+   "value": 5647000000.0,
+   "unit": "USD",
+   "period_start": "2024-05-27",
+   "period_end": "2024-11-24",
+   "period_basis": "YTD6",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0000940944-25-000071",
+   "filed": "2025-12-30"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 1787000000.0,
+   "unit": "USD",
+   "period_start": "2025-01-01",
+   "period_end": "2025-03-31",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001041061-26-000119",
+   "filed": "2026-05-06"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 8468543000.0,
+   "unit": "USD",
+   "period_start": "2024-01-01",
+   "period_end": "2024-09-30",
+   "period_basis": "YTD9",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001058090-25-000088",
+   "filed": "2025-10-30"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 145789000.0,
+   "unit": "USD",
+   "period_start": "2023-12-31",
+   "period_end": "2024-03-30",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001636222-25-000059",
+   "filed": "2025-04-30"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 1598000000.0,
+   "unit": "USD",
+   "period_start": "2024-01-01",
+   "period_end": "2024-03-31",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001041061-25-000025",
+   "filed": "2025-05-07"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 5674966000.0,
+   "unit": "USD",
+   "period_start": "2024-01-01",
+   "period_end": "2024-06-30",
+   "period_basis": "YTD6",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001058090-25-000056",
+   "filed": "2025-07-24"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "revenue",
+   "concept": "Revenues",
+   "value": 8214000000.0,
+   "unit": "USD",
+   "period_start": "2025-01-01",
+   "period_end": "2025-12-31",
+   "period_basis": "FY",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0001041061-26-000084",
+   "filed": "2026-02-20"
+  }
+ ],
+ "min": 145789000.0,
+ "max": 13210900000.0,
+ "vendor_documentation": {
+  "sec_companyfacts": {
+   "CMG": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001058090.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "WING": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001636222.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "YUM": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001041061.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "DRI": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000940944.json",
+    "retrieved_on": "2026-10-24"
+   }
+  }
+ }
+}
