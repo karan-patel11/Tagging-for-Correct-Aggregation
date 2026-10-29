@@ -44,6 +44,10 @@ Four replacement questions (q039–q042) were added in commit `4f06c42` on 2026-
 
 The full evaluation's recorded start times are 2026-10-28 00:17:40–00:25:49 UTC, equivalent to 2026-10-27 20:17:40–20:25:49 America/New_York. These are run start times, not completion times. The page labels its run date as UTC.
 
+## Engine hardening (after the study)
+
+After the auto-tag follow-up showed tags that made the engine raise or compute the wrong method, `src/semantics.py` was changed to refuse any method a code path does not implement and to return a clean error when a tag lacks metadata it needs, and `src/tags.py` gained five consistency rules. The results above were produced before this change (commit `bbc6310`) and were not re-run; re-executing all 455 recorded setup D tool calls on the hardened engine gave identical outputs for 455 of 455. Details: [followup/engine_fix/REPLAY.md](followup/engine_fix/REPLAY.md).
+
 ## Quickstart
 
 ```bash

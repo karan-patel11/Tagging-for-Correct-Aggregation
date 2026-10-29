@@ -1,8 +1,9 @@
 """Phase 15a: build the static results page docs/index.html (SPEC §13.1).
 
 Data comes only from eval/results/summary.json, eval/results/{A,B,C,D}.jsonl, eval/questions.yaml,
-tags/tags.yaml, eval/verification_log.csv and report/over_warning_reasons.json (written by
-report/analyze_over_warnings.py from the same runs). report/replays.yaml picks the replays and holds the
+tags/tags.yaml, eval/verification_log.csv, report/over_warning_reasons.json (written by
+report/analyze_over_warnings.py from the same runs) and followup/engine_fix/replay.json (written by
+followup/engine_fix/replay.py, for the engine-hardening line under "Limits"). report/replays.yaml picks the replays and holds the
 plain-language notes; report/template.html holds the layout. Runs are scored with eval/score.py's
 score_run, the same code that produced summary.json, so a replay badge always matches the summary.
 
@@ -41,6 +42,7 @@ TEMPLATE = ROOT / "report" / "template.html"
 OUT = ROOT / "docs" / "index.html"
 ERROR_ANALYSIS = ROOT / "docs" / "error_analysis.md"
 OVER_WARNINGS = ROOT / "report" / "over_warning_reasons.json"
+ENGINE_REPLAY = ROOT / "followup" / "engine_fix" / "replay.json"
 OW_LABEL = "Warnings on questions whose key expects no caveat"
 
 SETUP_NAMES = {"A": "Schema only", "B": "Prose descriptions", "C": "Tags file", "D": "Semantic tools"}
@@ -597,8 +599,13 @@ def section_checks(summary, questions, vlog, replays, tags):
     qpc = min(per_cat.values()) if len(set(per_cat.values())) == 1 else \
         f"{min(per_cat.values())}–{max(per_cat.values())}"
     ciks = {m.group(1) for r in vlog for m in [re.search(r"edgar/data/(\d+)/", r["source_url"])] if m}
-    lims = "".join(f"<li>{e(l.format(questions_per_category=qpc, companies=len(ciks)))}</li>"
-                   for l in need(replays, "limitations"))
+    if not ENGINE_REPLAY.exists():
+        die(f"missing {ENGINE_REPLAY.relative_to(ROOT)}; run followup/engine_fix/replay.py")
+    rp = json.loads(ENGINE_REPLAY.read_text())
+    fmt = {"questions_per_category": qpc, "companies": len(ciks),
+           "results_commit": need(rp, "results_commit"), "replay_calls": need(rp, "hand", "calls"),
+           "replay_identical": need(rp, "hand", "identical")}
+    lims = "".join(f"<li>{e(l.format(**fmt))}</li>" for l in need(replays, "limitations"))
     notes = []
     for n in need(summary, "scorer_notes"):
         by = ", ".join(f"{k} {v}" for k, v in need(n, "flipped_by_setup").items())
