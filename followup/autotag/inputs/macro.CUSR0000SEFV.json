@@ -1,0 +1,90 @@
+{
+ "table": "macro_monthly",
+ "column": "value",
+ "filter": {
+  "series_id": "CUSR0000SEFV"
+ },
+ "duckdb_dtype": "DOUBLE",
+ "row_count": 32,
+ "null_count": 0,
+ "distinct_count": 32,
+ "sample_rows": [
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2024-10-01",
+   "value": 372.486,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-05-01",
+   "value": 394.728,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2025-09-01",
+   "value": 385.451,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2024-04-01",
+   "value": 365.813,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-07-01",
+   "value": 396.859,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2025-02-01",
+   "value": 376.991,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2025-05-01",
+   "value": 381.228,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-04-01",
+   "value": 393.546,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-08-01",
+   "value": 397.868,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-09-01",
+   "value": 398.783,
+   "retrieved_on": "2026-10-23"
+  }
+ ],
+ "min": 363.249,
+ "max": 398.783,
+ "vendor_documentation": {
+  "source_file_headers": {
+   "CUSR0000SEFV": [
+    "Consumer Price Index for All Urban Consumers (CPI-U)",
+    "Original Data Value",
+    "Series Id: CUSR0000SEFV",
+    "Seasonally Adjusted",
+    "Series Title: Food away from home in U.S. city average, all urban consumers, seasonally adjusted",
+    "Area: U.S. city average",
+    "Item: Food away from home",
+    "Base Period: 1982-84=100",
+    "Years: 2016 to 2026"
+   ]
+  }
+ }
+}
