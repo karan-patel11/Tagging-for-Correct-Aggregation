@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.grain",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:55:58+00:00",
+ "seconds": 7.23,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2377,
+  "output_tokens": 959,
+  "output_tokens_details": {
+   "thinking_tokens": 550
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014417,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrXU5BF7p7wQd9JgyUm",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"dimension\",\"unit\":null,\"additive_over_entities\":null,\"additive_over_time\":null,\"time_rollup\":null,\"valid_methods\":[],\"period_basis\":null,\"derivation\":null,\"calendar\":null,\"seasonal_adjustment\":null,\"annualized\":null,\"entity_grain\":null,\"hierarchy\":\"brand -> parent_ticker\",\"comparability\":null,\"lineage\":{\"source\":\"Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user, daily)\",\"url_template\":\"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"},\"description\":\"Row-level grain flag with two values: 'brand' for a brand-level Wikipedia article (e.g. KFC, Pizza Hut) and 'parent' for the parent company's article (e.g. Yum! Brands). Each brand row links to its parent company through parent_ticker. Filter or group on this column before aggregating views. Parent-level views come from a separate article, not a sum of the brand articles, so mixing the two grains in one sum double-counts or misstates attention.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2377,
+   "output_tokens": 959,
+   "output_tokens_details": {
+    "thinking_tokens": 550
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

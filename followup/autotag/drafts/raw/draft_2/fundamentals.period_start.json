@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_start",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:59:55+00:00",
+ "seconds": 9.37,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2601,
+  "output_tokens": 1170,
+  "output_tokens_details": {
+   "thinking_tokens": 708
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016975,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrpud3aixyFWKF9M6QZ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Start date of the XBRL duration context for the reported fact, taken from the SEC companyfacts 'start' field. It is null for instant (point-in-time) facts such as balance sheet items.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Start date of the period a fundamentals fact covers. For quarterly facts (period_basis Q) it is the quarter start. For year-to-date facts (YTD6, YTD9) it is the fiscal year start. It is null for instant facts such as total assets, which have only a period_end. This is a date attribute for filtering and aligning periods, not a measure, so it should not be summed or averaged. Pair it with period_end and period_basis to identify the duration of each fact. Fiscal calendars differ across tickers.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2601,
+   "output_tokens": 1170,
+   "output_tokens_details": {
+    "thinking_tokens": 708
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

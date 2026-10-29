@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.metric",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:40:44+00:00",
+ "seconds": 8.18,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2480,
+  "output_tokens": 1002,
+  "output_tokens_details": {
+   "thinking_tokens": 497
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015053,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqN72GQ1NFMSXwVnm2S",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Label column for a long-format fundamentals table. It names which financial measure the row's value holds. The 7 values are capex, diluted_eps, net_income, op_cash_flow, operating_income, revenue and total_assets. The measures differ in kind: capex, net_income, op_cash_flow, operating_income and revenue are period flows in USD; diluted_eps is per-share in USD/shares; total_assets is an instant-in-time stock in USD. Values must not be aggregated across different metric labels. Filter to a single metric before aggregating. Each label is mapped from an XBRL concept, and the concept can differ by company. For example, DRI's op_cash_flow uses the continuing-operations variant of the concept. Check the concept column when comparing across tickers.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2480,
+   "output_tokens": 1002,
+   "output_tokens_details": {
+    "thinking_tokens": 497
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

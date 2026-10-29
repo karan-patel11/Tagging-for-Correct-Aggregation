@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:16+00:00",
+ "seconds": 5.32,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2145,
+  "output_tokens": 566,
+  "output_tokens_details": {
+   "thinking_tokens": 297
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010023,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqFdLiQkU1fiKuYXBQt",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQStgsKEAgTGAI4AUIIdGhpbmtpbmcSDM1jaVNOjSrZ8cKfoxoMcLZ+eY1YGLEWK5vHIjCjAoY76pFMid/CCNHde4n+U54yDXl+umx5xZGrEMIdQEl10WqgcmJHTaFCGmOREkcq0wrIRM7YAlV6QmX9i0ZocwNeZOI/Zwbo2Vlq2odYoubJiwoLHYyT1xFUxMNmTN9RJq17SrFkiTtW06Tj9QCcga8fIooT0+5/6i30pT4Us4kwVhxqOzxQPg538G2O0LzMNaS1YnvSQO4hVPK0oMWirQISt4YBwy/9l07/4eF406C0RzJmvuG74rIVOpEW/mEWakpTVqjbROdpbaXG2aXLzgWHPYF00O8LMHIy7Qz0BAC9aUf+3C2Dfkwf0beu2/PrN7hTERhds92I0A2aaZXO0Z1IHP5lWkqfMpHzheLSx01EQDZaV3f13V4SRWuYNUQMdgUuHikVKQMifO4aN339ld1p1XKPp6ITpIA9AwU42PDLW8e3EP/U5l6inOamV5tWhYV0ysUvUBbIJoAawE4YW/BfFoUu7nbdURmCR73sR+KYSUmJiVhXdcPmChGDlzEni+JAZzFN4ABDZAO5v/elcjA8MA7QB6OJwJLYfah4a1b2KJpR6aKN/lgQY1/ReXuVAkXsuOeSM7aY7LuQctM8avvW7kH2rFzbXV+PDIguTPwy3OsRsJlhX79YSsMMwt/mqgLNOsNukyRzORhlw8+/ZYQJlDndxLZZdugfRTokG/JNOs/sOjsvWw+cc0UHRmnII+MlAQ870vWteyk9BpaZrz1IBS8MWUaMHjcrndeaAX0gKuCIXm/B83sINOpFd1hScqUH+r5HR1SoERROPKY9ZY2TLyG5yt/tzKywPk3E4tx11vU4cq6tYLtf/PkqfI3gQfqNlMw2GCeJZ3h6F2PMAcyKrQMgvQ5ZbCfT1D7zSipkByG/xHNr/r8SUFWDGAdf1rUklVeHnFMnF64xD4xd9vasrgXkfVZbHjbt+piD78NnKudtKur4wG8MQx52479YcwzMkUJ7m/qiIPg2pGRwlArYE3S8VhiSLMWJQEeG9eB4YcqyYUGJAt9D4Fjlf+X9GfRc7mOeHJzkkALrHY8uMX3CecAH21EOC4eK+QUcfRIv3Qg1le9ALROms0OAySUmBSfXiSFMMlmuTMbz3lnArdPao4/uHYuPckg/G4ME9tIcKyoHXM2+J2S2/N0eaavsAhI4FjWu0RRQK+dS3WshqDJe3GxaBO/6WtLurjPVMsqzKC2BJ3WpyVGtv9bo9+bYYOIJsqR25QZcVmSV/M8Vl98ePv+Shh4wvn6FpDbOgBQBZ2PwCkkdGjc6dkRxfzbRdWrJ2TbtfXcSS7Ei5eBuZQZbv1QhFgMWpTftXUhsoOfb26B4QbC8SxPnjYLWAS1gRLaIkJq3k/fZ4V8r23aaUnYBUg7KfqIofMJUXzT7FyQrjZZ+xLbnA08+0QWWXKqgnrYStEC0jbD9yxSe38z+SiStcQscWCggrYEtS9j4FBrpkyqQX1X0UxSkR7HTalI//H9QnZgNYvZBB9HJd39yMy3HbZixbPI946BoO/LwG9ceSKIJU4nWNDjyOWzI4+Ogj3a5Hf0AQ2XZYFm+VreYkZ7hOw8D18iVAXmPgZK9YnPXaMFFd7dQzZN3uTo6xQN869Jvdq/YojEKTDs3XLW3cjlhCvott2tI297xTvfTgoDGzF5y36prejMemS2fZl8ieP86y+3xdAZCqq6GXKsn2Emt87DLWC5k8hnBWP/97pxtp4q0EZ8+gp9N57pza7+JgIdLGWGa+yJdcbnfK3BONe3uP/sPGEy+fkJk8Yx9X9OTLi84+aMMWY2o67ayS1NHBVWOfAfDz4Vn5sc/HS8+2mZ4P4q/fjvq96ou+sAvZxYIuF6NVQr7FLcncHpSH6DEpFxN1ZgvWvdU0uI9NM1JdFfAg7sMGAE=",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Stock ticker symbol identifying the restaurant company that reported each quarterly comparable-sales row (CMG, DRI, WING in this table). It is a key for grouping and joining, not a measure, so it is never aggregated. It links each row to the company's comparable-sales definition through definition_id.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2145,
+   "output_tokens": 566,
+   "output_tokens_details": {
+    "thinking_tokens": 297
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

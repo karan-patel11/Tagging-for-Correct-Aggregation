@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.fiscal_year",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:20+00:00",
+ "seconds": 7.29,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2137,
+  "output_tokens": 775,
+  "output_tokens_details": {
+   "thinking_tokens": 405
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012097,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrdY5CBYx8qLGxXM6RM",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_name}\"\n  },\n  \"description\": \"Fiscal year label (integer, e.g. 2025, 2026) of the company-reported fiscal period to which each quarterly comparable-sales observation belongs. It is a grouping and filtering dimension, not a measure, so it should not be summed or averaged. Fiscal calendars differ by company, so the same fiscal_year value does not cover the same calendar months for every ticker. Values come from each company's quarterly earnings release filed with the SEC.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2137,
+   "output_tokens": 775,
+   "output_tokens_details": {
+    "thinking_tokens": 405
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

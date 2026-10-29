@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.notes",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:02:23+00:00",
+ "seconds": 12.23,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 759,
+  "output_tokens": 1028,
+  "output_tokens_details": {
+   "thinking_tokens": 678
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.011871,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs1sDVWhAE2FoU2fSNk",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{primary_document}\"\n  },\n  \"description\": \"Free-text notes attached to each comparable-sales definition row (3 rows, all distinct, no nulls). It is a descriptive text attribute, not a numeric measure, so it cannot be aggregated. The sample values were withheld, so the exact contents are not confirmed. The vendor documentation gives each company's definition (CMG, DRI, WING) with a link to its SEC 10-K filing.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 759,
+   "output_tokens": 1028,
+   "output_tokens_details": {
+    "thinking_tokens": 678
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

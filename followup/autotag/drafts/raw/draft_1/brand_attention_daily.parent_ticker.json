@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.parent_ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:37:41+00:00",
+ "seconds": 8.09,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2392,
+  "output_tokens": 1044,
+  "output_tokens_details": {
+   "thinking_tokens": 587
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015297,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVq8cM14VcEvYMQhWiM4",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"daily\",\n  \"derivation\": \"Not in the Wikimedia vendor documentation. It appears to be a mapping from each Wikipedia article or brand to the stock ticker of its parent company, e.g. Taco Bell, KFC and Pizza Hut map to YUM. Rows with grain='parent' carry the parent company's own ticker.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"brand\",\n  \"hierarchy\": \"brand -> parent_ticker\",\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"\n  },\n  \"description\": \"Ticker symbol of the publicly traded parent company that owns the brand in each row (CMG, DRI, WING or YUM). It is a text key for grouping brand-level and parent-level rows. It is not a measure and should not be aggregated. Use it to roll brand-level pageviews up to the parent.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2392,
+   "output_tokens": 1044,
+   "output_tokens_details": {
+    "thinking_tokens": 587
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

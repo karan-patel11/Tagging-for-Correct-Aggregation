@@ -1,0 +1,22 @@
+{
+ "draft": 2,
+ "model": "claude-sonnet-5-5",
+ "ids": 43,
+ "prefix_tokens": 731,
+ "prefix_cached": true,
+ "wall_clock_seconds_this_process": 338.03,
+ "sum_call_seconds": 336.19,
+ "tokens": {
+  "cache_creation_input_tokens": 733,
+  "cache_read_input_tokens": 30786,
+  "input_tokens": 90029,
+  "output_tokens": 40282
+ },
+ "cost_usd": 0.587776,
+ "parse_notes": {
+  "fundamentals.revenue": [
+   "code fence removed"
+  ]
+ },
+ "unparsed_ids": []
+}

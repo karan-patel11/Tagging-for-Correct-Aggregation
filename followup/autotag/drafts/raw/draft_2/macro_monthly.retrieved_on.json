@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.retrieved_on",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:01:02+00:00",
+ "seconds": 5.25,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1195,
+  "output_tokens": 582,
+  "output_tokens_details": {
+   "thinking_tokens": 318
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.008283,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVruqV9TU1P8cr3tE26D",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"dimension\",\"unit\":null,\"additive_over_entities\":null,\"additive_over_time\":null,\"time_rollup\":null,\"valid_methods\":[],\"period_basis\":null,\"derivation\":null,\"calendar\":null,\"seasonal_adjustment\":null,\"annualized\":null,\"entity_grain\":null,\"hierarchy\":null,\"comparability\":null,\"lineage\":{},\"description\":\"Date on which the row's source data was retrieved (extraction date). This is load metadata, not an observation date or a measure. It has two distinct values in this table: 2026-10-23 for the CPI series (e.g. CUSR0000SEFV) and 2026-10-24 for the Census series (e.g. CENSUS_722_SA). Use it to track data vintage only, not for aggregation.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1195,
+   "output_tokens": 582,
+   "output_tokens_details": {
+    "thinking_tokens": 318
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

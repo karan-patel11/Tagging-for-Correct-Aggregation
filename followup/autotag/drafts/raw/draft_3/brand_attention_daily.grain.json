@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.grain",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:01:38+00:00",
+ "seconds": 10.4,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2377,
+  "output_tokens": 838,
+  "output_tokens_details": {
+   "thinking_tokens": 463
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013207,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrxXG75HWF1E8RjFdrJ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"dimension\",\"unit\":null,\"additive_over_entities\":null,\"additive_over_time\":null,\"time_rollup\":null,\"valid_methods\":[],\"period_basis\":null,\"derivation\":null,\"calendar\":null,\"seasonal_adjustment\":null,\"annualized\":null,\"entity_grain\":\"brand or parent company, as set by this column\",\"hierarchy\":\"brand -> parent_ticker\",\"comparability\":null,\"lineage\":{\"url_template\":\"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"},\"description\":\"Row-level grain label with two values: 'brand' for a restaurant brand's Wikipedia article (e.g. KFC, Pizza Hut) and 'parent' for the parent company's article (e.g. Yum! Brands). Brand rows link to their parent through parent_ticker. Use it to filter or group views. Parent rows should not be combined with brand rows in the same sum, since a parent's pageviews are a separate article's count and not a total of its brands.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2377,
+   "output_tokens": 838,
+   "output_tokens_details": {
+    "thinking_tokens": 463
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.date",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:07:00+00:00",
+ "seconds": 7.04,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1158,
+  "output_tokens": 767,
+  "output_tokens_details": {
+   "thinking_tokens": 411
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010059,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsNEhs6GFrbcvWVDG9N",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau Monthly Retail Trade and Food Services (series CENSUS_722_SA); U.S. Bureau of Labor Statistics CPI-U (series CUSR0000SEFV)\"\n  },\n  \"description\": \"Observation month for each row in macro_monthly, stored as a DATE on the first day of the month. Values range from 2024-01-01 to 2026-09-01 and cover 33 distinct months across the series in the table. It is a time dimension for grouping and joining, not a measure, and it is not aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1158,
+   "output_tokens": 767,
+   "output_tokens_details": {
+    "thinking_tokens": 411
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

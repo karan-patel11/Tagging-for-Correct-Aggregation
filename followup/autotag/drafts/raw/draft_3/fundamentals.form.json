@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.form",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:04:51+00:00",
+ "seconds": 6.87,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2454,
+  "output_tokens": 811,
+  "output_tokens_details": {
+   "thinking_tokens": 466
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013091,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsCnVY5PijoD7twWUxT",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"SEC filing form type of the filing that reported the fact. It has two values: 10-K (annual report) and 10-Q (quarterly report). In the samples, full-year (FY) facts come from 10-K filings, and quarterly and year-to-date facts come from 10-Q filings. It is a categorical label for filtering or grouping, not a measure.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2454,
+   "output_tokens": 811,
+   "output_tokens_details": {
+    "thinking_tokens": 466
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

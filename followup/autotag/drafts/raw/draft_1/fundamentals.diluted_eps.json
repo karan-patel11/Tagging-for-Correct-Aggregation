@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.diluted_eps",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:40:01+00:00",
+ "seconds": 10.46,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2447,
+  "output_tokens": 1225,
+  "output_tokens_details": {
+   "thinking_tokens": 688
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.017217,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqJx2xHigotPikQQYZK",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"per_share\",\n  \"unit\": \"USD/shares\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"As-reported XBRL concept EarningsPerShareDiluted from SEC 10-Q and 10-K filings. Rows cover discrete quarters (Q), nine-month year-to-date (YTD9) and full fiscal year (FY) periods.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"EarningsPerShareDiluted\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Diluted earnings per share in USD per share, as reported by each company in SEC filings. Each row covers a quarter, a nine-month YTD period or a full fiscal year, as shown by period_basis. Values are per-share ratios, so they cannot be summed across companies. They should not be summed across periods either, because YTD and FY rows overlap the quarters and share counts change over time. For a fiscal-year figure, use the reported FY value.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2447,
+   "output_tokens": 1225,
+   "output_tokens_details": {
+    "thinking_tokens": 688
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

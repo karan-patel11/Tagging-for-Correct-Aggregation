@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:02:41+00:00",
+ "seconds": 6.15,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1443,
+  "output_tokens": 730,
+  "output_tokens_details": {
+   "thinking_tokens": 371
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010259,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs3CZbcSQRLvkjpyQjS",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Company SEC Form 10-K filings, as cited in the source_url column of comps_definitions\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}.htm\"\n  },\n  \"description\": \"Stock ticker symbol of the company (e.g., CMG, WING, DRI) whose same-store or comparable sales definition is recorded in the row. It identifies the company and is not a measure, so it must not be aggregated. Each ticker appears once in the table, alongside its own definition_id and 10-K source.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1443,
+   "output_tokens": 730,
+   "output_tokens_details": {
+    "thinking_tokens": 371
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

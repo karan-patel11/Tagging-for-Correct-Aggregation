@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.form",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:58:48+00:00",
+ "seconds": 6.51,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2454,
+  "output_tokens": 817,
+  "output_tokens_details": {
+   "thinking_tokens": 441
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013151,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrjyEC1fKSNGDVfdAUQ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Taken as reported from the SEC filing form type attached to each XBRL fact in the company facts data. 10-K marks facts from an annual report and 10-Q marks facts from a quarterly report.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\"\n  },\n  \"description\": \"SEC form type of the filing in which the fact was reported. It has two values: 10-K (annual report) and 10-Q (quarterly report). It is a categorical label for grouping or filtering facts by filing type and should not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2454,
+   "output_tokens": 817,
+   "output_tokens_details": {
+    "thinking_tokens": 441
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

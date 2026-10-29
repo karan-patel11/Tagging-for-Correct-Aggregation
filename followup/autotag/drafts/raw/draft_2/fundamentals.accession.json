@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.accession",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:46+00:00",
+ "seconds": 6.8,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2407,
+  "output_tokens": 803,
+  "output_tokens_details": {
+   "thinking_tokens": 440
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012917,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrfPu86NWFkks3Zv2rs",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"filing\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"SEC accession number (format NNNNNNNNNN-YY-NNNNNN) of the 10-K or 10-Q filing that reported the fact in each row. It is a label for a filing and is never aggregated. Many rows share one accession, with 39 distinct values across 288 rows, and the column has no nulls.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2407,
+   "output_tokens": 803,
+   "output_tokens_details": {
+    "thinking_tokens": 440
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

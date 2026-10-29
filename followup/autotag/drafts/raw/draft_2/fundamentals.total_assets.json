@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.total_assets",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:22+00:00",
+ "seconds": 6.87,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2273,
+  "output_tokens": 881,
+  "output_tokens_details": {
+   "thinking_tokens": 418
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013429,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrrxLZPiJWRRaqJuFMx",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"stock\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"last\",\n  \"valid_methods\": [\"last\", \"pct_change\", \"sum_across_entities\"],\n  \"period_basis\": \"instant\",\n  \"derivation\": \"Reported value of the XBRL concept us-gaap:Assets (total assets) from the balance sheet in each 10-Q or 10-K, as of period_end.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": false,\n  \"entity_grain\": \"company (ticker/CIK)\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"Assets\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Total assets in USD for each company, taken from the balance sheet in its 10-Q and 10-K filings. Each value is a point-in-time balance at period_end, on the company's own fiscal calendar. Values can be summed across companies at the same date, but not across periods. To roll up over time, take the latest balance.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2273,
+   "output_tokens": 881,
+   "output_tokens_details": {
+    "thinking_tokens": 418
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

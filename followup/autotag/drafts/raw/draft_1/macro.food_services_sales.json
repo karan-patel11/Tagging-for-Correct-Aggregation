@@ -1,0 +1,66 @@
+{
+ "id": "macro.food_services_sales",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:34+00:00",
+ "seconds": 9.35,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1006,
+  "output_tokens": 1141,
+  "output_tokens_details": {
+   "thinking_tokens": 707
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013495,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqWE6edwgBm6bLeGVJ7",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"millions of USD\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": true,\n  \"time_rollup\": \"sum\",\n  \"valid_methods\": [\"sum_over_time\", \"mean_over_time\", \"last\", \"pct_change\"],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": \"calendar\",\n  \"seasonal_adjustment\": \"SA\",\n  \"annualized\": false,\n  \"entity_grain\": \"U.S. total\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau, Monthly Retail Trade and Food Services\",\n    \"series\": \"722: Food Services and Drinking Places: U.S. Total, Seasonally Adjusted Sales - Monthly\",\n    \"series_id\": \"CENSUS_722_SA\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Seasonally adjusted monthly sales of food services and drinking places (NAICS 722), U.S. total, in millions of dollars. Each value is the sales level for one calendar month, not an annualized rate. The series is already a national total, so summing it with other series, such as parent or sibling industry totals, would double count.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1006,
+   "output_tokens": 1141,
+   "output_tokens_details": {
+    "thinking_tokens": 707
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

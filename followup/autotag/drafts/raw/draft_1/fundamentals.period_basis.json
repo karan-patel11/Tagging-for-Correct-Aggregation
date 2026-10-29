@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_basis",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:41:26+00:00",
+ "seconds": 10.81,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2473,
+  "output_tokens": 868,
+  "output_tokens_details": {
+   "thinking_tokens": 457
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013699,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqRBFMKJXZnBrVTYnBy",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label giving the length and type of the reporting period that each fundamentals row covers. It has five values: Q (a single quarter), YTD6 (cumulative from fiscal-year start through the second quarter), YTD9 (cumulative through the third quarter), FY (the full fiscal year) and instant (a point-in-time balance). Use it to filter or group rows before aggregating. Rows with different period_basis values cover overlapping spans, for example YTD9 includes Q1-Q3 and FY includes all quarters, so do not sum them together.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2473,
+   "output_tokens": 868,
+   "output_tokens_details": {
+    "thinking_tokens": 457
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

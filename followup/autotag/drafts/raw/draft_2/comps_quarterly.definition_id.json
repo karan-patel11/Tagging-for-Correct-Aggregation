@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.definition_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:07+00:00",
+ "seconds": 6.86,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2161,
+  "output_tokens": 814,
+  "output_tokens_details": {
+   "thinking_tokens": 400
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012535,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrcaWGEtsKTCZvzJ7Jv",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQSyA0KEAgTGAI4AUIIdGhpbmtpbmcSDB18uKCTZ9UOTs1GlRoMkCwQjkTeWyK+6KpEIjCp3ocg6m0zsH3NZF4ZdCITL+mDn+D+WX8M8J99xXjhYjlVGstsvs2/HikPQ+a1bK8q5Qz5qcSL+Gr28o8wKuTqlmsHUuG8XcZGcuhywiC8xRRbeUY2d2I9uPNvMx/Fe9VTccx5Pn7rFfL48kvjvDrtBafg9W1alkfpRR9UQiokAWQmvZ/dW1dqwdlYSZMzsVxdy1LB7BhDPUzaoxnMm5dRAmKsWwK5lrqXc7M8OiTw32RAS/w7UBBEBxbDH2VhwA8QUHII30EGu6C95dkDVb/lr18Rec4Ymvs7HfQ0yHwfeW8QqKavIw1Za0OvV454W0erw1t1fMYPRpVpXBkIGv7X5R2oktaq+9j71VAIGXpoJSs7hbxEzdJSGON42rG1Jr8hcRvabLwvUZ54KilyLo1GY4CDXBo71LHtj7/POu0M/LozqU5syCKeammC1BlMyYcacB8/9pILKHMNf4KWa4Z+2gnpbo78O71PdwdY/bXhDlJCBNuEotNbQvn6sgu7CUOiDAFm3slby6rBTC5SPcJNv8tEQmVgbP0/4yORSO/rkG20MxC8hHboYl2T+WoqYxfgZ1q6VDvr05wyM4E0J2cO7kFlWKBnYUL2ztLCdQC3kcEr7msNLoOfjLkBZu0QmLK0qgNR1PlIDwabyF/MwnoDSKPPE9Iw6PHIpOnP+WtXDKp7KkGFnANkk275EiqJlKSTvDbLQ6/m3lp19BqEUMPWgX9AMktdguG0tJcDYYAUhhraMi/9uQju6kz+bWPw3d7NjVSW5kT1yh/nvmBfbzVK8bZBmd0/zfAerHTZfWkak0gtoq2FRTnfjqRquaPx1PX1pBsKQktBRSREBnTf7NtOjnp9NkbW8ubfQH4uqaXD1hM3BVEESbiVZia+/aE0XFUl1zBHANF/hyzdRHnU6HGFpU0hBt3bLaM/YXPX2iQufzIPOvNTuweU/x+zxGyOa/lSZrFn1WCpb8OhTyRGgMMW9T9BZ8CaKiGBBMnaURJx2cpHATy0ZDy5cm+FWv80v+2UCbDPcp9EWIWeAsz0KyrNfUn7sdqVb/6rT8u2iyyZJfX6VEz7XTIgVIOLwAL6UBqvtdmF1nJ5vwVw9xcExM041jezIV5spzi/4zdK6jFK9YITxtIzsA30JWFdjcs50PvKkatxGmDGDXJpOoNEEreLMkT9oZaF0SeOXNwdEKNZbleVnfrHbX5Fv5/nSbJISpiln4umpR9dmjKMWSqlDfPtZFOsn8Ws4SL2zWrqVon0E51cbCgUV0X3Mm1iT0AEAOv579AA+pMlid3nlY+HFhNImqjvpCp0XL/lfLhe/Z5TMfrDpRjfxOnQxUkE9SdZvqG8UXitq4iEZtpHC+KDKyzBG2CpTAkxj4JFUFR8TyP2r7Nn1Q/TGhBUA9XXFKBoMV0yiUwftBX4l59G+TmMmbPIFpPhjCR/EYQyJ2gtLKBp3uW8SsZE8EIuS10xpQ6wg9JkKAYQxS6KxsJuKGfo+5FhbRemYtVNodUwgailZypeS0eIGyWVzlQJ+Cs8d6l1YblBP9165UhTbuo6rEHCWQK85XL0CNGwThg0i4ZDMWZICWzja+CL++RO9TCjt/ze59JDsHfIELIXdesTK2PelS0jhxfvwfNA/pcdQoTA5DiSSFWY/5jb7QALA2Sq2D4fFqCTT5nidTGxhrugY7oNsn2+lArQCbQDVfbeFJZnRrAX3ulcols8aqP9Eg315jLvP9cdbPbTFPsm4Zb5PtUrvEAxJJfqT6B2cngmDHUXFxY3DbeT6iYegH1pxT1G/w3u85xpnAdLVtNbbGkviz33Yq/+h2SOiHYMW4h5uEcROE6khj1469q+jjFqi/rUXVAKCsdEY/0fOyHKbyFLqupUGNun8Yst6FRzO8BYLYQsIcslq/pYtG9qrhjpBgirhs6dsjKk5sZmqt5PGDjr7lUtaeMZ41cP/gcz2qOE6+OyiJfBArKC6WJ/umDCXuNzJpFrgvctJd6HsL5+rcFGtz0rjBtFzd181HhauzYsZprCDibf3xLo4mqxnrKi7rtDcadMpMt2QqapikdhamXNsUofihbd+ylo9MRmR0rBaUXD4MID4ws0iv8zw9a1lp49vqLtv9u561wN/8NaN7GIC6NxxXhKMOO+Xjq3Ai1HV9+SUXOCeoyQXeFTp9HRQHioEjHQ42ZLAjQgptWb1re8l2Y67EEiFk1wYAEB5xUAvee+WiL1E0H5dNEW9+w1b6kcCk9MjJ6+OtIciCd2ARgB",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession}/{document}\"\n  },\n  \"description\": \"Key identifying which company-specific definition of same-store/comparable sales (e.g. CMG_10K, DRI_10K, WING_10K) applies to each comp_sales_pct value. Definitions differ by company (CMG: 13 full calendar months of operation, company-owned restaurants; DRI: 16 months, 52-week basis, excluding Chuy's and Bahama Breeze; WING: 52 full weeks, domestic). Comp values should only be compared or combined across rows sharing the same definition_id. This is a label, not a measure, and should not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2161,
+   "output_tokens": 814,
+   "output_tokens_details": {
+    "thinking_tokens": 400
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}
