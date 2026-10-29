@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.source_url",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:11+00:00",
+ "seconds": 5.52,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2790,
+  "output_tokens": 693,
+  "output_tokens_details": {
+   "thinking_tokens": 354
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012583,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqFDLqmALNUru6pTgDZ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": \"ticker-fiscal_quarter\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_filename}\"\n  },\n  \"description\": \"URL of the SEC EDGAR earnings-release exhibit (Exhibit 99.1) from which each ticker's fiscal-quarter comparable sales figure was taken. Each row has a unique URL. It is a text reference for provenance and lookup, so it cannot be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2790,
+   "output_tokens": 693,
+   "output_tokens_details": {
+    "thinking_tokens": 354
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

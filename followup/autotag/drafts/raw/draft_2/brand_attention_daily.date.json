@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.date",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:55:51+00:00",
+ "seconds": 6.93,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2326,
+  "output_tokens": 752,
+  "output_tokens_details": {
+   "thinking_tokens": 415
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012245,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrWxNjm91hk8zCspXx3",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"dimension\",\"unit\":null,\"additive_over_entities\":null,\"additive_over_time\":null,\"time_rollup\":null,\"valid_methods\":[],\"period_basis\":\"daily\",\"derivation\":null,\"calendar\":\"calendar\",\"seasonal_adjustment\":\"n/a\",\"annualized\":null,\"entity_grain\":null,\"hierarchy\":null,\"comparability\":null,\"lineage\":{\"source\":\"Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user, daily)\",\"url_template\":\"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"},\"description\":\"Calendar date (daily grain) of the Wikipedia pageview observation. It is the time key for brand_attention_daily and spans 2024-01-01 to 2025-12-31, with no nulls. It is used to group or filter the views measure, not aggregated itself.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2326,
+   "output_tokens": 752,
+   "output_tokens_details": {
+    "thinking_tokens": 415
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

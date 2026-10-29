@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.total_assets",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:06:26+00:00",
+ "seconds": 13.71,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2273,
+  "output_tokens": 902,
+  "output_tokens_details": {
+   "thinking_tokens": 459
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013639,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsKnJKerkr3phg7uNgx",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQS0Q0KEAgTGAI4AUIIdGhpbmtpbmcSDO5ga2bWzqoyYAyIkhoMo3cmWI5WzdFlZgO6IjClqIvP9Y3XRIILNFu+15sgS5QMsTH9NQjKruVA/Rszs4UvXwlbZPG2aGLw43lolPcq7gx4igjDQ2wufKF9PVw+7E85EtGT1sF1RGlf719zNiR1vDWJHWlIHBceSDfUhf+255jjKpvFIt33Mfu3Qdbvco3e+gEofc1qlOE1PdsVFP7nlScDsLTrROZTFGfMlk0uLOll5EfYRgyY3fLqP9qdvZe2lT9+G2WYco+q4pU7/Cl3t46ZWOfz5zbGW5Wj4AoLj2tmiyIKI+uOYLJpAXiA433OcvVWLjKsohInMB5k9sjRrXl8F35hhkJttdbcc86qD80RTlN4V6qOaZ2Y2ObU9OTytprY+dGnFSNWBvNjg8BaO0/KXIfjWkGLZSeAghjQIr7xzqcIe+N1BTZfgFwRaQ2bddnQbdAQV/8NYtL0glnogJlmKd4HKvzhFSSsPkos+4CGPLnIDqo2VvKDmx+41Ettclv9OIhSyFF9D0C3XY0qnx88JS3mRq5DIYbH5tGsRFglONlZyxP1yExIUrsEbvlP7GTijHpNuvM3eAxFdFtyyX26szxSgD4rwNtjmk0qruytYTVOI9AyiNVFIu3rCfCbDRNhOcg4GYTiGwp5YEW1xz3Wi/Ik5jdYts/ODgEbmUfjSWiMxLeFD3Y6tQ1hQfYnWM9xZTiMkPJxZJQtGQovpkA/6S53E/THgu0fS3R2NUjgcHvWh/5hGpjslirjomdNr+8LjN9PedrUIYWN2e7gOc5/JNzi40vJFMMTxhcL8QF9ytKLiBLFSDYCA6hGykoUYBC859TeDi5LbKexrWjjdqqpzzhFkMF11kg3W/gEABpVS3aUBYXmTf8EeO0G+A8//ljEWC6yLH0HYwo3KmFgienXhUiY5f0UxQmhrsuVqE4N2Bw2zAIjB4jJSG0SdZHhAhCzB6iPWIdn0XXHTaCm8Mb1PcnL4WGvjOMSsoP07Ijg2ndu7zSDP1TsdIVh0Qo6RxSMZ9coeKrAHWw3XXpKczl8Y6i15OmGFkKDnKNCO+2IQOMBKfWNsJ6mZkTPb3GbEe7CsW3OYF/S49AbHsvndhEI4GGXuJ6OImFHcXi1onI7yygyYln9fIRh3szgy/WhS/9tvQ5IdkrlZwNHySpgz0LvF7uwMdnD76dZLuyfCCtTye7wR5cow1MzuOzjfm5P+Do3g1k7OXCBls4vN/KvQiLHmHYhsWWXAR2IoyHoFK/L3129wLs75Zt3tA1kTGhiyHlSO+OKeSiejztoQYrRr7nxnUW8vicsn3WlhnJY63tzxY1uhVXPy2Rh/LpVjzsLPT1uLD52hWG8mcJOj0DUKPpjCxUpps9GBqW0GCJGbn1oAjZOrQCDrJ7wWXqVaR4Z8mVKCX67Q+qm3ceoQryZ/eGOrHG0NpYSNxnnJWzVye/H6rU7KfnZfvo9xu0c2/PLO0BT+RH35AA99RUy6UhPUZw62I9GXIt5Q0HGpTTvVMLE31FpfPZyAyqMuS4Lgb51E5f9QrEy+KSqbzifZAsHmtEgrDDvnAEvCOznae2nDkmKFn6s91KHEEVDZCN6kpQSHNGIJp5Kub7y+tjoYMWtcgwTzHuEmv1AVUWnV65r5zdd6uA+shEyUsUpsbWRgYxt0mrmDWzFEb8f7ZClkALhHOa1JNUk0TKPAc6I9ICBH1czwA1ewf9AV7q/65aNbBTRDNPnXy6IUD2rmQYU0TAH1s+odgRBiAw/3E156YDBzZIJq/vHITHmBjjPa2ZOz65lwFCcIu1/u7//Rm4V0c9YbhV+5EdlGxWDh/1raglZh5oTomKK2RgAD9el3+Cg2SnBImjeBIfv9sNXnF6665XxwnBAscS2cKb+Iamao1tl/h1IS/j5HbL7hfdIScB3Rfc7wfeeP2BPypzEFYevxJTUuovlw15ZdZYXYnV7BiVCU1MSuWsniahJSEeuejHVD6i40zoP7zlOUsNFqt18tE2sW0pnwoFnjy4KCvKI80CVFZzgj8KeAEzv9WWuJg33tnZgWG4CILnJi4DK1OqdlwCtvwjnl/v2Txpwmbx9EFN+vPFiN9KZ9YFR6BYfgWCgZbUiVf7okale7f9rU1sRg8kIPMVXN5zGDtMI0PiZHhDtha728jyWHy9zmdUDsG/ca47/x+Dqclp1ZU+L4HUNnKaRgQGVfEc0M5jGcPJx+lpKQ5Mj8nt1cAFUyxSF7vFgXm67Ve43hTRwkIDUQh6PMSUyXyZzcVmDmmoDjOJgDL25uzLGvGW5H2etxYrgcRQpcBgB",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"stock\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"last\",\n  \"valid_methods\": [\"last\", \"sum_across_entities\", \"pct_change\"],\n  \"period_basis\": \"instant\",\n  \"derivation\": \"Reported balance-sheet value of the us-gaap Assets concept at period end, taken from 10-Q and 10-K filings.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"us-gaap:Assets\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Total assets in USD for each company, measured as a point-in-time balance at the fiscal period end (quarterly 10-Q and annual 10-K). It is a stock: it can be summed across companies at the same date, but not across periods. Roll up over time by taking the latest period-end value.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2273,
+   "output_tokens": 902,
+   "output_tokens_details": {
+    "thinking_tokens": 459
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

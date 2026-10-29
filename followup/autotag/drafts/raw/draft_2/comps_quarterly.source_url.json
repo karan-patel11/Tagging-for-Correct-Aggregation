@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.source_url",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:28+00:00",
+ "seconds": 6.02,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2790,
+  "output_tokens": 762,
+  "output_tokens_details": {
+   "thinking_tokens": 382
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013273,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVre5QbXk4HhraUWMByU",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": \"ticker-fiscal_year-fiscal_quarter\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR quarterly earnings release (Exhibit 99.1) for each ticker and fiscal quarter\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_name}\"\n  },\n  \"description\": \"Text URL of the SEC EDGAR earnings-release exhibit that reports the comparable sales figure for each row (one per ticker, fiscal year and fiscal quarter). It is a provenance attribute used for traceability and cannot be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2790,
+   "output_tokens": 762,
+   "output_tokens_details": {
+    "thinking_tokens": 382
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

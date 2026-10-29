@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.op_cash_flow",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:59:17+00:00",
+ "seconds": 8.98,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2554,
+  "output_tokens": 1148,
+  "output_tokens_details": {
+   "thinking_tokens": 564
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016661,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrn88HYtTcq3xSp96rX",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"ratio_of_sums\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Net cash provided by (used in) operating activities, taken as reported in SEC XBRL filings. Each row covers a Q, YTD6, YTD9 or FY period, so the quarterly rows are cumulative within the fiscal year. Summing rows across periods double-counts, so use the FY row for annual totals. Quarterly figures need differencing of YTD values, and that differencing is not part of this column. The XBRL concept varies by company: most use NetCashProvidedByUsedInOperatingActivities, while DRI uses the ContinuingOperations variant.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Operating cash flow in USD per company and reporting period, from SEC XBRL company facts. Rows cover quarterly, year-to-date (6 and 9 month) and full-fiscal-year durations, so values are not additive over time. Add them across companies only when the period basis matches.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2554,
+   "output_tokens": 1148,
+   "output_tokens_details": {
+    "thinking_tokens": 564
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

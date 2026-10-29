@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.comp_sales_pct",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:38+00:00",
+ "seconds": 10.19,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2208,
+  "output_tokens": 1270,
+  "output_tokens_details": {
+   "thinking_tokens": 654
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.017189,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqCoTMCkiKeKA9WjoXa",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"ratio\",\n  \"unit\": \"percent\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": \"Year-over-year percent change in comparable (same-restaurant / same-store) sales for each company's fiscal quarter, as reported in the quarterly earnings release. The comparable-store base and sales definition differ by company (see definition_id).\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"publisher\": \"SEC EDGAR (company earnings releases, Exhibit 99.1)\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession}/{document}\",\n    \"definition_source\": \"Company 10-K metric definitions, keyed by definition_id (CMG_10K, DRI_10K, WING_10K)\"\n  },\n  \"description\": \"Quarterly comparable restaurant sales growth in percent (4.3 means +4.3% versus the same quarter a year earlier), reported by each company for its fiscal quarter. Each company defines its comparable base differently: CMG uses company-owned restaurants open at least 13 full calendar months, DRI uses restaurants open at least 16 months (excluding Chuy's and Bahama Breeze), and WING uses domestic restaurants open at least 52 full weeks. Values are comparable only within the same definition_id. The metric is a ratio, so it cannot be summed across companies or quarters, and there is no weighting basis in the packet for averaging or rolling it up.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2208,
+   "output_tokens": 1270,
+   "output_tokens_details": {
+    "thinking_tokens": 654
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

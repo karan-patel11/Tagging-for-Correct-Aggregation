@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_basis",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:05:42+00:00",
+ "seconds": 10.83,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2473,
+  "output_tokens": 1187,
+  "output_tokens_details": {
+   "thinking_tokens": 685
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016889,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsGWuH5UmhQ4ifjay2r",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label for the reporting window a fundamentals value covers. Values: Q (a single fiscal quarter), YTD6 (cumulative from fiscal year start through the second quarter), YTD9 (cumulative through the third quarter), FY (full fiscal year) and instant (a point-in-time balance, none in the sample rows). It is a grouping and filter key, not a measure, so it should not be aggregated. Rows with different bases for the same metric overlap (YTD9 includes Q1-Q3, and FY includes all quarters), so summing across period_basis values double-counts. Fiscal-year boundaries vary by company (e.g. WING starts around Dec 31 and DRI around late May), so period_start and period_end define the actual dates.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2473,
+   "output_tokens": 1187,
+   "output_tokens_details": {
+    "thinking_tokens": 685
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

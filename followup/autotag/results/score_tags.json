@@ -1,0 +1,3277 @@
+{
+ "hand_path": "tags/tags.yaml",
+ "drafts": {
+  "draft_1": {
+   "m1": {
+    "fundamentals.revenue": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.operating_income": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "fundamentals.net_income": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.op_cash_flow": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.capex": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.total_assets": {
+     "semantic_type": {
+      "hand": "stock",
+      "draft": "stock",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "last",
+      "draft": "last",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "instant",
+      "draft": "instant",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "last",
+       "sum_across_entities"
+      ],
+      "draft": [
+       "last",
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "fundamentals.diluted_eps": {
+     "semantic_type": {
+      "hand": "per_share",
+      "draft": "per_share",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD/shares",
+      "draft": "USD/shares",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "reported_fy_value",
+      "draft": "reported_fy_value",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [],
+      "draft": [
+       "pct_change"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "derived.operating_margin": {
+     "semantic_type": {
+      "hand": "ratio",
+      "draft": "ratio",
+      "match": true
+     },
+     "unit": {
+      "hand": "percent",
+      "draft": null,
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "none",
+      "draft": "none",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": null,
+      "match": false
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": null,
+      "match": false
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums"
+      ],
+      "draft": [
+       "ratio_of_sums"
+      ],
+      "match": true,
+      "extra": [],
+      "missing": []
+     }
+    },
+    "comps_quarterly.comp_sales_pct": {
+     "semantic_type": {
+      "hand": "ratio",
+      "draft": "ratio",
+      "match": true
+     },
+     "unit": {
+      "hand": "percent",
+      "draft": "percent",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "none",
+      "draft": "none",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "quarterly",
+      "draft": "quarterly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [],
+      "draft": [],
+      "match": true,
+      "extra": [],
+      "missing": []
+     },
+     "comparability": {
+      "hand": "by_definition_id",
+      "draft": "by_definition_id",
+      "match": true
+     }
+    },
+    "brand_attention_daily.views": {
+     "semantic_type": {
+      "hand": "count",
+      "draft": "count",
+      "match": true
+     },
+     "unit": {
+      "hand": "views",
+      "draft": "page views",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "daily",
+      "draft": "daily",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": null,
+      "match": false
+     },
+     "valid_methods": {
+      "hand": [
+       "rollup_to_parent",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "mean_over_time",
+       "pct_change",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "missing": [
+       "rollup_to_parent"
+      ]
+     },
+     "hierarchy": {
+      "hand": "brand -> parent_ticker",
+      "draft": null,
+      "match": false
+     }
+    },
+    "macro.CUSR0000SEFV": {
+     "semantic_type": {
+      "hand": "index",
+      "draft": "index",
+      "match": true
+     },
+     "unit": {
+      "hand": "index_points",
+      "draft": "index (1982-84=100)",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "mean",
+      "draft": "mean",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "monthly",
+      "draft": "monthly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change"
+      ],
+      "match": false,
+      "extra": [
+       "last"
+      ],
+      "missing": []
+     },
+     "seasonal_adjustment": {
+      "hand": "SA",
+      "draft": "SA",
+      "match": true
+     },
+     "annualized": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     }
+    },
+    "macro.food_services_sales": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD_millions",
+      "draft": "millions of USD",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "monthly",
+      "draft": "monthly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "pct_change",
+       "sum_over_time"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "last",
+       "mean_over_time"
+      ],
+      "missing": []
+     },
+     "seasonal_adjustment": {
+      "hand": "SA",
+      "draft": "SA",
+      "match": true
+     },
+     "annualized": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     }
+    }
+   },
+   "m1b": {
+    "fundamentals.metric": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.cik": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.concept": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "fundamentals.unit": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_start": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_end": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_basis": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.fiscal_year": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.fiscal_quarter": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.form": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.accession": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.filed": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_quarterly.fiscal_year": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.fiscal_quarter": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.definition_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_quarterly.source_url": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.definition_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.definition_text": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_definitions.source_url": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.notes": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.date": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.article_title": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "brand_attention_daily.brand": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.grain": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.parent_ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "macro_monthly.series_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "macro_monthly.date": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "macro_monthly.retrieved_on": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    }
+   },
+   "m2": {
+    "fundamentals.revenue": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.operating_income": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "fundamentals.net_income": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.op_cash_flow": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.capex": [
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.total_assets": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "last",
+       "sum_across_entities"
+      ],
+      "draft": [
+       "last",
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "fundamentals.diluted_eps": [
+     {
+      "field": "valid_methods",
+      "hand": [],
+      "draft": [
+       "pct_change"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "derived.operating_margin": [],
+    "comps_quarterly.comp_sales_pct": [],
+    "brand_attention_daily.views": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "rollup_to_parent",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "mean_over_time",
+       "pct_change",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "mean_over_time",
+       "pct_change"
+      ]
+     },
+     {
+      "field": "hierarchy",
+      "hand": "brand -> parent_ticker",
+      "draft": null
+     }
+    ],
+    "macro.CUSR0000SEFV": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change"
+      ],
+      "forbidden_allowed": [
+       "last"
+      ]
+     }
+    ],
+    "macro.food_services_sales": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "pct_change",
+       "sum_over_time"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "last",
+       "mean_over_time"
+      ]
+     }
+    ]
+   },
+   "m3": {
+    "load_tags_ok": true,
+    "load_tags_error": null,
+    "entry_errors": {},
+    "db_checked_entries": 43,
+    "db_problems": [],
+    "pass": true
+   }
+  },
+  "draft_2": {
+   "m1": {
+    "fundamentals.revenue": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.operating_income": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "ratio_of_sums"
+      ]
+     }
+    },
+    "fundamentals.net_income": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.op_cash_flow": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.capex": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.total_assets": {
+     "semantic_type": {
+      "hand": "stock",
+      "draft": "stock",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "last",
+      "draft": "last",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "instant",
+      "draft": "instant",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "last",
+       "sum_across_entities"
+      ],
+      "draft": [
+       "last",
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "fundamentals.diluted_eps": {
+     "semantic_type": {
+      "hand": "per_share",
+      "draft": "per_share",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD/shares",
+      "draft": "USD/shares",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "reported_fy_value",
+      "draft": "reported_fy_value",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [],
+      "draft": [
+       "pct_change"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "derived.operating_margin": {
+     "semantic_type": {
+      "hand": "ratio",
+      "draft": "ratio",
+      "match": true
+     },
+     "unit": {
+      "hand": "percent",
+      "draft": null,
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "none",
+      "draft": "none",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": null,
+      "match": false
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": null,
+      "match": false
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums"
+      ],
+      "draft": [
+       "ratio_of_sums"
+      ],
+      "match": true,
+      "extra": [],
+      "missing": []
+     }
+    },
+    "comps_quarterly.comp_sales_pct": {
+     "semantic_type": {
+      "hand": "ratio",
+      "draft": "ratio",
+      "match": true
+     },
+     "unit": {
+      "hand": "percent",
+      "draft": "percent",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "none",
+      "draft": "none",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "quarterly",
+      "draft": "quarterly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [],
+      "draft": [],
+      "match": true,
+      "extra": [],
+      "missing": []
+     },
+     "comparability": {
+      "hand": "by_definition_id",
+      "draft": "by_definition_id",
+      "match": true
+     }
+    },
+    "brand_attention_daily.views": {
+     "semantic_type": {
+      "hand": "count",
+      "draft": "count",
+      "match": true
+     },
+     "unit": {
+      "hand": "views",
+      "draft": "page views",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "daily",
+      "draft": "daily",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "rollup_to_parent",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "missing": [
+       "rollup_to_parent",
+       "sum_across_entities"
+      ]
+     },
+     "hierarchy": {
+      "hand": "brand -> parent_ticker",
+      "draft": null,
+      "match": false
+     }
+    },
+    "macro.CUSR0000SEFV": {
+     "semantic_type": {
+      "hand": "index",
+      "draft": "index",
+      "match": true
+     },
+     "unit": {
+      "hand": "index_points",
+      "draft": "index, 1982-84=100",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "mean",
+      "draft": "mean",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "monthly",
+      "draft": "monthly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change"
+      ],
+      "match": false,
+      "extra": [
+       "last"
+      ],
+      "missing": []
+     },
+     "seasonal_adjustment": {
+      "hand": "SA",
+      "draft": "SA",
+      "match": true
+     },
+     "annualized": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     }
+    },
+    "macro.food_services_sales": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD_millions",
+      "draft": "millions of USD",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "monthly",
+      "draft": "monthly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "pct_change",
+       "sum_over_time"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "last",
+       "mean_over_time"
+      ],
+      "missing": []
+     },
+     "seasonal_adjustment": {
+      "hand": "SA",
+      "draft": "SA",
+      "match": true
+     },
+     "annualized": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     }
+    }
+   },
+   "m1b": {
+    "fundamentals.metric": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.cik": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.concept": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "fundamentals.unit": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_start": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_end": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_basis": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.fiscal_year": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.fiscal_quarter": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.form": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.accession": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.filed": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_quarterly.fiscal_year": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.fiscal_quarter": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.definition_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_quarterly.source_url": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "comps_definitions.definition_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.definition_text": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_definitions.source_url": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "comps_definitions.notes": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.date": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.article_title": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "brand_attention_daily.brand": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.grain": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.parent_ticker": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "macro_monthly.series_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "macro_monthly.date": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "macro_monthly.retrieved_on": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    }
+   },
+   "m2": {
+    "fundamentals.revenue": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.operating_income": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "fundamentals.net_income": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.op_cash_flow": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.capex": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.total_assets": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "last",
+       "sum_across_entities"
+      ],
+      "draft": [
+       "last",
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "fundamentals.diluted_eps": [
+     {
+      "field": "valid_methods",
+      "hand": [],
+      "draft": [
+       "pct_change"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "derived.operating_margin": [],
+    "comps_quarterly.comp_sales_pct": [],
+    "brand_attention_daily.views": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "rollup_to_parent",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "mean_over_time",
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_entities",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "hierarchy",
+      "hand": "brand -> parent_ticker",
+      "draft": null
+     }
+    ],
+    "macro.CUSR0000SEFV": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change"
+      ],
+      "forbidden_allowed": [
+       "last"
+      ]
+     }
+    ],
+    "macro.food_services_sales": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "pct_change",
+       "sum_over_time"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "last",
+       "mean_over_time"
+      ]
+     }
+    ]
+   },
+   "m3": {
+    "load_tags_ok": true,
+    "load_tags_error": null,
+    "entry_errors": {},
+    "db_checked_entries": 43,
+    "db_problems": [],
+    "pass": true
+   }
+  },
+  "draft_3": {
+   "m1": {
+    "fundamentals.revenue": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.operating_income": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "fundamentals.net_income": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.op_cash_flow": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [],
+      "missing": [
+       "ratio_of_sums",
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.capex": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": false,
+      "match": false
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "reported_fy_value",
+      "match": false
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": [
+       "sum_over_time"
+      ]
+     }
+    },
+    "fundamentals.total_assets": {
+     "semantic_type": {
+      "hand": "stock",
+      "draft": "stock",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD",
+      "draft": "USD",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "last",
+      "draft": "last",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "instant",
+      "draft": "instant",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "last",
+       "sum_across_entities"
+      ],
+      "draft": [
+       "last",
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "fundamentals.diluted_eps": {
+     "semantic_type": {
+      "hand": "per_share",
+      "draft": "per_share",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD/shares",
+      "draft": "USD/shares",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "reported_fy_value",
+      "draft": "reported_fy_value",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": "mixed",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [],
+      "draft": [
+       "pct_change"
+      ],
+      "match": false,
+      "extra": [
+       "pct_change"
+      ],
+      "missing": []
+     }
+    },
+    "derived.operating_margin": {
+     "semantic_type": {
+      "hand": "ratio",
+      "draft": "ratio",
+      "match": true
+     },
+     "unit": {
+      "hand": "percent",
+      "draft": null,
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "none",
+      "draft": "none",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "mixed",
+      "draft": null,
+      "match": false
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": null,
+      "match": false
+     },
+     "valid_methods": {
+      "hand": [
+       "ratio_of_sums"
+      ],
+      "draft": [
+       "ratio_of_sums"
+      ],
+      "match": true,
+      "extra": [],
+      "missing": []
+     }
+    },
+    "comps_quarterly.comp_sales_pct": {
+     "semantic_type": {
+      "hand": "ratio",
+      "draft": "ratio",
+      "match": true
+     },
+     "unit": {
+      "hand": "percent",
+      "draft": "percent",
+      "match": true
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "none",
+      "draft": "none",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "quarterly",
+      "draft": "quarterly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "fiscal",
+      "draft": "fiscal",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [],
+      "draft": [],
+      "match": true,
+      "extra": [],
+      "missing": []
+     },
+     "comparability": {
+      "hand": "by_definition_id",
+      "draft": "by_definition_id",
+      "match": true
+     }
+    },
+    "brand_attention_daily.views": {
+     "semantic_type": {
+      "hand": "count",
+      "draft": "flow",
+      "match": false
+     },
+     "unit": {
+      "hand": "views",
+      "draft": "page views",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "daily",
+      "draft": "daily",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": null,
+      "match": false
+     },
+     "valid_methods": {
+      "hand": [
+       "rollup_to_parent",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "mean_over_time",
+       "pct_change",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "missing": [
+       "rollup_to_parent"
+      ]
+     },
+     "hierarchy": {
+      "hand": "brand -> parent_ticker",
+      "draft": null,
+      "match": false
+     }
+    },
+    "macro.CUSR0000SEFV": {
+     "semantic_type": {
+      "hand": "index",
+      "draft": "index",
+      "match": true
+     },
+     "unit": {
+      "hand": "index_points",
+      "draft": "index points (1982-84=100)",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "additive_over_time": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "mean",
+      "draft": "mean",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "monthly",
+      "draft": "monthly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change"
+      ],
+      "match": false,
+      "extra": [
+       "last"
+      ],
+      "missing": []
+     },
+     "seasonal_adjustment": {
+      "hand": "SA",
+      "draft": "SA",
+      "match": true
+     },
+     "annualized": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     }
+    },
+    "macro.food_services_sales": {
+     "semantic_type": {
+      "hand": "flow",
+      "draft": "flow",
+      "match": true
+     },
+     "unit": {
+      "hand": "USD_millions",
+      "draft": "millions of USD",
+      "match": false
+     },
+     "additive_over_entities": {
+      "hand": false,
+      "draft": true,
+      "match": false
+     },
+     "additive_over_time": {
+      "hand": true,
+      "draft": true,
+      "match": true
+     },
+     "time_rollup": {
+      "hand": "sum",
+      "draft": "sum",
+      "match": true
+     },
+     "period_basis": {
+      "hand": "monthly",
+      "draft": "monthly",
+      "match": true
+     },
+     "calendar": {
+      "hand": "calendar",
+      "draft": "calendar",
+      "match": true
+     },
+     "valid_methods": {
+      "hand": [
+       "pct_change",
+       "sum_over_time"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "match": false,
+      "extra": [
+       "last",
+       "mean_over_time"
+      ],
+      "missing": []
+     },
+     "seasonal_adjustment": {
+      "hand": "SA",
+      "draft": "SA",
+      "match": true
+     },
+     "annualized": {
+      "hand": false,
+      "draft": false,
+      "match": true
+     }
+    }
+   },
+   "m1b": {
+    "fundamentals.metric": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.cik": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.concept": {
+     "hand": "identifier",
+     "draft": "dimension",
+     "match": false
+    },
+    "fundamentals.unit": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_start": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_end": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.period_basis": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.fiscal_year": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.fiscal_quarter": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.form": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "fundamentals.accession": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "fundamentals.filed": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_quarterly.fiscal_year": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.fiscal_quarter": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_quarterly.definition_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_quarterly.source_url": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.definition_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.definition_text": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "comps_definitions.source_url": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "comps_definitions.notes": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.date": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.article_title": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "brand_attention_daily.brand": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.grain": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "brand_attention_daily.parent_ticker": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "macro_monthly.series_id": {
+     "hand": "identifier",
+     "draft": "identifier",
+     "match": true
+    },
+    "macro_monthly.date": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    },
+    "macro_monthly.retrieved_on": {
+     "hand": "dimension",
+     "draft": "dimension",
+     "match": true
+    }
+   },
+   "m2": {
+    "fundamentals.revenue": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.operating_income": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "fundamentals.net_income": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.op_cash_flow": [
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.capex": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "ratio_of_sums",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "pct_change",
+       "ratio_of_sums",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     },
+     {
+      "field": "additive_over_time",
+      "hand": true,
+      "draft": false
+     },
+     {
+      "field": "time_rollup",
+      "hand": "sum",
+      "draft": "reported_fy_value"
+     }
+    ],
+    "fundamentals.total_assets": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "last",
+       "sum_across_entities"
+      ],
+      "draft": [
+       "last",
+       "pct_change",
+       "sum_across_entities"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "fundamentals.diluted_eps": [
+     {
+      "field": "valid_methods",
+      "hand": [],
+      "draft": [
+       "pct_change"
+      ],
+      "forbidden_allowed": [
+       "pct_change"
+      ]
+     }
+    ],
+    "derived.operating_margin": [],
+    "comps_quarterly.comp_sales_pct": [],
+    "brand_attention_daily.views": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "rollup_to_parent",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "draft": [
+       "mean_over_time",
+       "pct_change",
+       "sum_across_entities",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "mean_over_time",
+       "pct_change"
+      ]
+     },
+     {
+      "field": "hierarchy",
+      "hand": "brand -> parent_ticker",
+      "draft": null
+     }
+    ],
+    "macro.CUSR0000SEFV": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "mean_over_time",
+       "pct_change"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change"
+      ],
+      "forbidden_allowed": [
+       "last"
+      ]
+     }
+    ],
+    "macro.food_services_sales": [
+     {
+      "field": "valid_methods",
+      "hand": [
+       "pct_change",
+       "sum_over_time"
+      ],
+      "draft": [
+       "last",
+       "mean_over_time",
+       "pct_change",
+       "sum_over_time"
+      ],
+      "forbidden_allowed": [
+       "last",
+       "mean_over_time"
+      ]
+     },
+     {
+      "field": "additive_over_entities",
+      "hand": false,
+      "draft": true
+     }
+    ]
+   },
+   "m3": {
+    "load_tags_ok": true,
+    "load_tags_error": null,
+    "entry_errors": {},
+    "db_checked_entries": 43,
+    "db_problems": [],
+    "pass": true
+   }
+  }
+ },
+ "verdicts": {
+  "semantic_type": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "unit": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "additive_over_entities": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "additive_over_time": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "time_rollup": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "period_basis": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "calendar": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "valid_methods": {
+   "entries_per_draft": {
+    "draft_1": 12,
+    "draft_2": 12,
+    "draft_3": 12
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "comparability": {
+   "entries_per_draft": {
+    "draft_1": 1,
+    "draft_2": 1,
+    "draft_3": 1
+   },
+   "all_match": true,
+   "verdict": "safe to auto-draft"
+  },
+  "hierarchy": {
+   "entries_per_draft": {
+    "draft_1": 1,
+    "draft_2": 1,
+    "draft_3": 1
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  },
+  "seasonal_adjustment": {
+   "entries_per_draft": {
+    "draft_1": 2,
+    "draft_2": 2,
+    "draft_3": 2
+   },
+   "all_match": true,
+   "verdict": "safe to auto-draft"
+  },
+  "annualized": {
+   "entries_per_draft": {
+    "draft_1": 2,
+    "draft_2": 2,
+    "draft_3": 2
+   },
+   "all_match": true,
+   "verdict": "safe to auto-draft"
+  },
+  "semantic_type (dimension/identifier)": {
+   "entries_per_draft": {
+    "draft_1": 31,
+    "draft_2": 31,
+    "draft_3": 31
+   },
+   "all_match": false,
+   "verdict": "needs human review"
+  }
+ },
+ "missing_drafts": []
+}

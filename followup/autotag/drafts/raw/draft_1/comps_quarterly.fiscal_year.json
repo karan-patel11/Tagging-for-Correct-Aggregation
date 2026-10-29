@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.fiscal_year",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:03+00:00",
+ "seconds": 7.91,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2137,
+  "output_tokens": 917,
+  "output_tokens_details": {
+   "thinking_tokens": 505
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013517,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqEdUNoujahwiAMgMR7",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}\"\n  },\n  \"description\": \"Fiscal year label (integer, e.g. 2025, 2026) of the reporting period for each company's quarterly comparable-sales observation. It is a period dimension used with fiscal_quarter to identify the quarter, not a measure, so it should not be summed or averaged. It follows each company's own fiscal calendar, so the same value can cover different calendar months across tickers. For example, DRI's fiscal 2026 Q1 comes from a filing made in calendar 2025. Values come from the earnings-release exhibits on SEC EDGAR cited in each row's source_url.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2137,
+   "output_tokens": 917,
+   "output_tokens_details": {
+    "thinking_tokens": 505
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

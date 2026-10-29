@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.unit",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:29+00:00",
+ "seconds": 9.2,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2491,
+  "output_tokens": 901,
+  "output_tokens_details": {
+   "thinking_tokens": 502
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014065,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrsTrKuiHPsUKJc6oWc",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Unit of measure attached to each reported fact's value, taken from the SEC companyfacts XBRL data.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label giving the unit of measure for the value column in each row. It has two distinct values: 'USD' for monetary amounts such as revenue, operating income, net income, operating cash flow and capex, and 'USD/shares' for per-share amounts. It is not a measure and cannot be aggregated. Use it to group or filter rows so that dollar amounts and per-share amounts are never summed or compared together.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2491,
+   "output_tokens": 901,
+   "output_tokens_details": {
+    "thinking_tokens": 502
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

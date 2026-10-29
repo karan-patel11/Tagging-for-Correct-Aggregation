@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.parent_ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:56:05+00:00",
+ "seconds": 7.98,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2392,
+  "output_tokens": 1055,
+  "output_tokens_details": {
+   "thinking_tokens": 691
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015407,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrY1BgchppH9PK84Ckh",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"dimension\",\"unit\":null,\"additive_over_entities\":null,\"additive_over_time\":null,\"time_rollup\":null,\"valid_methods\":[],\"period_basis\":null,\"derivation\":\"Ticker of the parent company that each brand or parent article row belongs to. The packet's Wikimedia documentation does not describe this mapping, so it appears to be assigned by the dataset.\",\"calendar\":null,\"seasonal_adjustment\":null,\"annualized\":null,\"entity_grain\":null,\"hierarchy\":\"brand -> parent_ticker\",\"comparability\":null,\"lineage\":{\"url_template\":\"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/{start_date}/{end_date}\"},\"description\":\"Grouping key holding the ticker of the parent company (CMG, DRI, WING or YUM) that a brand or parent Wikipedia article is assigned to. It is used to roll brand-level attention up to the parent company. It is not a measure and should not be aggregated.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2392,
+   "output_tokens": 1055,
+   "output_tokens_details": {
+    "thinking_tokens": 691
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

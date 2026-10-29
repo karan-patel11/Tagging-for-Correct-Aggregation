@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.accession",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:31+00:00",
+ "seconds": 7.64,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2407,
+  "output_tokens": 863,
+  "output_tokens_details": {
+   "thinking_tokens": 488
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013517,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqGiz4vib85ogHi8yXi",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQS4Q4KEAgTGAI4AUIIdGhpbmtpbmcSDC84udTWIAOYW09XlRoM8JU4P4QaIQmoq39SIjARjpy5EvEQGD8H3N9Qn1dGAsTXCNsXcsQWVJWMmja9ABa1Q4KApzE/YSNM/8qoiRAq/g1Kq4hnwkLclaUs2Y7ke6+hOBNXPgX2/suEpjNWUab2b45iwAUDU84nhojwk/YPa3Q9MnwEGwHDGtG/H10CH1y+BvJKz21CLWM2xT4gXj9+zl0227eFsUpmAxENBxX5Ek0+GVib/CqU1AKWU8hS0rh9ewiAumhuG1bCHJkP4CQyAz1H2QPUeoB1ECOBogg0X1+br2BpAPKGHLp/X9mlhMY0EYNz24UbGuLpYs54gTA1yaonKYhQDdQbtiC0HZ+adOeOvEqf3eGdompF8m5d26ph6fR7iVRLe9mkWDvqlgl9klpZfM2hp5oWk6e75mw5KemYv80hlN7UaTILc7O0iLJdCFotmmk5MImjgPZtFORKCQ1vDI6At5hhP8n+eCiAy6G9d9+476noivfugY7MNkfM8jPX9VQJLpGGaSmCHm8ZEchw5gwoGpyUlnkpuB7u3P1/vSfLfGEoy++POhOGDyMlcpT9zdl5i+9foK1zyhXEpTppGScFE3J/7LK2o92nJLyI7RARb0j/87wXReBr4dwsY+zk22L+2to2j2/z57ETAtBybLT+mMPqO5uBP82DQtU8ZDkLGvMK55f2GRMR/549NZGDBkqHa0O32eCN9MedgiIRoITOzXxj5j7Bk0HS5OblT/zf1Y2maR9Xc4GOyDx5/3/VrS9s+3REKgqXoDGUOFlqHRRDk/hO4N5assKwbqkFLxbV5gyeKGx4EEmG0UnTaPwjecJ8Ofk0wNt5SncC3YrlgBOnqEjzT+d2VBW+qwq73klczKCprT7dzjN3OeETRf6LvuNo5gfzC0XBnpMgbJql8hnX8eAvP42IXN/GqdsiBVyYvRv1ByVLFQD5qWUFZbRdpRsl1YV4L0vPOkWxjwdfP8MXVnot+iMY/qsZTUvUNSc3aNcjKwoTfkOHklH9XkS5LmJOP4ZNiD4xUt3byZGERZVi8xXtgch3kCPtoZDM3Yu4bd3NvWAxBw0o6KfIIUP0Jn9DxOY/6VZ03YWdEVgNDu0QgCVRxq8STFI061mWFxOxvayLDEOUg8GWSYs4FXCRvB3Ny+/B7h1ZbO5YGhpksEJZScUwc8R6hqlQ1dQgqszTqZRuqFnvllTH7Phv28IUpreCnxbrmy2JHsKm7+RMRKMcf5lABZH4wO9fdidf8ZudlXWtnDyb6R0LHYtZPmDvMbFFPXjYc3ZNJ31eGg3X3xaD/BOxVHB/cFnI92yM6Mx6lUyfCdo7VDjao7nGGKIBfNwVBuLq3Lcx42Wjtn4PH/SYZqIqEtekansQQrSbmCmyOCf/CIZnHXBIYSjCA6fW+wv4CZ6H8M2cNzI6j+GqYeHyqH1K/iTsuKKmK9UxSHtlfW6UaDNIQqTG6OnIca+TxZ3e3e6FS0e5DNaYpVUVYa8eGDZ4DDKb834j33ml6FvhxzItb764ktXPkXGwC9VXKYV3sUnZ0KNeCYJKsGv1K76Ioc+5hrZlOQNWeT6eeRJx0qMI7cPkKpaB2mKa1XIP8UCClYTaUsRzOrz0ETI4Yw8sUzNEksSFbrlBxdtlGPQjqrVwB0NTBIwHrp9i0XCIBxzlDdU0ftHX4WIEcOUq16OKVaMmOwxykUH1MzTqPNJouoXdWZhjv0baGflLJcj2mi0wYBnGJV3X/0U1pXhfk4/Wk9eyFd/4ZaVS97pSbX6VprNpR6hcR645SXNGOdxowRUreeiA9gzu5KWjjz6/EB4PUUW9VoDxzhmUi+7Y0NYcKuKvEh/NcJYcV+MqM+x6HcuaTa+OsniyAfKU6Uhrx04nS3ln0qOIDtKab63Wz/Ymw/x90X9/EDaQJS3nVlUgCGqedoeTWQxbERDmsNKyfNU5ZHXR75AvQavEkh4UVWvROucHfu1CAUxWMmeva68ZHPfP0y3/ntvsF1W5cd0a5ERH/bSAiwYPcd4XzeBSo0u9mWxctpYFF92uTM/jhxPB2VU48HaF1EcEdoBSsS+nNDii3b5ZEySVHIKQZcFwhEAOQ+WUHE+lTtg75lcUznIjOIbonSYt1ozeMFcsyfqZbzWzE6yRyf/8klQbKdVPxscX6acHw0IUnGo5PmHM281QVQLAlvYCXIOK3bIukowRjSCR2CaT7P46scum4r3MWjiG/Ni84e2YOzVNwqnTnRfOgq3YXqtZUGSTHhhGzrDwgtmbIlQRNJH/K5PJL9ATLcjLS1wXBuNUhHMS8KM/TLxbAV42e+SBaBCcFqRQhlWBFOupcKdkztwbBagg21Luo4eDbh9jnxs25rETPCeIzvmbP9fyIXgbfvWBi5YUnbelEC9Y+8UAN2nUpqw0a7ua8y5UF0oajV2Hm5n0IfA0Wckk/y9v0xuLb1J1f5R8+oaRzuauhvRzJ65o4euZy1wViRCGgd/BnxLMAFgzExgB",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"filing\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"SEC accession number of the 10-K or 10-Q filing that reported each fact, in the format NNNNNNNNNN-YY-NNNNNN. It identifies the source filing and is not a measure, so it must not be aggregated. Many fact rows share one accession (39 distinct values across 288 rows), because a single filing reports several metrics and periods.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2407,
+   "output_tokens": 863,
+   "output_tokens_details": {
+    "thinking_tokens": 488
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

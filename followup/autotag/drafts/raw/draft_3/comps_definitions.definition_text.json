@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.definition_text",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:02:16+00:00",
+ "seconds": 6.9,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2007,
+  "output_tokens": 820,
+  "output_tokens_details": {
+   "thinking_tokens": 434
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012287,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs1NPdw1sVZzxkjBR1W",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}\"\n  },\n  \"description\": \"Free-text definition of each company's comparable/same-store sales metric, taken from its 10-K filing (one row per definition_id, e.g. WING_10K, DRI_10K, CMG_10K). The text describes the store-base eligibility rules (e.g. 52 weeks, 16 months, 13 full calendar months), the comparison basis and the exclusions. These differ by company, so the associated comp metrics are only comparable within the same definition_id. This is descriptive text and is not aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2007,
+   "output_tokens": 820,
+   "output_tokens_details": {
+    "thinking_tokens": 434
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

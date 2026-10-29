@@ -1,0 +1,195 @@
+{
+ "table": "fundamentals",
+ "column": "value",
+ "filter": {
+  "metric": "diluted_eps"
+ },
+ "duckdb_dtype": "DOUBLE",
+ "row_count": 48,
+ "null_count": 0,
+ "distinct_count": 47,
+ "sample_rows": [
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 2.74,
+   "unit": "USD/shares",
+   "period_start": "2024-11-25",
+   "period_end": "2025-02-23",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0000940944-26-000009",
+   "filed": "2026-03-27"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 1.28,
+   "unit": "USD/shares",
+   "period_start": "2024-04-01",
+   "period_end": "2024-06-30",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001041061-25-000057",
+   "filed": "2025-08-07"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 0.87,
+   "unit": "USD/shares",
+   "period_start": "2024-01-01",
+   "period_end": "2024-09-30",
+   "period_basis": "YTD9",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001058090-25-000088",
+   "filed": "2025-10-30"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 2.03,
+   "unit": "USD/shares",
+   "period_start": "2025-08-25",
+   "period_end": "2025-11-23",
+   "period_basis": "Q",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0000940944-25-000071",
+   "filed": "2025-12-30"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 5.55,
+   "unit": "USD/shares",
+   "period_start": "2025-01-01",
+   "period_end": "2025-12-31",
+   "period_basis": "FY",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0001041061-26-000084",
+   "filed": "2026-02-20"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 2.78,
+   "unit": "USD/shares",
+   "period_start": "2023-12-31",
+   "period_end": "2024-09-28",
+   "period_basis": "YTD9",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001636222-25-000110",
+   "filed": "2025-11-04"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 1.11,
+   "unit": "USD/shares",
+   "period_start": "2024-01-01",
+   "period_end": "2024-12-31",
+   "period_basis": "FY",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0001058090-26-000009",
+   "filed": "2026-02-04"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 0.32,
+   "unit": "USD/shares",
+   "period_start": "2025-04-01",
+   "period_end": "2025-06-30",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001058090-26-000066",
+   "filed": "2026-07-31"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 1.02,
+   "unit": "USD/shares",
+   "period_start": "2025-06-29",
+   "period_end": "2025-09-27",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001636222-25-000110",
+   "filed": "2025-11-04"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 0.33,
+   "unit": "USD/shares",
+   "period_start": "2024-04-01",
+   "period_end": "2024-06-30",
+   "period_basis": "Q",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0001058090-25-000056",
+   "filed": "2025-07-24"
+  }
+ ],
+ "min": 0.26,
+ "max": 10.38,
+ "vendor_documentation": {
+  "sec_companyfacts": {
+   "CMG": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001058090.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "WING": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001636222.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "YUM": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001041061.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "DRI": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000940944.json",
+    "retrieved_on": "2026-10-24"
+   }
+  }
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.form",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:40:38+00:00",
+ "seconds": 6.09,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2454,
+  "output_tokens": 786,
+  "output_tokens_details": {
+   "thinking_tokens": 397
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012841,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqMevPFDRNP8QZp43Hv",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Form type of the SEC filing (accession) in which the fact was reported, taken from the SEC companyfacts data. Observed values are 10-K for annual filings and 10-Q for quarterly filings.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"SEC filing form type (10-K or 10-Q) for the filing that reported each fundamentals fact. It is a categorical label for filtering or grouping and is not a measure, so it should not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2454,
+   "output_tokens": 786,
+   "output_tokens_details": {
+    "thinking_tokens": 397
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

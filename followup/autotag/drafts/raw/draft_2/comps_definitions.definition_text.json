@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.definition_text",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:56:33+00:00",
+ "seconds": 6.97,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2007,
+  "output_tokens": 801,
+  "output_tokens_details": {
+   "thinking_tokens": 355
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012097,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVra1hW5L2wMpMKNUieY",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Verbatim definition text of each company's comparable/same-store sales metric, taken from its 10-K filing\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company (one definition per ticker)\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"Company 10-K filings on SEC EDGAR\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}.htm\"\n  },\n  \"description\": \"Free-text definition of each company's comparable-store sales metric (WING, DRI, CMG), quoted from its 10-K. Definitions differ in store-base eligibility (52 weeks, 16 months, 13 months), scope (domestic, company-owned, system-wide) and exclusions. Use it as a descriptive attribute keyed by definition_id, not as a value to aggregate. Comps should only be compared across companies with the differences in definition in mind.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2007,
+   "output_tokens": 801,
+   "output_tokens_details": {
+    "thinking_tokens": 355
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

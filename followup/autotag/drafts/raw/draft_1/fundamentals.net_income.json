@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.net_income",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:40:52+00:00",
+ "seconds": 10.12,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2381,
+  "output_tokens": 1300,
+  "output_tokens_details": {
+   "thinking_tokens": 747
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.017835,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqNi8u2AXZ1ptCdKqBk",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Value of the us-gaap NetIncomeLoss concept as reported in SEC XBRL filings (10-Q and 10-K). No Q4 value is derived; fiscal-year totals come from the 10-K.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Net income (loss) in USD per company and fiscal period, taken from the NetIncomeLoss concept in SEC filings. The same table holds discrete quarters (Q), cumulative year-to-date values (YTD6, YTD9) and full fiscal years (FY), so the periods overlap. Summing over time would double count; use the FY value for annual figures and compare only rows with the same period_basis. Fiscal calendars differ by company, so cross-company sums of the same fiscal quarter cover slightly different dates. Values are not seasonally adjusted or annualized.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2381,
+   "output_tokens": 1300,
+   "output_tokens_details": {
+    "thinking_tokens": 747
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

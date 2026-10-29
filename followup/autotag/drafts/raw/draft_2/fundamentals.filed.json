@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.filed",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:58:24+00:00",
+ "seconds": 7.84,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2396,
+  "output_tokens": 844,
+  "output_tokens_details": {
+   "thinking_tokens": 453
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013305,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVriE9phPveDuBgpFvQC",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Date on which the SEC filing (10-Q or 10-K, identified by the accession number) that reported the fact was filed. It is a date attribute of the filing, not a reporting period end, and it is not a numeric measure. Use it for point-in-time (as-of) filtering and for choosing between original and restated values. It should not be summed or averaged. It differs from period_end, and a filing may come months after the period it covers.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2396,
+   "output_tokens": 844,
+   "output_tokens_details": {
+    "thinking_tokens": 453
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

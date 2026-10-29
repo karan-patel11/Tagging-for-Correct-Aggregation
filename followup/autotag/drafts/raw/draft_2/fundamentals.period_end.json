@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_end",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:59:44+00:00",
+ "seconds": 10.39,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2407,
+  "output_tokens": 1016,
+  "output_tokens_details": {
+   "thinking_tokens": 588
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015047,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrp9UTfoMxg6YSUJ24t",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Date on which the reported period ends for each fundamentals fact. For flow metrics (quarterly or year-to-date durations) it is the last day of the duration. For point-in-time metrics (period_basis 'instant', e.g. total assets) it is the balance-sheet as-of date. Calendar-year filers such as YUM and CMG end on calendar quarter ends; fiscal-year filers such as DRI end on fiscal quarter ends. Use it as a time dimension for grouping and filtering, not as a value to aggregate.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2407,
+   "output_tokens": 1016,
+   "output_tokens_details": {
+    "thinking_tokens": 588
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

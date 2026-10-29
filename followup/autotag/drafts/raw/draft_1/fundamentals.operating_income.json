@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.operating_income",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:41:12+00:00",
+ "seconds": 14.23,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2414,
+  "output_tokens": 1438,
+  "output_tokens_details": {
+   "thinking_tokens": 855
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.019281,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqQ7rSfFq1uES9ZLxzT",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": true,\n  \"time_rollup\": \"sum\",\n  \"valid_methods\": [\"sum_across_entities\", \"sum_over_time\", \"ratio_of_sums\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported XBRL us-gaap OperatingIncomeLoss, taken as filed in 10-Q filings. Rows cover discrete quarters (period_basis Q) and cumulative year-to-date periods (e.g. YTD6). Summing over time is valid only across non-overlapping discrete-quarter rows. Do not add YTD rows to quarterly rows, because that double counts.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"OperatingIncomeLoss\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Operating income (loss) in US dollars for restaurant companies (CMG, WING, YUM, DRI), as reported to the SEC. Each row is one fiscal period. The period is either a discrete quarter or a cumulative year-to-date span, identified by period_start, period_end and period_basis. Fiscal calendars differ by company, so period ends do not line up exactly across tickers.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2414,
+   "output_tokens": 1438,
+   "output_tokens_details": {
+    "thinking_tokens": 855
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

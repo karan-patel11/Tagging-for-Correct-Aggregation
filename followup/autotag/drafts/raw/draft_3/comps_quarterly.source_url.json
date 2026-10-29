@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.source_url",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:03:20+00:00",
+ "seconds": 6.05,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2790,
+  "output_tokens": 760,
+  "output_tokens_details": {
+   "thinking_tokens": 413
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013253,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs63TzUiEsHTX8n6Hya",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"ticker x fiscal_year x fiscal_quarter\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_name}\"\n  },\n  \"description\": \"URL of the SEC EDGAR earnings-release exhibit (Exhibit 99.1) from which each company-quarter's comparable sales figure was taken. There is one distinct URL per ticker, fiscal year and fiscal quarter row. It is a text provenance reference and cannot be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2790,
+   "output_tokens": 760,
+   "output_tokens_details": {
+    "thinking_tokens": 413
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

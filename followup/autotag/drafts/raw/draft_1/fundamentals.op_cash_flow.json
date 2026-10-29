@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.op_cash_flow",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:41:03+00:00",
+ "seconds": 8.99,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2554,
+  "output_tokens": 1171,
+  "output_tokens_details": {
+   "thinking_tokens": 571
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016891,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqPTNuoVnbyZxqgXTSi",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported XBRL value of NetCashProvidedByUsedInOperatingActivities (or its ContinuingOperations variant) as filed. Rows are cumulative year-to-date amounts (Q1 = Q, YTD6, YTD9, FY), not discrete quarters. Rows with different period_basis values must not be summed over time.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Net cash provided by (used in) operating activities in USD for restaurant companies (CMG, WING, YUM, DRI), taken from SEC 10-Q and 10-K filings. Each row covers a fiscal period (Q1, YTD6, YTD9 or FY) defined by period_start, period_end and period_basis. Values are cumulative within the fiscal year. Compare or sum across companies only for matching periods, and use the FY value for annual totals. The XBRL concept differs for some filers (DRI uses the ContinuingOperations variant), so definitions may not be identical across companies.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2554,
+   "output_tokens": 1171,
+   "output_tokens_details": {
+    "thinking_tokens": 571
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

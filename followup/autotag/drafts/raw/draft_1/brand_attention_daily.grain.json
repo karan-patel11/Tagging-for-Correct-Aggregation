@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.grain",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:37:34+00:00",
+ "seconds": 7.32,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2377,
+  "output_tokens": 906,
+  "output_tokens_details": {
+   "thinking_tokens": 457
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013887,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVq84rQbMVbCufN2SqMP",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"article_title\",\n  \"hierarchy\": \"brand -> parent_ticker\",\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Wikimedia Pageviews REST API (en.wikipedia, all-access, user, daily)\",\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"\n  },\n  \"description\": \"Categorical label marking the level of each row in brand_attention_daily. 'brand' rows are for a restaurant brand's Wikipedia article (e.g. KFC, Pizza Hut), and 'parent' rows are for the parent company's article (e.g. Yum! Brands). Brand rows roll up to their parent through parent_ticker. Filter or group on this column to avoid double counting when summing views, since parent and brand rows are different levels of the same hierarchy.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2377,
+   "output_tokens": 906,
+   "output_tokens_details": {
+    "thinking_tokens": 457
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

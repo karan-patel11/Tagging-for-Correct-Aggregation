@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:04+00:00",
+ "seconds": 6.79,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2419,
+  "output_tokens": 915,
+  "output_tokens_details": {
+   "thinking_tokens": 525
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014061,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqU1kguSRoAyodbG3jJ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Stock ticker symbol of the public company (CMG, DRI, WING or YUM) that filed each fact. It identifies the company and is a join and grouping key. It is not a measure and must not be aggregated. Each ticker maps to one SEC CIK, held in the cik column, which is used to build the companyfacts source URL. The column has no nulls and 4 distinct values across 288 rows.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2419,
+   "output_tokens": 915,
+   "output_tokens_details": {
+    "thinking_tokens": 525
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

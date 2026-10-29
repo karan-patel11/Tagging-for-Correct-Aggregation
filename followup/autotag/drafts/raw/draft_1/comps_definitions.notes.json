@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.notes",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:18+00:00",
+ "seconds": 7.82,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 759,
+  "output_tokens": 898,
+  "output_tokens_details": {
+   "thinking_tokens": 508
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010571,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqBHqbb7uXJabNjpCQP",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"definition_id\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Company 10-K filings on SEC EDGAR (CMG, DRI, WING)\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}.htm\"\n  },\n  \"description\": \"Free-text notes on how each company defines its comparable or same-store sales metric, one row per definition_id (CMG_10K, DRI_10K, WING_10K). The definitions differ, for example in the minimum restaurant age (13 months, 16 months, 52 weeks) and in exclusions. It is a descriptive text attribute, not a numeric measure, so it should not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 759,
+   "output_tokens": 898,
+   "output_tokens_details": {
+    "thinking_tokens": 508
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

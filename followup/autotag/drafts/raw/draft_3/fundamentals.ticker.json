@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.ticker",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:06:20+00:00",
+ "seconds": 6.16,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2419,
+  "output_tokens": 840,
+  "output_tokens_details": {
+   "thinking_tokens": 467
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013311,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsKL9xMD8KtgMPsaXiJ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Stock ticker symbol identifying the reporting company (4 distinct values in this table: CMG, DRI, WING, YUM). Each ticker maps one-to-one to a 10-digit SEC CIK, and the rows are long-format metric facts from SEC filings. It is a key for grouping and filtering, not a measure, so it should not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2419,
+   "output_tokens": 840,
+   "output_tokens_details": {
+    "thinking_tokens": 467
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

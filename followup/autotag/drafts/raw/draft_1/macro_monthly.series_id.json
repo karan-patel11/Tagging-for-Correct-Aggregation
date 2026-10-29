@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.series_id",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:58+00:00",
+ "seconds": 5.69,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1208,
+  "output_tokens": 690,
+  "output_tokens_details": {
+   "thinking_tokens": 275
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.009389,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqXzJjAvdShJFVwxXbN",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQSpgoKEAgTGAI4AUIIdGhpbmtpbmcSDHt8O4i7wXoQC1jBqhoMJJj9Cuie+Wvd8MAsIjAIKGa2g/Kg5OHVdC6EKEsOFXoXfghi65aCJ/A5LVeuGI4JqckEL5h2cBH2F5sIj0sqwwk7JNFkk2cP+gnmARYNJgmjCEvVdC6t6RSZAitorXOZ3JAUOt94zC7ffYxqXgQ7iXrvMcikmzkHuuHSGs6L1U9u/dIKLcXW8HybyxiXP6FWWw/C+Xxcf2VPtStWZ8VJzZQzCkUzDOpcAadCWckuN5/lqUNpbfLHtchpArdXqHKoriaADgn2Qg7QyFr9SF+wP8ZhNgTh7WKCwWRiVSR4+evwtXFZqM5SbPiyN0Nr7iZiaFcx8zptwkcmWpgrlRLfMv3nr7qvuUBPHx7TNvSDSmIRkmPTSnK26C0zVTcHBqe7vbW2ns39HJP5RTdFd+VgUvjJvXEe7BDBkcaJZvMDN/rgJdNRYZ/2+SRSLpjHkkAlJseUbJH9AuVAUDwVHT0s7zGXH6ck0lcTvoFVJ0BKYg73YD1B3SrjYBY1WakWtR2L1X/iTceeDtGMlrjqz0byMwgHJUd3tmPtJq8yZjx96JgaiztGZGj1GSy/p7SHqb/eEsPrSEDHLwIibf1kWfpomZ1XKLFmhnvnb0feaoP/ZoOxzKF0oBjeDZNUrRtUYqScjd72l7/3e0YWL3tPke+R2lF1IcszQaAFaefV54h9iXDgDkGyjbb30kIUapIGxhPTTFMBRH48tQMxJPxGJqdqWhio0rkdKWZJ9NzZ5m9QhWwrW/8DTi3NnZcqHSL5J2e3V3UTbciFRkjnkTe0VeNl1UiFLc1k8DaEVVPBZjIW4q2cOSlmL5G+BqoWbBa6j/LUGT1JfY0PyOLH1zbP4tRAySYxfl6fxeyaW3saWvPZNUWhpPJVIvxGHWMveEkNRjf6Dx36f+66yh2GrlBaKFUHgdGXCG9ZuYhP9CXvjA0x0vojt1dwl+MFoeVjVZqxT/OAjnwm9kmDB5afROGGfUmo6DEGlzUJnUreng1iNYwCSmR2txao8UOua5GHdYA9H1+TAuBlb2Ngh+gV4ek269MqpndwseaQvXJbLGoMQ9ZJqery8wt1eGfZb0/sSKIdQT8i1Vqyao5Um3f9abiBNqRjUfps+taQLxyW6GzaIpULxH5STJJzbe/3qsic6156h85WBXWmbWyP9mCDdErU8uLD+z8pAekHDf9BxG0csE9W1AJ+qOOZJGLqs2/eamLqtTfcGgkY2QzjaUTLQq7LabC+h7DReNWRPWBsagMkmXBQy8HkjxmKztySMoLwGCs3jnko4vxMMgl26KXe+8xKll35yilunIgINFTS3SsOoyU5kujfdGaJVI/P/mvIbPvUCn/UzXc20gzpabxrtfIhDSUf0dZeatMQWF2R2LDW/M7TBxrBogMdibGZG2o4eGm3or/pyvMr6mfPBORb3QR0RyAoMnV+3cukAIkfiovh6oEbF13uvohT4h0kXoVrCPKmjgB3y21F0I/ME7kD03VhmUUT5WxTGtO91sgYuLoudZ5ZDHI4SsokatVkehd6GfD7DV7QQcfi/ttSzQornrCKF3uavFqQ1TlsW3sIRIG84oP60qV9RQeNIEpDHVY/Xtxx8tCsY0PHbnyysnC1TOThH9kFr8KBjDLN2x2FY98RNmLoifU0dA7Ir227WKYkM+iPrSIbin99DVGgi11rNgcg30wZTxI6Tru2frjs0OWpSBOoX3bbK+WwGAE=",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"monthly\",\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"series\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"U.S. Census Bureau, Monthly Retail Trade and Food Services (CENSUS_722_SA); Consumer Price Index for All Urban Consumers, CPI-U (CUSR0000SEFV)\"\n  },\n  \"description\": \"Identifier of the monthly macro series that each row's value belongs to. The column has 2 distinct values. CENSUS_722_SA is Census seasonally adjusted monthly sales for food services and drinking places (NAICS 722), in millions of dollars. CUSR0000SEFV is the seasonally adjusted CPI-U index for food away from home, U.S. city average (1982-84=100). The two series have different units and meanings, so values should not be aggregated or compared across series_id.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1208,
+   "output_tokens": 690,
+   "output_tokens_details": {
+    "thinking_tokens": 275
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

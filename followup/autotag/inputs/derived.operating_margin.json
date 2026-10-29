@@ -1,0 +1,10 @@
+{
+ "id": "derived.operating_margin",
+ "table": "fundamentals",
+ "filter": {
+  "metric": [
+   "operating_income",
+   "revenue"
+  ]
+ }
+}

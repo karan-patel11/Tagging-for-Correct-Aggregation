@@ -1,0 +1,1201 @@
+- id: brand_attention_daily.article_title
+  table: brand_attention_daily
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: article
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user,
+      daily)
+    url_template: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231
+  description: 'English Wikipedia article title (underscore-separated) used as the
+    key when querying the Wikimedia pageviews API. There are 11 distinct titles, with
+    no nulls. They cover parent companies (Yum!_Brands, Darden_Restaurants) and individual
+    brands. The same brand can appear under more than one title: Habit Burger Grill
+    is tracked as both ''The_Habit_Burger_Grill'' and ''Habit_Burger_&_Grill'', so
+    titles are not a one-to-one key for brands. In API URLs, special characters are
+    percent-encoded (& as %26, ! as %21). This is a label for grouping or filtering
+    and should not be aggregated.'
+- id: brand_attention_daily.brand
+  table: brand_attention_daily
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: Display label assigned to each Wikipedia article_title, which identifies
+    the brand or parent company the daily pageviews belong to.
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: brand
+  hierarchy: brand -> parent_ticker
+  comparability: null
+  lineage:
+    source: Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user,
+      daily)
+    url_template: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231
+  description: Categorical label for the restaurant brand or parent company whose
+    Wikipedia article the daily views in brand_attention_daily refer to. It has 10
+    distinct values and no nulls. Brand-level values (Chipotle, Taco Bell, KFC, Pizza
+    Hut, Habit Burger Grill, Olive Garden, LongHorn Steakhouse, Wingstop) and parent-level
+    values (Yum! Brands, Darden Restaurants) share the column, and the grain column
+    distinguishes them. Use it for grouping and filtering, not for aggregation. Summing
+    views across brand and parent rows of the same parent_ticker would double count
+    attention.
+- id: brand_attention_daily.date
+  table: brand_attention_daily
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: daily
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user,
+      daily)
+    url_template: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231
+  description: Calendar date (DATE) of the daily Wikipedia pageview observation for
+    an article. It is a time dimension for grouping and filtering the views metric,
+    not a measure, and is not aggregated. Values run from 2024-01-01 to 2025-12-31,
+    with 731 distinct dates (every day of that range) and no nulls.
+- id: brand_attention_daily.grain
+  table: brand_attention_daily
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: article_title
+  hierarchy: brand -> parent_ticker
+  comparability: null
+  lineage:
+    source: Wikimedia Pageviews REST API (en.wikipedia, all-access, user, daily)
+    url_template: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231
+  description: Categorical label marking the level of each row in brand_attention_daily.
+    'brand' rows are for a restaurant brand's Wikipedia article (e.g. KFC, Pizza Hut),
+    and 'parent' rows are for the parent company's article (e.g. Yum! Brands). Brand
+    rows roll up to their parent through parent_ticker. Filter or group on this column
+    to avoid double counting when summing views, since parent and brand rows are different
+    levels of the same hierarchy.
+- id: brand_attention_daily.parent_ticker
+  table: brand_attention_daily
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: daily
+  derivation: Not in the Wikimedia vendor documentation. It appears to be a mapping
+    from each Wikipedia article or brand to the stock ticker of its parent company,
+    e.g. Taco Bell, KFC and Pizza Hut map to YUM. Rows with grain='parent' carry the
+    parent company's own ticker.
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: brand
+  hierarchy: brand -> parent_ticker
+  comparability: null
+  lineage:
+    url_template: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231
+  description: Ticker symbol of the publicly traded parent company that owns the brand
+    in each row (CMG, DRI, WING or YUM). It is a text key for grouping brand-level
+    and parent-level rows. It is not a measure and should not be aggregated. Use it
+    to roll brand-level pageviews up to the parent.
+- id: brand_attention_daily.views
+  table: brand_attention_daily
+  filter: null
+  semantic_type: count
+  unit: page views
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods:
+  - sum_over_time
+  - mean_over_time
+  - pct_change
+  - sum_across_entities
+  period_basis: daily
+  derivation: Daily count of user-agent (all-access) page views of one English Wikipedia
+    article, taken from the Wikimedia per-article pageviews REST API.
+  calendar: null
+  seasonal_adjustment: NSA
+  annualized: false
+  entity_grain: article_title
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: 'Wikimedia REST API: pageviews per-article (en.wikipedia, all-access,
+      user, daily)'
+    url_template: https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/{start_date}/{end_date}
+  description: Daily Wikipedia page views for the article representing a restaurant
+    brand or its parent company, used as an attention proxy. Values are additive over
+    days. Rows with grain='parent' and grain='brand' come from separate articles,
+    so a parent's views are not the sum of its brands' views. Sum across entities
+    only within one grain, and do not roll brand rows up to parent rows. A brand can
+    have more than one article title (e.g. Habit Burger Grill), and each title is
+    a separate series that may be sparse or overlap in time.
+- id: comps_definitions.definition_id
+  table: comps_definitions
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: company comparable-sales definition (one row per ticker)
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: Company 10-K filings on SEC EDGAR; each row's filing URL is stored in
+      comps_definitions.source_url
+  description: Key for a company's own definition of its comparable or same-store
+    sales metric, in the form <TICKER>_10K (e.g. WING_10K, DRI_10K, CMG_10K). It is
+    unique per row, with 3 distinct values and no nulls. Companies define the metric
+    differently (for example, 52 weeks open for WING, 16 months for DRI, 13 months
+    for CMG), so the key identifies which definition applies. It is a label for joining
+    and filtering, and must not be aggregated.
+- id: comps_definitions.definition_text
+  table: comps_definitions
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: company (one definition per definition_id/ticker)
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: Company 10-K filings on SEC EDGAR
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}.htm
+  description: Free-text definition of each company's same-store or comparable restaurant
+    sales metric, quoted from its 10-K (WING, DRI, CMG). It records the store-base
+    eligibility rules (for example 52 weeks, 16 months or 13 months open) and the
+    exclusions that apply. It is descriptive text with no aggregation, and is used
+    to judge whether comparable-sales figures are on the same definition.
+- id: comps_definitions.notes
+  table: comps_definitions
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: definition_id
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: Company 10-K filings on SEC EDGAR (CMG, DRI, WING)
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}.htm
+  description: Free-text notes on how each company defines its comparable or same-store
+    sales metric, one row per definition_id (CMG_10K, DRI_10K, WING_10K). The definitions
+    differ, for example in the minimum restaurant age (13 months, 16 months, 52 weeks)
+    and in exclusions. It is a descriptive text attribute, not a numeric measure,
+    so it should not be aggregated.
+- id: comps_definitions.source_url
+  table: comps_definitions
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: definition_id
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{primary_document}
+  description: URL of the SEC EDGAR 10-K filing document in which the company states
+    its comparable/same-store sales definition. There is one URL per definition_id
+    (per ticker). It is a text reference for provenance and lookup, not a measure,
+    so it should not be aggregated.
+- id: comps_definitions.ticker
+  table: comps_definitions
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: company
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}.htm
+  description: Stock ticker symbol (e.g., CMG, DRI, WING) that identifies the restaurant
+    company whose same-store or comparable sales definition appears in each row. The
+    definitions come from the companies' SEC 10-K filings. It is a categorical key
+    for joining and labeling, not a numeric measure, so it cannot be aggregated.
+- id: comps_quarterly.comp_sales_pct
+  table: comps_quarterly
+  filter: null
+  semantic_type: ratio
+  unit: percent
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: none
+  valid_methods: []
+  period_basis: quarterly
+  derivation: Year-over-year percent change in comparable (same-restaurant / same-store)
+    sales for each company's fiscal quarter, as reported in the quarterly earnings
+    release. The comparable-store base and sales definition differ by company (see
+    definition_id).
+  calendar: fiscal
+  seasonal_adjustment: null
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: by_definition_id
+  lineage:
+    publisher: SEC EDGAR (company earnings releases, Exhibit 99.1)
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession}/{document}
+    definition_source: Company 10-K metric definitions, keyed by definition_id (CMG_10K,
+      DRI_10K, WING_10K)
+  description: 'Quarterly comparable restaurant sales growth in percent (4.3 means
+    +4.3% versus the same quarter a year earlier), reported by each company for its
+    fiscal quarter. Each company defines its comparable base differently: CMG uses
+    company-owned restaurants open at least 13 full calendar months, DRI uses restaurants
+    open at least 16 months (excluding Chuy''s and Bahama Breeze), and WING uses domestic
+    restaurants open at least 52 full weeks. Values are comparable only within the
+    same definition_id. The metric is a ratio, so it cannot be summed across companies
+    or quarters, and there is no weighting basis in the packet for averaging or rolling
+    it up.'
+- id: comps_quarterly.definition_id
+  table: comps_quarterly
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: ticker
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}
+  description: Key identifying which company-specific definition of comparable/same-store
+    sales (CMG_10K, DRI_10K, WING_10K) applies to each comp_sales_pct row. Each ID
+    maps to the company's own 10-K wording, which differs in store-eligibility criteria
+    (13 months, 16 months, 52 weeks) and scope. It is a label for joining to the definitions,
+    not a measure, and should not be aggregated. Comp sales values should only be
+    compared directly when the definition_id is the same.
+- id: comps_quarterly.fiscal_quarter
+  table: comps_quarterly
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: none
+  valid_methods: []
+  period_basis: quarterly
+  derivation: null
+  calendar: fiscal
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: fiscal_quarter -> fiscal_year
+  comparability: null
+  lineage: {}
+  description: Fiscal quarter number (1-4) within the company's fiscal year, identifying
+    the reporting period for each comparable sales row. It is a period label, not
+    a measure, so it should not be summed or averaged. It only has meaning together
+    with fiscal_year and ticker, because each company's fiscal calendar differs. The
+    packet gives a separate source_url for each row (earnings release exhibits) and
+    no single URL or URL pattern, so lineage is left empty.
+- id: comps_quarterly.fiscal_year
+  table: comps_quarterly
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: fiscal
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: ticker
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}
+  description: Fiscal year label (integer, e.g. 2025, 2026) of the reporting period
+    for each company's quarterly comparable-sales observation. It is a period dimension
+    used with fiscal_quarter to identify the quarter, not a measure, so it should
+    not be summed or averaged. It follows each company's own fiscal calendar, so the
+    same value can cover different calendar months across tickers. For example, DRI's
+    fiscal 2026 Q1 comes from a filing made in calendar 2025. Values come from the
+    earnings-release exhibits on SEC EDGAR cited in each row's source_url.
+- id: comps_quarterly.source_url
+  table: comps_quarterly
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: none
+  valid_methods: []
+  period_basis: quarterly
+  derivation: null
+  calendar: fiscal
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: ticker-fiscal_quarter
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_filename}
+  description: URL of the SEC EDGAR earnings-release exhibit (Exhibit 99.1) from which
+    each ticker's fiscal-quarter comparable sales figure was taken. Each row has a
+    unique URL. It is a text reference for provenance and lookup, so it cannot be
+    aggregated.
+- id: comps_quarterly.ticker
+  table: comps_quarterly
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: company
+  hierarchy: null
+  comparability: null
+  lineage: {}
+  description: Stock ticker symbol identifying the restaurant company that reported
+    each quarterly comparable-sales row (CMG, DRI, WING in this table). It is a key
+    for grouping and joining, not a measure, so it is never aggregated. It links each
+    row to the company's comparable-sales definition through definition_id.
+- id: derived.operating_margin
+  table: fundamentals
+  filter:
+    metric:
+    - operating_income
+    - revenue
+  semantic_type: ratio
+  unit: null
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: none
+  valid_methods:
+  - ratio_of_sums
+  period_basis: null
+  derivation: operating_income / revenue
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage: {}
+  description: Operating margin, derived as operating income divided by revenue from
+    the fundamentals table. It is a ratio, so it cannot be summed across entities
+    or time. To aggregate, sum the numerator and denominator separately, then divide
+    (ratio of sums). The packet gave no data type, samples, vendor documentation or
+    source URL, so unit, period basis, calendar and lineage are left unset.
+- id: fundamentals.accession
+  table: fundamentals
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: filing
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: SEC accession number of the 10-K or 10-Q filing that reported each
+    fact, in the format NNNNNNNNNN-YY-NNNNNN. It identifies the source filing and
+    is not a measure, so it must not be aggregated. Many fact rows share one accession
+    (39 distinct values across 288 rows), because a single filing reports several
+    metrics and periods.
+- id: fundamentals.capex
+  table: fundamentals
+  filter:
+    metric: capex
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: false
+  time_rollup: reported_fy_value
+  valid_methods:
+  - sum_across_entities
+  period_basis: mixed
+  derivation: Reported as-is from the XBRL concept PaymentsToAcquirePropertyPlantAndEquipment.
+    Rows are discrete quarters (Q), year-to-date cumulatives (YTD6, YTD9) or full
+    fiscal years (FY).
+  calendar: fiscal
+  seasonal_adjustment: NSA
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: same_definition
+  lineage:
+    source: SEC EDGAR XBRL companyfacts
+    concept: PaymentsToAcquirePropertyPlantAndEquipment
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Capital expenditures (cash paid to acquire property, plant and equipment)
+    in USD for restaurant companies (CMG, DRI, WING, YUM), taken from 10-Q and 10-K
+    filings. Values are positive cash outflows. Each row covers a different period
+    (Q, YTD6, YTD9 or FY), and the YTD rows overlap the quarterly rows. Summing rows
+    over time therefore double counts. Use the FY row for annual totals, or compare
+    rows with the same period_basis. Values can be summed across companies only when
+    the period and fiscal calendar match.
+- id: fundamentals.cik
+  table: fundamentals
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: none
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: company
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL company facts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: 'SEC Central Index Key (CIK) of the filing company, stored as a 10-digit
+    zero-padded string. Identifies the registrant for each fundamentals row (4 distinct
+    companies in this table: CMG, WING, YUM, DRI). It is a label for joining and grouping
+    and must not be summed, averaged or otherwise aggregated.'
+- id: fundamentals.concept
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: US-GAAP XBRL concept name taken from the SEC companyfacts record for
+    each fact. The warehouse 'metric' column is mapped to it.
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: 'Categorical label holding the XBRL concept (tag) name under which
+    each fundamentals value was reported, for example NetIncomeLoss, EarningsPerShareDiluted
+    or OperatingIncomeLoss. It has 9 distinct values and no nulls. It is a grouping
+    and filtering key, not a measure, so it should never be aggregated. Some metrics
+    can be reported under more than one concept: Revenues and RevenueFromContractWithCustomerExcludingAssessedTax,
+    and the operating cash flow concept with or without ContinuingOperations. Check
+    which concept a value comes from before combining values across companies or periods.'
+- id: fundamentals.diluted_eps
+  table: fundamentals
+  filter:
+    metric: diluted_eps
+  semantic_type: per_share
+  unit: USD/shares
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: reported_fy_value
+  valid_methods:
+  - pct_change
+  period_basis: mixed
+  derivation: As-reported XBRL concept EarningsPerShareDiluted from SEC 10-Q and 10-K
+    filings. Rows cover discrete quarters (Q), nine-month year-to-date (YTD9) and
+    full fiscal year (FY) periods.
+  calendar: fiscal
+  seasonal_adjustment: n/a
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: same_definition
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    concept: EarningsPerShareDiluted
+    retrieved_on: '2026-10-24'
+  description: Diluted earnings per share in USD per share, as reported by each company
+    in SEC filings. Each row covers a quarter, a nine-month YTD period or a full fiscal
+    year, as shown by period_basis. Values are per-share ratios, so they cannot be
+    summed across companies. They should not be summed across periods either, because
+    YTD and FY rows overlap the quarters and share counts change over time. For a
+    fiscal-year figure, use the reported FY value.
+- id: fundamentals.filed
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: accession
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Date on which the SEC filing (10-Q or 10-K, identified by accession
+    number) that reported the fact was filed with the SEC. It is a date attribute
+    of the filing, not a measure of the reporting period, so it should not be summed
+    or averaged. Use it to filter or order facts by when they became public. The same
+    filing date applies to all facts reported in one accession. Values are never null
+    and range from 2024-04-25 to 2026-10-02.
+- id: fundamentals.fiscal_quarter
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: none
+  valid_methods: []
+  period_basis: null
+  derivation: Fiscal quarter label (1-4) attached to each reported fact. In the sampled
+    rows, FY-basis facts from 10-Ks carry 4, and YTD facts carry the quarter in which
+    the cumulative period ends (YTD6 is 2, YTD9 is 3). The packet does not document
+    how the label is derived.
+  calendar: fiscal
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: ticker
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Integer fiscal quarter (1-4) of the fiscal period a fundamentals fact
+    belongs to. It is a grouping and filtering label, not a measure, so it should
+    not be summed or averaged. It follows each company's own fiscal calendar, so the
+    same quarter number covers different calendar months across tickers (for example
+    DRI's fiscal Q3 ends in February, while YUM's Q3 ends in September). It must be
+    used with fiscal_year and period_basis, because FY rows carry 4 and YTD rows carry
+    the quarter in which they end. The column has no nulls in the 288 rows and holds
+    only the values 1 to 4.
+- id: fundamentals.fiscal_year
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: none
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: fiscal
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Fiscal year label (integer, observed 2024-2026, no nulls) attached
+    to each reported fact from SEC company facts. It is a grouping key, not a measure,
+    and should not be aggregated. The label follows each company's own fiscal calendar,
+    so the same fiscal_year covers different calendar dates across tickers (e.g. DRI
+    fiscal 2026 ends 2026-05-31, while CMG and YUM fiscal 2024 end 2024-12-31, and
+    WING fiscal 2024 ends 2024-12-28). It is used together with fiscal_quarter and
+    period_basis to identify the reporting period.
+- id: fundamentals.form
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: Form type of the SEC filing (accession) in which the fact was reported,
+    taken from the SEC companyfacts data. Observed values are 10-K for annual filings
+    and 10-Q for quarterly filings.
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: SEC filing form type (10-K or 10-Q) for the filing that reported each
+    fundamentals fact. It is a categorical label for filtering or grouping and is
+    not a measure, so it should not be aggregated.
+- id: fundamentals.metric
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: 'Label column for a long-format fundamentals table. It names which
+    financial measure the row''s value holds. The 7 values are capex, diluted_eps,
+    net_income, op_cash_flow, operating_income, revenue and total_assets. The measures
+    differ in kind: capex, net_income, op_cash_flow, operating_income and revenue
+    are period flows in USD; diluted_eps is per-share in USD/shares; total_assets
+    is an instant-in-time stock in USD. Values must not be aggregated across different
+    metric labels. Filter to a single metric before aggregating. Each label is mapped
+    from an XBRL concept, and the concept can differ by company. For example, DRI''s
+    op_cash_flow uses the continuing-operations variant of the concept. Check the
+    concept column when comparing across tickers.'
+- id: fundamentals.net_income
+  table: fundamentals
+  filter:
+    metric: net_income
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: false
+  time_rollup: reported_fy_value
+  valid_methods:
+  - sum_across_entities
+  - pct_change
+  period_basis: mixed
+  derivation: Value of the us-gaap NetIncomeLoss concept as reported in SEC XBRL filings
+    (10-Q and 10-K). No Q4 value is derived; fiscal-year totals come from the 10-K.
+  calendar: fiscal
+  seasonal_adjustment: NSA
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: same_definition
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Net income (loss) in USD per company and fiscal period, taken from
+    the NetIncomeLoss concept in SEC filings. The same table holds discrete quarters
+    (Q), cumulative year-to-date values (YTD6, YTD9) and full fiscal years (FY), so
+    the periods overlap. Summing over time would double count; use the FY value for
+    annual figures and compare only rows with the same period_basis. Fiscal calendars
+    differ by company, so cross-company sums of the same fiscal quarter cover slightly
+    different dates. Values are not seasonally adjusted or annualized.
+- id: fundamentals.op_cash_flow
+  table: fundamentals
+  filter:
+    metric: op_cash_flow
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: false
+  time_rollup: reported_fy_value
+  valid_methods:
+  - sum_across_entities
+  - pct_change
+  period_basis: mixed
+  derivation: Reported XBRL value of NetCashProvidedByUsedInOperatingActivities (or
+    its ContinuingOperations variant) as filed. Rows are cumulative year-to-date amounts
+    (Q1 = Q, YTD6, YTD9, FY), not discrete quarters. Rows with different period_basis
+    values must not be summed over time.
+  calendar: fiscal
+  seasonal_adjustment: null
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: by_definition_id
+  lineage:
+    source: SEC EDGAR XBRL companyfacts
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Net cash provided by (used in) operating activities in USD for restaurant
+    companies (CMG, WING, YUM, DRI), taken from SEC 10-Q and 10-K filings. Each row
+    covers a fiscal period (Q1, YTD6, YTD9 or FY) defined by period_start, period_end
+    and period_basis. Values are cumulative within the fiscal year. Compare or sum
+    across companies only for matching periods, and use the FY value for annual totals.
+    The XBRL concept differs for some filers (DRI uses the ContinuingOperations variant),
+    so definitions may not be identical across companies.
+- id: fundamentals.operating_income
+  table: fundamentals
+  filter:
+    metric: operating_income
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods:
+  - sum_across_entities
+  - sum_over_time
+  - ratio_of_sums
+  - pct_change
+  period_basis: mixed
+  derivation: Reported XBRL us-gaap OperatingIncomeLoss, taken as filed in 10-Q filings.
+    Rows cover discrete quarters (period_basis Q) and cumulative year-to-date periods
+    (e.g. YTD6). Summing over time is valid only across non-overlapping discrete-quarter
+    rows. Do not add YTD rows to quarterly rows, because that double counts.
+  calendar: fiscal
+  seasonal_adjustment: NSA
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: same_definition
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    concept: OperatingIncomeLoss
+    retrieved_on: '2026-10-24'
+  description: Operating income (loss) in US dollars for restaurant companies (CMG,
+    WING, YUM, DRI), as reported to the SEC. Each row is one fiscal period. The period
+    is either a discrete quarter or a cumulative year-to-date span, identified by
+    period_start, period_end and period_basis. Fiscal calendars differ by company,
+    so period ends do not line up exactly across tickers.
+- id: fundamentals.period_basis
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: 'Categorical label giving the length and type of the reporting period
+    that each fundamentals row covers. It has five values: Q (a single quarter), YTD6
+    (cumulative from fiscal-year start through the second quarter), YTD9 (cumulative
+    through the third quarter), FY (the full fiscal year) and instant (a point-in-time
+    balance). Use it to filter or group rows before aggregating. Rows with different
+    period_basis values cover overlapping spans, for example YTD9 includes Q1-Q3 and
+    FY includes all quarters, so do not sum them together.'
+- id: fundamentals.period_end
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: mixed
+  derivation: End date of the reporting period for each XBRL fact, as reported in
+    the SEC companyfacts filing. It is the balance-sheet date for instant facts and
+    the last day of the quarter or year-to-date window for duration facts.
+  calendar: null
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+  description: 'Date on which the reporting period of a fundamentals fact ends. It
+    is a time dimension and is not meant to be aggregated. Rows mix instant, quarterly
+    (Q) and year-to-date (YTD6, YTD9) period bases. Fiscal calendars differ by company:
+    Darden (DRI) uses fiscal quarter-ends that fall on dates such as 2026-02-22, while
+    Yum (YUM) and Chipotle (CMG) report on calendar quarter-ends. Use it together
+    with period_start and period_basis to tell periods apart.'
+- id: fundamentals.period_start
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL company facts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: 'Start date of the reporting period for a fundamentals fact. Each row''s
+    period runs from period_start to period_end. It is a date attribute for labelling
+    and filtering, not a measure, so it should not be summed or averaged. It is null
+    for instant (point-in-time) facts such as total_assets, which have only a period_end.
+    In this packet, 32 of 288 rows are null. For duration facts, the span depends
+    on the row''s period_basis: Q rows cover one quarter, and YTD6 and YTD9 rows begin
+    at the start of the fiscal year and run cumulatively. Start dates follow each
+    company''s own fiscal calendar. Some companies use calendar quarters (CMG, YUM).
+    Others use 52/53-week fiscal years (DRI, WING), whose period starts can fall on
+    or just after the previous period''s end date.'
+- id: fundamentals.revenue
+  table: fundamentals
+  filter:
+    metric: revenue
+  semantic_type: flow
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: false
+  time_rollup: reported_fy_value
+  valid_methods:
+  - sum_across_entities
+  - pct_change
+  period_basis: mixed
+  derivation: Taken as reported from SEC XBRL company facts (us-gaap Revenues or RevenueFromContractWithCustomerExcludingAssessedTax,
+    depending on filer). Rows are discrete quarters (Q), cumulative year-to-date values
+    (YTD6, YTD9) and full-year values (FY) from 10-K filings. The YTD and FY rows
+    overlap the quarterly rows, so summing across all rows would double count. Sum
+    over time only after filtering to a single period_basis.
+  calendar: fiscal
+  seasonal_adjustment: NSA
+  annualized: false
+  entity_grain: ticker
+  hierarchy: null
+  comparability: by_definition_id
+  lineage:
+    source: SEC EDGAR XBRL company facts
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Reported revenue in USD per company and fiscal period, from SEC filings
+    (10-Q and 10-K). The period_basis field (Q, YTD6, YTD9, FY) shows whether a value
+    covers one quarter, a cumulative year-to-date span or a full year. Fiscal calendars
+    differ by company (e.g. DRI's year ends in May), and the XBRL concept differs
+    by filer, so compare values only across rows with the same concept and period_basis.
+- id: fundamentals.ticker
+  table: fundamentals
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: none
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: company
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Stock ticker symbol of the public company (CMG, DRI, WING or YUM) that
+    filed each fact. It identifies the company and is a join and grouping key. It
+    is not a measure and must not be aggregated. Each ticker maps to one SEC CIK,
+    held in the cik column, which is used to build the companyfacts source URL. The
+    column has no nulls and 4 distinct values across 288 rows.
+- id: fundamentals.total_assets
+  table: fundamentals
+  filter:
+    metric: total_assets
+  semantic_type: stock
+  unit: USD
+  additive_over_entities: true
+  additive_over_time: false
+  time_rollup: last
+  valid_methods:
+  - last
+  - pct_change
+  - sum_across_entities
+  period_basis: instant
+  derivation: Reported value of the XBRL us-gaap 'Assets' concept at the balance sheet
+    date, taken from 10-Q and 10-K filings.
+  calendar: fiscal
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: ticker
+  hierarchy: null
+  comparability: same_definition
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: Total assets in USD, as reported by each company at the end of a fiscal
+    quarter or year (point-in-time balance sheet value). Values can be summed across
+    companies on the same date but not across time. Roll up over time by taking the
+    last value in the period. Fiscal period ends differ by company, so align dates
+    before comparing across entities.
+- id: fundamentals.unit
+  table: fundamentals
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: SEC EDGAR XBRL companyfacts API
+    url_template: https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    retrieved_on: '2026-10-24'
+  description: 'Unit of measure of the reported value in each fundamentals row, taken
+    from the XBRL fact''s unit as given in SEC companyfacts. It has two distinct values:
+    ''USD'' for currency amounts such as revenue, operating income, net income, operating
+    cash flow and capex, and ''USD/shares'' for per-share amounts. It is a categorical
+    label, not a measure. Use it to filter or group rows so that values in different
+    units are never summed or averaged together.'
+- id: macro.CUSR0000SEFV
+  table: macro_monthly
+  filter:
+    series_id: CUSR0000SEFV
+  semantic_type: index
+  unit: index (1982-84=100)
+  additive_over_entities: false
+  additive_over_time: false
+  time_rollup: mean
+  valid_methods:
+  - last
+  - mean_over_time
+  - pct_change
+  period_basis: monthly
+  derivation: null
+  calendar: calendar
+  seasonal_adjustment: SA
+  annualized: false
+  entity_grain: U.S. city average
+  hierarchy: null
+  comparability: same_definition
+  lineage:
+    source: Consumer Price Index for All Urban Consumers (CPI-U)
+    series_id: CUSR0000SEFV
+    series_title: Food away from home in U.S. city average, all urban consumers, seasonally
+      adjusted
+    retrieved_on: '2026-10-23'
+  description: Monthly seasonally adjusted CPI-U index level for food away from home,
+    U.S. city average, all urban consumers, with base period 1982-84=100. Index levels
+    are not additive across time or entities. Use pct_change for inflation rates,
+    and last or mean_over_time for rollups.
+- id: macro.food_services_sales
+  table: macro_monthly
+  filter:
+    series_id: CENSUS_722_SA
+  semantic_type: flow
+  unit: millions of USD
+  additive_over_entities: false
+  additive_over_time: true
+  time_rollup: sum
+  valid_methods:
+  - sum_over_time
+  - mean_over_time
+  - last
+  - pct_change
+  period_basis: monthly
+  derivation: null
+  calendar: calendar
+  seasonal_adjustment: SA
+  annualized: false
+  entity_grain: U.S. total
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: U.S. Census Bureau, Monthly Retail Trade and Food Services
+    series: '722: Food Services and Drinking Places: U.S. Total, Seasonally Adjusted
+      Sales - Monthly'
+    series_id: CENSUS_722_SA
+    retrieved_on: '2026-10-24'
+  description: Seasonally adjusted monthly sales of food services and drinking places
+    (NAICS 722), U.S. total, in millions of dollars. Each value is the sales level
+    for one calendar month, not an annualized rate. The series is already a national
+    total, so summing it with other series, such as parent or sibling industry totals,
+    would double count.
+- id: macro_monthly.date
+  table: macro_monthly
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: monthly
+  derivation: null
+  calendar: calendar
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: U.S. Census Bureau Monthly Retail Trade (series CENSUS_722_SA) and BLS
+      CPI-U (series CUSR0000SEFV), as listed in the vendor source file headers
+  description: Reference month of each observation, stored as the first day of the
+    calendar month (for example 2026-01-01 means January 2026). It is a time dimension
+    shared by all series in macro_monthly. It has 33 distinct months, from 2024-01-01
+    to 2026-09-01, and no nulls. It is not a measure and should not be aggregated.
+    Use it only to order, filter or group observations by month.
+- id: macro_monthly.retrieved_on
+  table: macro_monthly
+  filter: null
+  semantic_type: dimension
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: none
+  valid_methods: []
+  period_basis: null
+  derivation: null
+  calendar: null
+  seasonal_adjustment: n/a
+  annualized: null
+  entity_grain: null
+  hierarchy: null
+  comparability: null
+  lineage: {}
+  description: Date on which each row's observation was pulled from the source (2026-10-23
+    for the CPI-U series, 2026-10-24 for the Census series). It is load metadata,
+    not an economic measure, and should not be aggregated. Use it only to filter or
+    group by data vintage. It is distinct from the observation 'date' column. The
+    packet gives no source URL, so lineage is left empty.
+- id: macro_monthly.series_id
+  table: macro_monthly
+  filter: null
+  semantic_type: identifier
+  unit: null
+  additive_over_entities: null
+  additive_over_time: null
+  time_rollup: null
+  valid_methods: []
+  period_basis: monthly
+  derivation: null
+  calendar: null
+  seasonal_adjustment: null
+  annualized: null
+  entity_grain: series
+  hierarchy: null
+  comparability: null
+  lineage:
+    source: U.S. Census Bureau, Monthly Retail Trade and Food Services (CENSUS_722_SA);
+      Consumer Price Index for All Urban Consumers, CPI-U (CUSR0000SEFV)
+  description: Identifier of the monthly macro series that each row's value belongs
+    to. The column has 2 distinct values. CENSUS_722_SA is Census seasonally adjusted
+    monthly sales for food services and drinking places (NAICS 722), in millions of
+    dollars. CUSR0000SEFV is the seasonally adjusted CPI-U index for food away from
+    home, U.S. city average (1982-84=100). The two series have different units and
+    meanings, so values should not be aggregated or compared across series_id.

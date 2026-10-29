@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.comp_sales_pct",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:56:59+00:00",
+ "seconds": 8.36,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2208,
+  "output_tokens": 1071,
+  "output_tokens_details": {
+   "thinking_tokens": 565
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015199,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrbxdm2rd7GF6vHkf1z",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"ratio\",\n  \"unit\": \"percent\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": \"Year-over-year percent change in sales for the comparable restaurant base, as reported by each company in its quarterly earnings release. The base definition differs by company (CMG: 13 full calendar months open; DRI: 16 months open, 52-week basis; WING: 52 full weeks open, domestic).\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"Company quarterly earnings releases (Exhibit 99.1) on SEC EDGAR; definitions from each company's 10-K\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_name}\"\n  },\n  \"description\": \"Quarterly comparable (same-restaurant) sales growth, in percent, for CMG, DRI and WING, by fiscal year and quarter. Each value is a year-over-year change, so values are not additive across companies or quarters, and averaging them is not meaningful. Each company defines its comparable base differently (see definition_id), so values are comparable only within the same definition_id.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2208,
+   "output_tokens": 1071,
+   "output_tokens_details": {
+    "thinking_tokens": 565
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

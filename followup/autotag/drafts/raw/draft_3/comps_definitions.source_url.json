@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.source_url",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:02:36+00:00",
+ "seconds": 5.73,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1630,
+  "output_tokens": 668,
+  "output_tokens_details": {
+   "thinking_tokens": 332
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010013,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs2moaqBxdXFj6TPimx",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQSuwsKEAgTGAI4AUIIdGhpbmtpbmcSDH2cKccGGWb6+uXSzBoMkr5t1RtwcYPQ261EIjCMz7ZYQZ9a4+YqBpRrfVsYnbYo8uLAn0jIxtUhgmFfKOgQAJL0vPxGD6cwQzXKT3Mq2ArIJvmLXauDjLDse5hKJoDc+ds6H/pGggJSu9utUvhEv/bgWGvKx0GKuXRvUOX21BhxW1+LXd+r8dtNYQPOKiS6qdmA7t84PqhSbybA0ep/MeS5lOqYuxFyMT+Bpc2ZcdYngZl7i1Pba4VDD5kwMMHMbdDSwjOnJGsh/7ZrSWndufXpx8KGoxVGmgXt4JXjr3UcGBgWmTjjvn3H8hlXihI9m7i9dFpH648YD8mMllbKdXmp1/ZIYcZu4BV2eovQtWvSdyiUx0z1BLoefBIWIhpIsmdJah0LEfExVzv9L+gMnr4EF8m8Q9Foh5tNWsFfYi58OHRQe1p+BtroGicF0N3weB+fWnWhSGRRja0TxOzDail4v0IvKTvX5WoJlk+wLH1FP0KZjfTPWW6xOMhs59dmzbkmLwTxyMquV2JSkzDVI1AV47Iog9q44s0K0Iy5C8naq7ZDjaKO1Js2f+YP0OwQnT6XOsb8B3es8IrD1m8K3fAbWV+k421il7DXKacKcaTOqA/WSqW4Iy5Zhu/zOwFiejmSpto47Opega0RgvIGPJ8Erh4Utc3uIHkM+ftH3TcKMv7NHtALy9XPkmPYC2PpGHSmKS5mP5dSZBFxbWSMZCqxhW8iZ6a0ekzbh251Km0aAE7o2Ivl2YnJayDH38IDSfFfDMKnFML2rqWEHQXUCBNtgIHfNNVTnVcOauApxsRYgFGiHYPEiMt5m5Y3a1gWd5ibj8H5wIwke6ay/J08/vcM9Pa7fuPsZCbqQ+na6LErMa+Sc86kdsTCWxs7sSsvG3MMOH4beGAOaW5Gg92KDIRtzxBEIchqpEArYGdsX5neN2OEniq4/KshvjB0ai/GaF39l7PYSp1EK5XPZPYPnymKFTdCusdAUMWVse7/wPq/n0/x0KDgUPViHfV8Mjj/c1j3140K88t6FBi7Aj/frH7tdKeFnBYMmnadebIu3M6QoEBkeYeMJemHkjydeObFT9gfzCmkSpLf/LiOaQBIAlZp5LEzlYZ5RndNe4x1Q5AQDMlWnOW1Aw2fr7wvQlVUpGOgO7VeCXYdjDmcceVVIBfM4K0xgIW9SdDOO+/TMPFFI4B28ZSb2izH933nnjJbgmFUCBV1TU1aV1qSc6Apfa+uaS1p+UNzFty64bvsG7kOgsdXTuA2DSkdaB9NoL+8VmMidJwi4rYDS9sscDMH4wO4Rzq0UpUG4HrCFxsrafN6mCKOyFy+a36WX0S9hyXOv2jWxRSE12vBjVFJXqugSKrWsMkEE1PnmODEgdD38ArF25X73vHKhuzx10YVtwx5kmU2AUYgesnHePrUcahP9StahkyUDd44zCtfHeWIurLyEpUF5PvT8CCgRjWSHxw9NoCS/W44ryolbfblxQ3RGGrPES1lHqmLzE6FKOopotLrL0jLzWv3KZNaVVGB/xik2SriNLHISCfFQpYZ2XbyFkJ5mlQ+dKd8rUgCoXqU5guLCVXfQOuYen9pu44Mw2cY0y53tlVChEb6MY53a7O8VG0t64pXR+i0PjqFhFJudviBmWLmRs6JsbRAlnoxz/gH9YdssJgTVmzVfiYHdHRuGrAutqTAvPwygmer/R5/MpRb86HhbfEyvfCKiehikoCfTV5xkQtiCpoblEgIJviQoiJjyE2p3/tzQmPbGO04K4Jc/q+7BfrEoer0W1XFnB1nG3Jp7dKPClu1498NVSfNk+HeEsm1PTEu3y3jZYJSF04786dvgpL5C/1hlQNidxTQypVP8DmAtSiaAd49GBr+MiFD2ZVaJND7wNT60JRVAF8SnI8q17pHmFJKS2XSqvCJfs+7rSh/T/4YAQ==",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"definition_id\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR 10-K filings\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document_filename}\"\n  },\n  \"description\": \"URL of the SEC EDGAR 10-K filing document in which each company defines its comparable/same-store sales metric. There is one distinct URL per definition_id (CMG, DRI, WING). It is a text reference to the source and is not a measure, so it cannot be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1630,
+   "output_tokens": 668,
+   "output_tokens_details": {
+    "thinking_tokens": 332
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

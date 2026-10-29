@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.revenue",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:06:09+00:00",
+ "seconds": 11.27,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2384,
+  "output_tokens": 1459,
+  "output_tokens_details": {
+   "thinking_tokens": 843
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.019431,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsJVZieEjXnZ6kfWtco",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"ratio_of_sums\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"As reported in SEC XBRL filings (10-Q and 10-K). Rows with period_basis Q cover a single quarter. YTD6 and YTD9 rows are cumulative from fiscal year start. FY rows are full-year totals from the 10-K. The XBRL concept differs by company (Revenues, or RevenueFromContractWithCustomerExcludingAssessedTax). A standalone Q4 figure is not reported and would have to be derived as FY minus YTD9.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Reported revenue in USD for each company and fiscal period, taken from SEC XBRL company facts. The column mixes single-quarter, year-to-date (6 and 9 month) and full-year values, so summing over time across rows double counts. Sum over time only within a single period_basis, and use the FY row for annual totals. Values can be summed across companies for the same period, but fiscal calendars differ between companies. Each company's XBRL concept is recorded in the concept column.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2384,
+   "output_tokens": 1459,
+   "output_tokens_details": {
+    "thinking_tokens": 843
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

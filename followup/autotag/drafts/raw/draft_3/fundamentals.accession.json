@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.accession",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:03:40+00:00",
+ "seconds": 7.31,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2407,
+  "output_tokens": 800,
+  "output_tokens_details": {
+   "thinking_tokens": 433
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012887,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs7XB9kzdH8BBX9sTxA",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"SEC accession number of the 10-K or 10-Q filing that reported the fact in the row. It has the form <filer id>-<2-digit year>-<sequence>. The 288 rows share 39 distinct values, so one accession covers many metric rows. Use it only to identify or group rows by filing. It is not a measure and must not be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2407,
+   "output_tokens": 800,
+   "output_tokens_details": {
+    "thinking_tokens": 433
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

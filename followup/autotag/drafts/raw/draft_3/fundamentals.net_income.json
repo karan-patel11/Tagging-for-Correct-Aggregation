@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.net_income",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:05:08+00:00",
+ "seconds": 12.53,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2381,
+  "output_tokens": 1490,
+  "output_tokens_details": {
+   "thinking_tokens": 897
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.019735,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsDyAVuc9VzJS9GWpg7",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"pct_change\", \"ratio_of_sums\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported us-gaap NetIncomeLoss fact taken as filed from SEC XBRL company facts. Rows carry discrete quarters (Q), cumulative year-to-date periods (YTD6, YTD9) and full fiscal years (FY). No Q4 row appears in the sample, and a fiscal-year figure comes from the 10-K.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts\",\n    \"concept\": \"NetIncomeLoss\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Net income (loss) in USD for a company over the reporting period given by period_start and period_end, as reported in 10-Q and 10-K filings. The column mixes discrete quarters, cumulative YTD periods and full fiscal years, which overlap. Do not sum across rows over time. Filter on period_basis first and use the FY value for annual totals. Values can be added across companies only when they cover the same period_basis and a comparable fiscal period, because fiscal calendars differ by company.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2381,
+   "output_tokens": 1490,
+   "output_tokens_details": {
+    "thinking_tokens": 897
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

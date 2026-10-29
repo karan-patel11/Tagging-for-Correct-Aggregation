@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.fiscal_quarter",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:56+00:00",
+ "seconds": 7.33,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2141,
+  "output_tokens": 840,
+  "output_tokens_details": {
+   "thinking_tokens": 501
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012755,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqE61n4xRVAznrVjc9z",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": \"fiscal_quarter -> fiscal_year\",\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Fiscal quarter number (1-4) within the company's fiscal year, identifying the reporting period for each comparable sales row. It is a period label, not a measure, so it should not be summed or averaged. It only has meaning together with fiscal_year and ticker, because each company's fiscal calendar differs. The packet gives a separate source_url for each row (earnings release exhibits) and no single URL or URL pattern, so lineage is left empty.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2141,
+   "output_tokens": 840,
+   "output_tokens_details": {
+    "thinking_tokens": 501
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}
