@@ -24,3 +24,9 @@ RESULTS.md.
   metric). eval/questions.yaml has no tag field to map from.
 - M3 lists every failure by validating each entry on its own when load_tags fails (load_tags
   stops at the first bad entry), and runs check_tags_against_db on the entries that validated.
+
+## 2026-10-28 (before any drafting; reporting only)
+- Questions affected by a dangerous error (M2) and changed outcomes (M4) are reported twice:
+  (a) metric_id / get_metric's metric only, as above (the pre-registered count); (b) also
+  counting aggregate's denominator_id (secondary). Declared before any draft exists; implemented
+  after the run, because it reads only the hand-tag runs in eval/results/D.jsonl.
