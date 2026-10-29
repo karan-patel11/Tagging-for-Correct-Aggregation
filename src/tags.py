@@ -2,7 +2,9 @@
 
 load_tags() validates every entry in tags/tags.yaml. check_tags_against_db() opens the warehouse
 read-only and confirms each tag points at something that exists and that every non-dimension
-fundamentals metric (and macro series) has a tag.
+fundamentals metric (and macro series) has a tag. check_semantic_rules() checks that a tag's fields
+agree with each other and with what src/semantics.py needs (added after the auto-tag follow-up,
+followup/autotag/RESULTS.md "Validator gap"); main() runs all three.
 """
 from pathlib import Path
 from typing import Literal, Optional
@@ -118,9 +120,57 @@ def check_tags_against_db(tags, db_path=DB_PATH) -> list[str]:
     return problems
 
 
+# The lineage key src/semantics.py reads for each table's measures.
+LINEAGE_KEY = {"macro_monthly": "url", "brand_attention_daily": "url_template"}
+
+
+def semantic_rule_violations(tags, db_path=DB_PATH) -> list[tuple[str, str, str]]:
+    """(tag id, rule, message) for every rule a tag breaks. Opens the database read-only.
+
+    Rules: "flow" (a flow is additive over time and rolls up by sum), "sum_over_time" and
+    "sum_across_entities" (a method needs the matching additivity), "hierarchy" (a measure on a table
+    with a parent_* column needs a hierarchy), "lineage" (the lineage key semantics.py reads)."""
+    con = duckdb.connect(str(db_path), read_only=True)
+    try:
+        parents = {}
+        for t in tags:
+            if t.table not in parents:
+                try:
+                    cols = [r[0] for r in con.execute(f"describe {t.table}").fetchall()]
+                except duckdb.Error:
+                    cols = []
+                parents[t.table] = [c for c in cols if c.startswith("parent_")]
+    finally:
+        con.close()
+    out = []
+    for t in tags:
+        methods = set(t.valid_methods)
+        if t.semantic_type == "flow" and (t.additive_over_time is not True or t.time_rollup != "sum"):
+            out.append((t.id, "flow", f"{t.id}: a flow needs additive_over_time true and time_rollup "
+                                      f"sum (has {t.additive_over_time}, {t.time_rollup})"))
+        if "sum_over_time" in methods and t.additive_over_time is not True:
+            out.append((t.id, "sum_over_time",
+                        f"{t.id}: sum_over_time in valid_methods needs additive_over_time true"))
+        if "sum_across_entities" in methods and t.additive_over_entities is not True:
+            out.append((t.id, "sum_across_entities", f"{t.id}: sum_across_entities in valid_methods "
+                                                     f"needs additive_over_entities true"))
+        if t.semantic_type in MEASURE_TYPES and parents.get(t.table) and not t.hierarchy:
+            out.append((t.id, "hierarchy", f"{t.id}: table {t.table} has a parent column "
+                                           f"{parents[t.table]}, so the measure needs a hierarchy"))
+        key = LINEAGE_KEY.get(t.table)
+        if t.semantic_type in MEASURE_TYPES and key and not t.lineage.get(key):
+            out.append((t.id, "lineage", f"{t.id}: a measure on {t.table} needs lineage.{key}"))
+    return out
+
+
+def check_semantic_rules(tags, db_path=DB_PATH) -> list[str]:
+    """Return a list of rule violations (empty if clean)."""
+    return [msg for _, _, msg in semantic_rule_violations(tags, db_path)]
+
+
 def main():
     tags = load_tags()
-    problems = check_tags_against_db(tags)
+    problems = check_tags_against_db(tags) + check_semantic_rules(tags)
     print(f"{len(tags)} tags validated")
     for p in problems:
         print("PROBLEM:", p)
