@@ -390,3 +390,36 @@ def test_m4_changed_outcomes():
     ch = m4.changed_outcomes(hand_s, draft_s, runs, _hand_entries(), _hand_entries())
     assert ch == {"q1": {"hand_correct": 3, "draft_correct": 2, "incorrect_draft_runs": [
         {"run": 2, "class": m4.SILENT, "final_line": None, "linked": {}}]}}
+
+
+# ---------- cost cap and run order (draft 1 first) ----------
+
+def test_cost_cap_is_one_constant():
+    import costs
+    assert costs.COST_CAP_USD == 3.75
+    defs = [p.name for p in AUTOTAG.glob("*.py") if re.search(r"^\s*COST_CAP_USD\s*=", p.read_text(), re.M)]
+    assert defs == ["costs.py"]
+
+
+def test_score_tags_main_with_only_draft_1(tmp_path, capsys):
+    (tmp_path / "draft_1.yaml").write_bytes(TAGS_YAML.read_bytes())
+    out = tmp_path / "score.json"
+    r = score_tags.main(tmp_path, out)
+    assert list(r["drafts"]) == ["draft_1"] and r["missing_drafts"] == ["draft_2", "draft_3"]
+    assert r["verdicts"] is None
+    assert json.loads(out.read_text())["drafts"]["draft_1"]["m3"]["pass"]
+    assert "missing drafts" in capsys.readouterr().out
+
+
+def test_score_tags_verdicts_need_all_three(tmp_path):
+    paths = {n: TAGS_YAML for n in score_tags.DRAFT_NAMES}
+    assert score_tags.score_all(paths)["verdicts"]["unit"]["verdict"] == "safe to auto-draft"
+
+
+def test_results_deviations_include_the_record():
+    import build_results
+    text = build_results.deviations()
+    assert "### 2026-10-28 (before any drafting)" in text
+    assert "Cost cap raised from $3.00 to $3.75" in text
+    assert "Run order: draft 1, M1-M3 on draft 1, setup D on draft 1 (M4)" in text
+    assert "\n## " not in "\n" + text
