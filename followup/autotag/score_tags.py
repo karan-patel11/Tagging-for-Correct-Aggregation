@@ -13,6 +13,9 @@
 A draft entry that is missing (no entry with that id) counts as a mismatch on every field.
 Free-text fields (description, derivation, lineage) are not scored.
 
+Scores the drafts that exist (draft 1 alone is enough, for the run order in PREREG_DEVIATIONS.md)
+and lists the missing ones. The per-field verdict needs all three drafts and is left out until then.
+
 Run: python followup/autotag/score_tags.py   (writes followup/autotag/results/score_tags.json)
 """
 import json
@@ -40,6 +43,7 @@ M1_FIELDS = EXACT_FIELDS + ["valid_methods"] + PRESENCE_FIELDS
 DANGEROUS_EXACT = ["additive_over_time", "additive_over_entities", "time_rollup"]
 DANGEROUS_FLAGS = ["comparability", "hierarchy"]
 MISSING = "<no entry>"
+DRAFT_NAMES = ["draft_1", "draft_2", "draft_3"]
 
 
 def read_entries(path):
@@ -185,19 +189,24 @@ def score_all(draft_paths, hand_path=HAND_PATH, db_path=tags.DB_PATH):
         draft = read_entries(p)
         out["drafts"][name] = {"m1": m1(hand, draft), "m1b": m1b(hand, draft),
                                "m2": m2(hand, draft), "m3": m3(p, db_path)}
-    out["verdicts"] = verdicts({k: v["m1"] for k, v in out["drafts"].items()},
-                               {k: v["m1b"] for k, v in out["drafts"].items()})
+    if set(out["drafts"]) == set(DRAFT_NAMES):
+        out["verdicts"] = verdicts({k: v["m1"] for k, v in out["drafts"].items()},
+                                   {k: v["m1b"] for k, v in out["drafts"].items()})
+    else:
+        out["verdicts"] = None  # the decision rule needs all three drafts
     return out
 
 
-def main():
-    paths = {f"draft_{i}": DRAFTS / f"draft_{i}.yaml" for i in (1, 2, 3)}
-    missing = [str(p) for p in paths.values() if not p.exists()]
-    if missing:
-        sys.exit(f"missing draft files: {missing}")
-    result = score_all(paths)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(result, indent=1, default=str) + "\n")
+def main(drafts_dir=DRAFTS, out_path=OUT):
+    paths = {n: Path(drafts_dir) / f"{n}.yaml" for n in DRAFT_NAMES}
+    present = {n: p for n, p in paths.items() if p.exists()}
+    missing = [n for n in DRAFT_NAMES if n not in present]
+    if not present:
+        sys.exit(f"no draft files in {drafts_dir}")
+    result = score_all(present)
+    result["missing_drafts"] = missing
+    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(out_path).write_text(json.dumps(result, indent=1, default=str) + "\n")
     for name, d in result["drafts"].items():
         exact = sum(v["match"] for row in d["m1"].values() for v in row.values())
         cells = sum(len(row) for row in d["m1"].values())
@@ -205,7 +214,10 @@ def main():
         print(f"{name}: M1 {exact}/{cells} field cells match | M1b "
               f"{sum(v['match'] for v in d['m1b'].values())}/{len(d['m1b'])} | M2 {dang} dangerous "
               f"errors | M3 {'pass' if d['m3']['pass'] else 'FAIL'}")
-    print(f"wrote {OUT.relative_to(ROOT)}")
+    if missing:
+        print(f"missing drafts (not scored; no per-field verdict until all three exist): {missing}")
+    print(f"wrote {out_path}")
+    return result
 
 
 if __name__ == "__main__":

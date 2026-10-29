@@ -25,26 +25,20 @@ import score_tags  # noqa: E402
 PREREG = HERE / "PREREG.md"
 DRAFT_NAMES = ["draft_1", "draft_2", "draft_3"]
 
-# Changes of plan and decisions PREREG.md does not cover, each dated when it was made.
-DEVIATIONS = [
-    ("2026-10-29", "Not covered by PREREG, decided before any draft call: the tagger's reply is "
-     "parsed as JSON after removing a surrounding ```json code fence, and nothing else is repaired. "
-     "A reply that still does not parse leaves the entry with id, table and filter only, so it "
-     "fails M3. If the model returns id, table or filter, the packet's values replace them."),
-    ("2026-10-29", "Not covered by PREREG, decided before any draft call: tagger calls use "
-     "max_tokens 2000; a reply cut off at that limit is recorded in the draft's parse notes."),
-    ("2026-10-29", "Not covered by PREREG: the questions listed next to a dangerous error are the "
-     "questions whose hand-tag setup D runs (eval/results/D.jsonl) named that tag id in a tool call "
-     "(metric_id, or get_metric's metric). eval/questions.yaml has no tag field to map from."),
-    ("2026-10-29", "Not covered by PREREG: M3 lists every failure by validating each entry on its "
-     "own when load_tags fails (load_tags stops at the first bad entry), and runs "
-     "check_tags_against_db on the entries that validated."),
-]
+DEVIATIONS_PATH = HERE / "PREREG_DEVIATIONS.md"
 
 
 def rel(p):
     p = Path(p).resolve()
     return str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p)
+
+
+def deviations():
+    """The dated entries of PREREG_DEVIATIONS.md, with headings moved one level down to sit under
+    RESULTS.md's "## Deviations"."""
+    text = DEVIATIONS_PATH.read_text()
+    body = text[text.index("\n## "):].strip()
+    return re.sub(r"^## ", "### ", body, flags=re.M)
 
 
 def known_limits():
@@ -73,8 +67,12 @@ def questions_naming(runs_path, hand_entries):
 
 
 def build(drafts_dir, results_dir, out_path, free_text_path):
-    cost_check = json.loads((results_dir / "cost_check.json").read_text())
     paths = {n: drafts_dir / f"{n}.yaml" for n in DRAFT_NAMES}
+    missing = [str(f) for n in DRAFT_NAMES for f in (paths[n], drafts_dir / f"{n}_meta.json")
+               if not f.exists()]
+    if missing:
+        sys.exit(f"RESULTS.md needs all three drafts; missing: {missing}")
+    cost_check = json.loads((results_dir / "cost_check.json").read_text())
     metas = {n: json.loads((drafts_dir / f"{n}_meta.json").read_text()) for n in DRAFT_NAMES}
     hand = score_tags.read_entries(score_tags.HAND_PATH)
     drafts = {n: score_tags.read_entries(p) for n, p in paths.items()}
@@ -222,7 +220,7 @@ def build(drafts_dir, results_dir, out_path, free_text_path):
           f"description, derivation and lineage are not scored; all three drafts are listed next to "
           f"the hand text in `{rel(free_text_path)}` for a manual read.", ""]
     L += ["## Known limits (verbatim from PREREG.md)", "", known_limits(), ""]
-    L += ["## Deviations", ""] + [f"- {d}: {t}" for d, t in DEVIATIONS] + [""]
+    L += ["## Deviations", "", f"From `{rel(DEVIATIONS_PATH)}`.", "", deviations(), ""]
     out_path.write_text("\n".join(L))
 
     F = ["# Free-text fields for a manual read", "",

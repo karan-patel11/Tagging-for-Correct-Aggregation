@@ -4,7 +4,7 @@ Reuses eval/run_eval.py's run_one, Budget, load_questions, check_frozen and pref
 only the tags file differs. Runs only if draft 1 passes M3 (PREREG: otherwise the validation
 failures are the M4 result). Output goes only to followup/autotag/results/D_autotag.jsonl, with
 tags_path and tags_sha256 in every record. Resumes: a (question, run) already written without an API
-error is skipped. The cap is the follow-up's $3, counting what is already spent.
+error is skipped. The cap is the follow-up's costs.COST_CAP_USD, counting what is already spent.
 
 Run in a fresh process: python followup/autotag/run_d.py
 """

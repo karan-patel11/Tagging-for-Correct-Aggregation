@@ -9,7 +9,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 
-COST_CAP_USD = 3.00
+COST_CAP_USD = 3.75  # raised from 3.00 before any drafting; see PREREG_DEVIATIONS.md
 
 TAGGER_MODEL = "claude-sonnet-5-5"
 # USD per million tokens for claude-sonnet-5-5, read from PRICING_URL on 2026-10-29 (model pricing

@@ -5,7 +5,7 @@
                 input tokens of all 43 user messages, run one id through the tagger, and extrapolate
                 to 3 drafts x 43 ids plus 126 setup D runs (Haiku cost per run from
                 eval/results/D.jsonl). Writes results/cost_check.json; exits 2 if the estimate is
-                over the $3 cap.
+                over costs.COST_CAP_USD.
   --draft N     One call per tag id (43), sequential, default sampling settings. Writes the raw
                 response of every call to drafts/raw/draft_N/<id>.json and the draft to
                 drafts/draft_N.yaml: id, table and filter copied from the packet, every other field
