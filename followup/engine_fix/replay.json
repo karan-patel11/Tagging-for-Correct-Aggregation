@@ -1,0 +1,32 @@
+{
+ "results_commit": "bbc6310",
+ "hand": {
+  "calls": 455,
+  "identical": 455,
+  "different": 0,
+  "critical": 0
+ },
+ "draft_1": {
+  "calls": 779,
+  "old_exceptions": 171,
+  "new_exceptions": 0,
+  "pairs": {
+   "argument error -> argument error": 1,
+   "clean error -> clean error": 264,
+   "exception -> clean error": 171,
+   "number -> number": 132,
+   "ok without a number -> ok without a number": 211
+  }
+ },
+ "permissive": {
+  "numbers_before": 5,
+  "numbers_after": 1,
+  "calls_per_engine": 45,
+  "pairs": 12
+ },
+ "validator": {
+  "errors": 63,
+  "caught": 33,
+  "hand_violations": 0
+ }
+}
