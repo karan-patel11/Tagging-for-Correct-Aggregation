@@ -1,100 +1,171 @@
-# Replays and plain-language notes for docs/index.html (SPEC §13.1). Picked by the author after the
-# full run (2026-10-28). Selection and wording only: every result shown on the page (answers, scores,
-# counts, rates) is read from the eval output files by report/build_report.py. Notes carry no result
-# numbers.
+# Selection and wording for docs/index.html (SPEC §13.1). Picked by the author after the full run.
+# Every result shown on the page (answers, scores, counts, rates, dates) is read from the eval output
+# files by report/build_report.py. Prose here carries no digits (the build checks this); question IDs,
+# run numbers and links are data.
 #
-# runs: which recorded run to show for each setup. The page also shows each setup's record across
-# all of its runs, so a single run is never presented as the whole story.
-# expect: what each shown run must have scored (correct, incorrect, trap, unparsed). The build fails
-# if the recorded run differs, so a note can never describe a failure that did not happen.
-# untested_remedy: optional. A fix proposed for an observed failure. It was not implemented or
-# measured, and the page labels it that way.
+# default_replay: the replay open when the page loads. The build fails if setup A answered it
+#   correctly in every run, or if the A run shown for it is correct.
+# replays: one per category. runs: which recorded run each setup column shows. expect: what that run
+#   must have scored, one of correct, correct_refusal, trap, missing_warning, wrong_other, unparsed.
+#   The build recomputes each from the scored run and fails on any mismatch, so a failure can't be
+#   staged.
+# links.video: optional. If absent, the footer omits it and the build prints a warning.
 
-problem_question: q003   # section 1 explainer; must not imply any setup failed it
+default_replay: q017
+
+hero:                       # S1: the answer key's year-end balance vs its stored sum-of-quarters trap
+  question_id: q003
+  trap: sum_of_4_quarter_ends
+  ticker: YUM
+  metric: total_assets
 
 replays:
   - question_id: q003
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: correct}
     note: >-
-      Total assets is a balance, not a flow. Every recorded run used the year-end balance correctly.
+      Total assets is a balance. Every setup used the year-end balance here; no recorded run summed
+      the quarters.
 
   - question_id: q010
     runs: {A: 1, B: 1, C: 1, D: 1}
-    expect: {A: incorrect, B: correct, C: incorrect, D: correct}
+    expect: {A: missing_warning, B: correct, C: missing_warning, D: correct}
     note: >-
-      The arithmetic is correct across all runs. The missing caveat matters: Darden ends its fiscal
-      year in May; Chipotle and Yum end in December. D's tool flagged the mismatch. This is the only
-      question where B and C differ by majority vote.
+      The combined margin needs a caveat: Darden's fiscal year ends in May, Chipotle's and Yum's in
+      December. Every run got the number right; the difference is whether it carried the warning.
 
   - question_id: q017
     runs: {A: 2, B: 1, C: 1, D: 1}
     expect: {A: trap, B: correct, C: correct, D: correct}
     note: >-
-      A read the question as asking for the full year, although the question names the 14-week
-      quarter. It wrote that "the full year is the figure you asked about", gave the derived fourth
-      quarter only as a cross-check, and put the full-year figure in FINAL. The full-year row is
-      stored with fiscal_quarter set to the fourth quarter. This was the only stored-trap hit. A's
-      other runs answered correctly.
+      Darden's fourteen-week fiscal fourth quarter. In the run shown, A derived the quarter in its
+      explanation, then put the full-year figure in its final answer. A's other runs were correct.
 
   - question_id: q018
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: correct}
     note: >-
-      The question asks for percent change in the index. Every setup used the correct calculation.
+      A price index needs a percent change, not a difference in index points. Every setup computed it
+      correctly.
 
   - question_id: q030
     runs: {A: 1, B: 1, C: 1, D: 1}
     expect: {A: correct, B: correct, C: correct, D: unparsed}
     note: >-
-      D requested annual views from a tool that accepts calendar quarters. After the requests were
-      rejected, it hit the token limit without a final answer. Its other runs recovered by combining
-      quarterly calls. A, B and C answered with SQL. The data was available; the failure came from
-      the tool interface.
-    untested_remedy: >-
-      Let the pageview tool accept a calendar year, or say in its error that a year can be built
-      from quarterly calls.
+      D asked for a full year from a tool that takes calendar quarters, was rejected, and ran out of
+      tokens without a final answer. Its other runs combined quarterly calls.
 
   - question_id: q034
     runs: {A: 1, B: 1, C: 1, D: 1}
-    expect: {A: correct, B: correct, C: correct, D: incorrect}
+    expect: {A: correct, B: correct, C: correct, D: wrong_other}
     note: >-
-      D refused after trying unsupported comps lookups. The data was available: a multi-company
-      aggregate call returns each value and its definition with a warning. D found that route in its
-      other runs. A, B and C queried the rows and warned that the definitions differ.
-    untested_remedy: >-
-      Add a single-company comps lookup, or make the rejection point to the multi-company aggregate
-      call.
+      D tried comps lookups its tools don't support and refused, although the data was there. Its
+      other runs used the multi-company aggregate call, which returns each value with its definition
+      and a warning.
 
-tag_cards:
+traps:   # S2 cards. category links each card to that category's replay; tags give the data source.
+  - name: Time additivity
+    category: time_additivity
+    rule: A balance is read at the period end. Summing quarter-end balances counts the same money again.
+    source: SEC fundamentals
+    tags: [fundamentals.total_assets]
+  - name: Ratios
+    category: ratios
+    rule: A combined margin is total operating income over total revenue, not the average of the margins.
+    source: SEC fundamentals
+    tags: [derived.operating_margin]
+  - name: YTD basis
+    category: ytd_calendar
+    rule: Quarterly cash-flow statements report year-to-date totals; a single quarter is the difference of two.
+    source: SEC fundamentals
+    tags: [fundamentals.op_cash_flow]
+  - name: Fiscal calendar
+    category: ytd_calendar
+    rule: Darden's fiscal year ends in May, so its fiscal quarters don't line up with calendar quarters.
+    source: SEC fundamentals
+    tags: [fundamentals.revenue]
+  - name: Indices
+    category: indices
+    rule: Price-index levels can't be summed; use a percent change or a period average.
+    source: BLS–Census macro
+    tags: [macro.CUSR0000SEFV, macro.food_services_sales]
+  - name: Hierarchy
+    category: hierarchy
+    rule: Brand rows roll up to the parent company; the parent's own row must not be added on top.
+    source: Web-attention proxy for alternative data
+    tags: [brand_attention_daily.views]
+  - name: Comparability and unanswerable
+    category: comparability_unanswerable
+    rule: Each company defines comparable sales its own way, so a cross-company gap needs a caveat; missing data needs a refusal.
+    source: Company-reported comps
+    tags: [comps_quarterly.comp_sales_pct]
+
+proxy_caption: >-
+  The pageview data stands in for an alternative-data panel. It has brand vs. parent grain, and that
+  is the kind of quirk vendor data brings. It is used here only to test aggregation, not to predict
+  anything.
+
+tag_cards:   # S3. prevents: what the tag stops, tied to the running examples.
   - id: fundamentals.total_assets
-    sentence: >-
-      Use the last quarter-end balance for the year. Do not sum balances across quarters.
+    prevents: >-
+      Stops a model from summing Yum's four quarter-end balances into a "yearly" total: the yearly
+      value is the last quarter-end balance.
   - id: fundamentals.op_cash_flow
-    sentence: >-
-      Cash-flow statements report year-to-date totals. Derive later quarters by subtracting the
-      preceding year-to-date total.
+    prevents: >-
+      Stops a model from reporting Darden's nine-month year-to-date cash flow as its fiscal third
+      quarter: the quarter is the nine-month figure minus the six-month figure.
 
-# SPEC §11.8. Sample-size figures are filled in from the data at build time.
-limitations:
+setups:      # S4 ladder. Tools come from src/tool_specs.py.
+  A:
+    receives: The table schema (column names and types for every table).
+    changed: The baseline. Nothing says what a column means or how it may be combined.
+  B:
+    receives: >-
+      Prose sentences generated from the tags, one per fact, in place of the schema listing (they
+      name each table and column).
+    changed: Adds the facts about every metric, written as sentences.
+  C:
+    receives: The tags file itself, as structured fields.
+    changed: The same facts as B; only the format changes, from sentences to structured tags.
+  D:
+    receives: No context file. Tags reach the model only through describe_column.
+    changed: >-
+      SQL is removed and the tools apply the tags. The interface and the enforcement change
+      together, so D's result can't separate the two.
+
+limitations:  # SPEC §11.8. {placeholders} are filled from the data at build time.
   - "Small sample: {questions_per_category} questions per category, {companies} companies."
-  - "One model."
+  - One model.
   - >-
-    The author wrote both the questions and the system, a source of bias. Most questions were
-    drafted before the core logic existed; replacement questions were added after it existed.
-    All questions were frozen (git tag questions-frozen) before any evaluation run.
-  - "In setup D, the interface and the enforcement change together."
+    The author wrote both the questions and the system, a source of bias. Mitigation: questions
+    were drafted before the core logic existed (replacements excepted, see How it was checked),
+    written from an analyst's point of view, and frozen before any run.
+  - In D, the interface and the enforcement change together.
   - >-
-    D's tools cover the question categories closely, so D's advantage on answerable questions is
+    D's tools cover the question categories closely, so its advantage on answerable questions is
     partly by design. The unanswerable and out-of-coverage questions are D's real test.
-  - "Pageviews are only a proxy for real alternative data."
-  - "No 10-K or 10-Q amendments are included."
+  - Pageviews are only a proxy for real alternative data.
+  - No amendments to annual or quarterly filings are included.
+  - A two-year window.
   - >-
-    After the study, the engine was hardened (followup/engine_fix/REPLAY.md). The results above
-    were produced at commit {results_commit}; re-executing the {replay_calls} recorded setup D tool
-    calls on the hardened engine gave identical outputs for {replay_identical} of {replay_calls}.
-  - "A short window of recent filings."
+    After the study the engine was hardened (followup/engine_fix/REPLAY.md); the recorded runs
+    were made before that change and were not re-run.
+
+provenance:   # S9. Dates are read from git at build time.
+  draft_commit: f4f35b4          # "questions: draft before core logic"
+  replacement_commit: 4f06c42    # four replacement questions, written after semantics.py existed
+  replacement_questions: [q039, q040, q041, q042]
+
+next_steps:
+  - >-
+    Onboarding new datasets: a model drafts tags from a vendor's column profiles and documentation,
+    a human approves them, and the benchmark measures whether the tags hold up.
+  - >-
+    Mapping to a catalog: tags would map to column comments and tags, the enforcing tool to metric
+    views or trusted queries, and the question set to a benchmark set.
+  - >-
+    Fresh data: tags already carry lineage and retrieval dates; streaming sources would need
+    freshness fields too.
 
 links:
   repo: https://github.com/karan-patel11/Tagging-for-Correct-Aggregation
-  error_analysis: docs/error_analysis.md
