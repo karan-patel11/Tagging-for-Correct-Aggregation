@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.period_basis",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:59:35+00:00",
+ "seconds": 9.28,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2473,
+  "output_tokens": 1182,
+  "output_tokens_details": {
+   "thinking_tokens": 716
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016839,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVroTMxS8VLzV7VvbJtn",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": \"mixed\",\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label for the reporting period a fundamentals value covers. Five distinct values appear: FY (full fiscal year), Q (single fiscal quarter), YTD6 (cumulative first six months of the fiscal year), YTD9 (cumulative first nine months), and instant (a point-in-time balance). YTD6 and YTD9 values are cumulative and overlap with Q and FY rows, so rows with different period_basis values should not be summed together. Fiscal period boundaries vary by company, for example WING and DRI use 52/53-week fiscal calendars. Use this column to filter or group rows before aggregating the value column.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2473,
+   "output_tokens": 1182,
+   "output_tokens_details": {
+    "thinking_tokens": 716
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

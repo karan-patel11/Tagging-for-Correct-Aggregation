@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.total_assets",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:11+00:00",
+ "seconds": 7.86,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2273,
+  "output_tokens": 909,
+  "output_tokens_details": {
+   "thinking_tokens": 467
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013709,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqUWpAwSyZ85YBwXfme",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"stock\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"last\",\n  \"valid_methods\": [\"last\", \"pct_change\", \"sum_across_entities\"],\n  \"period_basis\": \"instant\",\n  \"derivation\": \"Reported value of the XBRL us-gaap 'Assets' concept at the balance sheet date, taken from 10-Q and 10-K filings.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Total assets in USD, as reported by each company at the end of a fiscal quarter or year (point-in-time balance sheet value). Values can be summed across companies on the same date but not across time. Roll up over time by taking the last value in the period. Fiscal period ends differ by company, so align dates before comparing across entities.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2273,
+   "output_tokens": 909,
+   "output_tokens_details": {
+    "thinking_tokens": 467
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

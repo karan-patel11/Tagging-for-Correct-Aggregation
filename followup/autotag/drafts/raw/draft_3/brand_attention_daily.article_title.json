@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.article_title",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:01:15+00:00",
+ "seconds": 8.42,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2552,
+  "output_tokens": 1018,
+  "output_tokens_details": {
+   "thinking_tokens": 565
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.015357,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrvnnSusmb7yoxrsM58",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"identifier\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"brand or parent company, per the grain column\",\n  \"hierarchy\": \"brand -> parent_ticker\",\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user, daily)\",\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"\n  },\n  \"description\": \"English Wikipedia article title (underscore-separated) whose daily pageviews are tracked for a restaurant brand or its parent company. It identifies the source page for each row and has 11 distinct values, with no nulls. Habit Burger Grill appears under two titles, 'Habit_Burger_&_Grill' and 'The_Habit_Burger_Grill', so aggregate by brand rather than by title. It is a label and is not aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2552,
+   "output_tokens": 1018,
+   "output_tokens_details": {
+    "thinking_tokens": 565
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

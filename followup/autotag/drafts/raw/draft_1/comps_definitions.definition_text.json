@@ -1,0 +1,66 @@
+{
+ "id": "comps_definitions.definition_text",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:38:10+00:00",
+ "seconds": 7.33,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2007,
+  "output_tokens": 779,
+  "output_tokens_details": {
+   "thinking_tokens": 389
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.011877,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqAkXRsaQiGPLkeWWYD",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"company (one definition per definition_id/ticker)\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Company 10-K filings on SEC EDGAR\",\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{filing_document}.htm\"\n  },\n  \"description\": \"Free-text definition of each company's same-store or comparable restaurant sales metric, quoted from its 10-K (WING, DRI, CMG). It records the store-base eligibility rules (for example 52 weeks, 16 months or 13 months open) and the exclusions that apply. It is descriptive text with no aggregation, and is used to judge whether comparable-sales figures are on the same definition.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2007,
+   "output_tokens": 779,
+   "output_tokens_details": {
+    "thinking_tokens": 389
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

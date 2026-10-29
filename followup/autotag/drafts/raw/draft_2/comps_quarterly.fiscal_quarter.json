@@ -1,0 +1,66 @@
+{
+ "id": "comps_quarterly.fiscal_quarter",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:57:14+00:00",
+ "seconds": 6.07,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2141,
+  "output_tokens": 705,
+  "output_tokens_details": {
+   "thinking_tokens": 373
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.011405,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrd63WvGcFmZhXcYvxW",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQS5gwKEAgTGAI4AUIIdGhpbmtpbmcSDOvXhW2rMXqCiSnB5BoM0upNcT5f/QWrVmBuIjD75MaFbq7oW9yjMbOyVS615CRgVD1uP/2N1DHG+z800VO4e4AKdPil2RxJOZIfIC4qgwzhKJzKvUWjwTYHe9oprNEZDACWGbaTLTz4VsXG9KZ2ZOAX4h45ZAwpXCVaimTJLF6uEyFLBPLtVzKXS2FooSEfim0puiiCkhxR/eN/X9hpY+pc5qdUBNvBsaPLwxCa0Us3m07YNuDfysjGiYvwASTCzI7KeFxrYz4Z3NbqJA2+u3Pf4TAtH3xGhZpY6qjkp+vahI9LT/DaVah2yJHlafYE/KzNcjyf+SQj0e+pBb2PO4nIKa4NGMj66vR50cjTMFQPq9Lo3YH6Z0Qon1vMZ3GUdOJG39Ek6IWh2q2n0LY2hMkCdZ4TpCMR73Tc0x9e7+lBo/cp6/tpIVj9WGV+RJl/WOPn6RhI7ynhlzGVKytxPyqw5bjO2H0Zkmyn/KqxHl/I5xM/Qn2KL1A3h3KXj5llKkiAQ99Wb+I1SUwBz02gK1Joiyuhvfc32PoTUkwhlxGa2x46RNQpNz/jTWlrptv++jk5f1zVCIy4/Ypec5SltRT2tdJ9KaW1XLPz52bCp2tXv4ykZw5V3DSAxCokMi+MMLTgQkax+W9et6jP/PbiSzGglHmP/fw/XKo0QwZ/GoR9YSA1do58op/vKNspwda7knjT1uiRnwunJ2rYOl2v1zTpB8cJwuoqlapzLSYfsGkHJNVFb6vKPNTbnjzAv1NUXgEH4N1cTwCmo1sNeOrvqWFat6tKJ9H6R9c3ySYX/IZcV6WFl+DF8jlW5JWKPFdSkelJX8OrGW3YpFbF6dpPIYV9Pn/+FP9wU3xQziARb6Tz1PuBAK4GLtRXp00zQXv/rWvgflRelFwAun9N0dcLG06iIaK5ivBnyk0l+NcqvLJPslMu31LaTG3YDNTzRi0pAZTgRdvrd9c3+M42srNvKHuF6nP9BVHj4cWqELETgNLNLUqO2x8y9eQg9K5hKKH2jcseqIvx4PPQVTGiZdnNATyNdSm8uUmjRunErB/cNtdCas/WM6vnO874cyX0vtfRM/d2atfSqbT+yQxjDiN9kuMcoLSgVygOe/bMja8ueY+t9XuUllFkuQH6EcLHtZX+TW6Jt9ixYEzBb8Kij3wYEgLmrRQ31kJgHzNsuPAjTwWO9DraErHB4FpMtIQ5jRPH5VoO/dTH7XVlDak7Y7EKopE43LKmqI93Ep83tAnIU7d5+Q8ij9+3jeW6S3qPM9sot21FS9FNsXlXbkFly+ABE5xWdnXaHGJYRmMtSmfwT3VwoeI/2HyCuVxrkumyO+csPlP0E+AddQKWF3A1LisAePHlb5HcOXqLHOXZkH6zNfW3gEjGR6s4/8gPzBBDx4oDS1IWjcgj+NUmRS+E+ajQdY7c/o2pBcbXCC32kkiH1AjO0EGZqZPlfu6tb/KuXjwQXQFZxLAz0Vc4z1DjVww8BeBg4oV/JbD422VShQKEuisaNrVEdWi2dB2/Y+r7TSPI/z8LACNNw1HDjG/7XOJ9na48lLqjV+EJKx7AudzlVq8ruU3dgKXDQtTQp3oSH86jsQUBuZgBmzbB+luVz9XBj9zbid79Rd831eIT3KseZcecY9Yt+FVXCL3EACvSBleyjQSxHqaKRWkXb34W3ASxsSwEjF1tCb6cCwskkxLRO/hqd5CHoh5Ku7sIILxgRyfUEz5eIdoyCbc5gYZlxK9K2snxjgYynopmsuRs0DfmaOygs2KrWS1FIWh5izoV3rULrlj7VX55AawkX6L2s8tnnfS3rsUnL1fIJ131U9FfSQJRp73ETmmUIHavUQ8/uUTe0YMB503SvREAljg1NezoTbOirrkpSbv0imO1qgimyQiCTqCOHXRrvlk9ltShpcyqC+jKu66wCBLJeVodaG8WxSASdB9+m40/kxsVAdcd1rLSeOXPg4C1lv+X6AEjKwo5oTniWveQw+J/Bgq0fa+APYpoI0ddZXC5J7DIwy5n5j4h1oKO5MEJk8hvYq7duHMF9Zcjziq9w5Y65hZTvKgwW6APdvgG1i4wNhIVcKy4FHlZ7IxY/qP5fGfxdYjsROeQ2udnebAv44hSekBwnHWHXoRWlelaEqvwRd1qAjkw4Wix39AYAQ==",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": \"quarterly\",\n  \"derivation\": null,\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://www.sec.gov/Archives/edgar/data/{cik}/{accession_number}/{document}\"\n  },\n  \"description\": \"Fiscal quarter number (1-4) within the company's fiscal year, used with fiscal_year to label the reporting period of each comparable sales observation. It is a period label, not a measure, so it should not be summed or averaged. Fiscal calendars differ by company, so the same quarter number can cover different calendar months across tickers.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2141,
+   "output_tokens": 705,
+   "output_tokens_details": {
+    "thinking_tokens": 373
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

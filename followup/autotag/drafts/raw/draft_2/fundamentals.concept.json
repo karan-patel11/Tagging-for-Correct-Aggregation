@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.concept",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:58:09+00:00",
+ "seconds": 6.11,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2605,
+  "output_tokens": 785,
+  "output_tokens_details": {
+   "thinking_tokens": 348
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.013133,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrh7t1aU1BY81efZHGn",
+  "container": null,
+  "content": [
+   {
+    "signature": "CAQSzgsKEAgTGAI4AUIIdGhpbmtpbmcSDHW8qsi/plzlpGTe9BoMP9P80MTLnDnZe5+rIjAQhMpW0aJCW2GZjWv4UqE/BQlZ9R7pDkWbEh+nhzxJugB6lHwud4vlbH6FAuMpGPUq6wpDASpnCluzs5KGbhkvdUScwavqFGo73hGo9QIPHg2smvlR+11r6Ut1RSdSOlK7rTURSto24NmO5p4LfaVN1R0X7jbriP3CK4krN/yL7qIJFdkOtUGsAswZe6V696IEwBm4cRqbL/QdsLsrVEf23GmNiQ+bmao9uatSk6P4zHvC0OGgApelmioUFjiRgBig+BlY1bEehCdWMtfi44FR87AI4LC8Y/FpN1MTnk4V+LLLGwPqunZIzlblKI06+HvAIMZv8W8e20VnXXSGudBthxM8+ld4RVb7NqOdyEz6elDkW/RLv/8bp1m7hIZFPy2IZU4k8sBIYzkild5+PY5bgvmN2PFqdg2VLmJOd7NYDL//uhCtbOVxtKG6xpERC4uBP2V58ZAV8nur0zhCLMDyT81R29gl9jmEjZkDbU5k/pAJypo6cJofGsiYFtMLGbnmQ4zvXxU33JW599kul2WeRiEcztI/Ta6+Ru4txYirfruDTbIoJPLo74ma97pu0V3su7IkL7wzQb6vQNNd9j3NPnchFOcM7K9/RNfEPVKX5qo1/d8wbT9HTJWyHdTThCg3odFyOA4G2e4XNPNePNnPpfk3DWfC3i4+szugHM27NaUuU6VofAYL1tSCj8SMujmTaRzla37v7C/5cF4KZ85K7F5cJZmJ0ZmvzedyGYtpwAjnyJXHTpoip3Dqm5wO2OnXslwt81lCGI0TlgLT1fp66T1XKIzUkH8mKb90MmUxzRE0IHAowbIJioRtvhXzeOGNIeenkj+D5+IAXuV7u40elcAQ9m5gYviy2Xy3AsUVgm5ryg+GiqbLMeyvEnF258QKsBJ8evjqj2evCsfa4vcAsTh+aXVW1iQunp+tojA1A8kMVxPiy51KkNOhbv3NHZVuqPVBsq6k/+q9VRPALGEdX0qhzRRhr1UsGZ/c99QhWtAuplQqZJXpHVajkaxHXOBwLne45Szq8sjYlBd58jZ37serbMt3hYvHm4Xp9RfjArEdAEW7a6nmJUKaB/xsIjCnt3zqyoR7RWUtG5LSwEJyCHdlsF4z/7BHx7RaGnQT2Vc7jGwPplTC0PdX7vXYbm0oWJ6SL5N2PfHYElcZjCz+HYmj9hCT+pPibEYHdMsxHqLRYUKLbRDuMDdxd+T/DSshrlZ4bgK+HW0s0U+pm6xh9RBcCvft/nys5Zv/p8QNpD2bYm02WZjbE77rfgnoR5f4nqPRjpPqGxwYNwOYZUGqZjJI17zEI96U2EiWz0MPIWsybgaqto1xB4W7H62P7K5qWLls6yCJ52LEVlln89M3wlj9ZrBhl09o9zppglscKtBphQwm2e4yfaJXU026J4EM3KZO/9Q780b3NXTvqUzp7QBZqU4UfCFaVyQLqhMe0zepL7F3P+ecmdCHWZPbOtvhCSrO6EcMRW2Y0aRu6p8eQmPDHWAWWEf5P/radLZ2ZDtbxTvvrzk+M14ChDC+QCuA/E6/Qha5WX6Q+T+C6h1g9wPsBlDwpVUaTgRCnF5Y9CHo2qSKxv6WIbD/sLuCPQ+2/gALXDswVOtm3dLUUiQRuFBnhPK3Cv2HhlEMXQN8h/lZwAfZz7UXKx3wvPWQzbcdvzTVbYxw7lKHxaxn6xx3NMroezxcsYBzjSmcrzz6MeME4ehyPfKujdozOGmYqiFR87uO2rSrU+PVfl8otiuVgO2oVRSgecq3GJn8EknUfYzHD+93ge4TIr8/UBr4RUz62V+zESMnET9QseneNqmnl8XDtEdgINs2Hif5iGkm20mBxy8WZRdplCQhV+dtijNtUUfFlJLPljgTJoS+xbxGCB6qASUP7YJXjyzTHZwJ6vJE6EaXKlxbbyZpTrCZGAE=",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Categorical label holding the XBRL (us-gaap) concept name that each fundamentals row was taken from, as reported in SEC company facts filings. It has 9 distinct values, such as EarningsPerShareDiluted, NetIncomeLoss, OperatingIncomeLoss, Revenues and Assets. Each concept corresponds to one of the friendlier 'metric' names, and several concepts can feed a single metric, for example Revenues and RevenueFromContractWithCustomerExcludingAssessedTax. Use it to filter or group rows by reported line item. It is not a measure and cannot be aggregated.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2605,
+   "output_tokens": 785,
+   "output_tokens_details": {
+    "thinking_tokens": 348
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

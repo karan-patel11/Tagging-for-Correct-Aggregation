@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.capex",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:03:47+00:00",
+ "seconds": 14.18,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2508,
+  "output_tokens": 1489,
+  "output_tokens_details": {
+   "thinking_tokens": 885
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.019979,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs84cW2Q8fUwnvZV3de",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"ratio_of_sums\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported XBRL fact PaymentsToAcquirePropertyPlantAndEquipment taken as filed, with no derivation. Rows are cash-flow-statement values over different windows: Q (discrete quarter), YTD6, YTD9 (cumulative year to date) and FY (full year). Rows with different period_basis overlap, so summing them over time double counts. For annual figures use the FY row. Sum across entities only when period_basis and period_end are aligned.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": false,\n  \"entity_grain\": \"company (ticker/cik)\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"PaymentsToAcquirePropertyPlantAndEquipment\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Capital expenditures (cash paid to acquire property, plant and equipment) in USD, per company filing. Values come from 10-Q and 10-K filings and cover quarterly, YTD6, YTD9 and full-year windows, each tagged by period_basis, period_start and period_end. Fiscal calendars differ by company.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2508,
+   "output_tokens": 1489,
+   "output_tokens_details": {
+    "thinking_tokens": 885
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

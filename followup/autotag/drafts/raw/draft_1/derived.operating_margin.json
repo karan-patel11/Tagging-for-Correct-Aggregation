@@ -1,0 +1,66 @@
+{
+ "id": "derived.operating_margin",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:39:22+00:00",
+ "seconds": 9.64,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 78,
+  "output_tokens": 779,
+  "output_tokens_details": {
+   "thinking_tokens": 467
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.008019,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqG1hddq7oo2NJXauaz",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"ratio\",\n  \"unit\": null,\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [\"ratio_of_sums\"],\n  \"period_basis\": null,\n  \"derivation\": \"operating_income / revenue\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Operating margin, derived as operating income divided by revenue from the fundamentals table. It is a ratio, so it cannot be summed across entities or time. To aggregate, sum the numerator and denominator separately, then divide (ratio of sums). The packet gave no data type, samples, vendor documentation or source URL, so unit, period basis, calendar and lineage are left unset.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 78,
+   "output_tokens": 779,
+   "output_tokens_details": {
+    "thinking_tokens": 467
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.date",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:37:27+00:00",
+ "seconds": 6.37,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2326,
+  "output_tokens": 810,
+  "output_tokens_details": {
+   "thinking_tokens": 458
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.012825,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVq7bdK6iyUcXHKz4Mr9",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"dimension\",\"unit\":null,\"additive_over_entities\":null,\"additive_over_time\":null,\"time_rollup\":null,\"valid_methods\":[],\"period_basis\":\"daily\",\"derivation\":null,\"calendar\":null,\"seasonal_adjustment\":null,\"annualized\":null,\"entity_grain\":null,\"hierarchy\":null,\"comparability\":null,\"lineage\":{\"source\":\"Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user, daily)\",\"url_template\":\"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"},\"description\":\"Calendar date (DATE) of the daily Wikipedia pageview observation for an article. It is a time dimension for grouping and filtering the views metric, not a measure, and is not aggregated. Values run from 2024-01-01 to 2025-12-31, with 731 distinct dates (every day of that range) and no nulls.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2326,
+   "output_tokens": 810,
+   "output_tokens_details": {
+    "thinking_tokens": 458
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

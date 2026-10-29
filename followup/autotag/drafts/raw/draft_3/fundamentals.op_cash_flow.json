@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.op_cash_flow",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:05:20+00:00",
+ "seconds": 9.05,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2554,
+  "output_tokens": 1201,
+  "output_tokens_details": {
+   "thinking_tokens": 604
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.017191,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsEu2FFdCLAHsD9GQ4j",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported XBRL value of NetCashProvidedByUsedInOperatingActivities, or the ...ContinuingOperations variant for DRI. Quarterly rows cover a single quarter. Later rows are cumulative year-to-date (YTD6, YTD9) or full fiscal year (FY), so rows for the same fiscal year overlap and must not be summed over time.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"company (ticker/cik)\",\n  \"hierarchy\": null,\n  \"comparability\": \"by_definition_id\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL company facts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Net cash provided by (used in) operating activities, in USD, for restaurant companies (CMG, WING, YUM, DRI) as reported in SEC 10-Q and 10-K filings. Each row's period_basis (Q, YTD6, YTD9, FY) shows whether it covers a quarter, a cumulative year-to-date span, or a full fiscal year. Annual totals should use the reported FY value rather than a sum of rows. Fiscal calendars differ across companies, and the XBRL concept differs for DRI (continuing operations).\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2554,
+   "output_tokens": 1201,
+   "output_tokens_details": {
+    "thinking_tokens": 604
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

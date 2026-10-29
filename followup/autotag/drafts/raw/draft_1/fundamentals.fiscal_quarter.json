@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.fiscal_quarter",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:40:19+00:00",
+ "seconds": 10.48,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2468,
+  "output_tokens": 1331,
+  "output_tokens_details": {
+   "thinking_tokens": 757
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.018319,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqLFXhGbV6npM46Urmc",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Fiscal quarter label (1-4) attached to each reported fact. In the sampled rows, FY-basis facts from 10-Ks carry 4, and YTD facts carry the quarter in which the cumulative period ends (YTD6 is 2, YTD9 is 3). The packet does not document how the label is derived.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Integer fiscal quarter (1-4) of the fiscal period a fundamentals fact belongs to. It is a grouping and filtering label, not a measure, so it should not be summed or averaged. It follows each company's own fiscal calendar, so the same quarter number covers different calendar months across tickers (for example DRI's fiscal Q3 ends in February, while YUM's Q3 ends in September). It must be used with fiscal_year and period_basis, because FY rows carry 4 and YTD rows carry the quarter in which they end. The column has no nulls in the 288 rows and holds only the values 1 to 4.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2468,
+   "output_tokens": 1331,
+   "output_tokens_details": {
+    "thinking_tokens": 757
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

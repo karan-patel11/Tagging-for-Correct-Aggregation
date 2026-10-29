@@ -1,0 +1,66 @@
+{
+ "id": "derived.operating_margin",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:03:33+00:00",
+ "seconds": 7.24,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 78,
+  "output_tokens": 696,
+  "output_tokens_details": {
+   "thinking_tokens": 428
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.007189,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVs6yvx1W4SaCvpXJ9NH",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"ratio\",\"unit\":null,\"additive_over_entities\":false,\"additive_over_time\":false,\"time_rollup\":\"none\",\"valid_methods\":[\"ratio_of_sums\"],\"period_basis\":null,\"derivation\":\"operating_income / revenue\",\"calendar\":null,\"seasonal_adjustment\":null,\"annualized\":null,\"entity_grain\":null,\"hierarchy\":null,\"comparability\":null,\"lineage\":{},\"description\":\"Operating margin, derived as operating income divided by revenue from the fundamentals table. It is a ratio, so values cannot be summed across entities or time. To aggregate, sum operating_income and revenue separately and then divide. The packet had no sample rows, statistics, or vendor documentation, so unit, period basis, calendar, and source URL are left unset.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 78,
+   "output_tokens": 696,
+   "output_tokens_details": {
+    "thinking_tokens": 428
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

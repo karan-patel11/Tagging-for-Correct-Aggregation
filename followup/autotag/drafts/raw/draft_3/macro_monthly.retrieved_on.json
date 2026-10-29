@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.retrieved_on",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:07:07+00:00",
+ "seconds": 6.95,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1195,
+  "output_tokens": 789,
+  "output_tokens_details": {
+   "thinking_tokens": 470
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.010353,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVsNm5yveUBuRj8xUvr1",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"series_id\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Date on which the row's source data was retrieved (extracted) from the vendor. It is load metadata, not an economic measure, and it is not the observation period, which is in the date column. The table has two distinct values, 2026-10-23 for the CPI series (CUSR0000SEFV) and 2026-10-24 for the Census series (CENSUS_722_SA). Use it for data-vintage filtering or auditing only, and do not aggregate it.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1195,
+   "output_tokens": 789,
+   "output_tokens_details": {
+    "thinking_tokens": 470
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

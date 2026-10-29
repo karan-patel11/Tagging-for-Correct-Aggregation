@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.views",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:37:49+00:00",
+ "seconds": 13.61,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2356,
+  "output_tokens": 1540,
+  "output_tokens_details": {
+   "thinking_tokens": 999
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.020185,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVq9CpAVuWAzEhi2kQdJ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"count\",\n  \"unit\": \"page views\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": true,\n  \"time_rollup\": \"sum\",\n  \"valid_methods\": [\"sum_over_time\", \"mean_over_time\", \"pct_change\", \"sum_across_entities\"],\n  \"period_basis\": \"daily\",\n  \"derivation\": \"Daily count of user-agent (all-access) page views of one English Wikipedia article, taken from the Wikimedia per-article pageviews REST API.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"article_title\",\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Wikimedia REST API: pageviews per-article (en.wikipedia, all-access, user, daily)\",\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/{start_date}/{end_date}\"\n  },\n  \"description\": \"Daily Wikipedia page views for the article representing a restaurant brand or its parent company, used as an attention proxy. Values are additive over days. Rows with grain='parent' and grain='brand' come from separate articles, so a parent's views are not the sum of its brands' views. Sum across entities only within one grain, and do not roll brand rows up to parent rows. A brand can have more than one article title (e.g. Habit Burger Grill), and each title is a separate series that may be sparse or overlap in time.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2356,
+   "output_tokens": 1540,
+   "output_tokens_details": {
+    "thinking_tokens": 999
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

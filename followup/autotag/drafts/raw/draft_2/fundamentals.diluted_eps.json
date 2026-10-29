@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.diluted_eps",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:58:15+00:00",
+ "seconds": 8.9,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2447,
+  "output_tokens": 1267,
+  "output_tokens_details": {
+   "thinking_tokens": 726
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.017637,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrhZugVn5jYBDeKTMVm",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"per_share\",\n  \"unit\": \"USD/shares\",\n  \"additive_over_entities\": false,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Reported value of the XBRL concept EarningsPerShareDiluted taken from SEC 10-Q and 10-K filings. Not computed in the warehouse. Each row covers a quarter (Q), a year-to-date period (YTD9) or a full fiscal year (FY).\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": null,\n  \"annualized\": false,\n  \"entity_grain\": \"ticker\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"EarningsPerShareDiluted\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Diluted earnings per share in USD per share, as reported by each company in its SEC filings. Rows can be a single quarter, a year-to-date span or a full fiscal year, so check period_basis before comparing them. EPS is not additive across companies. It is also not safely summed across periods, because share counts change and YTD and FY rows overlap the quarterly rows. For an annual figure, use the reported FY value rather than adding quarters.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2447,
+   "output_tokens": 1267,
+   "output_tokens_details": {
+    "thinking_tokens": 726
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

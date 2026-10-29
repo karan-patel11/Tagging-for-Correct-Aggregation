@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.brand",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:37:20+00:00",
+ "seconds": 6.99,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2500,
+  "output_tokens": 987,
+  "output_tokens_details": {
+   "thinking_tokens": 437
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.014943,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVq76GhnTjdqf1vuLwYE",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": \"Display label assigned to each Wikipedia article_title, which identifies the brand or parent company the daily pageviews belong to.\",\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": \"brand\",\n  \"hierarchy\": \"brand -> parent_ticker\",\n  \"comparability\": null,\n  \"lineage\": {\n    \"source\": \"Wikimedia Pageviews REST API (per-article, en.wikipedia, all-access, user, daily)\",\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/20240101/20251231\"\n  },\n  \"description\": \"Categorical label for the restaurant brand or parent company whose Wikipedia article the daily views in brand_attention_daily refer to. It has 10 distinct values and no nulls. Brand-level values (Chipotle, Taco Bell, KFC, Pizza Hut, Habit Burger Grill, Olive Garden, LongHorn Steakhouse, Wingstop) and parent-level values (Yum! Brands, Darden Restaurants) share the column, and the grain column distinguishes them. Use it for grouping and filtering, not for aggregation. Summing views across brand and parent rows of the same parent_ticker would double count attention.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2500,
+   "output_tokens": 987,
+   "output_tokens_details": {
+    "thinking_tokens": 437
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

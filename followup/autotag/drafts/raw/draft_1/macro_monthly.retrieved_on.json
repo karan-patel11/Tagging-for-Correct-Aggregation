@@ -1,0 +1,66 @@
+{
+ "id": "macro_monthly.retrieved_on",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:42:52+00:00",
+ "seconds": 6.77,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1195,
+  "output_tokens": 733,
+  "output_tokens_details": {
+   "thinking_tokens": 438
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.009793,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVqXVEkZNVjjF8KC5GaZ",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": \"none\",\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": \"n/a\",\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {},\n  \"description\": \"Date on which each row's observation was pulled from the source (2026-10-23 for the CPI-U series, 2026-10-24 for the Census series). It is load metadata, not an economic measure, and should not be aggregated. Use it only to filter or group by data vintage. It is distinct from the observation 'date' column. The packet gives no source URL, so lineage is left empty.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1195,
+   "output_tokens": 733,
+   "output_tokens_details": {
+    "thinking_tokens": 438
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

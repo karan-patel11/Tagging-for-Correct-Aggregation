@@ -1,0 +1,61 @@
+{
+ "id": "macro.CUSR0000SEFV",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T04:00:39+00:00",
+ "seconds": 3.68,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 1023,
+  "output_tokens": 339,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.005509,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrt9RLHhv1KhkzvoDF9",
+  "container": null,
+  "content": [
+   {
+    "citations": null,
+    "text": "{\"semantic_type\":\"index\",\"unit\":\"index, 1982-84=100\",\"additive_over_entities\":false,\"additive_over_time\":false,\"time_rollup\":\"mean\",\"valid_methods\":[\"last\",\"mean_over_time\",\"pct_change\"],\"period_basis\":\"monthly\",\"derivation\":null,\"calendar\":\"calendar\",\"seasonal_adjustment\":\"SA\",\"annualized\":false,\"entity_grain\":\"series_id\",\"hierarchy\":null,\"comparability\":\"by_definition_id\",\"lineage\":{\"source\":\"U.S. Bureau of Labor Statistics, Consumer Price Index for All Urban Consumers (CPI-U)\",\"series_id\":\"CUSR0000SEFV\",\"url\":null,\"url_template\":null,\"retrieved_on\":\"2026-10-23\"},\"description\":\"Seasonally adjusted CPI-U index for food away from home, U.S. city average, all urban consumers, base period 1982-84=100. Monthly values; not additive across time or series. Use last, monthly mean, or percent change to compare periods.\"}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 1023,
+   "output_tokens": 339,
+   "output_tokens_details": {
+    "thinking_tokens": 0
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

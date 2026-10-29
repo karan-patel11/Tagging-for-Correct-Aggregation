@@ -1,0 +1,66 @@
+{
+ "id": "brand_attention_daily.article_title",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:55:35+00:00",
+ "seconds": 8.47,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 733
+  },
+  "cache_creation_input_tokens": 733,
+  "cache_read_input_tokens": 0,
+  "inference_geo": "global",
+  "input_tokens": 2552,
+  "output_tokens": 1004,
+  "output_tokens_details": {
+   "thinking_tokens": 577
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.016976,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrVmW7GNxiStzYtcoPr",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"dimension\",\n  \"unit\": null,\n  \"additive_over_entities\": null,\n  \"additive_over_time\": null,\n  \"time_rollup\": null,\n  \"valid_methods\": [],\n  \"period_basis\": null,\n  \"derivation\": null,\n  \"calendar\": null,\n  \"seasonal_adjustment\": null,\n  \"annualized\": null,\n  \"entity_grain\": null,\n  \"hierarchy\": null,\n  \"comparability\": null,\n  \"lineage\": {\n    \"url_template\": \"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/{article_title}/daily/{start_date}/{end_date}\"\n  },\n  \"description\": \"English Wikipedia article title (underscore-separated) whose daily pageviews are recorded in this table. It is a categorical label for the source page, not a measure, and has 11 distinct values with no nulls. It covers both brand-level and parent-company articles. Several titles can map to the same brand: 'Habit_Burger_&_Grill' and 'The_Habit_Burger_Grill' both map to the Habit Burger Grill brand. Use it to group or filter rows. Do not aggregate it, and use the brand column rather than this one when counting entities.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 733
+   },
+   "cache_creation_input_tokens": 733,
+   "cache_read_input_tokens": 0,
+   "inference_geo": "global",
+   "input_tokens": 2552,
+   "output_tokens": 1004,
+   "output_tokens_details": {
+    "thinking_tokens": 577
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}

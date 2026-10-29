@@ -1,0 +1,66 @@
+{
+ "id": "fundamentals.net_income",
+ "model": "claude-sonnet-5-5",
+ "started_at": "2026-10-29T03:59:03+00:00",
+ "seconds": 13.53,
+ "cached_prefix": true,
+ "usage": {
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 0,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 733,
+  "inference_geo": "global",
+  "input_tokens": 2381,
+  "output_tokens": 1520,
+  "output_tokens_details": {
+   "thinking_tokens": 933
+  },
+  "server_tool_use": null,
+  "service_tier": "standard",
+  "speed": "standard"
+ },
+ "cost_usd": 0.020035,
+ "stop_reason": "end_turn",
+ "response": {
+  "id": "msg_011CgVrm85nPXFfwgkPHjRHF",
+  "container": null,
+  "content": [
+   {
+    "signature": "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",
+    "thinking": "",
+    "type": "thinking"
+   },
+   {
+    "citations": null,
+    "text": "{\n  \"semantic_type\": \"flow\",\n  \"unit\": \"USD\",\n  \"additive_over_entities\": true,\n  \"additive_over_time\": false,\n  \"time_rollup\": \"reported_fy_value\",\n  \"valid_methods\": [\"sum_across_entities\", \"pct_change\"],\n  \"period_basis\": \"mixed\",\n  \"derivation\": \"Value of the us-gaap NetIncomeLoss XBRL fact as filed. The table holds discrete quarters (Q), year-to-date cumulatives (YTD6, YTD9) and full-year (FY) values for the same company. These periods overlap, so they must not be summed over time. Q4 is not filed as a 10-Q, so the fiscal-year figure comes from the 10-K FY value.\",\n  \"calendar\": \"fiscal\",\n  \"seasonal_adjustment\": \"NSA\",\n  \"annualized\": false,\n  \"entity_grain\": \"company (ticker/cik) per period_end and period_basis\",\n  \"hierarchy\": null,\n  \"comparability\": \"same_definition\",\n  \"lineage\": {\n    \"source\": \"SEC EDGAR XBRL companyfacts API\",\n    \"url\": null,\n    \"url_template\": \"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json\",\n    \"concept\": \"NetIncomeLoss\",\n    \"retrieved_on\": \"2026-10-24\"\n  },\n  \"description\": \"Net income (loss) in USD as reported in SEC 10-Q and 10-K filings, one row per company and reporting period. It is a flow measure. Filter to a single period_basis (Q, YTD6, YTD9 or FY) before aggregating. Sums across companies are valid only for the same period type and fiscal period, and companies' fiscal calendars differ.\"\n}",
+    "type": "text"
+   }
+  ],
+  "diagnostics": null,
+  "model": "claude-sonnet-5-5",
+  "role": "assistant",
+  "stop_details": null,
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+   "cache_creation": {
+    "ephemeral_1h_input_tokens": 0,
+    "ephemeral_5m_input_tokens": 0
+   },
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 733,
+   "inference_geo": "global",
+   "input_tokens": 2381,
+   "output_tokens": 1520,
+   "output_tokens_details": {
+    "thinking_tokens": 933
+   },
+   "server_tool_use": null,
+   "service_tier": "standard",
+   "speed": "standard"
+  }
+ }
+}
