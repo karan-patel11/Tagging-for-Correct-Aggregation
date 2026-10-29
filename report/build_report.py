@@ -3,7 +3,9 @@
 Data comes only from eval/results/summary.json, eval/results/{A,B,C,D}.jsonl, eval/questions.yaml,
 tags/tags.yaml, eval/verification_log.csv, report/over_warning_reasons.json (written by
 report/analyze_over_warnings.py from the same runs) and followup/engine_fix/replay.json (written by
-followup/engine_fix/replay.py, for the engine-hardening line under "Limits"). report/replays.yaml picks the replays and holds the
+followup/engine_fix/replay.py, for the engine-hardening line under "Limits"). The follow-up section
+after the main results is built by report/followup_section.py from the follow-up's committed output
+files (listed there). report/replays.yaml picks the replays and holds the
 plain-language notes; report/template.html holds the layout. Runs are scored with eval/score.py's
 score_run, the same code that produced summary.json, so a replay badge always matches the summary.
 
@@ -29,8 +31,10 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "eval"))
+sys.path.insert(0, str(ROOT / "report"))
 
 import score  # noqa: E402  (scoring rules only; reads no files on import)
+import followup_section  # noqa: E402  (report/followup_section.py: the follow-up section)
 
 SUMMARY = ROOT / "eval" / "results" / "summary.json"
 RESULTS = ROOT / "eval" / "results"
@@ -653,6 +657,9 @@ def main():
         "INTRO": section_intro(questions, tags, replays),
         "SECTION_PROBLEM": section_problem(questions, runs, vlog, replays),
         "SECTION_RESULTS": section_results(summary, questions, ow),
+        "FOLLOWUP_TOPLINE": followup_section.top_line(),
+        "SECTION_FOLLOWUP": followup_section.section(followup_section.load(),
+                                                     need(replays, "links", "repo")),
         "SECTION_REPLAYS": section_replays(runs, questions, vlog, replays, tags),
         "SECTION_TAGS": section_tags(tags, replays),
         "SECTION_B_VS_C": section_b_vs_c(summary, questions, runs),
