@@ -1,8 +1,22 @@
 # Tagging for Correct Aggregation
 
+**AI can calculate a financial number correctly and still answer the wrong question.** Asked for Darden's revenue in fiscal Q4 2026, an AI tool can return the full-year figure ($13,210,900,000) without any error. The right answer is $3,718,800,000: the full year minus the first nine months. An analyst who cannot read the query cannot catch it.
+
+**The idea.** Attach rules ("tags") to every metric: whether it can be added up over time, which fiscal calendar it uses, which rows are parent totals.
+
+1. **Measure: do the rules help?** One model (claude-haiku-5-5) answered 42 questions in four setups, 504 answers in total: only the database layout; a written description; a rules file; tools that enforce the rules. All four scored 97%–100%, too close to rank on this sample.
+2. **Auto-tag: can an AI write the rules?** A stronger model (claude-sonnet-5-5) drafted them from column names, sample rows and the vendor's documentation ([pre-registered](followup/autotag/PREREG.md)). With its rules, correct answers fell from 124 to 62 of 126, through refusals or no final answer, not wrong numbers. The 64 misses: 20 rule errors by the AI; 21 source links missing from my inputs; 21 a missing parent/brand rule plus a crash in my engine; 2 unrelated.
+3. **Harden: the engine trusted the rules blindly.** It now refuses what it cannot compute. Crashes 171 → 0; results for a calculation the hand-written rules forbid 5 → 1; 455 of 455 recorded tool calls behind the main results give identical output. New automatic checks catch 33 of 63 AI rule errors (derived from the same drafts, not tested on new data).
+
+**What this suggests for a research data team** (suggested by this evidence, not proven): let AI draft the rules, but have a person sign off on how numbers combine; add automatic checks for rule combinations that cannot both be true; make the engine refuse anything it does not implement.
+
+**Read the full story and every number's source on the [results page](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/)** ([docs/index.html](docs/index.html)).
+
+## Detailed results
+
 SQL that runs without error can still answer the wrong question about financial data, for example by summing four quarter-end balances into a meaningless "annual" total assets. This small experiment asks one model (claude-haiku-5-5) the same 42 restaurant-sector questions in four setups (A: table schema only; B: prose descriptions; C: a tags file; D: semantic tools, no SQL) and scores 504 recorded runs against an answer key computed with direct SQL and checked against the filings and agency data (25 of 134 source rows read by hand; see the results page).
 
-**Headline result** (from [eval/results/summary.md](eval/results/summary.md)):
+**Main results** (from [eval/results/summary.md](eval/results/summary.md)):
 
 - Accuracy was close across setups: A 96.8%, B 100.0%, C 98.4%, D 98.4% of 126 runs each. The sample is too small to rank them.
 - One stored-trap hit in 504 runs (A, q017 run 2).

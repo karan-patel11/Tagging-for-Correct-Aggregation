@@ -12,6 +12,16 @@
 
 problem_question: q003   # section 1 explainer; must not imply any setup failed it
 
+# The problem-first story above the "Full detail" divider (report/story.py). Selection only; every
+# value shown is read from questions.yaml and the follow-up result files.
+story:
+  problem_question: q017   # first-screen example: one quarter vs the full-year and nine-month values
+  autotag_example:         # the clearest auto-tag failure: the AI's own description vs the rule it wrote
+    question_id: q012
+    run: 1
+    tag: fundamentals.op_cash_flow
+    description_phrase: "Values are cumulative within the fiscal year."
+
 replays:
   - question_id: q003
     runs: {A: 1, B: 1, C: 1, D: 1}

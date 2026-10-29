@@ -4,7 +4,12 @@ Data comes only from eval/results/summary.json, eval/results/{A,B,C,D}.jsonl, ev
 tags/tags.yaml, eval/verification_log.csv, report/over_warning_reasons.json (written by
 report/analyze_over_warnings.py from the same runs) and followup/engine_fix/replay.json (written by
 followup/engine_fix/replay.py, for the engine-hardening line under "Limits"). report/replays.yaml picks the replays and holds the
-plain-language notes; report/template.html holds the layout. Runs are scored with eval/score.py's
+plain-language notes; report/template.html holds the layout.
+
+The page opens with a problem-first story (report/story.py) for a non-technical reader, then a
+"Full detail" divider; everything below it is the original results page plus the follow-up tables.
+report/story.py reads the follow-up files (followup/autotag/results, drafts, engine_fix/replay.json)
+and computes every value it shows. Runs are scored with eval/score.py's
 score_run, the same code that produced summary.json, so a replay badge always matches the summary.
 
 The build fails loudly when an input file, a field or a number is missing, when a replay's recorded
@@ -645,11 +650,28 @@ Census months were checked by hand in the live table.</li>
 <p><a href="{e(repo)}">Repository</a> · {ea}</p>"""
 
 
+def story_parts(summary, questions, tags, vlog, replays):
+    import story  # report/story.py; imported here so the scoring helpers above load first
+    d = story.story_data(summary, questions, vlog, replays)
+    repo = need(need(replays, "links"), "repo")
+    return {
+        "STORY_HERO": story.section_hero(d, e),
+        "STORY_IDEA": story.section_idea(tags, e),
+        "STORY_MEASURE": story.section_measure(d, e, repo),
+        "STORY_AUTOTAG": story.section_autotag(d, e, repo),
+        "STORY_HARDEN": story.section_harden(d, e, repo),
+        "STORY_SUGGESTS": story.section_suggests(d, e),
+        "STORY_LIMITS": story.section_limits(d, e),
+        "SECTION_FOLLOWUP": story.section_followup_detail(d, e, repo, render_steps),
+    }
+
+
 def main():
     summary, questions, tags, vlog, runs, replays, template, ow = load()
     check_template(template)
     model = ", ".join(need(summary, "model"))
     parts = {
+        **story_parts(summary, questions, tags, vlog, replays),
         "INTRO": section_intro(questions, tags, replays),
         "SECTION_PROBLEM": section_problem(questions, runs, vlog, replays),
         "SECTION_RESULTS": section_results(summary, questions, ow),
