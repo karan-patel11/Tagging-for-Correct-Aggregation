@@ -6,6 +6,7 @@ lineage); nothing here is hardcoded per metric. The database is opened read-only
 Every public function returns the §9.2 envelope.
 """
 import re
+import string
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -26,6 +27,23 @@ MEASURES = {"flow", "stock", "ratio", "per_share", "index", "count"}
 CUMULATIVE = {1: "Q", 2: "YTD6", 3: "YTD9", 4: "FY"}
 # The method a tag's time_rollup corresponds to, used for use_instead.
 ROLLUP_METHOD = {"sum": "sum_over_time", "last": "last", "mean": "mean_over_time"}
+
+# The methods each aggregate code path implements. A method a tag allows that its code path does
+# not implement is refused; no code path falls through to another computation.
+IMPLEMENTED = {
+    "fundamentals": {"last", "sum_over_time", "sum_across_entities", "ratio_of_sums"},
+    "derived_ratio": {"ratio_of_sums"},
+    "macro": {"pct_change", "sum_over_time", "mean_over_time"},
+    "pageviews": {"sum_over_time", "sum_across_entities", "rollup_to_parent"},
+    "comps": set(),  # values are only listed with their definitions (_comps_warning), never combined
+}
+BRANCH_TABLE = {"fundamentals": "fundamentals", "derived_ratio": "fundamentals (derived ratio)",
+                "macro": "macro_monthly", "pageviews": "brand_attention_daily",
+                "comps": "comps_quarterly"}
+# What a method needs from the tag before any code path computes it.
+REQUIRES = {"sum_over_time": ("additive_over_time", True),
+            "sum_across_entities": ("additive_over_entities", True),
+            "last": ("semantic_type", "stock")}
 
 _con = None
 
@@ -62,6 +80,11 @@ def _insufficient(detail, **kw):
 
 def _iso(d):
     return d.isoformat() if d is not None else None
+
+
+def _missing(tag, field, detail="is missing"):
+    """Clean refusal for tag metadata a code path needs."""
+    return _error(f"{tag.id}: tag field {field} {detail}; refusing", unit=tag.unit)
 
 
 # ---------- periods (§9.1) ----------
@@ -279,13 +302,15 @@ def _macro(tag, method, p, label):
     if p is None or p["kind"] not in ("MR", "CQ"):
         return _error(f"macro series need a month range like 2025-01:2025-12 or a calendar "
                       f"quarter like CY2025Q1, got '{label}'", unit=tag.unit)
-    series = tag.filter["series_id"]
+    series = (tag.filter or {}).get("series_id")
+    if not isinstance(series, str):
+        return _missing(tag, "filter.series_id")
+    if not tag.lineage.get("url"):
+        return _missing(tag, "lineage.url")
     months = _months(p["start"].replace(day=1), p["end"].replace(day=1))
     rows = {r["date"]: r for r in _rows(
         "SELECT * FROM macro_monthly WHERE series_id = ? AND date BETWEEN ? AND ?",
         (series, months[0], months[-1]))}
-    if not tag.lineage.get("url"):
-        return _error(f"{tag.id} lineage has no url")
     sources = [{"type": "macro_series", "series_id": series, "url": tag.lineage["url"],
                 "retrieved_on": tag.lineage.get("retrieved_on")}]
     period = {"label": label, "start": _iso(months[0]), "end": _iso(months[-1])}
@@ -302,28 +327,51 @@ def _macro(tag, method, p, label):
                                      f"({b['value']} - {a['value']}) / {a['value']} * 100 = {value}"],
                          sources=sources)
 
+    if method not in ("sum_over_time", "mean_over_time"):
+        return _not_implemented(tag, method, "macro")
     missing = [m for m in months if m not in rows]
     if missing:
         return _insufficient(f"{series} has no value for {[f'{m:%Y-%m}' for m in missing]}",
                              unit=tag.unit)
     vals = [rows[m]["value"] for m in months]
-    value = sum(vals) if method == "sum_over_time" else sum(vals) / len(vals)
+    if method == "sum_over_time":
+        value, word = sum(vals), "Sum"
+    else:
+        value, word = sum(vals) / len(vals), "Mean"
     return _envelope("ok", value, unit=tag.unit, period=period,
-                     explanation=("Sum" if method == "sum_over_time" else "Mean") + " of monthly values.",
+                     explanation=word + " of monthly values.",
                      derivation=[f"{m:%Y-%m} = {rows[m]['value']}" for m in months], sources=sources)
 
 
 def _views(tag, method, entities, p, label):
     if p is None or p["kind"] != "CQ":
         return _error(f"pageviews need a calendar quarter like CY2025Q1, got '{label}'", unit=tag.unit)
-    child_grain, parent_col = (s.strip() for s in tag.hierarchy.split("->"))
+    if not tag.hierarchy:
+        return _missing(tag, "hierarchy")
+    parts = [s.strip() for s in tag.hierarchy.split("->")]
+    if len(parts) != 2 or not all(parts):
+        return _missing(tag, "hierarchy", f"must read '<child_grain> -> <parent_col>', got '{tag.hierarchy}'")
+    child_grain, parent_col = parts
+    if parent_col not in {r["column_name"] for r in _rows("DESCRIBE brand_attention_daily")}:
+        return _missing(tag, "hierarchy", f"names '{parent_col}', which is not a column of brand_attention_daily")
+    template = tag.lineage.get("url_template")
+    if not template:
+        return _missing(tag, "lineage.url_template")
+    fields = {f for _, f, _, _ in string.Formatter().parse(template) if f is not None}
+    if fields != {"title"}:
+        return _missing(tag, "lineage.url_template", f"must have exactly one placeholder {{title}}, got {sorted(fields)}")
     marks = ",".join("?" * len(entities))
     if method == "rollup_to_parent":
         where = f"grain = ? AND {parent_col} IN ({marks})"
         params = (child_grain, *entities)
-    else:
+        explanation = (f"Sum of grain = '{child_grain}' rows only, all titles of a brand "
+                       f"summed by date.")
+    elif method in ("sum_over_time", "sum_across_entities"):
         where = f"brand IN ({marks})"
         params = tuple(entities)
+        explanation = "Sum of daily views."
+    else:
+        return _not_implemented(tag, method, "pageviews")
     rows = _rows(f"SELECT brand, article_title, sum(views) AS views FROM brand_attention_daily "
                  f"WHERE {where} AND date BETWEEN ? AND ? GROUP BY ALL ORDER BY brand, article_title",
                  (*params, p["start"], p["end"]))
@@ -339,28 +387,29 @@ def _views(tag, method, entities, p, label):
                       (b, p["start"], p["end"]))[0]["n"] != expected_days]
     if short:
         return _insufficient(f"pageviews missing days for {short} in {label}", unit=tag.unit)
-    template = tag.lineage.get("url_template")
-    if not template:
-        return _error(f"{tag.id} lineage has no url")
     values = by_brand
     return _envelope("ok", sum(values.values()), values=values, unit=tag.unit,
                      period={"label": label, "start": _iso(p["start"]), "end": _iso(p["end"])},
-                     explanation=(f"Sum of grain = '{child_grain}' rows only, all titles of a brand "
-                                  f"summed by date." if method == "rollup_to_parent"
-                                  else "Sum of daily views."),
+                     explanation=explanation,
                      derivation=[f"{r['article_title']} ({r['brand']}) = {r['views']}" for r in rows],
                      sources=[{"type": "pageviews", "article_title": r["article_title"],
                                "url": template.format(title=r["article_title"])} for r in rows])
 
 
 def _ratio_of_sums(tag, entities, p, label, denominator_id):
-    if tag.table == "fundamentals" and isinstance(tag.filter.get("metric"), list):
-        num, den = tag.filter["metric"]
+    pair = (tag.filter or {}).get("metric")
+    if isinstance(pair, list):
+        if len(pair) != 2 or not all(isinstance(m, str) and m in FUNDAMENTALS for m in pair):
+            return _missing(tag, "filter.metric", "must name two stored fundamentals metrics")
+        num, den = pair
     else:
-        if denominator_id not in TAGS:
+        if not isinstance(denominator_id, str) or denominator_id not in TAGS:
             return _error("ratio_of_sums needs denominator_id naming a flow tag")
-        num, den = tag.filter.get("metric"), TAGS[denominator_id].filter.get("metric")
-        if TAGS[denominator_id].semantic_type != "flow" or num not in FUNDAMENTALS:
+        den_tag = TAGS[denominator_id]
+        num, den = pair, (den_tag.filter or {}).get("metric")
+        if (den_tag.semantic_type != "flow" or tag.semantic_type != "flow"
+                or not isinstance(num, str) or num not in FUNDAMENTALS
+                or not isinstance(den, str) or den not in FUNDAMENTALS):
             return _error("ratio_of_sums needs a flow numerator and a flow denominator")
     parts = {}
     for side, metric in (("numerator", num), ("denominator", den)):
@@ -385,6 +434,18 @@ def _ratio_of_sums(tag, entities, p, label, denominator_id):
                      sources=[s for r in parts.values() for s in r["sources"]])
 
 
+def _branch(tag):
+    if tag.table == "fundamentals":
+        return "derived_ratio" if isinstance((tag.filter or {}).get("metric"), list) else "fundamentals"
+    return {"macro_monthly": "macro", "brand_attention_daily": "pageviews",
+            "comps_quarterly": "comps"}.get(tag.table)
+
+
+def _not_implemented(tag, method, branch):
+    return _error(f"method '{method}' is allowed by the tag but not implemented for "
+                  f"{BRANCH_TABLE[branch]}; refusing", unit=tag.unit)
+
+
 def aggregate(metric_id, entities, period, method, denominator_id=None):
     """Aggregate a tagged metric, after checking the method against the tag (§9.3)."""
     tag = TAGS.get(metric_id)
@@ -401,14 +462,22 @@ def aggregate(metric_id, entities, period, method, denominator_id=None):
         use = _use_instead(tag, method)
         return _error(f"method '{method}' is not allowed for {metric_id} "
                       f"(allowed: {tag.valid_methods or 'none'})", unit=tag.unit, use_instead=use)
+    branch = _branch(tag)
+    if branch is not None and method not in IMPLEMENTED[branch]:
+        return _not_implemented(tag, method, branch)
+    if method in REQUIRES:
+        field, needed = REQUIRES[method]
+        if getattr(tag, field) != needed:
+            return _error(f"method '{method}' needs {field} = {needed} but {metric_id} has "
+                          f"{getattr(tag, field)}; refusing", unit=tag.unit)
     if p is None:
         return _error(f"unrecognized period '{period}'", unit=tag.unit)
 
-    if tag.table == "macro_monthly":
+    if branch == "macro":
         return _macro(tag, method, p, period)
-    if tag.table == "brand_attention_daily":
+    if branch == "pageviews":
         return _views(tag, method, entities, p, period)
-    if tag.table != "fundamentals":
+    if branch not in ("fundamentals", "derived_ratio"):
         return _error(f"aggregate does not support {metric_id}", unit=tag.unit)
 
     if not entities:
@@ -419,8 +488,10 @@ def aggregate(metric_id, entities, period, method, denominator_id=None):
 
     if method == "ratio_of_sums":
         result = _ratio_of_sums(tag, entities, p, period, denominator_id)
-    else:
-        metric = tag.filter["metric"]
+    elif branch == "fundamentals" and method in ("last", "sum_over_time", "sum_across_entities"):
+        metric = (tag.filter or {}).get("metric")
+        if not isinstance(metric, str) or metric not in FUNDAMENTALS:
+            return _missing(tag, "filter.metric", "must name a stored fundamentals metric")
         per = {}
         for e in entities:
             r = (_fundamental_quarters_sum(e, metric, p, period) if method == "sum_over_time"
@@ -439,6 +510,8 @@ def aggregate(metric_id, entities, period, method, denominator_id=None):
                                         "sum_across_entities": "Sum across the listed companies."}[method],
                            derivation=[f"{e} = {v}" for e, v in values.items()],
                            sources=[s for r in per.values() for s in r["sources"]])
+    else:
+        return _not_implemented(tag, method, branch)
 
     # Mixed fiscal calendars (e.g. DRI's May year-end with December year-ends).
     if result["status"] == "ok" and tag.calendar == "fiscal" and len(entities) > 1:
