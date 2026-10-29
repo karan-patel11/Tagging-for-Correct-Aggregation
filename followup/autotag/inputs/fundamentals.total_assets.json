@@ -1,0 +1,195 @@
+{
+ "table": "fundamentals",
+ "column": "value",
+ "filter": {
+  "metric": "total_assets"
+ },
+ "duckdb_dtype": "DOUBLE",
+ "row_count": 32,
+ "null_count": 0,
+ "distinct_count": 32,
+ "sample_rows": [
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 6659000000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2025-03-31",
+   "period_basis": "instant",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001041061-25-000025",
+   "filed": "2025-05-07"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 12888800000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2026-02-22",
+   "period_basis": "instant",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0000940944-26-000009",
+   "filed": "2026-03-27"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 8411249000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2024-03-31",
+   "period_basis": "instant",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001058090-24-000015",
+   "filed": "2024-04-25"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 12759600000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2025-08-24",
+   "period_basis": "instant",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0000940944-25-000054",
+   "filed": "2025-09-26"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 9011670000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2024-09-30",
+   "period_basis": "instant",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001058090-24-000050",
+   "filed": "2024-10-30"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 12519200000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2024-11-24",
+   "period_basis": "instant",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0000940944-25-000003",
+   "filed": "2025-01-02"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 12587000000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2025-05-25",
+   "period_basis": "instant",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0000940944-25-000038",
+   "filed": "2025-07-18"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 721033000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2025-09-27",
+   "period_basis": "instant",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001636222-25-000110",
+   "filed": "2025-11-04"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 716246000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2024-12-28",
+   "period_basis": "instant",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0001636222-25-000008",
+   "filed": "2025-02-19"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 12862400000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2026-05-31",
+   "period_basis": "instant",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0000940944-26-000025",
+   "filed": "2026-07-24"
+  }
+ ],
+ "min": 412251000.0,
+ "max": 12940200000.0,
+ "vendor_documentation": {
+  "sec_companyfacts": {
+   "CMG": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001058090.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "WING": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001636222.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "YUM": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001041061.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "DRI": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000940944.json",
+    "retrieved_on": "2026-10-24"
+   }
+  }
+ }
+}

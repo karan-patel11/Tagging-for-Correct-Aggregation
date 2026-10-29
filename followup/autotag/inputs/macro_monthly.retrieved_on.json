@@ -1,0 +1,99 @@
+{
+ "table": "macro_monthly",
+ "column": "retrieved_on",
+ "duckdb_dtype": "DATE",
+ "row_count": 64,
+ "null_count": 0,
+ "distinct_count": 2,
+ "sample_rows": [
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2024-10-01",
+   "value": 372.486,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2025-01-01",
+   "value": 375.532,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2024-07-01",
+   "value": 369.383,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-11-01",
+   "value": 87424.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2026-03-01",
+   "value": 87793.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-03-01",
+   "value": 85761.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-07-01",
+   "value": 396.859,
+   "retrieved_on": "2026-10-23"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-12-01",
+   "value": 87142.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-01-01",
+   "value": 84160.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CUSR0000SEFV",
+   "date": "2026-04-01",
+   "value": 393.546,
+   "retrieved_on": "2026-10-23"
+  }
+ ],
+ "min": "2026-10-23",
+ "max": "2026-10-24",
+ "distinct_values": [
+  "2026-10-23",
+  "2026-10-24"
+ ],
+ "vendor_documentation": {
+  "source_file_headers": {
+   "CENSUS_722_SA": [
+    "U.S. Census Bureau",
+    "Source: Monthly Retail Trade and Food Services",
+    "722: Food Services and Drinking Places: U.S. Total",
+    "Seasonally Adjusted Sales - Monthly [Millions of Dollars]",
+    "Period: 2024 to 2026",
+    "Data Extracted on: October 24, 2026 (1:06 pm)"
+   ],
+   "CUSR0000SEFV": [
+    "Consumer Price Index for All Urban Consumers (CPI-U)",
+    "Original Data Value",
+    "Series Id: CUSR0000SEFV",
+    "Seasonally Adjusted",
+    "Series Title: Food away from home in U.S. city average, all urban consumers, seasonally adjusted",
+    "Area: U.S. city average",
+    "Item: Food away from home",
+    "Base Period: 1982-84=100",
+    "Years: 2016 to 2026"
+   ]
+  }
+ }
+}

@@ -1,0 +1,155 @@
+{
+ "table": "brand_attention_daily",
+ "column": "grain",
+ "duckdb_dtype": "VARCHAR",
+ "row_count": 7800,
+ "null_count": 0,
+ "distinct_count": 2,
+ "sample_rows": [
+  {
+   "date": "2025-11-03",
+   "article_title": "The_Habit_Burger_Grill",
+   "brand": "Habit Burger Grill",
+   "grain": "brand",
+   "parent_ticker": "YUM",
+   "views": 11
+  },
+  {
+   "date": "2025-04-12",
+   "article_title": "LongHorn_Steakhouse",
+   "brand": "LongHorn Steakhouse",
+   "grain": "brand",
+   "parent_ticker": "DRI",
+   "views": 191
+  },
+  {
+   "date": "2025-11-25",
+   "article_title": "KFC",
+   "brand": "KFC",
+   "grain": "brand",
+   "parent_ticker": "YUM",
+   "views": 2300
+  },
+  {
+   "date": "2024-09-01",
+   "article_title": "Yum!_Brands",
+   "brand": "Yum! Brands",
+   "grain": "parent",
+   "parent_ticker": "YUM",
+   "views": 1377
+  },
+  {
+   "date": "2025-09-12",
+   "article_title": "LongHorn_Steakhouse",
+   "brand": "LongHorn Steakhouse",
+   "grain": "brand",
+   "parent_ticker": "DRI",
+   "views": 125
+  },
+  {
+   "date": "2025-12-27",
+   "article_title": "Wingstop",
+   "brand": "Wingstop",
+   "grain": "brand",
+   "parent_ticker": "WING",
+   "views": 523
+  },
+  {
+   "date": "2025-06-16",
+   "article_title": "Wingstop",
+   "brand": "Wingstop",
+   "grain": "brand",
+   "parent_ticker": "WING",
+   "views": 433
+  },
+  {
+   "date": "2025-09-21",
+   "article_title": "Pizza_Hut",
+   "brand": "Pizza Hut",
+   "grain": "brand",
+   "parent_ticker": "YUM",
+   "views": 1034
+  },
+  {
+   "date": "2024-01-09",
+   "article_title": "Chipotle_Mexican_Grill",
+   "brand": "Chipotle",
+   "grain": "brand",
+   "parent_ticker": "CMG",
+   "views": 1415
+  },
+  {
+   "date": "2025-12-05",
+   "article_title": "Olive_Garden",
+   "brand": "Olive Garden",
+   "grain": "brand",
+   "parent_ticker": "DRI",
+   "views": 452
+  }
+ ],
+ "min": "brand",
+ "max": "parent",
+ "distinct_values": [
+  "brand",
+  "parent"
+ ],
+ "vendor_documentation": {
+  "wikimedia_pageviews": [
+   {
+    "title": "Chipotle_Mexican_Grill",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Chipotle_Mexican_Grill/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:13:39Z"
+   },
+   {
+    "title": "Wingstop",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Wingstop/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:14:00Z"
+   },
+   {
+    "title": "KFC",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/KFC/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:14:03Z"
+   },
+   {
+    "title": "Taco_Bell",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Taco_Bell/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:14:05Z"
+   },
+   {
+    "title": "Pizza_Hut",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Pizza_Hut/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:14:08Z"
+   },
+   {
+    "title": "Habit_Burger_&_Grill",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Habit_Burger_%26_Grill/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:14:10Z"
+   },
+   {
+    "title": "The_Habit_Burger_Grill",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/The_Habit_Burger_Grill/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:14:12Z"
+   },
+   {
+    "title": "Olive_Garden",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Olive_Garden/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:15:00Z"
+   },
+   {
+    "title": "LongHorn_Steakhouse",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/LongHorn_Steakhouse/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:15:03Z"
+   },
+   {
+    "title": "Yum!_Brands",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Yum%21_Brands/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:15:05Z"
+   },
+   {
+    "title": "Darden_Restaurants",
+    "url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/Darden_Restaurants/daily/20240101/20251231",
+    "retrieved_at_utc": "2026-10-24T02:15:07Z"
+   }
+  ]
+ }
+}

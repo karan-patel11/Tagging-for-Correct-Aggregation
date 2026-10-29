@@ -1,0 +1,198 @@
+{
+ "table": "fundamentals",
+ "column": "ticker",
+ "duckdb_dtype": "VARCHAR",
+ "row_count": 288,
+ "null_count": 0,
+ "distinct_count": 4,
+ "sample_rows": [
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "net_income",
+   "concept": "NetIncomeLoss",
+   "value": 1204829000.0,
+   "unit": "USD",
+   "period_start": "2025-01-01",
+   "period_end": "2025-09-30",
+   "period_basis": "YTD9",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001058090-25-000088",
+   "filed": "2025-10-30"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "net_income",
+   "concept": "NetIncomeLoss",
+   "value": 323400000.0,
+   "unit": "USD",
+   "period_start": "2024-11-25",
+   "period_end": "2025-02-23",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0000940944-26-000009",
+   "filed": "2026-03-27"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 292100000.0,
+   "unit": "USD",
+   "period_start": "2024-08-26",
+   "period_end": "2024-11-24",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 2,
+   "form": "10-Q",
+   "accession": "0000940944-25-000071",
+   "filed": "2025-12-30"
+  },
+  {
+   "ticker": "CMG",
+   "cik": "0001058090",
+   "metric": "capex",
+   "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+   "value": 420718000.0,
+   "unit": "USD",
+   "period_start": "2024-01-01",
+   "period_end": "2024-09-30",
+   "period_basis": "YTD9",
+   "fiscal_year": 2024,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001058090-25-000088",
+   "filed": "2025-10-30"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "operating_income",
+   "concept": "OperatingIncomeLoss",
+   "value": 1066000000.0,
+   "unit": "USD",
+   "period_start": "2025-05-26",
+   "period_end": "2026-02-22",
+   "period_basis": "YTD9",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0000940944-26-000009",
+   "filed": "2026-03-27"
+  },
+  {
+   "ticker": "YUM",
+   "cik": "0001041061",
+   "metric": "net_income",
+   "concept": "NetIncomeLoss",
+   "value": 253000000.0,
+   "unit": "USD",
+   "period_start": "2025-01-01",
+   "period_end": "2025-03-31",
+   "period_basis": "Q",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 1,
+   "form": "10-Q",
+   "accession": "0001041061-26-000119",
+   "filed": "2026-05-06"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "diluted_eps",
+   "concept": "EarningsPerShareDiluted",
+   "value": 8.86,
+   "unit": "USD/shares",
+   "period_start": "2024-05-27",
+   "period_end": "2025-05-25",
+   "period_basis": "FY",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0000940944-26-000025",
+   "filed": "2026-07-24"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 12888800000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2026-02-22",
+   "period_basis": "instant",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0000940944-26-000009",
+   "filed": "2026-03-27"
+  },
+  {
+   "ticker": "DRI",
+   "cik": "0000940944",
+   "metric": "capex",
+   "concept": "PaymentsToAcquirePropertyPlantAndEquipment",
+   "value": 734000000.0,
+   "unit": "USD",
+   "period_start": "2025-05-26",
+   "period_end": "2026-05-31",
+   "period_basis": "FY",
+   "fiscal_year": 2026,
+   "fiscal_quarter": 4,
+   "form": "10-K",
+   "accession": "0000940944-26-000025",
+   "filed": "2026-07-24"
+  },
+  {
+   "ticker": "WING",
+   "cik": "0001636222",
+   "metric": "total_assets",
+   "concept": "Assets",
+   "value": 721033000.0,
+   "unit": "USD",
+   "period_start": null,
+   "period_end": "2025-09-27",
+   "period_basis": "instant",
+   "fiscal_year": 2025,
+   "fiscal_quarter": 3,
+   "form": "10-Q",
+   "accession": "0001636222-25-000110",
+   "filed": "2025-11-04"
+  }
+ ],
+ "min": "CMG",
+ "max": "YUM",
+ "distinct_values": [
+  "CMG",
+  "DRI",
+  "WING",
+  "YUM"
+ ],
+ "vendor_documentation": {
+  "sec_companyfacts": {
+   "CMG": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001058090.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "WING": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001636222.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "YUM": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001041061.json",
+    "retrieved_on": "2026-10-24"
+   },
+   "DRI": {
+    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000940944.json",
+    "retrieved_on": "2026-10-24"
+   }
+  }
+ }
+}

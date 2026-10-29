@@ -1,0 +1,87 @@
+{
+ "table": "macro_monthly",
+ "column": "value",
+ "filter": {
+  "series_id": "CENSUS_722_SA"
+ },
+ "duckdb_dtype": "DOUBLE",
+ "row_count": 32,
+ "null_count": 0,
+ "distinct_count": 31,
+ "sample_rows": [
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2026-02-01",
+   "value": 87586.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-09-01",
+   "value": 86837.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-04-01",
+   "value": 86400.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-12-01",
+   "value": 87142.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-08-01",
+   "value": 86837.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2024-08-01",
+   "value": 81524.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2024-10-01",
+   "value": 83405.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2026-03-01",
+   "value": 87793.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2024-09-01",
+   "value": 82588.0,
+   "retrieved_on": "2026-10-24"
+  },
+  {
+   "series_id": "CENSUS_722_SA",
+   "date": "2025-05-01",
+   "value": 85893.0,
+   "retrieved_on": "2026-10-24"
+  }
+ ],
+ "min": 80732.0,
+ "max": 91882.0,
+ "vendor_documentation": {
+  "source_file_headers": {
+   "CENSUS_722_SA": [
+    "U.S. Census Bureau",
+    "Source: Monthly Retail Trade and Food Services",
+    "722: Food Services and Drinking Places: U.S. Total",
+    "Seasonally Adjusted Sales - Monthly [Millions of Dollars]",
+    "Period: 2024 to 2026",
+    "Data Extracted on: October 24, 2026 (1:06 pm)"
+   ]
+  }
+ }
+}
