@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tagging for Correct Aggregation: Results</title>
-<meta name="description" content="A small experiment: does tagging columns with aggregation rules help a model answer restaurant-sector questions correctly?">
+<title>Tagging for Correct Aggregation</title>
+<meta name="description" content="AI can calculate a financial number correctly and still answer the wrong question. A small experiment with rules attached to each metric, AI-written rules, and an engine that refuses.">
 <style>
 :root {
   --bg: #fbfbfa; --surface: #ffffff; --text: #1d1f22; --muted: #5c6168; --line: #e3e4e6;
@@ -120,6 +120,74 @@ footer { margin-top: 24px; }
 .js-only { display: none; }
 .has-js .js-only { display: flex; }
 .has-js .replay[hidden], .has-js .pane[hidden] { display: none; }
+
+/* ---------- story (above the Full detail divider) ---------- */
+.theme-row { display: flex; justify-content: flex-end; margin: -16px 0 4px; }
+section.story { background: transparent; border: 0; border-radius: 0; padding: 56px 0 8px;
+  margin-top: 0; border-top: 1px solid var(--line); }
+section.story.hero-sec { border-top: 0; padding-top: 0; }
+section.story > p, section.story .rules, section.story .limits, section.story .suggest { max-width: 72ch; }
+h2.q { font-size: 2rem; line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 16px; max-width: 30ch; }
+h3.q3 { font-size: 1.35rem; margin: 36px 0 10px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 40px; align-items: start; }
+.hero h1 { font-size: 2.3rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; }
+.lede-lg { font-size: 1.05rem; margin: 0 0 16px; }
+.didfound { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid var(--accent); background: var(--accent-soft);
+  border-radius: 0 8px 8px 0; }
+.didfound dt { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+.didfound dd { margin: 0 0 8px; }
+.didfound dd:last-child { margin-bottom: 0; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.jump a { border: 1px solid var(--accent); border-radius: 999px; padding: 6px 14px; text-decoration: none;
+  font-weight: 600; font-size: 0.9rem; }
+.jump a:hover { background: var(--accent-soft); }
+.example { margin: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 18px; }
+.ex-q { display: block; margin-bottom: 12px; }
+.ex-qtext { display: block; font-weight: 600; font-size: 1.02rem; margin-top: 2px; }
+.ex-row { border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
+.ex-wrong { background: var(--bad-soft); }
+.ex-right { background: var(--ok-soft); }
+.ex-label { font-weight: 700; font-size: 0.85rem; }
+.ex-wrong .ex-label { color: var(--bad); }
+.ex-right .ex-label { color: var(--ok); }
+.ex-num { font-size: 1.75rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.ex-wrong .ex-num { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--bad); }
+.ex-why { margin: 2px 0 0; font-size: 0.9rem; }
+.tagcard { border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; background: var(--surface); max-width: 720px; margin-top: 16px; }
+.tag-name { display: inline-block; font-weight: 700; background: var(--accent-soft); color: var(--accent);
+  border-radius: 999px; padding: 2px 12px; margin-bottom: 6px; }
+.rules { margin: 0; padding-left: 22px; }
+.rules li { margin: 8px 0; }
+.setups { list-style: none; padding: 0; margin: 8px 0 0; max-width: 760px; }
+.setup { display: grid; grid-template-columns: minmax(150px, 260px) 1fr 64px; gap: 12px; align-items: center; margin: 8px 0; }
+.setup-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.rcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 20px 0; }
+.rcards.one { grid-template-columns: minmax(0, 420px); }
+.rcard { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--surface); min-width: 0; }
+.rcard.caveat { border-style: dashed; border-color: var(--muted); }
+.rbig { font-size: 2.1rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.rbig-sub { display: block; font-size: 1.1rem; font-weight: 700; margin-top: 4px; }
+.rmean { margin: 8px 0 6px; }
+.rsrc { margin: 0; font-size: 0.78rem; overflow-wrap: anywhere; }
+.stack-bar { display: flex; gap: 2px; height: 30px; border-radius: 6px; overflow: hidden; margin: 16px 0 12px; max-width: 900px; }
+.seg { display: block; height: 100%; }
+.seg-ai { background: var(--bad); }
+.seg-input { background: var(--accent); }
+.seg-engine { background: var(--warn); }
+.seg-other { background: var(--muted); }
+.legend { list-style: none; padding: 0; margin: 0; max-width: 900px; }
+.legend li { display: grid; grid-template-columns: 14px 32px 1fr; gap: 10px; align-items: baseline; margin: 10px 0; }
+.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; position: relative; top: 2px; }
+.lg-n { font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; }
+.triple { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 12px; }
+.tcol { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface); }
+.tlabel { font-weight: 700; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.tcol blockquote { margin: 8px 0; font-size: 1.02rem; }
+.label-pill { display: inline-block; border: 1px solid var(--warn); color: var(--warn); border-radius: 999px;
+  padding: 2px 12px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+.suggest li, .limits li { margin: 10px 0; }
+.divider { margin: 72px 0 0; padding: 28px 0 0; border-top: 4px double var(--line); }
+.divider h2 { font-size: 2rem; margin: 0 0 6px; }
 @media (max-width: 600px) {
   .table-wrap { overflow-x: visible; }
   table.stack, table.stack tbody, table.stack tr, table.stack th, table.stack td { display: block; width: 100%; }
@@ -142,19 +210,42 @@ footer { margin-top: 24px; }
   .bar-label { grid-column: 1 / -1; }
   .bar-row.axis > span:first-child, .bar-row.axis > span:last-child { display: none; }
   .bar-row.axis { grid-template-columns: 1fr 56px; }
+  .hero { grid-template-columns: 1fr; gap: 24px; }
+  .hero h1 { font-size: 1.7rem; }
+  h2.q, .divider h2 { font-size: 1.55rem; }
+  section.story { padding-top: 40px; }
+  .triple { grid-template-columns: 1fr; }
+  .setup { grid-template-columns: 1fr 56px; gap: 4px 8px; }
+  .setup-name { grid-column: 1 / -1; }
+  .rcards.one { grid-template-columns: 1fr; }
+  .theme-row { margin-top: -16px; }
 }
 </style>
 </head>
 <body>
 <main>
-<header class="top">
-  <div>
-    <div class="kicker">A small experiment</div>
-    <h1>Tagging for Correct Aggregation</h1>
-    {{INTRO}}
-  </div>
-  <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
-</header>
+<div class="theme-row"><button class="theme-btn" type="button" id="theme-btn">Switch theme</button></div>
+
+<section id="the-problem" class="story hero-sec">{{STORY_HERO}}</section>
+<section id="idea" class="story">{{STORY_IDEA}}</section>
+<section id="measure" class="story">{{STORY_MEASURE}}</section>
+<section id="autotag" class="story">{{STORY_AUTOTAG}}</section>
+<section id="harden" class="story">{{STORY_HARDEN}}</section>
+<section id="suggests" class="story">{{STORY_SUGGESTS}}</section>
+<section id="limits" class="story">{{STORY_LIMITS}}</section>
+
+<div id="full-detail" class="divider">
+  <div class="kicker">For data scientists</div>
+  <h2>Full detail</h2>
+  <p class="muted">Everything below supports the story above: recorded answers, rules, checks and the
+  follow-up tables. Question IDs, tag field names and commit hashes appear here.</p>
+</div>
+
+<section id="about">
+  <div class="kicker">A small experiment</div>
+  <h2>Tagging for Correct Aggregation</h2>
+  {{INTRO}}
+</section>
 
 <section id="problem">
   <div class="kicker">The problem</div>
@@ -184,6 +275,11 @@ footer { margin-top: 24px; }
 <section id="checks">
   <div class="kicker">How it was checked</div>
   {{SECTION_CHECKS}}
+</section>
+
+<section id="followup">
+  <div class="kicker">Follow-up after the study</div>
+  {{SECTION_FOLLOWUP}}
 </section>
 
 <footer class="small muted">{{FOOTER}}</footer>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tagging for Correct Aggregation: Results</title>
-<meta name="description" content="A small experiment: does tagging columns with aggregation rules help a model answer restaurant-sector questions correctly?">
+<title>Tagging for Correct Aggregation</title>
+<meta name="description" content="AI can calculate a financial number correctly and still answer the wrong question. A small experiment with rules attached to each metric, AI-written rules, and an engine that refuses.">
 <style>
 :root {
   --bg: #fbfbfa; --surface: #ffffff; --text: #1d1f22; --muted: #5c6168; --line: #e3e4e6;
@@ -120,6 +120,74 @@ footer { margin-top: 24px; }
 .js-only { display: none; }
 .has-js .js-only { display: flex; }
 .has-js .replay[hidden], .has-js .pane[hidden] { display: none; }
+
+/* ---------- story (above the Full detail divider) ---------- */
+.theme-row { display: flex; justify-content: flex-end; margin: -16px 0 4px; }
+section.story { background: transparent; border: 0; border-radius: 0; padding: 56px 0 8px;
+  margin-top: 0; border-top: 1px solid var(--line); }
+section.story.hero-sec { border-top: 0; padding-top: 0; }
+section.story > p, section.story .rules, section.story .limits, section.story .suggest { max-width: 72ch; }
+h2.q { font-size: 2rem; line-height: 1.2; letter-spacing: -0.015em; margin: 0 0 16px; max-width: 30ch; }
+h3.q3 { font-size: 1.35rem; margin: 36px 0 10px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 40px; align-items: start; }
+.hero h1 { font-size: 2.3rem; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; }
+.lede-lg { font-size: 1.05rem; margin: 0 0 16px; }
+.didfound { margin: 0 0 16px; padding: 12px 16px; border-left: 3px solid var(--accent); background: var(--accent-soft);
+  border-radius: 0 8px 8px 0; }
+.didfound dt { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); }
+.didfound dd { margin: 0 0 8px; }
+.didfound dd:last-child { margin-bottom: 0; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.jump a { border: 1px solid var(--accent); border-radius: 999px; padding: 6px 14px; text-decoration: none;
+  font-weight: 600; font-size: 0.9rem; }
+.jump a:hover { background: var(--accent-soft); }
+.example { margin: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 18px; }
+.ex-q { display: block; margin-bottom: 12px; }
+.ex-qtext { display: block; font-weight: 600; font-size: 1.02rem; margin-top: 2px; }
+.ex-row { border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
+.ex-wrong { background: var(--bad-soft); }
+.ex-right { background: var(--ok-soft); }
+.ex-label { font-weight: 700; font-size: 0.85rem; }
+.ex-wrong .ex-label { color: var(--bad); }
+.ex-right .ex-label { color: var(--ok); }
+.ex-num { font-size: 1.75rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.ex-wrong .ex-num { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--bad); }
+.ex-why { margin: 2px 0 0; font-size: 0.9rem; }
+.tagcard { border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; background: var(--surface); max-width: 720px; margin-top: 16px; }
+.tag-name { display: inline-block; font-weight: 700; background: var(--accent-soft); color: var(--accent);
+  border-radius: 999px; padding: 2px 12px; margin-bottom: 6px; }
+.rules { margin: 0; padding-left: 22px; }
+.rules li { margin: 8px 0; }
+.setups { list-style: none; padding: 0; margin: 8px 0 0; max-width: 760px; }
+.setup { display: grid; grid-template-columns: minmax(150px, 260px) 1fr 64px; gap: 12px; align-items: center; margin: 8px 0; }
+.setup-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.rcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 20px 0; }
+.rcards.one { grid-template-columns: minmax(0, 420px); }
+.rcard { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--surface); min-width: 0; }
+.rcard.caveat { border-style: dashed; border-color: var(--muted); }
+.rbig { font-size: 2.1rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.rbig-sub { display: block; font-size: 1.1rem; font-weight: 700; margin-top: 4px; }
+.rmean { margin: 8px 0 6px; }
+.rsrc { margin: 0; font-size: 0.78rem; overflow-wrap: anywhere; }
+.stack-bar { display: flex; gap: 2px; height: 30px; border-radius: 6px; overflow: hidden; margin: 16px 0 12px; max-width: 900px; }
+.seg { display: block; height: 100%; }
+.seg-ai { background: var(--bad); }
+.seg-input { background: var(--accent); }
+.seg-engine { background: var(--warn); }
+.seg-other { background: var(--muted); }
+.legend { list-style: none; padding: 0; margin: 0; max-width: 900px; }
+.legend li { display: grid; grid-template-columns: 14px 32px 1fr; gap: 10px; align-items: baseline; margin: 10px 0; }
+.sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; position: relative; top: 2px; }
+.lg-n { font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; }
+.triple { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 12px; }
+.tcol { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface); }
+.tlabel { font-weight: 700; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.tcol blockquote { margin: 8px 0; font-size: 1.02rem; }
+.label-pill { display: inline-block; border: 1px solid var(--warn); color: var(--warn); border-radius: 999px;
+  padding: 2px 12px; font-size: 0.8rem; font-weight: 700; margin-bottom: 10px; }
+.suggest li, .limits li { margin: 10px 0; }
+.divider { margin: 72px 0 0; padding: 28px 0 0; border-top: 4px double var(--line); }
+.divider h2 { font-size: 2rem; margin: 0 0 6px; }
 @media (max-width: 600px) {
   .table-wrap { overflow-x: visible; }
   table.stack, table.stack tbody, table.stack tr, table.stack th, table.stack td { display: block; width: 100%; }
@@ -142,16 +210,170 @@ footer { margin-top: 24px; }
   .bar-label { grid-column: 1 / -1; }
   .bar-row.axis > span:first-child, .bar-row.axis > span:last-child { display: none; }
   .bar-row.axis { grid-template-columns: 1fr 56px; }
+  .hero { grid-template-columns: 1fr; gap: 24px; }
+  .hero h1 { font-size: 1.7rem; }
+  h2.q, .divider h2 { font-size: 1.55rem; }
+  section.story { padding-top: 40px; }
+  .triple { grid-template-columns: 1fr; }
+  .setup { grid-template-columns: 1fr 56px; gap: 4px 8px; }
+  .setup-name { grid-column: 1 / -1; }
+  .rcards.one { grid-template-columns: 1fr; }
+  .theme-row { margin-top: -16px; }
 }
 </style>
 </head>
 <body>
 <main>
-<header class="top">
-  <div>
+<div class="theme-row"><button class="theme-btn" type="button" id="theme-btn">Switch theme</button></div>
+
+<section id="the-problem" class="story hero-sec">
+<div class="hero">
+  <div class="hero-text">
     <div class="kicker">A small experiment</div>
-    <h1>Tagging for Correct Aggregation</h1>
-    
+    <h1>AI can calculate a financial number correctly and still answer the wrong question.</h1>
+    <p class="lede-lg">Analysts increasingly ask AI tools questions about company data, and the tool
+    writes and runs the calculation itself. The calculation can run without any error and still be
+    wrong, for example by adding four quarter-end balances into a meaningless “annual” total. An
+    analyst who cannot read the query cannot catch it.</p>
+    <dl class="didfound">
+      <dt>What I did</dt>
+      <dd>I asked an AI model 42 questions about four restaurant
+      companies, with and without rules for each metric, and checked all 504 answers.</dd>
+      <dt>What I found</dt>
+      <dd>Rules barely moved accuracy (97%–100% correct
+      everywhere); AI-written rules cut correct answers from 124 to
+      62 of 126, mostly by refusing to answer.</dd>
+    </dl>
+    <nav class="jump" aria-label="Jump to">
+      <a href="#idea">1-minute summary</a><a href="#measure">How I tested it</a><a href="#full-detail">Full detail</a>
+    </nav>
+  </div>
+  <figure class="example" aria-labelledby="example-cap">
+    <figcaption id="example-cap" class="ex-q"><span class="muted small">The question</span>
+      <span class="ex-qtext">What was Darden&#x27;s total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?</span></figcaption>
+    <div class="ex-row ex-wrong">
+      <div class="ex-label"><span class="mark" aria-hidden="true">✕</span> A plausible wrong answer</div>
+      <div class="ex-num">$13,210,900,000</div>
+      <p class="ex-why">This is Darden's whole fiscal year, all four quarters together. The question asks
+      for one quarter.</p>
+    </div>
+    <div class="ex-row ex-right">
+      <div class="ex-label"><span class="mark" aria-hidden="true">✓</span> The right answer</div>
+      <div class="ex-num">$3,718,800,000</div>
+      <p class="ex-why">The full year minus the first nine months ($9,492,100,000), which
+      is also a plausible wrong answer.</p>
+    </div>
+  </figure>
+</div></section>
+<section id="idea" class="story">
+<h2 class="q">What if every metric carried its own rules?</h2>
+<p>A tag is a label attached to a metric that says how its numbers may be combined. It records
+whether values can be added up over time, which fiscal calendar applies and which rows are parent
+totals. A research data team writes the rules once, and every AI answer can follow them.</p>
+<div class="tagcard" role="group" aria-label="Example: the rules on revenue">
+  <div class="tag-name">Revenue</div>
+  <ol class="rules">
+    <li><b>Add up over time?</b> Yes. Revenue is earned over a period, so quarters add up to a year.</li>
+    <li><b>Which calendar?</b> Each company's own fiscal year. Darden's fiscal year ends in late May.</li>
+    <li><b>One quarter from a yearly report?</b> The fourth quarter is the full year minus the first nine months.</li>
+  </ol>
+</div></section>
+<section id="measure" class="story">
+<h2 class="q">Do the rules help the AI answer correctly?</h2>
+<p>If rules raise accuracy, a research data team has a reason to write and maintain them. One AI
+model (claude-haiku-5-5) answered 42 questions three times in each of
+four setups. Each answer was compared with an answer key checked against the companies'
+filings and agency data.</p>
+<p class="small muted">What the AI was given in each setup, and the share of its answers that were
+correct:</p>
+<ol class="setups"><li class="setup"><span class="setup-name">Only the database layout</span><span class="track" aria-hidden="true"><span class="fill" style="width:96.83%"></span></span><span class="setup-val">96.8%</span></li><li class="setup"><span class="setup-name">A written description of the rules</span><span class="track" aria-hidden="true"><span class="fill" style="width:100.00%"></span></span><span class="setup-val">100.0%</span></li><li class="setup"><span class="setup-name">A rules file</span><span class="track" aria-hidden="true"><span class="fill" style="width:98.41%"></span></span><span class="setup-val">98.4%</span></li><li class="setup"><span class="setup-name">Tools that enforce the rules</span><span class="track" aria-hidden="true"><span class="fill" style="width:98.41%"></span></span><span class="setup-val">98.4%</span></li></ol>
+<p class="small muted">Bars start at zero.</p>
+<div class="rcards one">
+<div class="rcard"><div class="rbig">97%–100%</div><p class="rmean">All four setups answered correctly this often. They are too close to rank on this sample.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/results/summary.md">Source: eval/results/summary.md</a></p></div>
+</div>
+<p>The model rarely fell for the traps here. It gave a plausible wrong answer
+once in 504 answers.</p></section>
+<section id="autotag" class="story">
+<h2 class="q">Can an AI write the rules itself?</h2>
+<p>Writing tags by hand doesn't scale to dozens of vendor datasets. So I asked a stronger model
+(claude-sonnet-5-5) to draft them using only what a vendor would supply: column names, sample rows
+and the vendor's documentation. I wrote down the test and what would count as success before
+running it (<a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/29d6074/followup/autotag/PREREG.md">pre-registration</a>). The main results above are unchanged.</p>
+<p>Then the same answering model used the AI-written rules through tools that enforce the rules, on
+the same 42 questions.</p>
+<div class="rcards">
+<div class="rcard"><div class="rbig">124 → 62</div><p class="rmean">Correct answers out of 126: with my hand-written rules, then with the AI-written rules.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/autotag/results/D_autotag.jsonl">Source: followup/autotag/results/D_autotag.jsonl</a></p></div>
+<div class="rcard"><div class="rbig">0 wrong numbers</div><p class="rmean">On the questions tested, the failures were refusals (59) or no final answer (5), not wrong numbers.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/autotag/results/D_autotag.jsonl">Source: followup/autotag/results/D_autotag.jsonl</a></p></div>
+<div class="rcard"><div class="rbig">3 of 3 drafts</div><p class="rmean">AI drafts that passed the automatic checks that existed at the time.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/autotag/results/score_tags.json">Source: followup/autotag/results/score_tags.json</a></p></div>
+<div class="rcard"><div class="rbig">5.6–6.1 min<span class="rbig-sub">$0.59–$0.60</span></div><p class="rmean">Time and cost for the AI to draft one full set of rules (three drafts).</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/autotag/drafts/draft_1_meta.json">Source: followup/autotag/drafts/*_meta.json</a></p></div>
+</div>
+<h3 class="q3">Why did the AI-written rules fail?</h3>
+<p>Each of the 64 answers it did not get right was traced to the first rule-related error in
+its record. They fall into four groups.</p>
+<div class="stack-bar" role="img" aria-label="Rule error by the AI: 20; Source links missing from what I gave the AI: 21; A missing parent/brand rule, plus a crash in my engine: 21; Unrelated to the rules: 2"><span class="seg seg-ai" style="width:31.250%"></span><span class="seg seg-input" style="width:32.812%"></span><span class="seg seg-engine" style="width:32.812%"></span><span class="seg seg-other" style="width:3.125%"></span></div><ul class="legend"><li><span class="sw seg-ai" aria-hidden="true"></span><span class="lg-n">20</span><span class="lg-t"><b>Rule error by the AI.</b> It marked cash flow, capital spending and revenue as “do not add up”, which blocks working out one quarter from year-to-date totals.</span></li><li><span class="sw seg-input" aria-hidden="true"></span><span class="lg-n">21</span><span class="lg-t"><b>Source links missing from what I gave the AI.</b> My input gap, not the AI&#x27;s fault: the vendor files I supplied had no source web address for the two government series.</span></li><li><span class="sw seg-engine" aria-hidden="true"></span><span class="lg-n">21</span><span class="lg-t"><b>A missing parent/brand rule, plus a crash in my engine.</b> The AI left out which brands belong to which parent company, and my engine crashed instead of refusing.</span></li><li><span class="sw seg-other" aria-hidden="true"></span><span class="lg-n">2</span><span class="lg-t"><b>Unrelated to the rules.</b> The AI asked for a metric name or period format the tools do not have.</span></li></ul>
+<h3 class="q3">The clearest example</h3>
+<p class="muted">The question: “What was Chipotle&#x27;s net cash from operating activities in fiscal Q2 2025 (the three months ended June 30, 2025), in US dollars?” The right answer is $561,327,000. With
+my hand-written rules, 3 of 3 attempts got it.</p>
+<div class="triple">
+  <div class="tcol"><div class="tlabel">What the AI wrote about the data</div>
+    <blockquote>“Values are cumulative within the fiscal year.”</blockquote>
+    <p class="small muted">Correct: these figures run from the start of the fiscal year.</p></div>
+  <div class="tcol"><div class="tlabel">The rule it wrote</div>
+    <blockquote>Do not add these values up over time. Use only a figure reported for that exact period.</blockquote>
+    <p class="small muted">Wrong: one quarter is a year-to-date total minus the previous one.</p></div>
+  <div class="tcol"><div class="tlabel">What happened</div>
+    <blockquote>The tool found no reported quarterly figure and refused. The AI replied: “I couldn&#x27;t get Chipotle&#x27;s Q2 2025 operating cash flow from the available data, so I can&#x27;t give a figure.”</blockquote>
+    <p class="small muted"><a href="#example-trace">See the recorded steps</a></p></div>
+</div></section>
+<section id="harden" class="story">
+<h2 class="q">The test showed my engine trusted the rules blindly.</h2>
+<p>My engine is the code that turns the rules into numbers. A research data team needs it to refuse
+rather than return a number nobody asked for. When a rule allowed something the engine could not
+compute, it crashed or returned a different calculation under the requested name. Now it refuses
+instead.</p>
+<p>To check the change, I re-ran every recorded tool request from both tests on the changed engine,
+with no AI model involved.</p>
+<div class="rcards">
+<div class="rcard"><div class="rbig">171 → 0</div><p class="rmean">Crashes, out of 779 recorded requests made with the AI-written rules.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/engine_fix/replay.json">Source: followup/engine_fix/replay.json</a></p></div>
+<div class="rcard"><div class="rbig">5 → 1</div><p class="rmean">Results for a calculation my hand-written rules forbid. The one left is a correctly labelled average the AI's rule allowed; deciding what is allowed is the reviewer's job.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/engine_fix/replay.json">Source: followup/engine_fix/replay.json</a></p></div>
+<div class="rcard"><div class="rbig">455 of 455</div><p class="rmean">Recorded requests from the main results that give identical output on the changed engine. The main results are unchanged.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/engine_fix/replay.json">Source: followup/engine_fix/replay.json</a></p></div>
+<div class="rcard caveat"><div class="rbig">33 of 63</div><p class="rmean">AI rule errors that the new automatic checks catch. Derived from the same drafts, not tested on new data.</p><p class="rsrc"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/engine_fix/replay.json">Source: followup/engine_fix/replay.json</a></p></div>
+</div></section>
+<section id="suggests" class="story">
+<div class="label-pill">Suggested by this evidence</div>
+<h2 class="q">What does this suggest for a research data team?</h2>
+<p>These are three practices this small test points to, not proven rules.</p>
+<ol class="suggest">
+  <li><b>Let AI draft the rules, but have a person sign off on how numbers combine.</b>
+    All three AI drafts passed the existing automatic checks, yet each had errors in how
+    numbers combine.</li>
+  <li><b>Add automatic checks for rule combinations that cannot both be true.</b>
+    Five such checks catch 33 of 63 errors in these drafts.</li>
+  <li><b>Make the engine refuse anything it does not implement.</b>
+    On the same recorded requests, crashes fell from 171 to 0.</li>
+</ol></section>
+<section id="limits" class="story">
+<h2 class="q">How far can these results be trusted?</h2>
+<p>Knowing the limits tells a research data team how much weight to put on these numbers.</p>
+<ul class="limits">
+  <li>The sample is small: 42 questions, 4 companies and
+  one answering model.</li>
+  <li>I wrote the questions, the system and the reference rules myself.</li>
+  <li>The cause analysis and the engine fix came after the results, not before.</li>
+  <li>The AI-written rules were tested on one kind of data with one drafting model.</li>
+</ul></section>
+
+<div id="full-detail" class="divider">
+  <div class="kicker">For data scientists</div>
+  <h2>Full detail</h2>
+  <p class="muted">Everything below supports the story above: recorded answers, rules, checks and the
+  follow-up tables. Question IDs, tag field names and commit hashes appear here.</p>
+</div>
+
+<section id="about">
+  <div class="kicker">A small experiment</div>
+  <h2>Tagging for Correct Aggregation</h2>
+  
 <p class="lede">One model answered the same restaurant-finance questions in four setups. This page
 replays the recorded runs. It does not call a model.</p>
 <p class="lede"><b>Tag:</b> a rule attached to a metric, kept in <code>tags/tags.yaml</code>. For
@@ -170,9 +392,7 @@ of four quarter-end balances. A run hits the trap when its number lands within t
 <dt>Correct</dt><dd>The run's behaviour matches the key and, unless the key expects a refusal, its
 number is within a per-unit tolerance defined in <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/score.py">eval/score.py</a>.</dd>
 </dl></details>
-  </div>
-  <button class="theme-btn" type="button" id="theme-btn">Switch theme</button>
-</header>
+</section>
 
 <section id="problem">
   <div class="kicker">The problem</div>
@@ -1328,6 +1548,104 @@ Census months were checked by hand in the live table.</li>
 <h3>Limits of this experiment</h3>
 <ul><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Most questions were drafted before the core logic existed; replacement questions were added after it existed. All questions were frozen (git tag questions-frozen) before any evaluation run.</li><li>In setup D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so D&#x27;s advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No 10-K or 10-Q amendments are included.</li><li>After the study, the engine was hardened (followup/engine_fix/REPLAY.md). The results above were produced at commit bbc6310; re-executing the 455 recorded setup D tool calls on the hardened engine gave identical outputs for 455 of 455.</li><li>A short window of recent filings.</li></ul>
 <p><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a> · <a href="error_analysis.md">Error analysis</a></p>
+</section>
+
+<section id="followup">
+  <div class="kicker">Follow-up after the study</div>
+  
+<h2>Follow-up: AI-drafted tags and engine hardening</h2>
+<p class="muted">Tagging model claude-sonnet-5-5; answering model claude-haiku-5-5, setup D. Three
+drafts (draft_1, draft_2, draft_3), one call per tag id; draft_1 was fixed in advance as the
+draft used end to end. Pre-registered at commit <code>29d6074</code>. Hand tags
+(<code>tags/tags.yaml</code>) are the reference. Sources: <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/autotag/RESULTS.md">followup/autotag/RESULTS.md</a> · <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/engine_fix/REPLAY.md">followup/engine_fix/REPLAY.md</a> · <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/29d6074/followup/autotag/PREREG.md">followup/autotag/PREREG.md (commit 29d6074)</a> · <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/followup/autotag/PREREG_DEVIATIONS.md">followup/autotag/PREREG_DEVIATIONS.md</a>.</p>
+
+<h3>Per-field match and verdict (M1, M1b; <code>score_tags.json</code>)</h3>
+<p class="small muted">Cells: matches / entries scored. “Safe to auto-draft” only if all three drafts match
+the hand tag on every scored entry (a threshold chosen in PREREG.md, not an industry standard).</p>
+<div class="table-wrap"><table class="stack"><thead><tr><th scope="col">Field</th><th scope="col">draft_1</th><th scope="col">draft_2</th><th scope="col">draft_3</th><th scope="col">Verdict</th></tr></thead><tbody><tr><th scope='row'><code>semantic_type</code></th><td data-label="draft_1"><span>12/12</span></td><td data-label="draft_2"><span>12/12</span></td><td data-label="draft_3"><span>11/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>unit</code></th><td data-label="draft_1"><span>8/12</span></td><td data-label="draft_2"><span>8/12</span></td><td data-label="draft_3"><span>8/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>additive_over_entities</code></th><td data-label="draft_1"><span>12/12</span></td><td data-label="draft_2"><span>11/12</span></td><td data-label="draft_3"><span>11/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>additive_over_time</code></th><td data-label="draft_1"><span>8/12</span></td><td data-label="draft_2"><span>8/12</span></td><td data-label="draft_3"><span>8/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>time_rollup</code></th><td data-label="draft_1"><span>8/12</span></td><td data-label="draft_2"><span>8/12</span></td><td data-label="draft_3"><span>8/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>period_basis</code></th><td data-label="draft_1"><span>11/12</span></td><td data-label="draft_2"><span>11/12</span></td><td data-label="draft_3"><span>11/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>calendar</code></th><td data-label="draft_1"><span>10/12</span></td><td data-label="draft_2"><span>11/12</span></td><td data-label="draft_3"><span>10/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>valid_methods</code></th><td data-label="draft_1"><span>2/12</span></td><td data-label="draft_2"><span>2/12</span></td><td data-label="draft_3"><span>2/12</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>comparability</code></th><td data-label="draft_1"><span>1/1</span></td><td data-label="draft_2"><span>1/1</span></td><td data-label="draft_3"><span>1/1</span></td><td data-label="Verdict"><span>safe to auto-draft</span></td></tr><tr><th scope='row'><code>hierarchy</code></th><td data-label="draft_1"><span>0/1</span></td><td data-label="draft_2"><span>0/1</span></td><td data-label="draft_3"><span>0/1</span></td><td data-label="Verdict"><span>needs human review</span></td></tr><tr><th scope='row'><code>seasonal_adjustment</code></th><td data-label="draft_1"><span>2/2</span></td><td data-label="draft_2"><span>2/2</span></td><td data-label="draft_3"><span>2/2</span></td><td data-label="Verdict"><span>safe to auto-draft</span></td></tr><tr><th scope='row'><code>annualized</code></th><td data-label="draft_1"><span>2/2</span></td><td data-label="draft_2"><span>2/2</span></td><td data-label="draft_3"><span>2/2</span></td><td data-label="Verdict"><span>safe to auto-draft</span></td></tr><tr><th scope='row'><code>semantic_type (dimension/identifier)</code></th><td data-label="draft_1"><span>30/31</span></td><td data-label="draft_2"><span>26/31</span></td><td data-label="draft_3"><span>30/31</span></td><td data-label="Verdict"><span>needs human review</span></td></tr></tbody></table></div>
+<p class="small muted">Dangerous errors (M2) per draft: draft_1 18, draft_2 20, draft_3 19.</p>
+
+<h3>Validation at the time (M3)</h3>
+<div class="table-wrap"><table class="stack"><thead><tr><th scope="col">Draft</th><th scope="col">load_tags</th><th scope="col">Entries failing alone</th><th scope="col">DB problems</th><th scope="col">Result</th></tr></thead><tbody><tr><th scope='row'>draft_1</th><td data-label="load_tags"><span>ok</span></td><td data-label="Entries failing alone"><span>0</span></td><td data-label="DB problems"><span>0</span></td><td data-label="Result"><span>pass</span></td></tr><tr><th scope='row'>draft_2</th><td data-label="load_tags"><span>ok</span></td><td data-label="Entries failing alone"><span>0</span></td><td data-label="DB problems"><span>0</span></td><td data-label="Result"><span>pass</span></td></tr><tr><th scope='row'>draft_3</th><td data-label="load_tags"><span>ok</span></td><td data-label="Entries failing alone"><span>0</span></td><td data-label="DB problems"><span>0</span></td><td data-label="Result"><span>pass</span></td></tr></tbody></table></div>
+
+<h3>End to end (M4)</h3>
+<p>Setup D on hand tags: 124/126 correct. On draft_1: 62/126.
+Of the 64 incorrect draft_1 runs, 59 set refused=true and 5 ended
+without a FINAL line (tool-turn limit); 0 returned a number. M4 classes
+(<code>followup/autotag/m4.py</code>, all incorrect runs):</p><ul><li>other: 5</li><li>tool error/refusal: 59</li></ul>
+
+<h3>Root causes of the incorrect draft_1 runs (post-run, not pre-registered)</h3>
+<p class="small muted">Computed here with <code>followup/autotag/root_causes.py</code>'s
+<code>run_causes</code> and <code>primary_cause</code>: each incorrect run gets the first tag-driven tool
+error in its record, checked in the order of the table. The input packets for the lineage tags contain
+0 URLs (macro.CUSR0000SEFV: 0, macro.food_services_sales: 0).</p>
+<div class="table-wrap"><table class="stack"><thead><tr><th scope="col">Cause</th><th scope="col">Tag ids</th><th scope="col">Questions</th><th scope="col">Runs</th><th scope="col">Hand → draft_1 value</th></tr></thead><tbody><tr><th scope='row'>Rule error by the AI<br><span class='muted small'>insufficient data: no reported quarter</span></th><td data-label="Tag ids"><span>fundamentals.capex, fundamentals.op_cash_flow, fundamentals.revenue</span></td><td data-label="Questions"><span>q012, q013, q014, q015, q016, q017, q042</span></td><td data-label="Runs"><span>20</span></td><td data-label="Hand → draft_1 value"><span>fundamentals.capex: &quot;sum&quot; → &quot;reported_fy_value&quot;; fundamentals.op_cash_flow: &quot;sum&quot; → &quot;reported_fy_value&quot;; fundamentals.revenue: &quot;sum&quot; → &quot;reported_fy_value&quot;</span></td></tr><tr><th scope='row'>Source links missing from what I gave the AI<br><span class='muted small'>lineage has no url</span></th><td data-label="Tag ids"><span>macro.CUSR0000SEFV, macro.food_services_sales</span></td><td data-label="Questions"><span>q018, q019, q020, q021, q022, q023, q024</span></td><td data-label="Runs"><span>21</span></td><td data-label="Hand → draft_1 value"><span>macro.CUSR0000SEFV: &quot;url: present&quot; → &quot;url: absent&quot;; macro.food_services_sales: &quot;url: present&quot; → &quot;url: absent&quot;</span></td></tr><tr><th scope='row'>A missing parent/brand rule, plus a crash in my engine<br><span class='muted small'>hierarchy is null (AttributeError)</span></th><td data-label="Tag ids"><span>brand_attention_daily.views</span></td><td data-label="Questions"><span>q025, q026, q027, q028, q029, q030, q031</span></td><td data-label="Runs"><span>21</span></td><td data-label="Hand → draft_1 value"><span>brand_attention_daily.views: &quot;brand -&gt; parent_ticker&quot; → null</span></td></tr><tr><th scope='row'>Unrelated to the rules<br><span class='muted small'>no tag-driven tool error</span></th><td data-label="Tag ids"><span>-</span></td><td data-label="Questions"><span>q032, q033</span></td><td data-label="Runs"><span>2</span></td><td data-label="Hand → draft_1 value"><span>-</span></td></tr><tr><th scope='row'>Total</th><td data-label="Tag ids"><span></span></td><td data-label="Questions"><span></span></td><td data-label="Runs"><span>64</span></td><td data-label="Hand → draft_1 value"><span>= 126 − 62</span></td></tr></tbody></table></div>
+
+<h3>Example run: q012 run 1 on draft_1</h3>
+<p class="small">Tag <code>fundamentals.op_cash_flow</code> in draft_1: additive_over_time
+<code>false</code>, time_rollup <code>reported_fy_value</code>; hand tag:
+additive_over_time <code>true</code>, time_rollup <code>sum</code>, derivation “A reported single quarter is used as is; otherwise Q2 = YTD6 - Q1, Q3 = YTD9 - YTD6, Q4 = FY - YTD9. Each period must start the day after the previous one ends. 10-Q cash-flow values are year-to-date, so single quarters are derived.”
+Tool error: <code>insufficient data: no reported Q op_cash_flow for CMG FY2025Q3</code>. Hand-tag D on q012: 3/3.</p>
+<details class="trace" id="example-trace"><summary>View recorded steps</summary>
+<div class="trace-body"><div class="step"><div class="tool">list_metrics</div><pre>{}</pre><div class="muted small">returned</div><pre>{&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: null, &quot;values&quot;: {&quot;brand_attention_daily.views&quot;: &quot;Daily Wikipedia page views for the article representing a restaurant brand or its parent company, used as an attention proxy. Values are additive over days. Rows with grain=&#x27;parent&#x27; and grain=&#x27;brand&#x27; come from separate articles, so a parent&#x27;s views are not the sum of its brands&#x27; views. Sum across entities only within one grain, and do not roll…</pre><details><summary>show full</summary><pre>{&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: null, &quot;values&quot;: {&quot;brand_attention_daily.views&quot;: &quot;Daily Wikipedia page views for the article representing a restaurant brand or its parent company, used as an attention proxy. Values are additive over days. Rows with grain=&#x27;parent&#x27; and grain=&#x27;brand&#x27; come from separate articles, so a parent&#x27;s views are not the sum of its brands&#x27; views. Sum across entities only within one grain, and do not roll brand rows up to parent rows. A brand can have more than one article title (e.g. Habit Burger Grill), and each title is a separate series that may be sparse or overlap in time.&quot;, &quot;comps_quarterly.comp_sales_pct&quot;: &quot;Quarterly comparable restaurant sales growth in percent (4.3 means +4.3% versus the same quarter a year earlier), reported by each company for its fiscal quarter. Each company defines its comparable base differently: CMG uses company-owned restaurants open at least 13 full calendar months, DRI uses restaurants open at least 16 months (excluding Chuy&#x27;s and Bahama Breeze), and WING uses domestic restaurants open at least 52 full weeks. Values are comparable only within the same definition_id. The metric is a ratio, so it cannot be summed across companies or quarters, and there is no weighting basis in the packet for averaging or rolling it up.&quot;, &quot;derived.operating_margin&quot;: &quot;Operating margin, derived as operating income divided by revenue from the fundamentals table. It is a ratio, so it cannot be summed across entities or time. To aggregate, sum the numerator and denominator separately, then divide (ratio of sums). The packet gave no data type, samples, vendor documentation or source URL, so unit, period basis, calendar and lineage are left unset.&quot;, &quot;fundamentals.capex&quot;: &quot;Capital expenditures (cash paid to acquire property, plant and equipment) in USD for restaurant companies (CMG, DRI, WING, YUM), taken from 10-Q and 10-K filings. Values are positive cash outflows. Each row covers a different period (Q, YTD6, YTD9 or FY), and the YTD rows overlap the quarterly rows. Summing rows over time therefore double counts. Use the FY row for annual totals, or compare rows with the same period_basis. Values can be summed across companies only when the period and fiscal calendar match.&quot;, &quot;fundamentals.diluted_eps&quot;: &quot;Diluted earnings per share in USD per share, as reported by each company in SEC filings. Each row covers a quarter, a nine-month YTD period or a full fiscal year, as shown by period_basis. Values are per-share ratios, so they cannot be summed across companies. They should not be summed across periods either, because YTD and FY rows overlap the quarters and share counts change over time. For a fiscal-year figure, use the reported FY value.&quot;, &quot;fundamentals.net_income&quot;: &quot;Net income (loss) in USD per company and fiscal period, taken from the NetIncomeLoss concept in SEC filings. The same table holds discrete quarters (Q), cumulative year-to-date values (YTD6, YTD9) and full fiscal years (FY), so the periods overlap. Summing over time would double count; use the FY value for annual figures and compare only rows with the same period_basis. Fiscal calendars differ by company, so cross-company sums of the same fiscal quarter cover slightly different dates. Values are not seasonally adjusted or annualized.&quot;, &quot;fundamentals.op_cash_flow&quot;: &quot;Net cash provided by (used in) operating activities in USD for restaurant companies (CMG, WING, YUM, DRI), taken from SEC 10-Q and 10-K filings. Each row covers a fiscal period (Q1, YTD6, YTD9 or FY) defined by period_start, period_end and period_basis. Values are cumulative within the fiscal year. Compare or sum across companies only for matching periods, and use the FY value for annual totals. The XBRL concept differs for some filers (DRI uses the ContinuingOperations variant), so definitions may not be identical across companies.&quot;, &quot;fundamentals.operating_income&quot;: &quot;Operating income (loss) in US dollars for restaurant companies (CMG, WING, YUM, DRI), as reported to the SEC. Each row is one fiscal period. The period is either a discrete quarter or a cumulative year-to-date span, identified by period_start, period_end and period_basis. Fiscal calendars differ by company, so period ends do not line up exactly across tickers.&quot;, &quot;fundamentals.revenue&quot;: &quot;Reported revenue in USD per company and fiscal period, from SEC filings (10-Q and 10-K). The period_basis field (Q, YTD6, YTD9, FY) shows whether a value covers one quarter, a cumulative year-to-date span or a full year. Fiscal calendars differ by company (e.g. DRI&#x27;s year ends in May), and the XBRL concept differs by filer, so compare values only across rows with the same concept and period_basis.&quot;, &quot;fundamentals.total_assets&quot;: &quot;Total assets in USD, as reported by each company at the end of a fiscal quarter or year (point-in-time balance sheet value). Values can be summed across companies on the same date but not across time. Roll up over time by taking the last value in the period. Fiscal period ends differ by company, so align dates before comparing across entities.&quot;, &quot;macro.CUSR0000SEFV&quot;: &quot;Monthly seasonally adjusted CPI-U index level for food away from home, U.S. city average, all urban consumers, with base period 1982-84=100. Index levels are not additive across time or entities. Use pct_change for inflation rates, and last or mean_over_time for rollups.&quot;, &quot;macro.food_services_sales&quot;: &quot;Seasonally adjusted monthly sales of food services and drinking places (NAICS 722), U.S. total, in millions of dollars. Each value is the sales level for one calendar month, not an annualized rate. The series is already a national total, so summing it with other series, such as parent or sibling industry totals, would double count.&quot;}, &quot;unit&quot;: null, &quot;period&quot;: null, &quot;explanation&quot;: &quot;12 metrics.&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [{&quot;type&quot;: &quot;tags&quot;, &quot;url&quot;: &quot;tags/tags.yaml&quot;}], &quot;use_instead&quot;: null, &quot;definitions&quot;: null}</pre></details></div>
+<div class="step"><div class="tool">get_metric <span class="badge bad">tool error</span></div><pre>{
+ &quot;ticker&quot;: &quot;CMG&quot;,
+ &quot;metric&quot;: &quot;op_cash_flow&quot;,
+ &quot;period&quot;: &quot;FY2025Q3&quot;
+}</pre><div class="muted small">returned</div><pre>{&quot;status&quot;: &quot;error&quot;, &quot;value&quot;: null, &quot;values&quot;: null, &quot;unit&quot;: &quot;USD&quot;, &quot;period&quot;: null, &quot;explanation&quot;: &quot;insufficient data: no reported Q op_cash_flow for CMG FY2025Q3&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [], &quot;use_instead&quot;: null, &quot;definitions&quot;: null}</pre></div>
+<div class="step"><div class="tool">describe_column</div><pre>{
+ &quot;metric_id&quot;: &quot;fundamentals.op_cash_flow&quot;
+}</pre><div class="muted small">returned</div><pre>{&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: null, &quot;values&quot;: {&quot;id&quot;: &quot;fundamentals.op_cash_flow&quot;, &quot;table&quot;: &quot;fundamentals&quot;, &quot;filter&quot;: {&quot;metric&quot;: &quot;op_cash_flow&quot;}, &quot;semantic_type&quot;: &quot;flow&quot;, &quot;unit&quot;: &quot;USD&quot;, &quot;additive_over_entities&quot;: true, &quot;additive_over_time&quot;: false, &quot;time_rollup&quot;: &quot;reported_fy_value&quot;, &quot;valid_methods&quot;: [&quot;sum_across_entities&quot;, &quot;pct_change&quot;], &quot;period_basis&quot;: &quot;mixed&quot;, &quot;derivation&quot;: &quot;Reported XBRL value of NetCashProvidedByUsedIn…</pre><details><summary>show full</summary><pre>{&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: null, &quot;values&quot;: {&quot;id&quot;: &quot;fundamentals.op_cash_flow&quot;, &quot;table&quot;: &quot;fundamentals&quot;, &quot;filter&quot;: {&quot;metric&quot;: &quot;op_cash_flow&quot;}, &quot;semantic_type&quot;: &quot;flow&quot;, &quot;unit&quot;: &quot;USD&quot;, &quot;additive_over_entities&quot;: true, &quot;additive_over_time&quot;: false, &quot;time_rollup&quot;: &quot;reported_fy_value&quot;, &quot;valid_methods&quot;: [&quot;sum_across_entities&quot;, &quot;pct_change&quot;], &quot;period_basis&quot;: &quot;mixed&quot;, &quot;derivation&quot;: &quot;Reported XBRL value of NetCashProvidedByUsedInOperatingActivities (or its ContinuingOperations variant) as filed. Rows are cumulative year-to-date amounts (Q1 = Q, YTD6, YTD9, FY), not discrete quarters. Rows with different period_basis values must not be summed over time.&quot;, &quot;calendar&quot;: &quot;fiscal&quot;, &quot;seasonal_adjustment&quot;: null, &quot;annualized&quot;: false, &quot;entity_grain&quot;: &quot;ticker&quot;, &quot;hierarchy&quot;: null, &quot;comparability&quot;: &quot;by_definition_id&quot;, &quot;lineage&quot;: {&quot;source&quot;: &quot;SEC EDGAR XBRL companyfacts&quot;, &quot;url_template&quot;: &quot;https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json&quot;, &quot;retrieved_on&quot;: &quot;2026-10-24&quot;}, &quot;description&quot;: &quot;Net cash provided by (used in) operating activities in USD for restaurant companies (CMG, WING, YUM, DRI), taken from SEC 10-Q and 10-K filings. Each row covers a fiscal period (Q1, YTD6, YTD9 or FY) defined by period_start, period_end and period_basis. Values are cumulative within the fiscal year. Compare or sum across companies only for matching periods, and use the FY value for annual totals. The XBRL concept differs for some filers (DRI uses the ContinuingOperations variant), so definitions may not be identical across companies.&quot;}, &quot;unit&quot;: &quot;USD&quot;, &quot;period&quot;: null, &quot;explanation&quot;: &quot;Net cash provided by (used in) operating activities in USD for restaurant companies (CMG, WING, YUM, DRI), taken from SEC 10-Q and 10-K filings. Each row covers a fiscal period (Q1, YTD6, YTD9 or FY) defined by period_start, period_end and period_basis. Values are cumulative within the fiscal year. Compare or sum across companies only for matching periods, and use the FY value for annual totals. The XBRL concept differs for some filers (DRI uses the ContinuingOperations variant), so definitions may not be identical across companies.&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [{&quot;type&quot;: &quot;tags&quot;, &quot;url&quot;: &quot;tags/tags.yaml&quot;}], &quot;use_instead&quot;: null, &quot;definitions&quot;: {&quot;CMG&quot;: {&quot;definition_id&quot;: &quot;CMG_10K&quot;, &quot;definition_text&quot;: &quot;Comparable restaurant sales represent the change in period-over-period total revenue for company-owned restaurants in operation for at least 13 full calendar months.&quot;, &quot;source_url&quot;: &quot;https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/cmg-20251231.htm&quot;}, &quot;DRI&quot;: {&quot;definition_id&quot;: &quot;DRI_10K&quot;, &quot;definition_text&quot;: &quot;Same-restaurant sales is a year-over-year comparison of each period\u2019s sales volumes for a 52-week year, and is limited to restaurants that have been open and operated by Darden for at least 16 months, and excludes the impact of Chuy\u2019s, as they were not owned and operated by Darden for a 16-month period prior to the beginning of fiscal 2026, as well as Bahama Breeze as all locations are expected to be closed or converted to other brands (between Q3 fiscal 2026 and Q4 fiscal 2027).&quot;, &quot;source_url&quot;: &quot;https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/dri-20260531.htm&quot;}, &quot;WING&quot;: {&quot;definition_id&quot;: &quot;WING_10K&quot;, &quot;definition_text&quot;: &quot;Domestic same store sales reflects the change in year-over-year sales for the same store base. We define the same store base to include those restaurants open for at least 52 full weeks. This measure highlights the performance of existing restaurants, while excluding the impact of new restaurant openings and permanent closures. We review same store sales for domestic company-owned restaurants as well as system-wide domestic restaurants.&quot;, &quot;source_url&quot;: &quot;https://www.sec.gov/Archives/edgar/data/1636222/000163622226000008/wing-20251227.htm&quot;}}}</pre></details></div>
+<div class="step"><div class="tool">get_metric <span class="badge bad">tool error</span></div><pre>{
+ &quot;ticker&quot;: &quot;CMG&quot;,
+ &quot;metric&quot;: &quot;op_cash_flow&quot;,
+ &quot;period&quot;: &quot;FY2025Q2&quot;
+}</pre><div class="muted small">returned</div><pre>{&quot;status&quot;: &quot;error&quot;, &quot;value&quot;: null, &quot;values&quot;: null, &quot;unit&quot;: &quot;USD&quot;, &quot;period&quot;: null, &quot;explanation&quot;: &quot;insufficient data: no reported Q op_cash_flow for CMG FY2025Q2&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [], &quot;use_instead&quot;: null, &quot;definitions&quot;: null}</pre></div>
+<div class="step"><div class="tool">get_metric</div><pre>{
+ &quot;ticker&quot;: &quot;CMG&quot;,
+ &quot;metric&quot;: &quot;op_cash_flow&quot;,
+ &quot;period&quot;: &quot;FY2025&quot;
+}</pre><div class="muted small">returned</div><pre>{&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: 2113926000.0, &quot;values&quot;: null, &quot;unit&quot;: &quot;USD&quot;, &quot;period&quot;: {&quot;label&quot;: &quot;FY2025&quot;, &quot;start&quot;: &quot;2025-01-01&quot;, &quot;end&quot;: &quot;2025-12-31&quot;}, &quot;explanation&quot;: &quot;Reported annual figure from the FY 10-K; no derivation.&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [{&quot;type&quot;: &quot;sec_filing&quot;, &quot;accession&quot;: &quot;0001058090-26-000009&quot;, &quot;form&quot;: &quot;10-K&quot;, &quot;period_basis&quot;: &quot;FY&quot;, &quot;period_start&quot;: &quot;2025-01-01&quot;, &quot;period_end&quot;: &quot;2025-12-31&quot;, &quot;url&quot;: &quot;https:…</pre><details><summary>show full</summary><pre>{&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: 2113926000.0, &quot;values&quot;: null, &quot;unit&quot;: &quot;USD&quot;, &quot;period&quot;: {&quot;label&quot;: &quot;FY2025&quot;, &quot;start&quot;: &quot;2025-01-01&quot;, &quot;end&quot;: &quot;2025-12-31&quot;}, &quot;explanation&quot;: &quot;Reported annual figure from the FY 10-K; no derivation.&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [{&quot;type&quot;: &quot;sec_filing&quot;, &quot;accession&quot;: &quot;0001058090-26-000009&quot;, &quot;form&quot;: &quot;10-K&quot;, &quot;period_basis&quot;: &quot;FY&quot;, &quot;period_start&quot;: &quot;2025-01-01&quot;, &quot;period_end&quot;: &quot;2025-12-31&quot;, &quot;url&quot;: &quot;https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/&quot;}], &quot;use_instead&quot;: null, &quot;definitions&quot;: null}</pre></details></div>
+<div class="step"><div class="tool">aggregate <span class="badge bad">tool error</span></div><pre>{
+ &quot;metric_id&quot;: &quot;fundamentals.op_cash_flow&quot;,
+ &quot;entities&quot;: [
+  &quot;CMG&quot;
+ ],
+ &quot;period&quot;: &quot;CY2025Q2&quot;,
+ &quot;method&quot;: &quot;sum_across_entities&quot;
+}</pre><div class="muted small">returned</div><pre>{&quot;status&quot;: &quot;error&quot;, &quot;value&quot;: null, &quot;values&quot;: null, &quot;unit&quot;: &quot;USD&quot;, &quot;period&quot;: null, &quot;explanation&quot;: &quot;fundamentals need a fiscal period like FY2025 or FY2025Q3, got &#x27;CY2025Q2&#x27;&quot;, &quot;derivation&quot;: [], &quot;sources&quot;: [], &quot;use_instead&quot;: null, &quot;definitions&quot;: null}</pre></div>
+<div class="step"><div class="tool muted">model text</div><pre>I couldn&#x27;t get Chipotle&#x27;s Q2 2025 operating cash flow from the available data, so I can&#x27;t give a figure.
+
+- The operating cash flow data is stored as cumulative year-to-date values (Q1, six-month YTD, nine-month YTD, full year), not discrete quarters.
+- Requests for CMG&#x27;s discrete Q2 2025 value (`FY2025Q2`) and its Q3 2025 value (`FY2025Q3`) both returned &quot;no reported Q op_cash_flow.&quot;
+- The only CMG value I could ret…</pre><details><summary>show full</summary><pre>I couldn&#x27;t get Chipotle&#x27;s Q2 2025 operating cash flow from the available data, so I can&#x27;t give a figure.
+
+- The operating cash flow data is stored as cumulative year-to-date values (Q1, six-month YTD, nine-month YTD, full year), not discrete quarters.
+- Requests for CMG&#x27;s discrete Q2 2025 value (`FY2025Q2`) and its Q3 2025 value (`FY2025Q3`) both returned &quot;no reported Q op_cash_flow.&quot;
+- The only CMG value I could retrieve is the full-year FY2025 figure of $2,113,926,000 from the 10-K. That is not the Q2 figure.
+- The aggregate tool doesn&#x27;t accept a calendar-quarter period for this metric, so I couldn&#x27;t derive Q2 another way. Deriving it would take the six-month YTD value minus the Q1 value, and neither is retrievable here.
+
+FINAL: {&quot;answer&quot;: null, &quot;unit&quot;: &quot;USD&quot;, &quot;warning&quot;: true, &quot;refused&quot;: true}</pre></details></div></div></details>
+
+<h3>Engine hardening: replay (no model calls)</h3>
+<p>Main results were produced at <code>bbc6310</code>. Re-executing the 455
+recorded setup D tool calls on the hardened engine: 455 of 455 identical.
+Re-executing the 779 draft_1 tool calls: exceptions 171 recorded,
+0 now.</p>
+<div class="table-wrap"><table class="stack"><thead><tr><th scope="col">Recorded output → current output (draft_1 calls)</th><th scope="col">Calls</th></tr></thead><tbody><tr><th scope='row'>argument error -&gt; argument error</th><td data-label="Calls"><span>1</span></td></tr><tr><th scope='row'>clean error -&gt; clean error</th><td data-label="Calls"><span>264</span></td></tr><tr><th scope='row'>exception -&gt; clean error</th><td data-label="Calls"><span>171</span></td></tr><tr><th scope='row'>number -&gt; number</th><td data-label="Calls"><span>132</span></td></tr><tr><th scope='row'>ok without a number -&gt; ok without a number</th><td data-label="Calls"><span>211</span></td></tr></tbody></table></div>
+
+<h3>Permissive methods</h3>
+<p>The 12 tag/method pairs that a draft allows and the hand tag forbids, called directly
+(45 calls per engine, on the drafts and on a counterfactual draft_1 with the hand
+tags' lineage and hierarchy). Calls that returned a number: 5 before the hardening,
+1 after. The remaining one: macro.food_services_sales mean_over_time on counterfactual = 85295.5 (Mean of monthly values.). The engine follows the tags it is
+given, so a permissive tag that names an implemented method still needs review.</p>
+
+<h3>Validator rules added to <code>src/tags.py</code></h3>
+<ul><li><code>flow</code>: A flow (semantic_type flow) needs additive_over_time true and time_rollup sum.</li><li><code>sum_over_time</code>: sum_over_time in valid_methods needs additive_over_time true.</li><li><code>sum_across_entities</code>: sum_across_entities in valid_methods needs additive_over_entities true.</li><li><code>hierarchy</code>: A measure on a table with a parent_* column needs a hierarchy.</li><li><code>lineage</code>: A measure on macro_monthly needs lineage.url; on brand_attention_daily, lineage.url_template (the keys src/semantics.py reads).</li></ul>
+<p>Hand tags violating a rule: 0. Draft errors (M2 errors plus a missing lineage key)
+caught: 33 of 63. The rules were derived from these same drafts' errors,
+so this is not a test on new data.</p>
 </section>
 
 <footer class="small muted">Generated by report/build_report.py from the recorded runs of claude-haiku-5-5. A static page: no model is called.</footer>
