@@ -423,3 +423,67 @@ def test_results_deviations_include_the_record():
     assert "Cost cap raised from $3.00 to $3.75" in text
     assert "Run order: draft 1, M1-M3 on draft 1, setup D on draft 1 (M4)" in text
     assert "\n## " not in "\n" + text
+
+
+# ---------- secondary count and post-run analysis (no model calls) ----------
+
+import root_causes  # noqa: E402
+
+
+def test_named_tag_ids_secondary_counts_denominator_id():
+    rec = _rec(calls=[("aggregate", {"metric_id": "fundamentals.operating_income", "entities": ["CMG"],
+                                     "period": "FY2025", "method": "ratio_of_sums",
+                                     "denominator_id": "fundamentals.revenue"})])
+    short = m4.short_metric_map(_hand_entries())
+    assert m4.named_tag_ids(rec, short) == ["fundamentals.operating_income"]
+    assert m4.named_tag_ids(rec, short, include_denominator=True) == [
+        "fundamentals.operating_income", "fundamentals.revenue"]
+
+
+def _err(name, args, explanation):
+    return {"name": name, "input": args, "is_error": True,
+            "output": json.dumps({"status": "error", "explanation": explanation})}
+
+
+def test_root_cause_order_and_fields():
+    hand = {e["id"]: e for e in _hand_entries()}
+    draft = {k: dict(v) for k, v in hand.items()}
+    draft["fundamentals.capex"]["valid_methods"] = ["sum_across_entities"]
+    rec = {"tool_calls": [
+        _err("aggregate", {"metric_id": "fundamentals.capex", "method": "sum_over_time"},
+             "method 'sum_over_time' is not allowed for fundamentals.capex (allowed: ['sum_across_entities'])"),
+        _err("aggregate", {"metric_id": "fundamentals.capex", "method": "sum"},
+             "method 'sum' is not allowed for fundamentals.capex (allowed: ['sum_across_entities'])"),
+        _err("get_metric", {"metric": "capex"}, "insufficient data: no reported Q capex for CMG FY2025Q4"),
+        _err("aggregate", {"metric_id": "brand_attention_daily.views"},
+             "AttributeError: 'NoneType' object has no attribute 'split'"),
+        _err("aggregate", {"metric_id": "macro.CUSR0000SEFV"}, "macro.CUSR0000SEFV lineage has no url")]}
+    causes = root_causes.run_causes(rec, hand, draft)
+    # 'sum' is not a method name, so it is not a draft-driven cause.
+    assert causes == [(root_causes.METHOD, "fundamentals.capex"),
+                      (root_causes.REPORTED_Q, "fundamentals.capex"),
+                      (root_causes.HIERARCHY, "brand_attention_daily.views"),
+                      (root_causes.LINEAGE, "macro.CUSR0000SEFV")]
+    assert root_causes.primary_cause(causes) == (root_causes.LINEAGE, "macro.CUSR0000SEFV")
+    assert root_causes.primary_cause([]) == (root_causes.NONE, None)
+    assert root_causes.primary_cause(
+        [(root_causes.REPORTED_Q, "a"), (root_causes.HIERARCHY, "b")]) == (root_causes.HIERARCHY, "b")
+
+
+def test_proposed_rules_pass_on_hand_tags():
+    hits = root_causes.rule_hits(_hand_entries())
+    assert hits and not any(hits.values()), hits
+
+
+def test_proposed_rules_flag_the_fixture_errors():
+    d = {e["id"]: dict(e) for e in _hand_entries()}
+    # As draft 1 wrote revenue: sum_over_time dropped, pct_change added.
+    d["fundamentals.revenue"].update(additive_over_time=False, time_rollup="reported_fy_value",
+                                     valid_methods=["pct_change", "sum_across_entities"])
+    d["brand_attention_daily.views"]["hierarchy"] = None
+    d["macro.CUSR0000SEFV"]["lineage"] = {"source": "x"}
+    hits = root_causes.rule_hits(list(d.values()))
+    flagged = {tid for ids in hits.values() for tid in ids}
+    assert flagged == {"fundamentals.revenue", "brand_attention_daily.views", "macro.CUSR0000SEFV"}
+    assert root_causes.catching_rules(hits, "fundamentals.revenue", "time_rollup")
+    assert not root_causes.catching_rules(hits, "fundamentals.revenue", "valid_methods")

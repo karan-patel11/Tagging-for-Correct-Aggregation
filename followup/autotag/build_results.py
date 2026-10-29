@@ -19,6 +19,7 @@ sys.path.insert(0, str(HERE))
 
 import costs  # noqa: E402
 import m4  # noqa: E402
+import root_causes  # noqa: E402
 import score_d  # noqa: E402
 import score_tags  # noqa: E402
 
@@ -57,11 +58,11 @@ def table(header, rows):
     return out
 
 
-def questions_naming(runs_path, hand_entries):
+def questions_naming(runs_path, hand_entries, include_denominator=False):
     short = m4.short_metric_map(hand_entries)
     by_tag = {}
     for rec in score_d.load_records(runs_path).values():
-        for tid in m4.named_tag_ids(rec, short):
+        for tid in m4.named_tag_ids(rec, short, include_denominator):
             by_tag.setdefault(tid, set()).add(rec["question_id"])
     return {k: sorted(v) for k, v in by_tag.items()}
 
@@ -95,7 +96,8 @@ def build(drafts_dir, results_dir, out_path, free_text_path):
           f"Cost check (one id, {cost_check['sample_call']['id']}): "
           f"${cost_check['sample_call']['cost_usd']:.6f}. Estimated total before drafting: "
           f"${cost_check['total_estimate_usd']:.4f} (upper bound ${cost_check['total_bound_usd']:.4f}); "
-          f"cap ${cost_check['cap_usd']:.2f}.", ""]
+          f"cap at the cost check ${cost_check['cap_usd']:.2f}, cap for the runs "
+          f"${costs.COST_CAP_USD:.2f} (see Deviations).", ""]
     rows = []
     for n in DRAFT_NAMES:
         t = metas[n]["tokens"]
@@ -148,22 +150,36 @@ def build(drafts_dir, results_dir, out_path, free_text_path):
 
     # ---- M2
     naming = questions_naming(score_d.HAND_D, hand)
+    naming2 = questions_naming(score_d.HAND_D, hand, include_denominator=True)
     L += ["## M2: dangerous errors", "",
-          "Questions: those whose hand-tag setup D runs named the tag id in a tool call (see "
-          "Deviations).", ""]
+          "Questions: those whose hand-tag setup D runs named the tag id in a tool call through "
+          "metric_id or get_metric's metric (pre-registered count). \"+ denominator_id\": questions "
+          "added when aggregate's denominator_id also counts (secondary count, reporting only; "
+          "see Deviations).", ""]
     rows = []
     for n in DRAFT_NAMES:
         for tid, errs in D[n]["m2"].items():
             for e in errs:
                 val = fmt(e["draft"]) + (f" (allows {e['forbidden_allowed']})"
                                          if "forbidden_allowed" in e else "")
-                rows.append([n, tid, e["field"], fmt(e["hand"]), val, ", ".join(naming.get(tid, [])) or "none"])
+                extra = sorted(set(naming2.get(tid, [])) - set(naming.get(tid, [])))
+                rows.append([n, tid, e["field"], fmt(e["hand"]), val,
+                             ", ".join(naming.get(tid, [])) or "none", ", ".join(extra) or "none"])
     counts = [f"{n}: {sum(len(v) for v in D[n]['m2'].values())} errors on "
               f"{sum(1 for v in D[n]['m2'].values() if v)} of {len(D[n]['m2'])} measures"
               for n in DRAFT_NAMES]
     L += ["; ".join(counts) + ".", ""]
-    L += (table(["draft", "measure", "field", "hand", "draft value", "questions"], rows)
-          if rows else ["none"]) + [""]
+    qrows = []
+    for n in DRAFT_NAMES:
+        bad = [tid for tid, v in D[n]["m2"].items() if v]
+        q1 = sorted({q for tid in bad for q in naming.get(tid, [])})
+        q2 = sorted({q for tid in bad for q in naming2.get(tid, [])})
+        qrows.append([n, len(q1), len(q2), ", ".join(sorted(set(q2) - set(q1))) or "none"])
+    L += ["Distinct questions affected by a dangerous error:", ""]
+    L += table(["draft", "pre-registered count", "secondary count (+ denominator_id)",
+                "questions added by denominator_id"], qrows) + [""]
+    L += (table(["draft", "measure", "field", "hand", "draft value", "questions",
+                 "+ denominator_id"], rows) if rows else ["none"]) + [""]
 
     # ---- M3
     L += ["## M3: validation (load_tags, check_tags_against_db)", ""]
@@ -206,6 +222,23 @@ def build(drafts_dir, results_dir, out_path, free_text_path):
             rows.append([qid, f"{v['hand_correct']}/3", f"{v['draft_correct']}/3", detail])
         L += (table(["question", "hand", "draft_1", "incorrect draft-1 runs: class [tag id: differing fields]"],
                     rows) if rows else ["none"]) + [""]
+        # Secondary count (reporting only): links that appear only when denominator_id counts.
+        sec = []
+        for qid, v in ch.items():
+            for r in v["incorrect_draft_runs"]:
+                rec = draft_runs[(qid, r["run"])]
+                both = m4.linked_fields(rec, hand, drafts["draft_1"], include_denominator=True)
+                only = {t: fs for t, fs in both.items() if t not in r["linked"]}
+                if only:
+                    sec.append([qid, r["run"], ", ".join(f"{t}: {'/'.join(fs)}" for t, fs in only.items())])
+        n_runs = sum(len(v["incorrect_draft_runs"]) for v in ch.values())
+        n_pri = sum(1 for v in ch.values() for r in v["incorrect_draft_runs"] if r["linked"])
+        n_sec = len({(q, r) for q, r, _ in sec} | {(q, r["run"]) for q, v in ch.items()
+                                                    for r in v["incorrect_draft_runs"] if r["linked"]})
+        L += [f"Incorrect draft-1 runs linked to a differing tag: {n_pri} of {n_runs} "
+              f"(pre-registered count); {n_sec} of {n_runs} when aggregate's denominator_id also "
+              f"counts (secondary count). Links added by denominator_id:", ""]
+        L += (table(["question", "run", "tag id: differing fields"], sec) if sec else ["none"]) + [""]
 
     # ---- verdicts
     L += ["## Per-field verdict: auto-draft vs human review", "",
@@ -219,6 +252,8 @@ def build(drafts_dir, results_dir, out_path, free_text_path):
     L += ["## Free-text fields", "",
           f"description, derivation and lineage are not scored; all three drafts are listed next to "
           f"the hand text in `{rel(free_text_path)}` for a manual read.", ""]
+    if D["draft_1"]["m3"]["pass"]:
+        L += root_causes.section_lines()
     L += ["## Known limits (verbatim from PREREG.md)", "", known_limits(), ""]
     L += ["## Deviations", "", f"From `{rel(DEVIATIONS_PATH)}`.", "", deviations(), ""]
     out_path.write_text("\n".join(L))
