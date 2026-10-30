@@ -329,3 +329,16 @@ def test_with_a_raw_exploratory_section_follows_results(tmp_path):
     assert "Exploratory, added after seeing the main results" in text
     assert "No detectable difference between A and A_raw (0 vs 0 discordant questions; exact sign test, p = 1.00)" in text
     assert br.A_RAW_NOT_RUN not in res.page and len(res.audit) == 11
+
+
+def test_hand_check_labels_disagreeing_between_files_fails(tmp_path):
+    rows = list(csv.DictReader((ROOT / "eval" / "verification_ai.csv").open()))
+    for r in rows:
+        if r["input_key"] == "views:KFC:CY2024Q4":
+            r["status"] = "pending"
+    with (tmp_path / "ai.csv").open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows)
+    with pytest.raises(br.BuildError, match="hand checks disagree"):
+        br.build(paths_for(tmp_path, vlog_ai=tmp_path / "ai.csv"))
