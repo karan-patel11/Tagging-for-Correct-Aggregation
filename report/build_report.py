@@ -559,6 +559,10 @@ def verification_counts(vlog, vlog_ai):
     sourced = keys - unsourced
     if hand & unsourced:
         die(f"inputs marked hand-checked have no source in verification_ai.csv: {sorted(hand & unsourced)}")
+    labelled = {k for k, r in ai.items() if r["status"] == "hand_checked_reread"}
+    if labelled != hand:
+        die("hand checks disagree: verification_log.csv notes vs verification_ai.csv status hand_checked_reread "
+            f"(log only: {sorted(hand - labelled)[:5]}; ai only: {sorted(labelled - hand)[:5]})")
     verdict = {k: ai[k]["matches"].strip().lower() for k in sourced}
     unread = sorted(k for k, v in verdict.items() if v not in ("yes", "no"))
     if unread:
