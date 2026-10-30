@@ -13,11 +13,10 @@
 
 default_replay: q017
 
-hero:                       # S1: the answer key's year-end balance vs its stored sum-of-quarters trap
-  question_id: q003
-  trap: sum_of_4_quarter_ends
-  ticker: YUM
-  metric: total_assets
+hero:                       # S1: the real setup A failure. trap: the stored trap the hero shows;
+  question_id: q017         # minus: the stored value that, subtracted from it, gives the answer key.
+  trap: used_fy_value       # The trap count, the recorded query and both filing links are read at build time.
+  minus: used_ytd9_value
 
 replays:
   - question_id: q003

@@ -213,3 +213,119 @@ def test_rail_and_deep_links_resolve(built):
         assert p["q"] in replays and p["left"] in "ABCD" and p["right"] in "ABCD", d
     for anchor in re.findall(r'href="#([^"?]+)"', page):
         assert anchor in ids, anchor
+
+
+# ---------- results-page revision: q017 hero, plain headline, D failures first, verification counts ----------
+
+import csv  # noqa: E402
+
+sys.path.insert(0, str(ROOT / "eval"))
+import score  # noqa: E402
+
+
+def _section(page, sid):
+    m = re.search(rf'<section id="{sid}".*?</section>', page, re.S)
+    assert m, sid
+    return m.group(0)
+
+
+def test_hero_is_q017_with_trap_count_read_from_the_jsonl(built):
+    q = {x["id"]: x for x in yaml.safe_load((ROOT / "eval" / "questions.yaml").read_text())}["q017"]
+    hits = n = ok = 0
+    for s in "ABCD":
+        for line in (RESULTS / f"{s}.jsonl").read_text().splitlines():
+            r = json.loads(line)
+            if r["question_id"] == "q017":
+                sc = score.score_run(r, q)
+                n, hits, ok = n + 1, hits + (sc["trap_hit"] == "used_fy_value"), ok + sc["correct"]
+    assert hits >= 1
+    hero = _section(built.page, "problem")
+    text = br.page_text(hero)
+    assert f"{hits} of {n} recorded runs on this question fell into this trap" in text
+    assert f"The other {n - hits} were correct." in text and ok == n - hits
+    assert f"{q['correct']:,}" in text and f"{q['trap_answers']['used_fy_value']:,}" in text
+    # both filing links: the full-year 10-K and the nine-month 10-Q
+    for acc in ("000094094426000025", "000094094426000009"):
+        assert f"https://www.sec.gov/Archives/edgar/data/940944/{acc}/" in hero, acc
+    assert "Yum" not in text and "total assets" not in text.lower()
+
+
+def test_headline_rule():
+    few = br.headline_claim("m", {"A": (4, 126), "B": (0, 126), "C": (2, 126), "D": (2, 126)}, 1.0)
+    assert few[0] == "With these tables and this model (m), every setup made few errors: 0 to 4 wrong runs out of 126 per setup."
+    assert few[1].endswith("showed no detectable difference.")
+    assert few[2].startswith("Setup A, with no tags at all, was already 96.8% correct")
+    many = br.headline_claim("m", {"A": (40, 126), "B": (0, 126), "C": (2, 126), "D": (2, 126)}, 0.01)
+    assert "few errors" not in " ".join(many) and len(many) == 2
+    assert "differed (exact sign test, p = 0.01)" in many[1]
+
+
+def test_headline_on_page_is_generated_from_summary(built):
+    s = json.loads((RESULTS / "summary.json").read_text())
+    wrong = {x: (v["n"] - v["correct_runs"], v["n"]) for x, v in s["setups"].items()}
+    _, p = br.b_vs_c_verdict(len(s["b_vs_c"]["b_right_c_wrong"]), len(s["b_vs_c"]["c_right_b_wrong"]))
+    text = br.page_text(_section(built.page, "problem"))
+    for sentence in br.headline_claim(", ".join(s["model"]), wrong, p):
+        assert sentence in text
+
+
+def test_failures_section_starts_with_d_breakages(built):
+    fails = _section(built.page, "failures")
+    groups = re.findall(r'<div class="fail-group"><h3>([ABCD]) ', fails)
+    assert groups == ["D", "A", "B", "C"]
+    first = fails.split('<div class="fail-group">')[1]
+    assert re.findall(r"<b>(q\d{3}), run \d+</b>", first) == ["q030", "q034"]
+
+
+def test_verification_counts_match_the_two_files():
+    log = list(csv.DictReader((ROOT / "eval" / "verification_log.csv").open()))
+    ai = {r["input_key"]: r for r in csv.DictReader((ROOT / "eval" / "verification_ai.csv").open())}
+    keys = {re.match(r"\[([^\]]+)\]", r["where_in_source"])[1] for r in log}
+    hand = {re.match(r"\[([^\]]+)\]", r["where_in_source"])[1] for r in log
+            if "hand-read by" in r["notes"] or "hand spot-check by" in r["notes"]}
+    sourced = {k for k in keys if ai[k]["status"] != "n/a"}
+    v = br.verification_counts(log, list(ai.values()))
+    assert (v["inputs"], v["sourced"], v["unsourced"]) == (len(keys), len(sourced), len(keys - sourced))
+    assert v["hand"] == len(hand) and v["ai_read"] == sum(ai[k]["matches"] in ("yes", "no") for k in sourced)
+    assert v["mismatches"] == sum(ai[k]["matches"] == "no" for k in sourced)
+    assert v["revisions"] == sum(r["revision"] not in ("", "none") for r in ai.values())
+    assert v["trap_only"] == sum(r["status"] == "trap_only" for r in ai.values())
+
+
+def test_checks_section_shows_verification_counts_and_scorer_cause(built):
+    text = br.page_text(_section(built.page, "checks"))
+    log = list(csv.DictReader((ROOT / "eval" / "verification_log.csv").open()))
+    ai = list(csv.DictReader((ROOT / "eval" / "verification_ai.csv").open()))
+    for sentence in br.verification_claims(br.verification_counts(log, ai)):
+        assert sentence in text
+    note = json.loads((RESULTS / "summary.json").read_text())["scorer_notes"][0]
+    assert "Post-hoc scorer fix" in text and note["description"] in text
+    assert "rows by hand against the source; the rest were" not in text  # the old hand-check sentence
+
+
+def test_logged_input_missing_from_verification_ai_fails(tmp_path):
+    rows = list(csv.DictReader((ROOT / "eval" / "verification_ai.csv").open()))
+    with (tmp_path / "ai.csv").open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(r for r in rows if r["input_key"] != "sec:DRI:revenue:FY:FY2026")
+    with pytest.raises(br.BuildError, match="verification_ai.csv has no row for logged inputs"):
+        br.build(paths_for(tmp_path, vlog_ai=tmp_path / "ai.csv"))
+
+
+def test_without_a_raw_next_steps_says_not_run(built):
+    assert not (RESULTS / "A_raw.jsonl").exists()
+    assert 'id="exploratory"' not in built.page
+    assert br.A_RAW_NOT_RUN in br.page_text(_section(built.page, "next"))
+
+
+def test_with_a_raw_exploratory_section_follows_results(tmp_path):
+    d = results_copy(tmp_path)
+    (d / "A_raw.jsonl").symlink_to(RESULTS / "A.jsonl")  # identical runs: no discordant questions
+    res = br.build(paths_for(tmp_path, results=d))
+    ids = re.findall(r'<section id="([^"]+)"', res.page)
+    assert ids[ids.index("results") + 1] == "exploratory"
+    text = br.page_text(_section(res.page, "exploratory"))
+    assert "Exploratory, added after seeing the main results" in text
+    assert "No detectable difference between A and A_raw (0 vs 0 discordant questions; exact sign test, p = 1.00)" in text
+    assert br.A_RAW_NOT_RUN not in res.page and len(res.audit) == 11
