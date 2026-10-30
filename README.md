@@ -36,7 +36,7 @@ Companies: CMG, WING, YUM, DRI. Sources: SEC XBRL filings, BLS, Census, Wikipedi
 - Setup D changes both the interface and enforcement. Its tool coverage closely follows the question categories; the replay includes its failures and available recovery routes.
 - Wikipedia pageviews are a proxy for alternative data. Habit combines two article titles, including traffic to its former title; other brands do not include redirect views.
 - No amended 10-K or 10-Q filings are included.
-- Results use the corrected scorer. Its unit-parsing bug changed 12 B/C run scores; the disclosure and before/after counts remain in the summary and page.
+- Results use the corrected scorer. Its unit-parsing bug changed 12 B/C run scores; the disclosure and before/after counts remain in the summary and page. The affected spelling, `USD_millions`, appeared in FINAL only in B (eight runs) and C (four runs), all on Census questions q022–q024; both Census contexts specify that exact unit. The correction applies equally to all four setups. This wording match does not establish why the model chose that spelling.
 
 ## Disclosures
 
