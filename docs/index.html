@@ -86,6 +86,11 @@ section { background: var(--surface); border: 1px solid var(--line); border-radi
 .stat-k { font-size: 0.85rem; color: var(--muted); }
 .big { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
 .unit { font-size: 0.9rem; font-weight: 500; color: var(--muted); }
+.trapcount { max-width: 70ch; margin: 0 0 12px; }
+.headline { border-left: 4px solid var(--accent); padding: 8px 14px; margin: 12px 0; max-width: 80ch; }
+.headline p { margin: 4px 0 0; font-size: 1.05rem; }
+.kicker.exploratory { display: inline-block; border: 1px dashed var(--muted); color: var(--muted); border-radius: 999px;
+  padding: 2px 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
 .punch { font-size: 1.2rem; font-weight: 600; max-width: 60ch; }
 
 /* S2 */
@@ -221,24 +226,24 @@ ol.next li { margin: 6px 0; }
 <main>
 <section id="problem" aria-label="Problem">
 <h1>Valid SQL, wrong answer.</h1>
-<p class="lede">A query can run without error and still return the wrong number, because the schema
-doesn't say how each column may be combined.</p>
-<p class="q">“What were Yum! Brands&#x27; total assets at the end of fiscal 2025, in US dollars?”</p>
+<p class="lede">A query can run without error and still return the wrong number. Here the table held
+everything needed; the model reported the full-year row instead of deriving the quarter.</p>
+<p class="q">“What was Darden&#x27;s total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?”</p>
 <div class="compare">
-  <div class="stat bad-edge"><div class="stat-k">Sum of the four quarter-end balances</div>
-    <div class="big">28,966,000,000 <span class="unit">USD</span></div>
-    <pre class="sql">SELECT SUM(value) FROM fundamentals
-WHERE ticker = &#x27;YUM&#x27;
-  AND metric = &#x27;total_assets&#x27;
-  AND fiscal_year = 2025;</pre>
-    <div class="small muted">Runs without error. Counts the same balance four times.</div></div>
-  <div class="stat ok-edge"><div class="stat-k">Balance at fiscal year end</div>
-    <div class="big">8,197,000,000 <span class="unit">USD</span></div>
-    <div class="small">Source: <a href="https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/">10-K · 0001041061-26-000084 on SEC EDGAR</a></div>
-    <div class="small muted">The correct answer, from the hand-checked answer key.</div></div>
+  <div class="stat bad-edge"><div class="stat-k">The trap: the full fiscal year</div>
+    <div class="big">13,210,900,000 <span class="unit">USD</span></div>
+    <div class="small muted">The query a recorded run wrote (setup A, run 2):</div>
+    <pre class="sql">SELECT ticker, metric, concept, value, unit, period_start, period_end, period_basis, fiscal_year, fiscal_quarter, form, filed FROM fundamentals WHERE ticker IN (&#x27;DRI&#x27;) AND (metric ILIKE &#x27;%revenue%&#x27; OR concept ILIKE &#x27;%revenue%&#x27;) ORDER BY period_end DESC LIMIT 50</pre>
+    <div class="small muted">In that run the full-year row came back with period_basis FY and fiscal_quarter 4, and the model put it in its final answer.</div>
+    <div class="small">Source: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">10-K on SEC EDGAR</a> (full fiscal year)</div></div>
+  <div class="stat ok-edge"><div class="stat-k">The correct answer: the fourth quarter</div>
+    <div class="big">3,718,800,000 <span class="unit">USD</span></div>
+    <div class="small">Full year 13,210,900,000 minus the first nine months 9,492,100,000.</div>
+    <div class="small">Sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">10-K on SEC EDGAR</a> (full fiscal year) · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">10-Q on SEC EDGAR</a> (first nine months)</div></div>
 </div>
-<p class="punch">Connecting a model to data isn't enough; it has to know how each number may be combined.</p>
-<p class="small muted">Both numbers come from the answer key. No model made this mistake on this question: 12 of 12 recorded runs used the year-end balance.</p><p class="bridge">This isn&#x27;t one edge case. Here are seven.</p></section>
+<p class="trapcount"><b>1 of 12 recorded runs on this question fell into this trap (setup A, run 2). The other 11 were correct.</b></p>
+<div class="headline"><div class="stat-k">The result</div><p>With these tables and this model (claude-haiku-5-5), every setup made few errors: 0 to 4 wrong runs out of 126 per setup. B vs. C (prose vs. structured tags with the same facts) showed no detectable difference. Setup A, with no tags at all, was already 96.8% correct, so tagging had few errors to remove here.</p></div>
+<p class="small muted">Both numbers come from the answer key; the trap count is scored from the recorded runs.</p><p class="bridge">The same kind of unstated rule turns up in seven places in this data.</p></section>
 <section id="traps" aria-label="Seven traps">
 <h2>Seven traps in real data</h2>
 <p class="muted">Each trap is a rule the schema doesn't state. The questions cover six
@@ -1958,8 +1963,21 @@ the 1 discordant question: p = 1.00.</p>
 <section id="failures" aria-label="Failures">
 <h2>Where it fails</h2>
 <p class="muted">Two instructive runs per setup, from <code>docs/error_analysis.md</code>. Each badge is
-recomputed from the recorded score.</p>
-<div class="fail-grid"><div class="fail-group"><h3>A · Schema only <span class="muted small">4 of 126 runs wrong</span></h3><ul class="fails">
+recomputed from the recorded score. D comes first: its failures show where the enforcing tools
+themselves broke on answerable questions.</p>
+<div class="fail-grid"><div class="fail-group"><h3>D · Enforcing tools <span class="muted small">2 of 126 runs wrong</span></h3><ul class="fails">
+<li class="fail">
+  <div><span class="badge bad">Unparseable</span> <b>q030, run 1</b> — interface mismatch and failed recovery</div>
+  <p class="small"><b>What happened:</b> D requested full-year pageviews using a month range, received errors explaining that calendar quarters were required, and ended with <code>max_tokens</code> and no FINAL line.</p>
+  <p class="small"><b>What would fix it:</b> Clearer period-format guidance or a future annual wrapper could reduce this friction.</p>
+  <a class="jump" href="#replay?q=q030&amp;left=A&amp;right=D">open its replay →</a>
+</li>
+<li class="fail">
+  <div><span class="badge bad">Wrong (other)</span> <b>q034, run 1</b> — failed discovery of the comps retrieval route</div>
+  <p class="small"><b>What happened:</b> D tried unsupported comps lookups through <code>get_metric</code> and disallowed single-company aggregation calls, then refused an answerable question.</p>
+  <p class="small"><b>What would fix it:</b> Making that supported route discoverable could address this failure without treating comps as additive.</p>
+  <a class="jump" href="#replay?q=q034&amp;left=A&amp;right=D">open its replay →</a>
+</li></ul></div><div class="fail-group"><h3>A · Schema only <span class="muted small">4 of 126 runs wrong</span></h3><ul class="fails">
 <li class="fail">
   <div><span class="badge bad">Trap: used fy value</span> <b>q017, run 2</b> — annual revenue substituted for a quarter</div>
   <p class="small"><b>What happened:</b> The response actually calculated Darden&#x27;s fiscal Q4 2026 revenue as $3,718.8 million in its explanation, but put the full-year $13,210.9 million in FINAL, matching <code>used_fy_value</code>.</p>
@@ -2146,18 +2164,6 @@ YUM	revenue	2025	FY	2025-01-01	2025-12-31	8214000000.0	10-K	2026-02-20	000104106
 All three figures are the reported full-year (FY) values from the 10-K filings, so no quarterly derivation was needed.
 
 FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;warning&quot;: false, &quot;refused&quot;: false}</div></details></div></div></details>
-</li></ul></div><div class="fail-group"><h3>D · Enforcing tools <span class="muted small">2 of 126 runs wrong</span></h3><ul class="fails">
-<li class="fail">
-  <div><span class="badge bad">Unparseable</span> <b>q030, run 1</b> — interface mismatch and failed recovery</div>
-  <p class="small"><b>What happened:</b> D requested full-year pageviews using a month range, received errors explaining that calendar quarters were required, and ended with <code>max_tokens</code> and no FINAL line.</p>
-  <p class="small"><b>What would fix it:</b> Clearer period-format guidance or a future annual wrapper could reduce this friction.</p>
-  <a class="jump" href="#replay?q=q030&amp;left=A&amp;right=D">open its replay →</a>
-</li>
-<li class="fail">
-  <div><span class="badge bad">Wrong (other)</span> <b>q034, run 1</b> — failed discovery of the comps retrieval route</div>
-  <p class="small"><b>What happened:</b> D tried unsupported comps lookups through <code>get_metric</code> and disallowed single-company aggregation calls, then refused an answerable question.</p>
-  <p class="small"><b>What would fix it:</b> Making that supported route discoverable could address this failure without treating comps as additive.</p>
-  <a class="jump" href="#replay?q=q034&amp;left=A&amp;right=D">open its replay →</a>
 </li></ul></div></div>
 <h3 class="sub">Limits</h3>
 <ul class="limits"><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Mitigation: questions were drafted before the core logic existed (replacements excepted, see How it was checked), written from an analyst&#x27;s point of view, and frozen before any run.</li><li>In D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so its advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No amendments to annual or quarterly filings are included.</li><li>A two-year window.</li><li>After the study the engine was hardened (followup/engine_fix/REPLAY.md); the recorded runs were made before that change and were not re-run.</li></ul><p class="bridge">How the answers were checked.</p></section>
@@ -2166,16 +2172,17 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <ul class="checks">
   <li>The answer key was computed by <code>eval/make_questions.py</code> with direct SQL, independent of
   <code>semantics.py</code>, so the code being tested does not grade itself.</li>
-  <li>42 of 42 questions have every row in the verification log marked matches = yes (134 rows). The author checked 25 of those rows by hand against the source; the rest were compared by script or with AI assistance.</li>
+  <li>42 of 42 questions have every row in the verification log marked matches = yes (134 rows).</li><li>The answer key rests on 96 distinct input values; 4 record that the data does not exist and have no source to check.</li><li>The other 92 were checked against primary sources: 23 by the author by hand, and all 92 by an AI-assisted read of the source; 0 mismatches.</li><li>Revisions found: 0, among the 23 inputs from series that get revised (BLS and Census).</li><li>A further 32 values used only to compute trap answers were also read from the source.</li>
   <li>Most questions were written before the rule engine, and all were frozen before any run: drafted 2026-10-24 (commit f4f35b4), before semantics.py was first committed (2026-10-26); four replacements (q039, q040, q041, q042) were added 2026-10-27, after it; all frozen 2026-10-27 (git tag questions-frozen), before the first run (2026-10-28).</li>
-  <li>213 tests collected by pytest at build time.</li>
-  <li>A scorer bug (unit spelling) was found and fixed before publishing (commit 4977d48); the fix changed 12 runs (B 8, C 4), all from incorrect to correct.</li>
+  <li>222 tests collected by pytest at build time.</li>
+  <li>Post-hoc scorer fix, made after the runs were scored and before publishing (found 2026-10-28, commit 4977d48): The scale-word pattern used \b, which treats &quot;_&quot; as part of a word, so a FINAL unit of &quot;USD_millions&quot; was read as unscaled while the question unit &quot;USD millions&quot; was read as millions, and correct answers were divided by 1,000,000. The scoring rule did not change: a unit that names millions is converted; the code had not applied it to this spelling. The fix changed 12 runs (B 8, C 4; q022, q023, q024), all from incorrect to correct.</li>
 </ul>
 <p><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a> · <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_log.csv">Verification log</a> ·
+<a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_ai.csv">AI-assisted source reads</a> ·
 <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/docs/error_analysis.md">Error analysis</a></p><p class="bridge">What this would mean on real research data.</p></section>
 <section id="next" aria-label="Next steps">
 <h2>Next steps</h2>
-<ol class="next"><li>Onboarding new datasets: a model drafts tags from a vendor&#x27;s column profiles and documentation, a human approves them, and the benchmark measures whether the tags hold up.</li><li>Mapping to a catalog: tags would map to column comments and tags, the enforcing tool to metric views or trusted queries, and the question set to a benchmark set.</li><li>Fresh data: tags already carry lineage and retrieval dates; streaming sources would need freshness fields too.</li></ol>
+<ol class="next"><li>Onboarding new datasets: a model drafts tags from a vendor&#x27;s column profiles and documentation, a human approves them, and the benchmark measures whether the tags hold up.</li><li>Mapping to a catalog: tags would map to column comments and tags, the enforcing tool to metric views or trusted queries, and the question set to a benchmark set.</li><li>Fresh data: tags already carry lineage and retrieval dates; streaming sources would need freshness fields too.</li><li>Not run: setup A on the raw tables. eval/results/A_raw.jsonl does not exist; if it is added, the page compares it with A question by question, with an exact sign test, labelled exploratory because it comes after seeing the main results.</li></ol>
 <footer class="foot"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a>
 <p class="small muted">A small experiment. All numbers generated from recorded runs on 2026-10-28 (UTC).</p></footer></section>
 </main>

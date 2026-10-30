@@ -4,6 +4,7 @@
 https://data.bls.gov/timeseries/CUSR0000SEFV	Replay
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation	Checks, Next steps
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/docs/error_analysis.md	Checks
+https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_ai.csv	Checks
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_log.csv	Checks
 https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2025-01-01&end=2025-03-31&pages=Habit_Burger_%26_Grill	Replay
 https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2025-01-01&end=2025-03-31&pages=KFC	Replay
@@ -25,9 +26,9 @@ https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agen
 https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2025-10-01&end=2025-12-31&pages=Pizza_Hut	Replay
 https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2025-10-01&end=2025-12-31&pages=Taco_Bell	Replay
 https://pageviews.wmcloud.org/?project=en.wikipedia.org&platform=all-access&agent=user&redirects=0&start=2025-10-01&end=2025-12-31&pages=The_Habit_Burger_Grill	Replay
-https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/	Problem, Replay
+https://www.sec.gov/Archives/edgar/data/1041061/000104106126000084/	Replay
 https://www.sec.gov/Archives/edgar/data/1058090/000105809026000007/	Replay
 https://www.sec.gov/Archives/edgar/data/1058090/000105809026000009/	Replay
 https://www.sec.gov/Archives/edgar/data/1636222/000163622226000006/	Replay
-https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/	Replay
-https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/	Replay
+https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/	Problem, Replay
+https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/	Problem, Replay
