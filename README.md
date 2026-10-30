@@ -1,6 +1,6 @@
 # Tagging for Correct Aggregation
 
-SQL that runs without error can still answer the wrong question about financial data, for example by summing four quarter-end balances into a meaningless "annual" total assets. This small experiment asks one model (claude-haiku-5-5) the same 42 restaurant-sector questions in four setups (A: table schema only; B: prose descriptions; C: a tags file; D: semantic tools, no SQL) and scores 504 recorded runs against an answer key computed with direct SQL and checked against the filings and agency data (25 of 134 source rows read by hand; see the results page).
+SQL that runs without error can still answer the wrong question about financial data, for example by summing four quarter-end balances into a meaningless "annual" total assets. This small experiment asks one model (claude-haiku-5-5) the same 42 restaurant-sector questions in four setups (A: table schema only; B: prose descriptions; C: a tags file; D: semantic tools, no SQL) and scores 504 recorded runs against an answer key computed with direct SQL and checked against the filings and agency data (96 distinct input values; the 92 that have a source were all read from it with AI assistance, and 23 of them also by hand by the author; no mismatches; see the results page).
 
 **Headline result** (from [eval/results/summary.md](eval/results/summary.md)):
 
