@@ -218,6 +218,7 @@ def test_rail_and_deep_links_resolve(built):
 # ---------- results-page revision: q017 hero, plain headline, D failures first, verification counts ----------
 
 import csv  # noqa: E402
+import html  # noqa: E402
 
 sys.path.insert(0, str(ROOT / "eval"))
 import score  # noqa: E402
@@ -342,3 +343,60 @@ def test_hand_check_labels_disagreeing_between_files_fails(tmp_path):
         w.writerows(rows)
     with pytest.raises(br.BuildError, match="hand checks disagree"):
         br.build(paths_for(tmp_path, vlog_ai=tmp_path / "ai.csv"))
+
+
+def _plain(fragment):
+    """Visible text with tags removed and nothing inserted where they were (so `x`; stays x;)."""
+    return html.unescape(re.sub(r"<[^>]+>", "", fragment))
+
+
+def _ea_entries():
+    """(setup, qid, run, entry text without markdown) for every bullet under '## A:' .. '## D:' in error_analysis.md."""
+    text = (ROOT / "docs" / "error_analysis.md").read_text()
+    out = []
+    for sec in re.split(r"^## ", text, flags=re.M)[1:]:
+        m = re.match(r"([ABCD]):", sec)
+        if not m:
+            continue
+        for e in re.finditer(r"^- \*\*(q\d{3}), run (\d+)(?: — .+?)?\.\*\* (.+)$", sec, re.M):
+            out.append((m[1], e[1], int(e[2]), " ".join(e[3].replace("`", "").replace("**", "").split())))
+    return out
+
+
+def test_every_failure_entry_renders_every_sentence_of_its_source(built):
+    entries = _ea_entries()
+    assert len(entries) == 8
+    fails = _section(built.page, "failures")
+    for setup, qid, run, text in entries:
+        li = re.search(rf'<li class="fail" data-q="{qid}" data-run="{run}">.*?</li>', fails, re.S)
+        assert li, (setup, qid, run)
+        body = re.sub(r'<details class="transcript">.*?</details>', "", li.group(0), flags=re.S)
+        rendered = " ".join(_plain(body).replace("What happened:", " ").replace("What would fix it:", " ").split())
+        for sentence in re.split(r"(?<=\.)\s+(?=[A-Z])", text):
+            assert sentence in rendered, (qid, run, sentence)
+
+
+def test_q030_and_q034_keep_their_recovery_context(built):
+    text = " ".join(_plain(_section(built.page, "failures")).split())
+    assert "Its other two runs recovered using quarterly requests" in text
+    assert "Its other two runs used a multi-company aggregate request" in text
+
+
+def test_q017_setup_d_tab_links_its_tool_sources(built):
+    pane = re.search(r'<div class="replay" data-q="q017".*?<div class="col" data-side="right">.*?'
+                     r'(<div class="pane" data-setup="D".*?</div>\s*</div>)', built.page, re.S).group(1)
+    srcs = re.search(r'<p class="small tool-sources">(.*?)</p>', pane, re.S).group(1)
+    links = re.findall(r'<a href="([^"]+)">([^<]+)</a>', srcs)
+    assert ("https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/", "10-K · 0000940944-26-000025") in links
+    assert ("https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/", "10-Q · 0000940944-26-000009") in links
+    # same label and target as the answer-key links above the columns
+    above = re.search(r'<div class="replay" data-q="q017".*?<b>Sources:</b>(.*?)</p>', built.page, re.S).group(1)
+    for u, label in links:
+        if "sec.gov" in u:
+            assert f'<a href="{u}">{label}</a>' in above
+
+
+def test_sql_setups_show_no_tool_sources(built):
+    pane = re.search(r'<div class="replay" data-q="q017".*?(<div class="pane" data-setup="A".*?</p>\s*<p class="small tool-sources">.*?</p>)',
+                     built.page, re.S).group(1)
+    assert "none returned in this run" in pane
