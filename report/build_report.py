@@ -1016,10 +1016,14 @@ of its runs are correct ({len(a)} questions; A_raw runs per question: {", ".join
         else:
             final = f"no FINAL line (stopped: {rec.get('stop_reason')})"
         runs_line = ", ".join(f"run {i}: {BADGES[o][0].lower()}" for i, o in outs)
+        srcs = tool_sources(rec, need(ev("replays"), "links", "repo"))
+        src_html = (" · ".join(f'<a href="{e(u)}">{e(l)}</a>' for l, u in srcs) if srcs else
+                    '<span class="muted">none returned in this run</span>')
         return f"""
 <div class="pane" data-setup="{e(setup)}" role="tabpanel"{" hidden" if hidden else ""}>
   <div class="pane-head">{badge(sc)} <span class="small muted">setup {e(setup)}, run {run} · {k} of {n} runs correct ({e(runs_line)})</span></div>
   <p class="small"><b>Final answer:</b> {e(final)}</p>
+  <p class="small tool-sources"><b>Sources returned by its tools:</b> {src_html}</p>
   <div class="steps" data-verbatim>{render_steps(rec)}</div>
 </div>"""
 
@@ -1064,7 +1068,7 @@ the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
             n = sum(record(ev, q, st)[1] for q in ev("questions"))
             items = []
             failed = 0
-            for qid, run, title, happened, fix in es:
+            for qid, run, title, happened, fix, _ in es:
                 if qid not in ev("questions"):
                     die(f"docs/error_analysis.md cites unknown question {qid}")
                 rec, sc = scored(ev, qid, st, run)
@@ -1077,10 +1081,10 @@ the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
                             f'<p class="small"><b>Final answer:</b> {e(json.dumps(sc["final"]))}</p>'
                             f'<div class="steps" data-verbatim>{render_steps(rec)}</div></details>')
                 items.append(f"""
-<li class="fail">
+<li class="fail" data-q="{e(qid)}" data-run="{run}">
   <div>{badge(sc)} <b>{e(qid)}, run {run}</b>{" — " + e(title) if title else ""}</div>
   <p class="small"><b>What happened:</b> {inline_md(happened)}</p>
-  <p class="small"><b>What would fix it:</b> {inline_md(fix)}</p>
+  <p class="small"><b>What would fix it:</b> <span class="fix">{inline_md(fix)}</span></p>
   {more}
 </li>""")
             if st == "D" and not failed:
@@ -1201,6 +1205,36 @@ themselves broke on answerable questions.</p>
 <p class="small muted">{e(self.closing)}</p></footer>"""
 
 
+def tool_sources(rec, repo):
+    """(label, url) for each distinct source the run's tools returned, labelled like the links above the columns."""
+    out, seen = [], set()
+    for c in rec.get("tool_calls") or []:
+        try:
+            o = json.loads(c["output"]) if isinstance(c["output"], str) else c["output"]
+        except (TypeError, ValueError):
+            continue
+        for src in (o.get("sources") or []) if isinstance(o, dict) else []:
+            t, u = src.get("type"), src.get("url")
+            if not u:
+                continue
+            if t == "sec_filing":
+                label, u = f"{src.get('form') or 'SEC filing'} · {src['accession']}", sec_link(u) or u
+            elif t == "earnings_release":
+                label = f"Earnings release · {src.get('ticker')}"
+            elif t == "macro_series":
+                label = "BLS series page" if "bls.gov" in u else "Census retail trade" if "census.gov" in u else src.get("series_id")
+            elif t == "pageviews":
+                label = f"Wikimedia pageviews · {src.get('article_title')}"
+            elif t == "tags":
+                label, u = u, f"{repo}/blob/main/{u}"
+            else:
+                die(f"tool returned a source of unknown type {t}")
+            if u not in seen:
+                seen.add(u)
+                out.append((label, u))
+    return out
+
+
 def render_steps(rec):
     """Every step in order: model text, then each tool call with its input and an excerpt of what came back."""
     texts = rec.get("text") or []
@@ -1234,12 +1268,24 @@ EA_ITEM = re.compile(r"^- \*\*(q\d{3}), run (\d+)(?: — (.+?))?\.\*\* (.+)$", r
 FIX_RE = re.compile(r"remedy|refinement|\bcould\b|\bwould\b|\bapplies\b", re.I)
 
 
-def split_clauses(text):
-    return [c.strip() for c in re.split(r"(?<=[.;])\s+(?=[A-Za-z`])", text) if c.strip()]
+CLAUSE_RE = re.compile(r"(?<=[.;])\s+(?=[A-Za-z`])")
+
+
+def split_entry(text):
+    """(what happened, what would fix it) from one error_analysis.md entry, dropping nothing.
+
+    The split falls at the first clause (sentence or ;-part) that states a fix (FIX_RE); everything
+    before it is what happened, everything from it on is the fix. Both parts are verbatim slices of
+    the entry, so happened + " " + fix is the whole entry."""
+    clauses = CLAUSE_RE.split(" ".join(text.split()))
+    j = next((i for i, c in enumerate(clauses) if FIX_RE.search(c)), None)
+    if not j:
+        return None
+    return " ".join(clauses[:j]), " ".join(clauses[j:])
 
 
 def parse_error_analysis(text):
-    """setup -> [(qid, run, title, what happened, what would fix it)] from the '## X:' sections' bullets."""
+    """setup -> [(qid, run, title, what happened, what would fix it, full entry)] from the '## X:' bullets."""
     heads = list(EA_HEAD.finditer(text))
     if not heads:
         die("docs/error_analysis.md has no '## A:' style setup sections")
@@ -1248,14 +1294,11 @@ def parse_error_analysis(text):
         body = text[h.end():heads[i + 1].start() if i + 1 < len(heads) else len(text)]
         body = body.split("\n## ")[0]
         for m in EA_ITEM.finditer(body):
-            clauses = split_clauses(m[4])
-            fix_i = next((j for j, c in enumerate(clauses) if FIX_RE.search(c)), None)
-            if fix_i is None or fix_i == 0:
+            parts = split_entry(m[4])
+            if parts is None:
                 die(f"docs/error_analysis.md {h[1]} {m[1]} run {m[2]}: can't find separate "
-                    "'what happened' and 'what would fix it' sentences")
-            happened = clauses[0].rstrip(";").rstrip(".") + "."
-            fix = clauses[fix_i].rstrip(";").rstrip(".") + "."
-            out.setdefault(h[1], []).append((m[1], int(m[2]), m[3], happened, fix[0].upper() + fix[1:]))
+                    "'what happened' and 'what would fix it' text")
+            out.setdefault(h[1], []).append((m[1], int(m[2]), m[3], *parts, " ".join(m[4].split())))
     return out
 
 
