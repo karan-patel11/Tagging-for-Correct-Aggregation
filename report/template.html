@@ -247,7 +247,8 @@ ol.next li { margin: 6px 0; }
   /* replay state: question, left setup, right setup */
   var section = document.getElementById("replay");
   var state = { q: document.body.getAttribute("data-default-replay"), left: "A", right: "D" };
-  var SETUPS = ["A", "B", "C", "D"];
+  var SETUPS = ["A", "B", "C", "D", "A_raw"];
+  var FALLBACK = { left: "A", right: "D" };
   function block(q) { return section.querySelector('.replay[data-q="' + q + '"]'); }
   function apply() {
     section.querySelectorAll(".picker [role=radio]").forEach(function (b) {
@@ -259,6 +260,7 @@ ol.next li { margin: 6px 0; }
     var r = block(state.q);
     ["left", "right"].forEach(function (side) {
       var col = r.querySelector('.col[data-side="' + side + '"]');
+      if (!col.querySelector('[role=tab][data-setup="' + state[side] + '"]')) { state[side] = FALLBACK[side]; }
       col.querySelectorAll("[role=tab]").forEach(function (t) {
         var on = t.getAttribute("data-setup") === state[side];
         t.setAttribute("aria-selected", on ? "true" : "false");

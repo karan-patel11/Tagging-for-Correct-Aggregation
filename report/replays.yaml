@@ -9,6 +9,7 @@
 #   must have scored, one of correct, correct_refusal, trap, missing_warning, wrong_other, unparsed.
 #   The build recomputes each from the scored run and fails on any mismatch, so a failure can't be
 #   staged.
+# runs/expect may name A_raw (exploratory, SPEC §15); its tab appears only when eval/results/A_raw.jsonl exists.
 # links.video: optional. If absent, the footer omits it and the build prints a warning.
 
 default_replay: q017
@@ -34,11 +35,12 @@ replays:
       December. Every run got the number right; the difference is whether it carried the warning.
 
   - question_id: q017
-    runs: {A: 2, B: 1, C: 1, D: 1}
-    expect: {A: trap, B: correct, C: correct, D: correct}
+    runs: {A: 2, B: 1, C: 1, D: 1, A_raw: 1}   # A_raw: exploratory tab, shown only if A_raw.jsonl exists
+    expect: {A: trap, B: correct, C: correct, D: correct, A_raw: correct}
     note: >-
       Darden's fourteen-week fiscal fourth quarter. In the run shown, A derived the quarter in its
       explanation, then put the full-year figure in its final answer. A's other runs were correct.
+      The A_raw tab is the exploratory run on the raw tables, which have no fiscal-quarter column.
 
   - question_id: q018
     runs: {A: 1, B: 1, C: 1, D: 1}
@@ -146,6 +148,9 @@ limitations:  # SPEC §11.8. {placeholders} are filled from the data at build ti
   - Pageviews are only a proxy for real alternative data.
   - No amendments to annual or quarterly filings are included.
   - A two-year window.
+  - >-
+    In A_raw, without the concept column, the model cannot confirm from the data that Darden's
+    operating cash flow is from continuing operations (q016).
   - >-
     After the study the engine was hardened (followup/engine_fix/REPLAY.md); the recorded runs
     were made before that change and were not re-run.

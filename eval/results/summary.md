@@ -164,3 +164,59 @@ Majority vote across runs (more than half correct). With this sample, a differen
 ## Unparseable FINAL lines (scored incorrect)
 
 - D: q030 run 1
+
+## Exploratory: setup A_raw (added after seeing the main results)
+
+Added after seeing the main results (SPEC section 15, 2026-11-01). A_raw is setup A on data/warehouse_raw.duckdb: the same tables with the meaning columns removed (fundamentals: period_basis, fiscal_year, fiscal_quarter, concept; brand_attention_daily: grain, brand). Same questions, answer key, model, instructions and scorer. Not one of the planned A-D comparisons and never mixed into their tables.
+
+Model: claude-haiku-5-5. Run date(s): 2026-11-01. Runs scored: 126 (3 per question). Cost: $0.0901.
+
+A is repeated from the tables above for reference only.
+
+| Setup | Correct runs | Mean | Min | Max | Behavior accuracy | Unparsed |
+|---|---|---|---|---|---|---|
+| A (reference) | 122 / 126 | 96.8% | 92.9% | 100.0% | 98.4% | 0 |
+| A_raw | 126 / 126 | 100.0% | 100.0% | 100.0% | 100.0% | 0 |
+
+### A_raw: accuracy by category (mean [min, max])
+
+| Category | A (reference) | A_raw |
+|---|---|---|
+| comparability_unanswerable | 100.0% [100.0%, 100.0%] | 100.0% [100.0%, 100.0%] |
+| hierarchy | 95.2% [85.7%, 100.0%] | 100.0% [100.0%, 100.0%] |
+| indices | 100.0% [100.0%, 100.0%] | 100.0% [100.0%, 100.0%] |
+| ratios | 90.5% [85.7%, 100.0%] | 100.0% [100.0%, 100.0%] |
+| time_additivity | 100.0% [100.0%, 100.0%] | 100.0% [100.0%, 100.0%] |
+| ytd_calendar | 95.2% [85.7%, 100.0%] | 100.0% [100.0%, 100.0%] |
+
+### A_raw: trap hits
+
+| Trap | A (reference) hits / runs | A_raw hits / runs |
+|---|---|---|
+| average_instead_of_sum | 0 / 9 | 0 / 9 |
+| included_parent_rows | 0 / 21 | 0 / 21 |
+| index_point_difference | 0 / 9 | 0 / 9 |
+| mean_of_4_quarter_ends | 0 / 21 | 0 / 21 |
+| mean_of_margins | 0 / 21 | 0 / 21 |
+| sum_of_4_quarter_ends | 0 / 21 | 0 / 21 |
+| sum_of_index_levels | 0 / 3 | 0 / 3 |
+| used_fiscal_2025 | 0 / 3 | 0 / 3 |
+| used_fiscal_2026 | 0 / 3 | 0 / 3 |
+| used_fy_value | 1 / 21 | 0 / 21 |
+| used_ytd6_value | 0 / 3 | 0 / 3 |
+| used_ytd9_value | 0 / 18 | 0 / 18 |
+
+### A_raw: cost (averages per run)
+
+| Setup | Tool calls | Input | Cache write | Cache read | Output | Cost |
+|---|---|---|---|---|---|---|
+| A (reference) | 2.2 | 3140 | 14 | 2438 | 906 | $0.0999 |
+| A_raw | 2.2 | 2486 | 0 | 2240 | 888 | $0.0901 |
+
+Over-warned runs / answer-question runs: A_raw 37 / 102 (A 34 / 102). Scale-converted runs: A_raw 13 (A 8). Unparseable FINAL lines in A_raw: none.
+
+### A vs. A_raw, paired by question
+
+Questions: 42. A right, A_raw wrong: 0 []. A_raw right, A wrong: 1 ['q010']. Both right: 41. Both wrong: 0. Exact two-sided sign test (McNemar) on discordant questions: p = 1.00 (a difference is reported only if p < 0.05; otherwise no detectable difference).
+
+Majority vote across runs (more than half correct). With this sample, a difference of a few questions is within noise.

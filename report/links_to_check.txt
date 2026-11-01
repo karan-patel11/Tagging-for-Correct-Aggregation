@@ -4,6 +4,8 @@
 https://data.bls.gov/timeseries/CUSR0000SEFV	Replay
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation	Checks, Next steps
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/docs/error_analysis.md	Checks
+https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/results/A_raw_failures.md	Exploratory
+https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/results/summary.md	Exploratory
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_ai.csv	Checks
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_log.csv	Checks
 https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/tags/tags.yaml	Replay

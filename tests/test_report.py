@@ -55,6 +55,9 @@ import yaml  # noqa: E402
 import build_report as br  # noqa: E402
 
 RESULTS = ROOT / "eval" / "results"
+# Ten planned sections (SPEC §13.1) plus the exploratory A_raw section, shown because
+# eval/results/A_raw.jsonl exists (SPEC §15, 2026-11-01).
+N_SECTIONS = 11
 
 
 @pytest.fixture(scope="module")
@@ -68,6 +71,8 @@ def results_copy(tmp_path, summary=None):
     d.mkdir()
     for s in "ABCD":
         (d / f"{s}.jsonl").symlink_to(RESULTS / f"{s}.jsonl")
+    if (RESULTS / "A_raw.jsonl").exists():
+        (d / "A_raw.jsonl").symlink_to(RESULTS / "A_raw.jsonl")
     if summary is None:
         shutil.copy(RESULTS / "summary.json", d / "summary.json")
     else:
@@ -92,12 +97,24 @@ def summary_key_paths(s):
         out += [("setups", "A", k, first)] + [("setups", "A", k, first, j) for j in a[k][first]]
     out += [("b_vs_c", k) for k in s["b_vs_c"]]
     out += [("scorer_notes", 0, k) for k in s["scorer_notes"][0]]
+    if "exploratory" in s:
+        x = s["exploratory"]
+        out += [("exploratory", k) for k in x]
+        out += [("exploratory", "setups", k) for k in x["setups"]]
+        v = x["setups"]["A_raw"]
+        out += [("exploratory", "setups", "A_raw", k) for k in v]
+        for k in ("accuracy", "avg_tokens"):
+            out += [("exploratory", "setups", "A_raw", k, j) for j in v[k]]
+        for k in ("accuracy_by_category", "trap_hits", "per_question"):
+            first = sorted(v[k])[0]
+            out += [("exploratory", "setups", "A_raw", k, first, j) for j in v[k][first]]
+        out += [("exploratory", "a_vs_a_raw", k) for k in x["a_vs_a_raw"]]
     return out
 
 
 def test_build_succeeds_on_current_results(built):
     assert "<section id=\"problem\"" in built.page and not built.pilot
-    assert len(built.audit) == 10 and all(all(row) for row in built.audit)
+    assert len(built.audit) == N_SECTIONS and all(all(row) for row in built.audit)
     assert len(built.page.encode()) < br.MAX_BYTES
 
 
@@ -145,7 +162,7 @@ def test_pilot_summary_puts_banner_on_every_section(tmp_path):
     s["pilot"] = True
     res = br.build(paths_for(tmp_path, results=results_copy(tmp_path, s)))
     sections = re.findall(r"<section id=\"[^\"]+\".*?</section>", res.page, re.S)
-    assert res.pilot and len(sections) == 10
+    assert res.pilot and len(sections) == N_SECTIONS
     for sec in sections:
         assert "PILOT DATA — NOT FINAL" in sec
     assert "pilot-fixed" in res.page
@@ -204,13 +221,16 @@ def test_rail_and_deep_links_resolve(built):
     ids = set(re.findall(r'\bid="([^"]+)"', page))
     rail = re.search(r'<nav class="rail".*?</nav>', page, re.S).group(0)
     rail_ids = re.findall(r'href="#([^"?]+)"', rail)
-    assert len(rail_ids) == 10 and set(rail_ids) <= ids
+    assert len(rail_ids) == N_SECTIONS and set(rail_ids) <= ids
     replays = set(re.findall(r'<div class="replay" data-q="([^"]+)"', page))
     deep = re.findall(r'href="#replay\?([^"]+)"', page)
     assert deep
     for d in deep:
         p = dict(kv.split("=") for kv in d.replace("&amp;", "&").split("&"))
-        assert p["q"] in replays and p["left"] in "ABCD" and p["right"] in "ABCD", d
+        assert p["q"] in replays, d
+        block = re.search(rf'<div class="replay" data-q="{p["q"]}".*?(?=<div class="replay" |</section>)', page, re.S).group(0)
+        tabs = set(re.findall(r'role="tab" data-setup="([^"]+)"', block))
+        assert p["left"] in tabs and p["right"] in tabs, d
     for anchor in re.findall(r'href="#([^"?]+)"', page):
         assert anchor in ids, anchor
 
@@ -314,22 +334,130 @@ def test_logged_input_missing_from_verification_ai_fails(tmp_path):
         br.build(paths_for(tmp_path, vlog_ai=tmp_path / "ai.csv"))
 
 
-def test_without_a_raw_next_steps_says_not_run(built):
-    assert not (RESULTS / "A_raw.jsonl").exists()
-    assert 'id="exploratory"' not in built.page
-    assert br.A_RAW_NOT_RUN in br.page_text(_section(built.page, "next"))
-
-
-def test_with_a_raw_exploratory_section_follows_results(tmp_path):
-    d = results_copy(tmp_path)
-    (d / "A_raw.jsonl").symlink_to(RESULTS / "A.jsonl")  # identical runs: no discordant questions
-    res = br.build(paths_for(tmp_path, results=d))
-    ids = re.findall(r'<section id="([^"]+)"', res.page)
+def test_exploratory_section_reads_every_number_from_summary(built):
+    s = json.loads((RESULTS / "summary.json").read_text())
+    x, a = s["exploratory"], s["setups"]["A"]
+    v, pc = x["setups"]["A_raw"], x["a_vs_a_raw"]
+    ids = re.findall(r'<section id="([^"]+)"', built.page)
     assert ids[ids.index("results") + 1] == "exploratory"
+    sec = _section(built.page, "exploratory")
+    text = " ".join(br.page_text(sec).split())
+    assert "Added after seeing the main results" in text
+    assert "Exploratory: the same questions without meaning columns" in text
+    verdict, p = br.a_raw_verdict(len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))
+    assert verdict in text and abs(p - pc["sign_test_p"]) < 1e-12
+    for w in (a, v):
+        assert f"{w['correct_runs']} of {w['n']}" in text
+        acc = w["accuracy"]
+        assert f"{br.pct(acc['mean'])} [{br.pct(acc['min'])}, {br.pct(acc['max'])}]" in text
+        assert br.pct(w["behavior_accuracy"]) in text
+        assert f"${w['cost_usd']:.3f}" in text and f"{w['avg_tool_calls']:.1f}" in text
+        hits = sum(t["hits"] for t in w["trap_hits"].values())
+        assert f"{hits} of {sum(t['runs'] for t in w['trap_hits'].values())}" in text
+        # run range shown as visible text, not only in the SVG
+        assert f"runs {br.pct(acc['min'])} to {br.pct(acc['max'])}" in br.page_text(
+            re.search(r'<p class="small muted range-text">.*?</p>', sec, re.S).group(0))
+    for c, r in v["accuracy_by_category"].items():
+        assert f"{br.pct(r['mean'])} [{br.pct(r['min'])}, {br.pct(r['max'])}]" in text, c
+    for k in ("both_right", "both_wrong"):
+        assert f"<dd>{pc[k]}</dd>" in sec
+    # removed columns are read from the two context files
+    gone = br.removed_columns((ROOT / "eval/contexts/schema_only.txt").read_text(),
+                              (ROOT / "eval/contexts/schema_raw.txt").read_text())
+    for t, cols in gone.items():
+        assert f"{t}: {', '.join(cols)}" in text
+    assert br.A_RAW_NOT_RUN not in built.page
+
+
+def test_exploratory_headline_next_steps_and_limit(built):
+    pc = json.loads((RESULTS / "summary.json").read_text())["exploratory"]["a_vs_a_raw"]
+    ab = (len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))
+    assert br.a_raw_headline(*ab) in br.page_text(_section(built.page, "problem"))
+    nxt = " ".join(br.page_text(_section(built.page, "next")).split())
+    assert br.a_raw_next_step(*ab) in nxt
+    lim = ("In A_raw, without the concept column, the model cannot confirm from the data that Darden's "
+           "operating cash flow is from continuing operations (q016).")
+    assert lim in " ".join(br.page_text(_section(built.page, "failures")).split())
+
+
+def test_q017_replay_has_an_a_raw_tab_in_both_columns(built):
+    block = re.search(r'<div class="replay" data-q="q017".*?(?=<div class="replay" |</section>)', built.page, re.S).group(0)
+    for side in ("left", "right"):
+        col = re.search(rf'<div class="col" data-side="{side}">.*?(?=<div class="col" |$)', block, re.S).group(0)
+        assert re.findall(r'role="tab" data-setup="([^"]+)"', col) == ["A", "B", "C", "D", "A_raw"]
+        assert '<div class="pane" data-setup="A_raw"' in col
+    others = re.findall(r'<div class="replay" data-q="(q\d{3})"', built.page)
+    for q in others:
+        if q != "q017":
+            b = re.search(rf'<div class="replay" data-q="{q}".*?(?=<div class="replay" |</section>)', built.page, re.S).group(0)
+            assert 'data-setup="A_raw"' not in b, q
+
+
+def test_a_raw_verdict_rule():
+    none, p = br.a_raw_verdict(0, 1)
+    assert p == 1.0 and none == "No detectable difference between A and A_raw (0 vs 1 discordant questions; exact sign test, p = 1.00)."
+    raw_better, p = br.a_raw_verdict(0, 6)
+    assert p < 0.05 and raw_better.startswith("A_raw (raw tables) was right where A was wrong on 6 of 6")
+    a_better, p = br.a_raw_verdict(6, 0)
+    assert p < 0.05 and a_better.startswith("A (schema with meaning columns) was right")
+    _, p = br.a_raw_verdict(0, 5)
+    assert p > 0.05
+    assert "no detectable difference" in br.a_raw_headline(0, 5) and "no detectable difference" in br.a_raw_next_step(0, 5)
+    assert "differed" in br.a_raw_headline(0, 6) and "no detectable" not in br.a_raw_next_step(0, 6)
+
+
+def test_identical_a_raw_runs_give_no_discordant_questions(tmp_path):
+    """A_raw replaced by A's own runs: score.py's exploratory block, then the page, report 0 vs 0."""
+    qs = {q["id"]: q for q in yaml.safe_load((ROOT / "eval" / "questions.yaml").read_text())}
+    main = [score.score_run(json.loads(l), qs[json.loads(l)["question_id"]])
+            for st in "ABCD" for l in (RESULTS / f"{st}.jsonl").read_text().splitlines() if l.strip()]
+    recs = []
+    for l in (RESULTS / "A.jsonl").read_text().splitlines():
+        r = json.loads(l)
+        r["setup"] = "A_raw"
+        recs.append(r)
+    sx = [score.score_run(r, qs[r["question_id"]]) for r in recs]
+    s = json.loads((RESULTS / "summary.json").read_text())
+    s["exploratory"] = score.summarize_exploratory("A_raw", sx, recs, main, qs)
+    d = tmp_path / "results"
+    d.mkdir()
+    for st in "ABCD":
+        (d / f"{st}.jsonl").symlink_to(RESULTS / f"{st}.jsonl")
+    (d / "A_raw.jsonl").write_text("".join(json.dumps(r) + "\n" for r in recs))
+    (d / "summary.json").write_text(json.dumps(s))
+    res = br.build(paths_for(tmp_path, results=d))
     text = br.page_text(_section(res.page, "exploratory"))
-    assert "Exploratory, added after seeing the main results" in text
     assert "No detectable difference between A and A_raw (0 vs 0 discordant questions; exact sign test, p = 1.00)" in text
-    assert br.A_RAW_NOT_RUN not in res.page and len(res.audit) == 11
+
+
+def test_without_a_raw_next_steps_says_not_run(tmp_path):
+    s = json.loads((RESULTS / "summary.json").read_text())
+    s.pop("exploratory")
+    d = tmp_path / "results"
+    d.mkdir()
+    for st in "ABCD":
+        (d / f"{st}.jsonl").symlink_to(RESULTS / f"{st}.jsonl")
+    (d / "summary.json").write_text(json.dumps(s))
+    res = br.build(paths_for(tmp_path, results=d))
+    assert 'id="exploratory"' not in res.page and 'data-setup="A_raw"' not in res.page
+    assert br.A_RAW_NOT_RUN in br.page_text(_section(res.page, "next"))
+
+
+def test_exploratory_summary_without_a_raw_transcripts_fails(tmp_path):
+    d = tmp_path / "results"
+    d.mkdir()
+    for st in "ABCD":
+        (d / f"{st}.jsonl").symlink_to(RESULTS / f"{st}.jsonl")
+    shutil.copy(RESULTS / "summary.json", d / "summary.json")
+    with pytest.raises(br.BuildError, match="exploratory block but eval/results/A_raw.jsonl is missing"):
+        br.build(paths_for(tmp_path, results=d))
+
+
+def test_exploratory_summary_that_disagrees_with_transcripts_fails(tmp_path):
+    s = json.loads((RESULTS / "summary.json").read_text())
+    s["exploratory"]["a_vs_a_raw"]["a_raw_right_a_wrong"] = []
+    with pytest.raises(br.BuildError, match="exploratory.a_vs_a_raw does not match the transcripts"):
+        br.build(paths_for(tmp_path, results=results_copy(tmp_path, s)))
 
 
 def test_hand_check_labels_disagreeing_between_files_fails(tmp_path):
