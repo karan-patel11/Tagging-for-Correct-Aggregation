@@ -1204,5 +1204,322 @@
     "D": 124
    }
   }
- ]
+ ],
+ "exploratory": {
+  "note": "Added after seeing the main results (SPEC section 15, 2026-11-01). A_raw is setup A on data/warehouse_raw.duckdb: the same tables with the meaning columns removed (fundamentals: period_basis, fiscal_year, fiscal_quarter, concept; brand_attention_daily: grain, brand). Same questions, answer key, model, instructions and scorer. Not one of the planned A-D comparisons and never mixed into their tables.",
+  "setups": {
+   "A_raw": {
+    "n": 126,
+    "correct_runs": 126,
+    "accuracy": {
+     "mean": 1.0,
+     "min": 1.0,
+     "max": 1.0
+    },
+    "accuracy_by_category": {
+     "comparability_unanswerable": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "hierarchy": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "indices": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "ratios": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "time_additivity": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     },
+     "ytd_calendar": {
+      "mean": 1.0,
+      "min": 1.0,
+      "max": 1.0
+     }
+    },
+    "behavior_accuracy": 1.0,
+    "over_warning_rate": 0.3627450980392157,
+    "over_warning_runs": 37,
+    "answer_question_runs": 102,
+    "scaled_runs": 13,
+    "trap_hits": {
+     "average_instead_of_sum": {
+      "hits": 0,
+      "runs": 9,
+      "rate": 0.0
+     },
+     "included_parent_rows": {
+      "hits": 0,
+      "runs": 21,
+      "rate": 0.0
+     },
+     "index_point_difference": {
+      "hits": 0,
+      "runs": 9,
+      "rate": 0.0
+     },
+     "mean_of_4_quarter_ends": {
+      "hits": 0,
+      "runs": 21,
+      "rate": 0.0
+     },
+     "mean_of_margins": {
+      "hits": 0,
+      "runs": 21,
+      "rate": 0.0
+     },
+     "sum_of_4_quarter_ends": {
+      "hits": 0,
+      "runs": 21,
+      "rate": 0.0
+     },
+     "sum_of_index_levels": {
+      "hits": 0,
+      "runs": 3,
+      "rate": 0.0
+     },
+     "used_fiscal_2025": {
+      "hits": 0,
+      "runs": 3,
+      "rate": 0.0
+     },
+     "used_fiscal_2026": {
+      "hits": 0,
+      "runs": 3,
+      "rate": 0.0
+     },
+     "used_fy_value": {
+      "hits": 0,
+      "runs": 21,
+      "rate": 0.0
+     },
+     "used_ytd6_value": {
+      "hits": 0,
+      "runs": 3,
+      "rate": 0.0
+     },
+     "used_ytd9_value": {
+      "hits": 0,
+      "runs": 18,
+      "rate": 0.0
+     }
+    },
+    "unparsed": [],
+    "avg_tool_calls": 2.2301587301587302,
+    "avg_tokens": {
+     "input_tokens": 2486.2936507936506,
+     "cache_creation_input_tokens": 0.0,
+     "cache_read_input_tokens": 2239.7619047619046,
+     "output_tokens": 887.8492063492064
+    },
+    "cost_usd": 0.090085,
+    "per_question": {
+     "q001": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 2940.3333333333335
+     },
+     "q002": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 2849.0
+     },
+     "q003": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 2936.3333333333335
+     },
+     "q004": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 2765.0
+     },
+     "q005": {
+      "tool_calls": 1.0,
+      "tokens": 2883.0
+     },
+     "q006": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 2924.3333333333335
+     },
+     "q007": {
+      "tool_calls": 1.6666666666666667,
+      "tokens": 8355.0
+     },
+     "q008": {
+      "tool_calls": 2.3333333333333335,
+      "tokens": 6506.333333333333
+     },
+     "q009": {
+      "tool_calls": 3.0,
+      "tokens": 9276.666666666666
+     },
+     "q010": {
+      "tool_calls": 2.6666666666666665,
+      "tokens": 9560.0
+     },
+     "q011": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 5691.666666666667
+     },
+     "q012": {
+      "tool_calls": 2.6666666666666665,
+      "tokens": 6729.333333333333
+     },
+     "q013": {
+      "tool_calls": 3.0,
+      "tokens": 7035.0
+     },
+     "q014": {
+      "tool_calls": 3.0,
+      "tokens": 5581.0
+     },
+     "q015": {
+      "tool_calls": 3.3333333333333335,
+      "tokens": 6499.0
+     },
+     "q016": {
+      "tool_calls": 3.3333333333333335,
+      "tokens": 7946.333333333333
+     },
+     "q017": {
+      "tool_calls": 2.3333333333333335,
+      "tokens": 5986.666666666667
+     },
+     "q018": {
+      "tool_calls": 2.0,
+      "tokens": 4164.333333333333
+     },
+     "q019": {
+      "tool_calls": 2.0,
+      "tokens": 4138.333333333333
+     },
+     "q020": {
+      "tool_calls": 2.3333333333333335,
+      "tokens": 5344.0
+     },
+     "q021": {
+      "tool_calls": 2.0,
+      "tokens": 4182.666666666667
+     },
+     "q022": {
+      "tool_calls": 2.0,
+      "tokens": 4063.3333333333335
+     },
+     "q023": {
+      "tool_calls": 2.6666666666666665,
+      "tokens": 5231.666666666667
+     },
+     "q024": {
+      "tool_calls": 2.6666666666666665,
+      "tokens": 4984.333333333333
+     },
+     "q025": {
+      "tool_calls": 2.0,
+      "tokens": 5341.333333333333
+     },
+     "q026": {
+      "tool_calls": 2.0,
+      "tokens": 5372.0
+     },
+     "q027": {
+      "tool_calls": 2.0,
+      "tokens": 5488.666666666667
+     },
+     "q028": {
+      "tool_calls": 3.3333333333333335,
+      "tokens": 7521.0
+     },
+     "q029": {
+      "tool_calls": 1.6666666666666667,
+      "tokens": 5347.0
+     },
+     "q030": {
+      "tool_calls": 2.0,
+      "tokens": 5834.0
+     },
+     "q031": {
+      "tool_calls": 2.0,
+      "tokens": 5425.0
+     },
+     "q032": {
+      "tool_calls": 1.6666666666666667,
+      "tokens": 3905.3333333333335
+     },
+     "q033": {
+      "tool_calls": 1.0,
+      "tokens": 3425.6666666666665
+     },
+     "q034": {
+      "tool_calls": 1.3333333333333333,
+      "tokens": 5535.333333333333
+     },
+     "q035": {
+      "tool_calls": 3.3333333333333335,
+      "tokens": 5298.333333333333
+     },
+     "q036": {
+      "tool_calls": 5.0,
+      "tokens": 7526.0
+     },
+     "q037": {
+      "tool_calls": 2.3333333333333335,
+      "tokens": 9642.0
+     },
+     "q038": {
+      "tool_calls": 4.333333333333333,
+      "tokens": 10004.0
+     },
+     "q039": {
+      "tool_calls": 1.0,
+      "tokens": 2907.6666666666665
+     },
+     "q040": {
+      "tool_calls": 2.0,
+      "tokens": 5881.666666666667
+     },
+     "q041": {
+      "tool_calls": 2.0,
+      "tokens": 6529.0
+     },
+     "q042": {
+      "tool_calls": 2.6666666666666665,
+      "tokens": 6226.333333333333
+     }
+    },
+    "model": [
+     "claude-haiku-5-5"
+    ],
+    "run_dates": [
+     "2026-11-01"
+    ],
+    "runs_per_question": [
+     1,
+     2,
+     3
+    ]
+   }
+  },
+  "a_vs_a_raw": {
+   "questions": 42,
+   "a_right_a_raw_wrong": [],
+   "a_raw_right_a_wrong": [
+    "q010"
+   ],
+   "both_right": 41,
+   "both_wrong": 0,
+   "discordant": 1,
+   "sign_test_p": 1.0,
+   "test": "exact two-sided sign test (McNemar) on discordant questions",
+   "rule": "a difference is reported only if p < 0.05; otherwise no detectable difference",
+   "note": "Majority vote across runs (more than half correct). With this sample, a difference of a few questions is within noise."
+  }
+ }
 }

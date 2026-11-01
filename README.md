@@ -8,6 +8,14 @@ SQL that runs without error can still answer the wrong question about financial 
 - One stored-trap hit in 504 runs (A, q017 run 2).
 - Runs that set warning=true on questions whose answer key expects no caveat: A 34, B 9, C 19, D 7 of 102 each. Most cite stored filing dates or retrieval metadata (keyword match plus 4 manual corrections, listed in the JSON: [report/over_warning_reasons.json](report/over_warning_reasons.json)); they are not scored as errors, and the metric does not show that any setup hedges more or less well.
 
+**Exploratory, added after seeing the main results** (not one of the four planned setups; from the exploratory section of [eval/results/summary.md](eval/results/summary.md)):
+
+| Exploratory setup | Correct runs | Mean | Min | Max | Behavior accuracy | Cost |
+|---|---|---|---|---|---|---|
+| A_raw: setup A on the same tables without the meaning columns | 126 / 126 | 100.0% | 100.0% | 100.0% | 100.0% | $0.0901 |
+
+A and A_raw differ by majority vote on one question of 42 (q010, where the difference is a warning flag), exact sign test p = 1.00: no detectable difference, and since every removed column can be recomputed from columns that stayed, this does not show that written meaning is unnecessary ([eval/results/A_raw_failures.md](eval/results/A_raw_failures.md)).
+
 **Links:** [results page (docs/index.html)](docs/index.html) · [live page](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/) · video: TODO: video link · [results summary](eval/results/summary.md) · [error analysis](docs/error_analysis.md) · [terms and question texts](docs/key.md)
 
 Question IDs: q017 means question 17 in [eval/questions.yaml](eval/questions.yaml); [docs/key.md](docs/key.md) lists the text of every ID mentioned here and in the error analysis. q017 is "What was Darden's total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?"
