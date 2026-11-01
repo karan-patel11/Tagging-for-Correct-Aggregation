@@ -117,7 +117,7 @@ SETUPS = {
 EXPLORATORY = {
     "A_raw": {"context": "schema_raw.txt", "tools": [RUN_SQL_SPEC], "db": RAW_DB_PATH},
 }
-EXPLORATORY_COST_CAP_USD = 3.00
+EXPLORATORY_COST_CAP_USD = 2.40
 ALL_SETUPS = {**SETUPS, **EXPLORATORY}
 
 
