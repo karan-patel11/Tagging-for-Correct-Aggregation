@@ -168,8 +168,8 @@ def render_prose(tags, facts):
     return "\n".join(lines)
 
 
-def render_schema():
-    con = duckdb.connect(str(DB_PATH), read_only=True)
+def render_schema(db_path=DB_PATH):
+    con = duckdb.connect(str(db_path), read_only=True)
     tables = [r[0] for r in con.execute("SHOW TABLES").fetchall()]
     lines = []
     for t in tables:

@@ -27,8 +27,18 @@ answer is never retried.
 Reads ANTHROPIC_API_KEY from the environment or .env. Only questions whose verification_log rows all
 say matches = yes are run.
 
+Exploratory setup A_raw (added after the main results; SPEC §15, 2026-11-01) is behind
+--exploratory and never runs with A-D. It is setup A with one change: its context is
+schema_raw.txt and its run_sql reads data/warehouse_raw.duckdb (src/build_raw_views.py), which has
+the same tables without the meaning columns. Model, instructions, FINAL format, turn limit,
+max_tokens, temperature, concurrency, retries and caching are A's. It has its own hard cap of $3,
+covering its pilot and its full run together. --exploratory runs the pilot (the same 5 questions),
+prints the projection, and continues to the full run only if all 5 pilot runs finished without a
+harness error (API error, turn limit or no stop) and the projection is under $3.
+
 Run: python eval/run_eval.py --pilot
      python eval/run_eval.py [--runs 3]
+     python eval/run_eval.py --exploratory A_raw
 """
 
 import argparse
@@ -80,6 +90,7 @@ PRICES = {
 }
 
 DB_PATH = ROOT / "data" / "warehouse.duckdb"
+RAW_DB_PATH = ROOT / "data" / "warehouse_raw.duckdb"
 CONTEXTS = ROOT / "eval" / "contexts"
 QUESTIONS = ROOT / "eval" / "questions.yaml"
 VERIFICATION_LOG = ROOT / "eval" / "verification_log.csv"
@@ -102,6 +113,17 @@ SETUPS = {
     "D": {"context": None, "tools": TOOL_SPECS},
 }
 
+# Exploratory setups: never part of SETUPS, so the main A-D runs and summaries cannot include them.
+EXPLORATORY = {
+    "A_raw": {"context": "schema_raw.txt", "tools": [RUN_SQL_SPEC], "db": RAW_DB_PATH},
+}
+EXPLORATORY_COST_CAP_USD = 3.00
+ALL_SETUPS = {**SETUPS, **EXPLORATORY}
+
+
+def setup_db(setup):
+    return ALL_SETUPS[setup].get("db", DB_PATH)
+
 # 5 questions from 5 categories: Yum FY2025 total assets (time_additivity), a combined margin
 # (ratios), Darden's derived fiscal Q3 cash flow (ytd_calendar), a CPI change (indices), and CAVA
 # comps, which aren't in the data (comparability_unanswerable, refuse).
@@ -118,29 +140,28 @@ FINAL_KEYS = {"answer", "unit", "warning", "refused"}
 
 # ---------- run_sql ----------
 
-_sql_con = None
+_sql_cons = {}
 _sql_lock = threading.Lock()
 _tool_lock = threading.Lock()  # semantics.py shares one DuckDB connection; calls are serialized
 
 
-def _sql_connection():
-    global _sql_con
+def _sql_connection(db_path=DB_PATH):
     with _sql_lock:
-        if _sql_con is None:
-            con = duckdb.connect(str(DB_PATH), read_only=True)
+        if db_path not in _sql_cons:
+            con = duckdb.connect(str(db_path), read_only=True)
             con.execute("SET enable_external_access = false")
             con.execute("SET lock_configuration = true")
-            _sql_con = con
-    return _sql_con
+            _sql_cons[db_path] = con
+    return _sql_cons[db_path]
 
 
 def _cell(v):
     return "NULL" if v is None else str(v)
 
 
-def run_sql(sql):
+def run_sql(sql, db_path=DB_PATH):
     """Run one query; return (text, is_error). Never raises."""
-    cur = _sql_connection().cursor()
+    cur = _sql_connection(db_path).cursor()
     timer = threading.Timer(SQL_TIMEOUT_S, cur.interrupt)
     timer.start()
     try:
@@ -166,14 +187,14 @@ def run_sql(sql):
 
 def execute_tool(setup, name, args):
     """Run one tool call for a setup; return (text, is_error)."""
-    allowed = [t["name"] for t in SETUPS[setup]["tools"]]
+    allowed = [t["name"] for t in ALL_SETUPS[setup]["tools"]]
     if name not in allowed:
         return f"ERROR: unknown tool '{name}'; tools are {allowed}", True
     if name == "run_sql":
         sql = (args or {}).get("sql")
         if not isinstance(sql, str):
             return "ERROR: run_sql needs a string argument 'sql'", True
-        return run_sql(sql)
+        return run_sql(sql, setup_db(setup))
     with _tool_lock:
         envelope = mcp_server.call_tool(name, args)
     return json.dumps(envelope), envelope.get("status") == "error"
@@ -183,7 +204,7 @@ def execute_tool(setup, name, args):
 
 def system_blocks(setup, cache):
     blocks = [{"type": "text", "text": BASE_INSTRUCTIONS}]
-    ctx = SETUPS[setup]["context"]
+    ctx = ALL_SETUPS[setup]["context"]
     if ctx:
         blocks.append({"type": "text", "text": CONTEXT_HEADER + (CONTEXTS / ctx).read_text()})
     if cache:
@@ -195,7 +216,7 @@ def prefix_tokens(client, setup):
     """Tokens in the fixed prefix (tools + system), from the token-counting endpoint."""
     probe = [{"role": "user", "content": "."}]
     full = client.messages.count_tokens(model=MODEL, system=system_blocks(setup, False),
-                                        tools=SETUPS[setup]["tools"], messages=probe)
+                                        tools=ALL_SETUPS[setup]["tools"], messages=probe)
     bare = client.messages.count_tokens(model=MODEL, messages=probe)
     return full.input_tokens - bare.input_tokens
 
@@ -289,7 +310,7 @@ def run_one(client, budget, q, setup, run, cache):
     t0 = time.time()
     started_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     system = system_blocks(setup, cache)
-    tools = SETUPS[setup]["tools"]
+    tools = ALL_SETUPS[setup]["tools"]
     messages = [{"role": "user", "content": q["question"]}]
     tokens = defaultdict(int)
     cost, api_calls, tool_calls, turns = 0.0, 0, [], []
@@ -383,12 +404,132 @@ def check_frozen():
         sys.exit("eval/questions.yaml differs from the questions-frozen tag (or the tag is missing).")
 
 
+def harness_problem(rec):
+    """Why a run did not finish cleanly in the harness, or None. An unparseable FINAL line is not
+    a harness problem (the scorer counts it as incorrect); an API error, the turn limit, or no stop
+    reason is."""
+    if rec.get("error"):
+        return f"error {rec['error']}"
+    if rec.get("stop_reason") in (None, "tool_turn_limit"):
+        return f"stop {rec.get('stop_reason')}"
+    return None
+
+
+def _print_run(rec, budget):
+    t = rec["tokens"]
+    print(f"{rec['question_id']} {rec['setup']} run {rec['run']} | in {t.get('input_tokens', 0)} cache_w "
+          f"{t.get('cache_creation_input_tokens', 0)} cache_r {t.get('cache_read_input_tokens', 0)} "
+          f"out {t.get('output_tokens', 0)} | ${rec['cost_usd']:.5f} | tools {len(rec['tool_calls'])} "
+          f"| parsed {rec['parsed']} | {rec['final_line'] or '(no FINAL line)'}"
+          + (f" | stop {rec['stop_reason']}" if rec["stop_reason"] != "end_turn" else "")
+          + (f" | ERROR {rec['error']}" if rec["error"] else "")
+          + f" | total ${budget.spent:.4f}", flush=True)
+
+
+def _run_jobs(client, budget, jobs, cache, path, mode):
+    """Run (question, setup, run) jobs at CONCURRENCY, appending (mode 'a') or writing fresh
+    (mode 'w') one JSON line per run to path. Returns (records, number stopped by the cap)."""
+    records, capped = [], 0
+    with open(path, mode) as f, ThreadPoolExecutor(CONCURRENCY) as pool:
+        if mode == "a" and path.stat().st_size and not path.read_bytes().endswith(b"\n"):
+            f.write("\n")  # never append onto a truncated line
+        futures = {pool.submit(run_one, client, budget, q, s, r, cache): (q["id"], s, r)
+                   for q, s, r in jobs}
+        for fut in as_completed(futures):
+            qid, s, r = futures[fut]
+            try:
+                rec = fut.result()
+            except CapReached as e:
+                capped += 1
+                print(f"STOP {qid} {s} run {r}: {e}", flush=True)
+                continue
+            records.append(rec)
+            f.write(json.dumps(rec) + "\n")
+            f.flush()
+            _print_run(rec, budget)
+    return records, capped
+
+
+def _rel(p):
+    return p.relative_to(ROOT) if p.is_relative_to(ROOT) else p
+
+
+def main_exploratory(setup, runs, client):
+    """Pilot, gate, then full run for one exploratory setup, under EXPLORATORY_COST_CAP_USD."""
+    cap = EXPLORATORY_COST_CAP_USD
+    db = setup_db(setup)
+    if not db.exists():
+        sys.exit(f"{db.relative_to(ROOT)} is missing; run python src/build_raw_views.py first.")
+    print(f"Exploratory setup {setup}: context {ALL_SETUPS[setup]['context']}, run_sql on "
+          f"{db.relative_to(ROOT)} (read_only=True); hard cap ${cap:.2f} for pilot + full run")
+    n = prefix_tokens(client, setup)
+    cache = n >= MIN_CACHEABLE_TOKENS
+    print(f"Setup {setup}: fixed prefix {n} tokens -> {'cached' if cache else 'not cached (below minimum)'}")
+
+    pilot_path = RESULTS / "pilot" / f"{setup}.jsonl"
+    full_path = RESULTS / f"{setup}.jsonl"
+    pilot_path.parent.mkdir(parents=True, exist_ok=True)
+    budget = Budget(cap)
+    # The cap covers everything this setup has ever spent: an earlier pilot and any earlier part
+    # of the full run, so a resumed session cannot exceed it.
+    _, pilot_spent = completed_runs([pilot_path])
+    full_done, full_spent = completed_runs([full_path])
+    budget.spent = pilot_spent + full_spent
+
+    pilot_qs = load_questions(PILOT_IDS)
+    pilot = [json.loads(l) for l in pilot_path.read_text().splitlines() if l.strip()] \
+        if pilot_path.exists() else []
+    if pilot and len(pilot) == len(pilot_qs) and not any(harness_problem(r) for r in pilot):
+        print(f"\nPilot already complete in {_rel(pilot_path)}; not re-run")
+        for rec in pilot:
+            _print_run(rec, budget)
+    else:
+        # A replaced pilot file was billed, so its cost stays in budget.spent.
+        print(f"\nPilot: {[q['id'] for q in pilot_qs]} "
+              f"(categories: {[q['category'] for q in pilot_qs]}), 1 run each")
+        pilot, capped = _run_jobs(client, budget, [(q, setup, 1) for q in pilot_qs], cache,
+                                  pilot_path, "w")
+        if capped:
+            sys.exit(f"STOP: {capped} pilot runs stopped by the cost cap")
+
+    qs = load_questions()
+    jobs = [(q, setup, r) for r in range(1, runs + 1) for q in qs if (q["id"], setup, r) not in full_done]
+    per_run = sum(r["cost_usd"] for r in pilot) / len(pilot)
+    projection = per_run * len(qs) * runs
+    remaining = per_run * len(jobs)
+    problems = [(r["question_id"], harness_problem(r)) for r in pilot if harness_problem(r)]
+    print(f"\nPilot: {len(pilot)}/{len(pilot_qs)} runs, harness problems: {problems or 'none'}, "
+          f"cost ${sum(r['cost_usd'] for r in pilot):.5f}")
+    print(f"Projected full-run cost: ${per_run:.5f}/run x {len(qs)} questions x {runs} runs = "
+          f"${projection:.4f}; runs still to do: {len(jobs)} (${remaining:.4f}); "
+          f"spent so far ${budget.spent:.4f}; cap ${cap:.2f}")
+    if len(pilot) != len(pilot_qs) or problems:
+        sys.exit("STOP: the pilot did not complete without harness errors; not starting the full run")
+    if projection >= cap or budget.spent + remaining >= cap:
+        sys.exit("STOP: the projected full run, or spent so far plus the runs still to do, is not "
+                 "under the cap; not starting the full run")
+    print("Gate passed: continuing to the full run")
+
+    if full_done:
+        print(f"Resuming: {len(full_done)} runs already in {_rel(full_path)} are skipped")
+    print(f"\n{len(jobs)} runs, concurrency {CONCURRENCY}\n")
+    records, capped = _run_jobs(client, budget, jobs, cache, full_path,
+                                "a" if full_path.exists() else "w")
+    total = len(full_done) + sum(1 for r in records if not r.get("error"))
+    print(f"\nFull run: {total}/{len(qs) * runs} runs complete without an API error; "
+          f"this session {len(records)} written, {capped} stopped by the cap")
+    print(f"Parsed FINAL lines this session: {sum(r['parsed'] for r in records)}/{len(records)}")
+    print(f"Total {setup} spend (pilot + full run): ${budget.spent:.4f} of ${cap:.2f}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", action="store_true", help="5 questions x 4 setups x 1 run")
     ap.add_argument("--runs", type=int, default=3, help="runs per question and setup (full run)")
     ap.add_argument("--overwrite", action="store_true",
                     help="full run: discard existing result files instead of resuming")
+    ap.add_argument("--exploratory", choices=sorted(EXPLORATORY),
+                    help="run one exploratory setup (pilot, gate, full run) instead of A-D")
     args = ap.parse_args()
 
     check_frozen()
@@ -403,6 +544,9 @@ def main():
     for tier, p in PRICES.items():
         print(f"  {tier}: " + ", ".join(f"{k} ${v}" for k, v in p.items()))
     print(f"Minimum cacheable prefix: {MIN_CACHEABLE_TOKENS} tokens ({CACHING_URL})")
+    if args.exploratory:
+        print(f"Per-call reserve ${CALL_RESERVE_USD:.4f}")
+        return main_exploratory(args.exploratory, args.runs, client)
     print(f"Cost cap: ${COST_CAP_USD:.2f}; per-call reserve ${CALL_RESERVE_USD:.4f}")
 
     qs = load_questions(PILOT_IDS if args.pilot else None)
