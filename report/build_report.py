@@ -1445,88 +1445,94 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
         review = sum(1 for v in verdicts.values() if v["verdict"] == "needs human review")
 
         bottom = self.claim(rule + f"setup A at most {FEW_ERRORS:.0%} wrong (summary.json); judgment drawn from the findings below",
-                            "Making a dataset usable by AI is not mainly a model problem; it is a metadata and tooling "
-                            "problem. On this data, the model already got the arithmetic right almost every time. The real "
-                            "gains and the real risks were in what surrounds it: whether an answer carries its source, "
-                            "whether the tools let the model ask the right question, and whether the tags themselves are correct.")
+                            "Getting reliable answers from AI on financial data depends less on the model and more on how "
+                            "the data is described and what tools the model is given. On this data the model already did the "
+                            "math right almost every time. What made the difference was around the model: whether each answer "
+                            "came with its source, whether the tool let the model ask for what it needed, and whether the "
+                            "descriptions of the data were correct.")
         did = self.claim(rule + "question and company counts; summary.json model, runs and cost",
-                         f"{n_q} analyst-style questions from {word(companies)} restaurant companies' SEC filings and public "
-                         f"data were put to {', '.join(s['model'])} in four setups: A, the table schema only; B, prose "
-                         "descriptions; C, the same facts as structured tags; D, an MCP tool that enforces the tags. "
-                         f"{f['total']} runs in total, ${s['total_cost_usd']:.2f}. The answer key was checked against "
-                         "primary sources and computed without the code under test, and the questions were frozen before "
-                         "the first run.")
+                         f"We wrote {n_q} questions an analyst might ask about {word(companies)} restaurant companies, using "
+                         f"their SEC filings and public data, and asked {', '.join(s['model'])} each question in four setups, "
+                         "each adding one thing: (A) only the table and column names; (B) a plain-English description of "
+                         "every column; (C) the same facts as structured tags; (D) a tool that applies those tags and does "
+                         f"the calculation, with no SQL allowed. {f['total']} answers in total, costing "
+                         f"${s['total_cost_usd']:.2f}. The correct answers were computed separately and checked against the "
+                         "original filings, and the questions were locked before the first run.")
+        disagree = (f"they disagreed on only {b_c_disc} {plural(b_c_disc, 'question', 'questions')}, too few to tell "
+                    "apart" if b_c_disc < MIN_DISCORDANT else f"exact sign test, p = {bvc_p:.2f}")
         p1 = [
             self.claim(rule + "setup A mean accuracy and wrong runs (summary.json)",
-                       f"Accuracy was not the bottleneck. With no tags, the model was already {pct(f['acc_a'])} correct; "
-                       f"only {f['wrong']} of {f['total']} runs were wrong. This experiment cannot show tags raising accuracy."),
+                       f"Accuracy was not the bottleneck. Given only the table and column names, the model was already "
+                       f"{pct(f['acc_a'])} correct; only {f['wrong']} of {f['total']} answers were wrong. So this test "
+                       "cannot show that describing the data improves accuracy."),
             self.claim(rule + "B vs C exact sign test, stated only if p >= 0.05 (checked in facts())",
-                       "Format did not matter. Prose and structured tags with the same facts showed no detectable "
-                       f"difference ({b_c_disc} discordant {plural(b_c_disc, 'question', 'questions')}; "
-                       f"{sign_test_text(b_c_disc, bvc_p)}). Good documentation carried the same information as "
-                       "structured metadata."),
+                       "Writing style did not matter. Plain-English descriptions and structured tags carrying the same "
+                       f"facts showed no measurable difference ({disagree})."),
             self.claim(rule + "answerable runs whose tools returned at least one source, per setup",
-                       f"Enforcement bought traceability. Only the MCP tool returned a source with each answer: {dk} of "
-                       f"{dn} answerable runs, against none for raw SQL. An analyst who cannot read SQL can still click "
-                       "through to the filing."),
+                       "The tool made answers traceable. Only when the model had to go through the tool, instead of "
+                       f"writing SQL, did each answer come with a link to its source: {dk} of {dn} answers, against none "
+                       "when it wrote SQL itself. An analyst who cannot read SQL can still check the number."),
             self.claim(rule + "over_warning_runs for A, B and D against the shared answer_question_runs total",
-                       f"Context cut false alarms. Warnings where none was needed fell from {st_['A']['over_warning_runs']} "
-                       f"of {d} runs to {st_['B']['over_warning_runs']} with prose and {st_['D']['over_warning_runs']} with "
-                       "the tool. This was not a planned measure, so it is a lead, not a result."),
+                       f"Descriptions cut false alarms. Unneeded caveats fell from {st_['A']['over_warning_runs']} of {d} "
+                       f"answers with no descriptions to {st_['B']['over_warning_runs']} with plain-English descriptions "
+                       f"and {st_['D']['over_warning_runs']} with the tool. We did not plan to measure this, so treat it as "
+                       "a hint, not a result."),
             self.claim(rule + "wrong setup D runs equal the tool_interface runs in report/failure_types.yaml",
-                       "The tool's interface became the weak point. "
-                       + ("Both of the tool setup's failures" if d_wrong == 2 else
-                          "The tool setup's one failure" if d_wrong == 1 else
-                          f"All {word(d_wrong)} of the tool setup's failures")
-                       + f" came from its own design, not from the data."),
+                       "The tool itself became the weak point. "
+                       + ("Both of the tool setup's wrong answers" if d_wrong == 2 else
+                          "The tool setup's one wrong answer" if d_wrong == 1 else
+                          f"All {word(d_wrong)} of the tool setup's wrong answers")
+                       + " came from limits in how the tool accepts requests, not from the data."),
         ]
         p2 = [
             self.claim(rule + "included_parent_rows trap hits (summary.json); hierarchy runs correct; comps runs that warned",
-                       f"The vendor-style traps held up. No run added a parent company's row on top of its brands "
-                       f"({p_hits} hits in {p_checks} checks); brand-hierarchy questions were wrong in {h_n - h_ok} of "
-                       f"{h_n} runs; and comparable-sales questions, where each company defines the measure its own way, "
-                       f"drew the required caveat in {c_warn} of {c_n} runs."),
+                       "Messy vendor-style data was mostly handled. No answer double-counted a parent company on top of its "
+                       f"brands ({p_hits} times in {p_checks} chances); questions about brands were wrong in {h_n - h_ok} "
+                       f"of {h_n} answers; and where each company defines comparable sales its own way, the model added the "
+                       f"required caveat in {c_warn} of {c_n} answers."),
             self.claim(rule + "followup/autotag/results/D_autotag.jsonl scored with score.py; hand D from summary.json; "
                        "field verdicts from followup/autotag/results/score_tags.json",
-                       "Auto-drafted tags are not ready to trust. In a follow-up, a model drafted the tags from column "
-                       "profiles and documentation, as you would for a new vendor dataset. With those drafts in place of the "
-                       f"hand tags, the tool setup fell from {st_['D']['correct_runs']} to {at_ok} correct runs out of {at_n}. "
-                       f"None of the {len(at_bad)} wrong runs was a silent wrong number: {refused} were refusals and "
-                       f"{no_final} ended without a final answer. {review} of {len(verdicts)} tag fields need human review. "
-                       "The workflow this points to: the model drafts, a human approves, and a benchmark checks the result."),
+                       "Letting AI write the descriptions is not safe yet. In a follow-up, a model wrote the tags itself "
+                       "from column summaries and documentation, as you might for a new vendor dataset. With those tags in "
+                       f"place of the human-written ones, correct answers in the tool setup fell from "
+                       f"{st_['D']['correct_runs']} to {at_ok} out of {at_n}. It failed safely: {refused} refusals and "
+                       f"{no_final} unfinished answers, and no confidently wrong numbers. But {review} of {len(verdicts)} "
+                       "tag fields needed a person to correct them. The approach this points to: AI drafts, a person "
+                       "approves, and a test set checks the result."),
         ]
         means = self.claim(rule + "restates the rule-checked findings above",
-                           "For making datasets AI-accessible, the leverage is in tags a human has checked, tools that return "
-                           "lineage with every number, and a benchmark of real analyst questions run before and after "
-                           "tagging, not in model cleverness. For alternative data, raw vendor quirks are learnable, but tag "
-                           "drafting needs a review step before it scales.")
+                           "To make existing data usable by AI, the work that pays off is: descriptions a person has checked, "
+                           "a tool that returns the source with every number, and a set of real analyst questions to test "
+                           "before and after. A smarter model is not the main lever. For new vendor data, the messy parts can "
+                           "be handled, but AI-written descriptions need a human review before they can be trusted at scale.")
         limits = self.claim(rule + "questions per category and companies (questions.yaml, verification_log.csv)",
-                            f"Limits: {qpc} questions per category, {word(companies)} companies, one model. The pageview "
-                            "data is a stand-in for an alternative-data panel and predicts nothing. The tool was built around "
-                            "these categories, and the author wrote both the questions and the system.")
+                            f"Limits: {qpc} questions per category, {word(companies)} companies, one model. The website-traffic "
+                            "data stands in for a real vendor dataset and predicts nothing. The tool was designed around these "
+                            "question types, and the same person wrote both the questions and the system.")
         li = lambda items: "".join(f"<li>{e(t)}</li>" for t in items)  # noqa: E731
         return f"""
 <h2>Conclusion</h2>
 <div class="conclusion">
 <p class="punch">{e(bottom)}</p>
 <h3>Why we did it</h3>
-<p>A research data team has two jobs here. First, make its datasets usable by AI end to end, so a model
-understands each metric and calculates and aggregates it correctly; an MCP connector alone does not do that.
-Second, bring in alternative data, which arrives raw: daily grain, brand rows next to parent rows, renamed series,
-and definitions that differ by vendor. We built both problems into one test with traps from real filings: balances
-that cannot be summed, year-to-date cash flow, Darden's May fiscal year, brand-versus-parent pageviews, and
-company-specific comparable-sales definitions.</p>
+<p>Analysts now ask AI assistants questions about financial data in plain English. That raises two problems.
+First, existing datasets have to be made usable by AI. Connecting a model to a database (for example through an
+MCP connector) is not enough: the model also has to know what each column means, such as whether it can be added
+up across quarters, whether it is a year-to-date total, and which fiscal calendar it follows. Second, new data from
+outside vendors, often called alternative data, arrives messy: daily rows, brand and parent-company rows mixed
+together, renamed series, and definitions that differ by company. We built both problems into one test, using
+traps taken from real company filings.</p>
 <h3>What we did</h3>
 <p>{e(did)}</p>
-<h3>Pillar one: AI accessibility</h3>
+<h3>What we found: using existing data with AI</h3>
 <ol>{li(p1)}</ol>
-<h3>Pillar two: alternative data and onboarding</h3>
+<h3>What we found: adding new, messy data</h3>
 <ol start="{len(p1) + 1}">{li(p2)}</ol>
 <h3>What it means</h3>
 <p>{e(means)}</p>
 <h3>What would change the answer</h3>
-<p>Data whose meaning cannot be recovered from other columns, more questions to detect small effects, and a scorer
-that grades the explanation as well as the number.</p>
+<p>A harder test: data whose meaning cannot be worked out from the other columns, more questions so that small
+differences show up, and grading that checks the explanation, not just the final number.</p>
 <p class="small muted">{e(limits)}</p>
 </div>"""
 
