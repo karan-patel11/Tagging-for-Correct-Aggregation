@@ -7,8 +7,12 @@ source link on it is read at build time from these inputs, and nothing else:
   src/tool_specs.py, eval/verification_log.csv, eval/verification_ai.csv, docs/error_analysis.md,
   report/replays.yaml, and git metadata (commit dates, the questions-frozen tag, pytest collection).
 
-eval/results/A_raw.jsonl is optional. If it exists, an exploratory A vs A_raw section follows Results;
-if not, Next steps says it was not run.
+eval/results/A_raw.jsonl is optional (exploratory setup A_raw, SPEC §15, added after seeing the main
+results). If it exists, summary.json must carry its "exploratory" block (written by eval/score.py),
+the exploratory section follows Results, the q017 replay gets an A_raw tab, and the headline and Next
+steps add one sentence each, by the same sign-test rule as B vs C. The removed columns are read from
+the diff of eval/contexts/schema_only.txt and eval/contexts/schema_raw.txt. If A_raw.jsonl is absent,
+Next steps says it was not run.
 
 eval/make_questions.py is also read, only to confirm that the answer key does not import
 semantics.py. Runs are scored with eval/score.py's score_run, the same code that produced
@@ -55,7 +59,9 @@ BANNED = ["solves", "eliminates", "production", "state-of-the-art", "significant
 CATEGORY_NAMES = {"time_additivity": "Balances over time", "ratios": "Ratios",
                   "ytd_calendar": "Year-to-date and fiscal calendars", "indices": "Price indices",
                   "hierarchy": "Brand hierarchy", "comparability_unanswerable": "Comparability and refusals"}
-SETUP_NAMES = {"A": "Schema only", "B": "Prose", "C": "Structured tags", "D": "Enforcing tools"}
+SETUP_NAMES = {"A": "Schema only", "B": "Prose", "C": "Structured tags", "D": "Enforcing tools",
+               "A_raw": "Raw tables (exploratory)"}
+X = "A_raw"  # the exploratory setup
 SETUP_TOOLS = {"A": [tool_specs.RUN_SQL_SPEC], "B": [tool_specs.RUN_SQL_SPEC],
                "C": [tool_specs.RUN_SQL_SPEC], "D": tool_specs.TOOL_SPECS}
 NUMBER_WORDS = {n: w for n, w in enumerate(
@@ -86,6 +92,7 @@ class Paths:
     replays: Path = ROOT / "report" / "replays.yaml"
     template: Path = ROOT / "report" / "template.html"
     make_questions: Path = ROOT / "eval" / "make_questions.py"
+    contexts: Path = ROOT / "eval" / "contexts"
     out: Path = ROOT / "docs" / "index.html"
     links: Path = ROOT / "report" / "links_to_check.txt"
 
@@ -197,6 +204,10 @@ SETUP_KEYS = ["n", "correct_runs", "accuracy", "accuracy_by_category", "behavior
 RANGE_KEYS = ["mean", "min", "max"]
 TOKEN_KEYS = ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"]
 BVC_KEYS = ["questions", "b_right_c_wrong", "c_right_b_wrong", "both_right", "both_wrong", "note"]
+EXPL_KEYS = ["note", "setups", "a_vs_a_raw"]
+EXPL_SETUP_KEYS = SETUP_KEYS + ["model", "run_dates", "runs_per_question"]
+AVX_KEYS = ["questions", "a_right_a_raw_wrong", "a_raw_right_a_wrong", "both_right", "both_wrong",
+            "discordant", "sign_test_p", "test", "rule", "note"]
 NOTE_KEYS = ["id", "found", "fix_commit", "description", "runs_flipped", "flipped_by_setup",
              "flipped_questions", "flip_direction", "correct_before", "correct_after"]
 
@@ -245,7 +256,54 @@ def validate_summary(s, questions):
         has(n, f"scorer_notes.{i}", NOTE_KEYS)
     if sum(setups[st]["n"] for st in score.SETUPS) != s["n_runs"]:
         die("summary.json: n_runs does not equal the sum of the setups' n")
+    if "exploratory" in s:
+        validate_exploratory(s["exploratory"], cats, traps, covered)
     return covered
+
+
+def validate_exploratory(x, cats, traps, covered):
+    has(x, "exploratory", EXPL_KEYS)
+    has(x["setups"], "exploratory.setups", [X])
+    v, p = x["setups"][X], f"exploratory.setups.{X}"
+    has(v, p, EXPL_SETUP_KEYS)
+    has(v["accuracy"], f"{p}.accuracy", RANGE_KEYS)
+    has(v["accuracy_by_category"], f"{p}.accuracy_by_category", sorted(cats))
+    for c in cats:
+        has(v["accuracy_by_category"][c], f"{p}.accuracy_by_category.{c}", RANGE_KEYS)
+    has(v["trap_hits"], f"{p}.trap_hits", sorted(traps))
+    for t in traps:
+        has(v["trap_hits"][t], f"{p}.trap_hits.{t}", ["hits", "runs", "rate"])
+    has(v["avg_tokens"], f"{p}.avg_tokens", TOKEN_KEYS)
+    has(v["per_question"], f"{p}.per_question", sorted(covered))
+    for q in covered:
+        has(v["per_question"][q], f"{p}.per_question.{q}", ["tool_calls", "tokens"])
+    has(x["a_vs_a_raw"], "exploratory.a_vs_a_raw", AVX_KEYS)
+
+
+def schema_columns(text):
+    """table -> [column] from a DESCRIBE context file (TABLE name, then indented 'column TYPE' lines)."""
+    out, cur = {}, None
+    for line in text.splitlines():
+        if line.startswith("TABLE "):
+            cur = out.setdefault(line.split()[1], [])
+        elif line.strip() and cur is not None:
+            cur.append(line.split()[0])
+    return out
+
+
+def removed_columns(full, raw):
+    """table -> [column in the full schema but not the raw one], in schema order; dies on any other change."""
+    a, b = schema_columns(full), schema_columns(raw)
+    if set(a) != set(b):
+        die(f"schema_raw.txt and schema_only.txt list different tables: {sorted(set(a) ^ set(b))}")
+    out = {}
+    for t in a:
+        if [c for c in a[t] if c in b[t]] != b[t]:
+            die(f"schema_raw.txt adds or reorders columns in {t}")
+        gone = [c for c in a[t] if c not in b[t]]
+        if gone:
+            out[t] = gone
+    return out or die("schema_raw.txt removes no columns")
 
 
 def load(paths):
@@ -276,20 +334,48 @@ def load(paths):
             if line.strip():
                 r = json.loads(line)
                 a_raw[(r["question_id"], r["run"])] = r
+    raw_schema = None
+    if a_raw is None and "exploratory" in summary:
+        die("summary.json has an exploratory block but eval/results/A_raw.jsonl is missing")
+    if a_raw is not None:
+        if "exploratory" not in summary:
+            die("summary.json: missing key exploratory (eval/results/A_raw.jsonl exists; run python eval/score.py)")
+        check_exploratory(summary, questions, runs, a_raw)
+        raw_schema = removed_columns(read(paths.contexts / "schema_only.txt"), read(paths.contexts / "schema_raw.txt"))
     replays = yaml.safe_load(read(paths.replays))
     ea = read(paths.error_analysis)
     template = read(paths.template)
     data = {"summary": summary, "questions": questions, "tags": tags, "vlog": vlog, "vlog_ai": vlog_ai,
-            "runs": runs, "a_raw": a_raw,
+            "runs": runs, "a_raw": a_raw, "raw_schema": raw_schema,
             "replays": replays, "error_analysis": ea, "tool_specs": tool_specs,
             "make_questions": read(paths.make_questions), "git": git}
     files = {"summary": rel(paths.results / "summary.json"), "questions": rel(paths.questions),
              "tags": rel(paths.tags), "vlog": rel(paths.vlog), "vlog_ai": rel(paths.vlog_ai),
              "runs": rel(paths.results / "{A,B,C,D}.jsonl"), "a_raw": rel(a_raw_path) + ("" if a_raw is not None else " (absent)"),
+             "raw_schema": rel(paths.contexts / "schema_only.txt") + " vs " + rel(paths.contexts / "schema_raw.txt"),
              "replays": rel(paths.replays), "error_analysis": rel(paths.error_analysis),
              "tool_specs": rel(paths.tool_specs), "make_questions": rel(paths.make_questions),
              "git": "git metadata"}
     return Evidence(data, files), template, covered
+
+
+def check_exploratory(summary, questions, runs, a_raw):
+    """The exploratory block in summary.json must match the A_raw transcripts scored now."""
+    x = summary["exploratory"]
+    v = x["setups"][X]
+    sc = [score.score_run(r, questions.get(k[0]) or die(f"A_raw run for unknown question {k[0]}"))
+          for k, r in a_raw.items()]
+    if (sum(r["correct"] for r in sc), len(sc)) != (v["correct_runs"], v["n"]):
+        die("summary.json exploratory.setups.A_raw does not match eval/results/A_raw.jsonl; run python eval/score.py")
+    a = majority_by_question({(k[0], k[2]): rec for k, rec in runs.items() if k[1] == "A"}, questions)
+    r = majority_by_question(a_raw, questions)
+    a_only, raw_only, both, neither = paired(a, r)
+    pc = x["a_vs_a_raw"]
+    if (a_only, raw_only, both, neither) != (pc["a_right_a_raw_wrong"], pc["a_raw_right_a_wrong"],
+                                             pc["both_right"], pc["both_wrong"]):
+        die("summary.json exploratory.a_vs_a_raw does not match the transcripts; run python eval/score.py")
+    if abs(mcnemar_p(len(a_only), len(raw_only)) - pc["sign_test_p"]) > 1e-12:
+        die("summary.json exploratory.a_vs_a_raw.sign_test_p does not match the exact sign test")
 
 
 # ---------- scoring ----------
@@ -324,6 +410,24 @@ def badge(sc):
     return f'<span class="badge {cls}">{e(label)}</span>'
 
 
+def scored_any(ev, qid, setup, run):
+    """Like scored(), also for the exploratory setup (its records live in ev("a_raw"))."""
+    if setup != X:
+        return scored(ev, qid, setup, run)
+    raw = ev("a_raw") or die("replays.yaml names an A_raw run but eval/results/A_raw.jsonl is absent")
+    rec = raw.get((qid, run)) or die(f"no recorded run {qid} setup A_raw run {run}")
+    return rec, score.score_run(rec, ev("questions")[qid])
+
+
+def record_any(ev, qid, setup):
+    if setup != X:
+        return record(ev, qid, setup)
+    raw = ev("a_raw")
+    outs = [(k[1], outcome(score.score_run(raw[k], ev("questions")[qid]))) for k in sorted(raw) if k[0] == qid]
+    outs or die(f"no A_raw runs for {qid}")
+    return sum(is_ok(o) for _, o in outs), len(outs), outs
+
+
 def run_keys(ev, qid, setup):
     keys = sorted(k for k in ev("runs") if k[0] == qid and k[1] == setup)
     return keys or die(f"no runs for {qid} setup {setup}")
@@ -332,6 +436,11 @@ def run_keys(ev, qid, setup):
 def record(ev, qid, setup):
     outs = [(k[2], outcome(score.score_run(ev("runs")[k], ev("questions")[qid]))) for k in run_keys(ev, qid, setup)]
     return sum(is_ok(o) for _, o in outs), len(outs), outs
+
+
+def tab_setups(item, ev):
+    """Setups with a tab in a replay: A-D always; A_raw when replays.yaml names a run for it and A_raw.jsonl exists."""
+    return score.SETUPS + ([X] if X in (item.get("runs") or {}) and ev("a_raw") is not None else [])
 
 
 # ---------- sources ----------
@@ -509,9 +618,10 @@ def behavior_claim(beh):
 FEW_ERRORS = 0.05  # a setup "made few errors" when at most this share of its runs were wrong
 
 
-def headline_claim(model, wrong, bvc_p):
+def headline_claim(model, wrong, bvc_p, a_raw=None):
     """wrong: setup -> (wrong runs, runs). The plain result, by rule: few errors only if every setup is at
-    or under FEW_ERRORS; B vs C named only if the sign test gives p < 0.05."""
+    or under FEW_ERRORS; B vs C named only if the sign test gives p < 0.05. a_raw: (A right A_raw wrong,
+    A_raw right A wrong) when the exploratory run exists; same sign-test rule."""
     rates = {s: w / n for s, (w, n) in wrong.items()}
     lo, hi = min(w for w, _ in wrong.values()), max(w for w, _ in wrong.values())
     sizes = {n for _, n in wrong.values()}
@@ -527,7 +637,43 @@ def headline_claim(model, wrong, bvc_p):
     if rates["A"] <= FEW_ERRORS:
         out.append(f"Setup A, with no tags at all, was already {pct(1 - rates['A'])} correct, so tagging had few "
                    "errors to remove here.")
+    if a_raw is not None:
+        out.append(a_raw_headline(*a_raw))
     return out
+
+
+def a_raw_verdict(a_only, raw_only):
+    """(verdict sentence, p) for A vs A_raw by question. Same rule as B vs C: a direction only if p < 0.05."""
+    p = mcnemar_p(a_only, raw_only)
+    n = a_only + raw_only
+    if p < 0.05:
+        if raw_only > a_only:
+            return (f"A_raw (raw tables) was right where A was wrong on {raw_only} of {n} questions where they "
+                    f"disagreed (exact sign test, p = {p:.2f})."), p
+        return (f"A (schema with meaning columns) was right where A_raw was wrong on {a_only} of {n} questions "
+                f"where they disagreed (exact sign test, p = {p:.2f})."), p
+    return (f"No detectable difference between A and A_raw ({a_only} vs {raw_only} discordant questions; "
+            f"exact sign test, p = {p:.2f})."), p
+
+
+def a_raw_headline(a_only, raw_only):
+    _, p = a_raw_verdict(a_only, raw_only)
+    lead = "In an exploratory run added after seeing the main results, setup A on raw tables without the meaning columns"
+    if p >= 0.05:
+        return f"{lead} showed no detectable difference from setup A (exact sign test, p = {p:.2f})."
+    better = "A_raw" if raw_only > a_only else "A"
+    return f"{lead} differed from setup A ({better} ahead; exact sign test, p = {p:.2f})."
+
+
+def a_raw_next_step(a_only, raw_only):
+    _, p = a_raw_verdict(a_only, raw_only)
+    if p >= 0.05:
+        return ("Meaning that lives only in columns: removing the meaning columns made no detectable difference "
+                f"to setup A (exploratory, exact sign test, p = {p:.2f}). Every removed column can be recomputed "
+                "from columns that stayed, so a harder test needs data whose meaning cannot be recovered from "
+                "other columns.")
+    return ("Meaning that lives only in columns: removing the meaning columns changed setup A's results "
+            f"(exploratory, exact sign test, p = {p:.2f}); test the same on a second dataset before relying on it.")
 
 
 VKEY = re.compile(r"^\[([^\]]+)\]")
@@ -613,7 +759,7 @@ def paired(x, y):
 A_RAW_NOT_RUN = ("Not run: setup A on the raw tables. eval/results/A_raw.jsonl does not exist; if it is added, "
                  "the page compares it with A question by question, with an exact sign test, labelled exploratory "
                  "because it comes after seeing the main results.")
-EXPLORATORY = ("exploratory", "Exploratory", "Does setup A score differently on the raw tables?",
+EXPLORATORY = ("exploratory", "Exploratory", "Was setup A accurate only because the meaning was already in the columns?",
                "Numbers hide how. Watch the same question go wrong and right.")
 EXPLORATORY_IN = "One more comparison, added after seeing the main results."
 
@@ -697,9 +843,12 @@ class Page:
         st_ = s["setups"]
         wrong = {x: (st_[x]["n"] - st_[x]["correct_runs"], st_[x]["n"]) for x in score.SETUPS}
         _, p = b_vs_c_verdict(len(s["b_vs_c"]["b_right_c_wrong"]), len(s["b_vs_c"]["c_right_b_wrong"]))
+        avx = s.get("exploratory", {}).get("a_vs_a_raw")
+        ar = (len(avx["a_right_a_raw_wrong"]), len(avx["a_raw_right_a_wrong"])) if avx else None
         head = [self.claim("headline: summary.json correct_runs per setup (few errors = at most "
-                           f"{FEW_ERRORS:.0%} wrong in every setup) and the B vs C sign test", t)
-                for t in headline_claim(", ".join(s["model"]), wrong, p)]
+                           f"{FEW_ERRORS:.0%} wrong in every setup), the B vs C sign test"
+                           + (" and the exploratory A vs A_raw sign test (summary.json exploratory.a_vs_a_raw)" if ar else ""), t)
+                for t in headline_claim(", ".join(s["model"]), wrong, p, ar)]
         return f"""
 <h1>Valid SQL, wrong answer.</h1>
 <p class="lede">A query can run without error and still return the wrong number. Here the table held
@@ -912,35 +1061,93 @@ metric views). The contribution is the measurement.</p>"""
     # S5b, only when eval/results/A_raw.jsonl exists
     def exploratory(self):
         ev = self.ev
-        q, raw = ev("questions"), ev("a_raw")
-        a = majority_by_question({(k[0], k[2]): rec for k, rec in ev("runs").items() if k[1] == "A"}, q)
-        x = majority_by_question(raw, q)
-        a_only, raw_only, both, neither = paired(a, x)
-        p = mcnemar_p(len(a_only), len(raw_only))
-        if p < 0.05:
-            better, k = ("A", len(a_only)) if len(a_only) > len(raw_only) else ("A_raw", len(raw_only))
-            verdict = (f"{better} was right where the other was wrong on {k} of {len(a_only) + len(raw_only)} "
-                       f"questions where they disagreed (exact sign test, p = {p:.2f}).")
-        else:
-            verdict = (f"No detectable difference between A and A_raw ({len(a_only)} vs {len(raw_only)} "
-                       f"discordant questions; exact sign test, p = {p:.2f}).")
-        self.claim("exploratory: A vs A_raw majority vote by question, exact two-sided sign test", verdict)
+        s, q, raw = ev("summary"), ev("questions"), ev("a_raw")
+        gone = ev("raw_schema")
+        x = s["exploratory"]
+        a, v, pc = s["setups"]["A"], x["setups"][X], x["a_vs_a_raw"]
+        a_only, raw_only = pc["a_right_a_raw_wrong"], pc["a_raw_right_a_wrong"]
+        verdict, p = a_raw_verdict(len(a_only), len(raw_only))
+        self.claim("exploratory: A vs A_raw majority vote by question (summary.json exploratory.a_vs_a_raw), "
+                   "exact two-sided sign test, a direction only if p < 0.05", verdict)
+        removed = "; ".join(f"{t}: {', '.join(cs)}" for t, cs in gone.items())
+        rows = [(f"{k} · {SETUP_NAMES[k].replace(' (exploratory)', '')}", w["accuracy"]["mean"], w["accuracy"]["min"], w["accuracy"]["max"])
+                for k, w in (("A", a), (X, v))]
+        bars = svg_bars(rows, "Accuracy, A vs A_raw, with lowest and highest run: " + "; ".join(
+            f"{n} {pct(m)} (runs {pct(lo)} to {pct(hi)})" for n, m, lo, hi in rows), True)
+        ranges = " · ".join(f"{e(n.split(' · ')[0])}: runs {e(pct(lo))} to {e(pct(hi))}" for n, _, lo, hi in rows)
+
+        def traps(w):
+            return sum(t["hits"] for t in w["trap_hits"].values()), sum(t["runs"] for t in w["trap_hits"].values())
+
+        def tok(w):
+            return sum(w["avg_tokens"][k] for k in TOKEN_KEYS)
+
+        def rng(r):
+            return f"{pct(r['mean'])} [{pct(r['min'])}, {pct(r['max'])}]"
+        metrics = [
+            ("Correct runs", lambda w: f"{w['correct_runs']} of {w['n']}"),
+            ("Accuracy, mean [lowest, highest run]", lambda w: rng(w["accuracy"])),
+            ("Behavior accuracy", lambda w: pct(w["behavior_accuracy"])),
+            ("Stored-trap hits", lambda w: "{} of {}".format(*traps(w))),
+            ("Unparseable final lines", lambda w: str(len(w["unparsed"]))),
+            ("Over-warned runs (not scored wrong)", lambda w: f"{w['over_warning_runs']} of {w['answer_question_runs']}"),
+            ("Tool calls per question", lambda w: f"{w['avg_tool_calls']:.1f}"),
+            ("Tokens per question", lambda w: f"{tok(w):,.0f}"),
+            ("Total cost", lambda w: f"${w['cost_usd']:.3f}"),
+        ]
+        body = "".join(f"<tr><th scope='row'>{e(m)}</th><td>{e(f(a))}</td><td>{e(f(v))}</td></tr>" for m, f in metrics)
+        cats = "".join(f"<tr><th scope='row'>{e(CATEGORY_NAMES[c])}</th><td>{e(rng(a['accuracy_by_category'][c]))}</td>"
+                       f"<td>{e(rng(v['accuracy_by_category'][c]))}</td></tr>" for c in CATEGORY_NAMES
+                       if c in v["accuracy_by_category"])
+        table = (f"<table class='cost'><thead><tr><th scope='col'>Measure</th><th scope='col'>A · {e(SETUP_NAMES['A'])}</th>"
+                 f"<th scope='col'>A_raw · {e(SETUP_NAMES[X])}</th></tr></thead><tbody>{body}</tbody></table>")
+        cat_table = (f"<table class='cost'><thead><tr><th scope='col'>Category</th><th scope='col'>A</th>"
+                     f"<th scope='col'>A_raw</th></tr></thead><tbody>{cats}</tbody></table>")
+        # q016: what the scorer does not grade. Count A_raw runs whose text calls the figure total cash flow.
+        q016 = sorted(k for k in raw if k[0] == "q016")
+        total_ocf = [k[1] for k in q016 if re.search(r"total operating cash flow", " ".join(raw[k].get("text") or []), re.I)]
+        q016_ok = sum(score.score_run(raw[k], q["q016"])["correct"] for k in q016)
+        note016 = self.claim(
+            "q016: A_raw runs scored correct (score.py) and A_raw runs whose recorded text contains 'total operating cash flow'",
+            f"Scored correct is not the same as explained correctly. On q016 (Darden operating cash flow from continuing "
+            f"operations), {q016_ok} of {len(q016)} A_raw runs had the right number, but {word(len(total_ocf))} of them "
+            f"(run{'s' if len(total_ocf) != 1 else ''} {', '.join(map(str, total_ocf))}) told the reader it was total "
+            "operating cash flow; the column that said continuing operations was removed, and the scorer does not grade "
+            "the explanation.") if total_ocf else None
+        repo = need(ev("replays"), "links", "repo")
+        hq = need(ev("replays"), "hero", "question_id")
+        if X not in next((x["runs"] for x in need(ev("replays"), "replays") if x["question_id"] == hq), {}):
+            die(f"replays.yaml: the hero replay {hq} needs an A_raw run when A_raw.jsonl exists")
         lst = lambda ids: f" ({', '.join(ids)})" if ids else ""  # noqa: E731
-        runs = {}
-        for (qid, _) in raw:
-            runs[qid] = runs.get(qid, 0) + 1
+        n_runs = len(v["runs_per_question"])
         return f"""
-<div class="kicker exploratory">Exploratory, added after seeing the main results</div>
-<h2>A vs. A_raw, paired by question</h2>
+<div class="kicker exploratory">Added after seeing the main results</div>
+<h2>Exploratory: the same questions without meaning columns</h2>
+<p class="muted">Setup A again, on a copy of the database with the columns that carry meaning removed
+({e(removed)}). Same questions, answer key, model, instructions and scorer. Each removed column can be
+recomputed from columns that stayed (<code>src/build_raw_views.py</code> checks this), so no question became
+unanswerable. This run is not one of the planned comparisons.</p>
+<div class="box">
 <p class="verdict">{e(verdict)}</p>
 <dl class="counts">
   <div><dt>A right, A_raw wrong</dt><dd>{len(a_only)}<span class="small muted">{e(lst(a_only))}</span></dd></div>
   <div><dt>A_raw right, A wrong</dt><dd>{len(raw_only)}<span class="small muted">{e(lst(raw_only))}</span></dd></div>
-  <div><dt>Both right</dt><dd>{both}</dd></div>
-  <div><dt>Both wrong</dt><dd>{neither}</dd></div>
+  <div><dt>Both right</dt><dd>{pc["both_right"]}</dd></div>
+  <div><dt>Both wrong</dt><dd>{pc["both_wrong"]}</dd></div>
 </dl>
-<p class="small muted">Not part of the pre-planned comparisons. A setup is right on a question when more than half
-of its runs are correct ({len(a)} questions; A_raw runs per question: {", ".join(sorted({str(v) for v in runs.values()}))}).</p>"""
+<p class="small muted">A setup is right on a question when more than half of its {n_runs} runs are correct
+({pc["questions"]} questions). Exact two-sided sign test on the {pc["discordant"]} discordant
+question{"" if pc["discordant"] == 1 else "s"}: p = {p:.2f}.</p>
+</div>
+<div class="results-grid">
+  <div class="panel"><h3>Accuracy <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3>{bars}
+    <p class="small muted range-text">{ranges}</p>{table}</div>
+  <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3>{cat_table}</div>
+</div>
+{f'<p class="small">{e(note016)}</p>' if note016 else ""}
+<p class="small"><a class="jump" href="#replay?q={e(hq)}&amp;left=A&amp;right=A_raw">Compare A and A_raw on {e(hq)} →</a> ·
+<a href="{e(repo)}/blob/main/eval/results/A_raw_failures.md">A_raw runs worth reading</a> ·
+<a href="{e(repo)}/blob/main/eval/results/summary.md">summary.md</a></p>"""
 
     # S6
     def replay(self):
@@ -956,9 +1163,9 @@ of its runs are correct ({len(a)} questions; A_raw runs per question: {", ".join
             die(f"default_replay {default} is not one of the replays")
         for x in items:
             qid = x["question_id"]
-            for st in score.SETUPS:
+            for st in tab_setups(x, ev):
                 run = need(x, "runs", st)
-                o = outcome(scored(ev, qid, st, run)[1])
+                o = outcome(scored_any(ev, qid, st, run)[1])
                 exp = need(x, "expect", st)
                 if exp not in BADGES:
                     die(f"replays.yaml {qid} {st}: unknown expected outcome {exp}")
@@ -985,8 +1192,8 @@ of its runs are correct ({len(a)} questions; A_raw runs per question: {", ".join
             for side, start in (("left", "A"), ("right", "D")):
                 tabs = "".join(
                     f'<button type="button" role="tab" data-setup="{st}" aria-selected="{"true" if st == start else "false"}" '
-                    f'tabindex="{0 if st == start else -1}">{st} · {e(SETUP_NAMES[st])}</button>' for st in score.SETUPS)
-                panes = "".join(self.pane(qid, st, x["runs"][st], st != start) for st in score.SETUPS)
+                    f'tabindex="{0 if st == start else -1}">{st} · {e(SETUP_NAMES[st])}</button>' for st in tab_setups(x, ev))
+                panes = "".join(self.pane(qid, st, x["runs"][st], st != start) for st in tab_setups(x, ev))
                 cols.append(f'<div class="col" data-side="{side}"><div class="tabs" role="tablist" '
                             f'aria-label="Setup shown in the {side} column">{tabs}</div>{panes}</div>')
             expected = ("refuse (the data isn't there)" if q["expected_behavior"] == "refuse" else
@@ -1007,8 +1214,8 @@ of its runs are correct ({len(a)} questions; A_raw runs per question: {", ".join
 
     def pane(self, qid, setup, run, hidden):
         ev = self.ev
-        rec, sc = scored(ev, qid, setup, run)
-        k, n, outs = record(ev, qid, setup)
+        rec, sc = scored_any(ev, qid, setup, run)
+        k, n, outs = record_any(ev, qid, setup)
         f = sc["final"]
         if f:
             final = (f"{num(f['answer']) if f['answer'] is not None else 'no number'} {f['unit'] or ''}".strip()
@@ -1192,12 +1399,19 @@ themselves broke on answerable questions.</p>
         steps = list(need(r, "next_steps"))
         if ev("a_raw") is None:
             steps.append(A_RAW_NOT_RUN)
+        else:
+            pc = need(s, "exploratory", "a_vs_a_raw")
+            steps.append(self.claim("next step: exploratory A vs A_raw sign test (summary.json exploratory.a_vs_a_raw), "
+                                    "a direction only if p < 0.05",
+                                    a_raw_next_step(len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))))
         items = "".join(f"<li>{e(x)}</li>" for x in steps)
         repo = need(r, "links", "repo")
         video = (r.get("links") or {}).get("video")
         if not video:
             self.notes.append("replays.yaml links.video is absent; the footer omits the video link")
-        self.closing = f"A small experiment. All numbers generated from recorded runs on {' and '.join(s['run_dates'])} (UTC)."
+        xd = s.get("exploratory", {}).get("setups", {}).get(X, {}).get("run_dates") if ev("a_raw") is not None else None
+        self.closing = (f"A small experiment. All numbers generated from recorded runs on {' and '.join(s['run_dates'])} (UTC)"
+                        + (f"; the exploratory A_raw runs on {' and '.join(xd)} (UTC)." if xd else "."))
         return f"""
 <h2>Next steps</h2>
 <ol class="next">{items}</ol>

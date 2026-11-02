@@ -222,7 +222,7 @@ ol.next li { margin: 6px 0; }
 
 <div class="shell">
 <nav class="rail" aria-label="Sections">
-  <ol><li><a href="#problem">Problem</a></li><li><a href="#traps">Seven traps</a></li><li><a href="#fix">The fix</a></li><li><a href="#experiment">Experiment</a></li><li><a href="#results">Results</a></li><li><a href="#replay">Replay</a></li><li><a href="#b-vs-c">B vs C</a></li><li><a href="#failures">Failures</a></li><li><a href="#checks">Checks</a></li><li><a href="#next">Next steps</a></li></ol>
+  <ol><li><a href="#problem">Problem</a></li><li><a href="#traps">Seven traps</a></li><li><a href="#fix">The fix</a></li><li><a href="#experiment">Experiment</a></li><li><a href="#results">Results</a></li><li><a href="#exploratory">Exploratory</a></li><li><a href="#replay">Replay</a></li><li><a href="#b-vs-c">B vs C</a></li><li><a href="#failures">Failures</a></li><li><a href="#checks">Checks</a></li><li><a href="#next">Next steps</a></li></ol>
   <button type="button" class="theme-btn" id="theme-btn" aria-label="Switch colour theme">Theme</button>
 </nav>
 <main>
@@ -244,7 +244,7 @@ everything needed; the model reported the full-year row instead of deriving the 
     <div class="small">Sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">10-K on SEC EDGAR</a> (full fiscal year) · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">10-Q on SEC EDGAR</a> (first nine months)</div></div>
 </div>
 <p class="trapcount"><b>1 of 12 recorded runs on this question fell into this trap (setup A, run 2). The other 11 were correct.</b></p>
-<div class="headline"><div class="stat-k">The result</div><p>With these tables and this model (claude-haiku-5-5), every setup made few errors: 0 to 4 wrong runs out of 126 per setup. B vs. C (prose vs. structured tags with the same facts) showed no detectable difference. Setup A, with no tags at all, was already 96.8% correct, so tagging had few errors to remove here.</p></div>
+<div class="headline"><div class="stat-k">The result</div><p>With these tables and this model (claude-haiku-5-5), every setup made few errors: 0 to 4 wrong runs out of 126 per setup. B vs. C (prose vs. structured tags with the same facts) showed no detectable difference. Setup A, with no tags at all, was already 96.8% correct, so tagging had few errors to remove here. In an exploratory run added after seeing the main results, setup A on raw tables without the meaning columns showed no detectable difference from setup A (exact sign test, p = 1.00).</p></div>
 <p class="small muted">Both numbers come from the answer key; the trap count is scored from the recorded runs.</p><p class="bridge">The same kind of unstated rule turns up in seven places in this data.</p></section>
 <section id="traps" aria-label="Seven traps">
 <h2>Seven traps in real data</h2>
@@ -354,7 +354,35 @@ metric views). The contribution is the measurement.</p><p class="bridge">Does an
     <h3>Behavior accuracy <span class="muted small">warn when needed, refuse when unanswerable</span></h3><svg viewBox="0 0 560 148" role="img" aria-label="Behavior accuracy by setup: A 98.4%; B 100.0%; C 98.4%; D 98.4%" class="chart"><line x1="150.0" x2="150.0" y1="6" y2="130" class="grid"/><text x="150.0" y="144" class="tick" text-anchor="middle">0%</text><line x1="320.0" x2="320.0" y1="6" y2="130" class="grid"/><text x="320.0" y="144" class="tick" text-anchor="middle">50%</text><line x1="490.0" x2="490.0" y1="6" y2="130" class="grid"/><text x="490.0" y="144" class="tick" text-anchor="middle">100%</text><text x="142" y="20" class="lab" text-anchor="end">A · Schema only</text><rect x="150" y="6" width="334.6" height="18" class="bar" rx="2"/><text x="498.0" y="20" class="val">98.4%</text><text x="142" y="50" class="lab" text-anchor="end">B · Prose</text><rect x="150" y="36" width="340.0" height="18" class="bar" rx="2"/><text x="498.0" y="50" class="val">100.0%</text><text x="142" y="80" class="lab" text-anchor="end">C · Structured tags</text><rect x="150" y="66" width="334.6" height="18" class="bar" rx="2"/><text x="498.0" y="80" class="val">98.4%</text><text x="142" y="110" class="lab" text-anchor="end">D · Enforcing tools</text><rect x="150" y="96" width="334.6" height="18" class="bar" rx="2"/><text x="498.0" y="110" class="val">98.4%</text></svg><table class="sr-only"><caption>Behavior accuracy by setup</caption><tr><th scope='col'>Setup</th><th scope='col'>Behavior accuracy</th></tr><tr><td>A</td><td>98.4%</td></tr><tr><td>B</td><td>100.0%</td></tr><tr><td>C</td><td>98.4%</td></tr><tr><td>D</td><td>98.4%</td></tr></table>
     <h3>Cost per setup <span class="muted small">means per question</span></h3><table class='cost'><thead><tr><th scope='col'>Setup</th><th scope='col'>Tool calls per question</th><th scope='col'>Tokens per question</th><th scope='col'>Total cost</th></tr></thead><tbody><tr><th scope='row'>A · Schema only</th><td>2.2</td><td>6,498</td><td>$0.100</td></tr><tr><th scope='row'>B · Prose</th><td>1.4</td><td>22,587</td><td>$0.095</td></tr><tr><th scope='row'>C · Structured tags</th><td>1.3</td><td>21,341</td><td>$0.095</td></tr><tr><th scope='row'>D · Enforcing tools</th><td>3.6</td><td>11,094</td><td>$0.138</td></tr></tbody></table></div>
   <div class="panel"><h3>Stored-trap hits <span class="muted small">hits / runs; select a cell to open its replay</span></h3><table class="heat"><caption class="sr-only">Stored-trap hits by setup: hits / runs. Each cell opens that category's replay.</caption><thead><tr><th scope="col">Trap</th><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th><th scope="col">D</th></tr></thead><tbody><tr><th scope="row"><span class="cat">Balances over time</span>mean of 4 quarter ends</th><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=A&amp;right=D" aria-label="Setup A, mean of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=B&amp;right=D" aria-label="Setup B, mean of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=C&amp;right=D" aria-label="Setup C, mean of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=A&amp;right=D" aria-label="Setup D, mean of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td></tr><tr><th scope="row"><span class="cat">Balances over time</span>sum of 4 quarter ends</th><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=A&amp;right=D" aria-label="Setup A, sum of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=B&amp;right=D" aria-label="Setup B, sum of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=C&amp;right=D" aria-label="Setup C, sum of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q003&amp;left=A&amp;right=D" aria-label="Setup D, sum of 4 quarter ends: 0 of 21 runs (0.0%); open the Balances over time replay">0/21</a></td></tr><tr><th scope="row"><span class="cat">Ratios</span>mean of margins</th><td><a class="cell" style="--a:0.00" href="#replay?q=q010&amp;left=A&amp;right=D" aria-label="Setup A, mean of margins: 0 of 21 runs (0.0%); open the Ratios replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q010&amp;left=B&amp;right=D" aria-label="Setup B, mean of margins: 0 of 21 runs (0.0%); open the Ratios replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q010&amp;left=C&amp;right=D" aria-label="Setup C, mean of margins: 0 of 21 runs (0.0%); open the Ratios replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q010&amp;left=A&amp;right=D" aria-label="Setup D, mean of margins: 0 of 21 runs (0.0%); open the Ratios replay">0/21</a></td></tr><tr><th scope="row"><span class="cat">Year-to-date and fiscal calendars</span>used fiscal 2025</th><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup A, used fiscal 2025: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=B&amp;right=D" aria-label="Setup B, used fiscal 2025: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=C&amp;right=D" aria-label="Setup C, used fiscal 2025: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup D, used fiscal 2025: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td></tr><tr><th scope="row"><span class="cat">Year-to-date and fiscal calendars</span>used fiscal 2026</th><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup A, used fiscal 2026: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=B&amp;right=D" aria-label="Setup B, used fiscal 2026: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=C&amp;right=D" aria-label="Setup C, used fiscal 2026: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup D, used fiscal 2026: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td></tr><tr><th scope="row"><span class="cat">Year-to-date and fiscal calendars</span>used fy value</th><td><a class="cell hot" style="--a:0.19" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup A, used fy value: 1 of 21 runs (4.8%); open the Year-to-date and fiscal calendars replay">1/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=B&amp;right=D" aria-label="Setup B, used fy value: 0 of 21 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=C&amp;right=D" aria-label="Setup C, used fy value: 0 of 21 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup D, used fy value: 0 of 21 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/21</a></td></tr><tr><th scope="row"><span class="cat">Year-to-date and fiscal calendars</span>used ytd6 value</th><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup A, used ytd6 value: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=B&amp;right=D" aria-label="Setup B, used ytd6 value: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=C&amp;right=D" aria-label="Setup C, used ytd6 value: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup D, used ytd6 value: 0 of 3 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/3</a></td></tr><tr><th scope="row"><span class="cat">Year-to-date and fiscal calendars</span>used ytd9 value</th><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup A, used ytd9 value: 0 of 18 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/18</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=B&amp;right=D" aria-label="Setup B, used ytd9 value: 0 of 18 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/18</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=C&amp;right=D" aria-label="Setup C, used ytd9 value: 0 of 18 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/18</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q017&amp;left=A&amp;right=D" aria-label="Setup D, used ytd9 value: 0 of 18 runs (0.0%); open the Year-to-date and fiscal calendars replay">0/18</a></td></tr><tr><th scope="row"><span class="cat">Price indices</span>average instead of sum</th><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=A&amp;right=D" aria-label="Setup A, average instead of sum: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=B&amp;right=D" aria-label="Setup B, average instead of sum: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=C&amp;right=D" aria-label="Setup C, average instead of sum: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=A&amp;right=D" aria-label="Setup D, average instead of sum: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td></tr><tr><th scope="row"><span class="cat">Price indices</span>index point difference</th><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=A&amp;right=D" aria-label="Setup A, index point difference: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=B&amp;right=D" aria-label="Setup B, index point difference: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=C&amp;right=D" aria-label="Setup C, index point difference: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=A&amp;right=D" aria-label="Setup D, index point difference: 0 of 9 runs (0.0%); open the Price indices replay">0/9</a></td></tr><tr><th scope="row"><span class="cat">Price indices</span>sum of index levels</th><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=A&amp;right=D" aria-label="Setup A, sum of index levels: 0 of 3 runs (0.0%); open the Price indices replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=B&amp;right=D" aria-label="Setup B, sum of index levels: 0 of 3 runs (0.0%); open the Price indices replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=C&amp;right=D" aria-label="Setup C, sum of index levels: 0 of 3 runs (0.0%); open the Price indices replay">0/3</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q018&amp;left=A&amp;right=D" aria-label="Setup D, sum of index levels: 0 of 3 runs (0.0%); open the Price indices replay">0/3</a></td></tr><tr><th scope="row"><span class="cat">Brand hierarchy</span>included parent rows</th><td><a class="cell" style="--a:0.00" href="#replay?q=q030&amp;left=A&amp;right=D" aria-label="Setup A, included parent rows: 0 of 21 runs (0.0%); open the Brand hierarchy replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q030&amp;left=B&amp;right=D" aria-label="Setup B, included parent rows: 0 of 21 runs (0.0%); open the Brand hierarchy replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q030&amp;left=C&amp;right=D" aria-label="Setup C, included parent rows: 0 of 21 runs (0.0%); open the Brand hierarchy replay">0/21</a></td><td><a class="cell" style="--a:0.00" href="#replay?q=q030&amp;left=A&amp;right=D" aria-label="Setup D, included parent rows: 0 of 21 runs (0.0%); open the Brand hierarchy replay">0/21</a></td></tr></tbody></table></div>
-</div><p class="bridge">Numbers hide how. Watch the same question go wrong and right.</p></section>
+</div><p class="bridge">One more comparison, added after seeing the main results.</p></section>
+<section id="exploratory" aria-label="Exploratory">
+<div class="kicker exploratory">Added after seeing the main results</div>
+<h2>Exploratory: the same questions without meaning columns</h2>
+<p class="muted">Setup A again, on a copy of the database with the columns that carry meaning removed
+(brand_attention_daily: brand, grain; fundamentals: concept, period_basis, fiscal_year, fiscal_quarter). Same questions, answer key, model, instructions and scorer. Each removed column can be
+recomputed from columns that stayed (<code>src/build_raw_views.py</code> checks this), so no question became
+unanswerable. This run is not one of the planned comparisons.</p>
+<div class="box">
+<p class="verdict">No detectable difference between A and A_raw (0 vs 1 discordant questions; exact sign test, p = 1.00).</p>
+<dl class="counts">
+  <div><dt>A right, A_raw wrong</dt><dd>0<span class="small muted"></span></dd></div>
+  <div><dt>A_raw right, A wrong</dt><dd>1<span class="small muted"> (q010)</span></dd></div>
+  <div><dt>Both right</dt><dd>41</dd></div>
+  <div><dt>Both wrong</dt><dd>0</dd></div>
+</dl>
+<p class="small muted">A setup is right on a question when more than half of its 3 runs are correct
+(42 questions). Exact two-sided sign test on the 1 discordant
+question: p = 1.00.</p>
+</div>
+<div class="results-grid">
+  <div class="panel"><h3>Accuracy <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3><svg viewBox="0 0 560 88" role="img" aria-label="Accuracy, A vs A_raw, with lowest and highest run: A · Schema only 96.8% (runs 92.9% to 100.0%); A_raw · Raw tables 100.0% (runs 100.0% to 100.0%)" class="chart"><line x1="150.0" x2="150.0" y1="6" y2="70" class="grid"/><text x="150.0" y="84" class="tick" text-anchor="middle">0%</text><line x1="320.0" x2="320.0" y1="6" y2="70" class="grid"/><text x="320.0" y="84" class="tick" text-anchor="middle">50%</text><line x1="490.0" x2="490.0" y1="6" y2="70" class="grid"/><text x="490.0" y="84" class="tick" text-anchor="middle">100%</text><text x="142" y="20" class="lab" text-anchor="end">A · Schema only</text><rect x="150" y="6" width="329.2" height="18" class="bar" rx="2"/><line x1="465.7" x2="490.0" y1="15.0" y2="15.0" class="whisker"/><line x1="465.7" x2="465.7" y1="9" y2="21" class="whisker"/><line x1="490.0" x2="490.0" y1="9" y2="21" class="whisker"/><text x="498.0" y="20" class="val">96.8%</text><text x="142" y="50" class="lab" text-anchor="end">A_raw · Raw tables</text><rect x="150" y="36" width="340.0" height="18" class="bar" rx="2"/><line x1="490.0" x2="490.0" y1="45.0" y2="45.0" class="whisker"/><line x1="490.0" x2="490.0" y1="39" y2="51" class="whisker"/><line x1="490.0" x2="490.0" y1="39" y2="51" class="whisker"/><text x="498.0" y="50" class="val">100.0%</text></svg>
+    <p class="small muted range-text">A: runs 92.9% to 100.0% · A_raw: runs 100.0% to 100.0%</p><table class='cost'><thead><tr><th scope='col'>Measure</th><th scope='col'>A · Schema only</th><th scope='col'>A_raw · Raw tables (exploratory)</th></tr></thead><tbody><tr><th scope='row'>Correct runs</th><td>122 of 126</td><td>126 of 126</td></tr><tr><th scope='row'>Accuracy, mean [lowest, highest run]</th><td>96.8% [92.9%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Behavior accuracy</th><td>98.4%</td><td>100.0%</td></tr><tr><th scope='row'>Stored-trap hits</th><td>1 of 153</td><td>0 of 153</td></tr><tr><th scope='row'>Unparseable final lines</th><td>0</td><td>0</td></tr><tr><th scope='row'>Over-warned runs (not scored wrong)</th><td>34 of 102</td><td>37 of 102</td></tr><tr><th scope='row'>Tool calls per question</th><td>2.2</td><td>2.2</td></tr><tr><th scope='row'>Tokens per question</th><td>6,498</td><td>5,614</td></tr><tr><th scope='row'>Total cost</th><td>$0.100</td><td>$0.090</td></tr></tbody></table></div>
+  <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3><table class='cost'><thead><tr><th scope='col'>Category</th><th scope='col'>A</th><th scope='col'>A_raw</th></tr></thead><tbody><tr><th scope='row'>Balances over time</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Ratios</th><td>90.5% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Year-to-date and fiscal calendars</th><td>95.2% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Price indices</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Brand hierarchy</th><td>95.2% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Comparability and refusals</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr></tbody></table></div>
+</div>
+<p class="small">Scored correct is not the same as explained correctly. On q016 (Darden operating cash flow from continuing operations), 3 of 3 A_raw runs had the right number, but two of them (runs 1, 2) told the reader it was total operating cash flow; the column that said continuing operations was removed, and the scorer does not grade the explanation.</p>
+<p class="small"><a class="jump" href="#replay?q=q017&amp;left=A&amp;right=A_raw">Compare A and A_raw on q017 →</a> ·
+<a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/results/A_raw_failures.md">A_raw runs worth reading</a> ·
+<a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/results/summary.md">summary.md</a></p><p class="bridge">Numbers hide how. Watch the same question go wrong and right.</p></section>
 <section id="replay" aria-label="Replay">
 <h2>Side-by-side replay</h2>
 <p class="muted">Recorded runs, shown as recorded. Pick a question, then a setup for each column.</p>
@@ -1065,8 +1093,8 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <div class="replay" data-q="q017">
   <p class="q"><span class="muted">q017 · Year-to-date and fiscal calendars</span><br>“What was Darden&#x27;s total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?”</p>
   <p class="small"><b>Correct answer:</b> 3,718,800,000 USD · <b>Sources:</b> <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">10-K · 0000940944-26-000025</a> · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">10-Q · 0000940944-26-000009</a></p>
-  <p class="small muted">Darden&#x27;s fourteen-week fiscal fourth quarter. In the run shown, A derived the quarter in its explanation, then put the full-year figure in its final answer. A&#x27;s other runs were correct.</p>
-  <div class="cols"><div class="col" data-side="left"><div class="tabs" role="tablist" aria-label="Setup shown in the left column"><button type="button" role="tab" data-setup="A" aria-selected="true" tabindex="0">A · Schema only</button><button type="button" role="tab" data-setup="B" aria-selected="false" tabindex="-1">B · Prose</button><button type="button" role="tab" data-setup="C" aria-selected="false" tabindex="-1">C · Structured tags</button><button type="button" role="tab" data-setup="D" aria-selected="false" tabindex="-1">D · Enforcing tools</button></div>
+  <p class="small muted">Darden&#x27;s fourteen-week fiscal fourth quarter. In the run shown, A derived the quarter in its explanation, then put the full-year figure in its final answer. A&#x27;s other runs were correct. The A_raw tab is the exploratory run on the raw tables, which have no fiscal-quarter column.</p>
+  <div class="cols"><div class="col" data-side="left"><div class="tabs" role="tablist" aria-label="Setup shown in the left column"><button type="button" role="tab" data-setup="A" aria-selected="true" tabindex="0">A · Schema only</button><button type="button" role="tab" data-setup="B" aria-selected="false" tabindex="-1">B · Prose</button><button type="button" role="tab" data-setup="C" aria-selected="false" tabindex="-1">C · Structured tags</button><button type="button" role="tab" data-setup="D" aria-selected="false" tabindex="-1">D · Enforcing tools</button><button type="button" role="tab" data-setup="A_raw" aria-selected="false" tabindex="-1">A_raw · Raw tables (exploratory)</button></div>
 <div class="pane" data-setup="A" role="tabpanel">
   <div class="pane-head"><span class="badge bad">Trap: used fy value</span> <span class="small muted">setup A, run 2 · 2 of 3 runs correct (run 1: correct, run 2: trap, run 3: correct)</span></div>
   <p class="small"><b>Final answer:</b> 13,210,900,000 USD · warning false · refused false</p>
@@ -1171,7 +1199,105 @@ FINAL: {&quot;answer&quot;: 37188000…</div><details class="full"><summary>show
 The figure is derived as full-year FY2026 revenue ($13,210.9M) minus the nine-month year-to-date figure through February 22, 2026 ($9,492.1M). Both inputs come from SEC filings (the FY2026 10-K and the Q3 10-Q).
 
 FINAL: {&quot;answer&quot;: 3718800000, &quot;unit&quot;: &quot;USD&quot;, &quot;warning&quot;: false, &quot;refused&quot;: false}</div></details></div></div>
-</div></div><div class="col" data-side="right"><div class="tabs" role="tablist" aria-label="Setup shown in the right column"><button type="button" role="tab" data-setup="A" aria-selected="false" tabindex="-1">A · Schema only</button><button type="button" role="tab" data-setup="B" aria-selected="false" tabindex="-1">B · Prose</button><button type="button" role="tab" data-setup="C" aria-selected="false" tabindex="-1">C · Structured tags</button><button type="button" role="tab" data-setup="D" aria-selected="true" tabindex="0">D · Enforcing tools</button></div>
+</div>
+<div class="pane" data-setup="A_raw" role="tabpanel" hidden>
+  <div class="pane-head"><span class="badge ok">Correct</span> <span class="small muted">setup A_raw, run 1 · 3 of 3 runs correct (run 1: correct, run 2: correct, run 3: correct)</span></div>
+  <p class="small"><b>Final answer:</b> 3,718.8 USD millions · warning true · refused false</p>
+  <p class="small tool-sources"><b>Sources returned by its tools:</b> <span class="muted">none returned in this run</span></p>
+  <div class="steps" data-verbatim><div class="step"><div class="step-k"><code>run_sql</code></div><pre>SELECT ticker, metric, value, unit, period_start, period_end, form, accession, filed FROM fundamentals WHERE ticker ILIKE &#x27;%DRI%&#x27; OR cik IN (SELECT cik FROM fundamentals WHERE ticker ILIKE &#x27;%DRI%&#x27;) ORDER BY period_end DESC, metric LIMIT 200</pre><div class="step-k">returned</div><pre>ticker	metric	value	unit	period_start	period_end	form	accession	filed
+DRI	capex	734000000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	diluted_eps	10.38	USD/shares	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	net_income	1206700000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	op_cash_flow	18531…</pre><details class="full"><summary>show full</summary><pre>ticker	metric	value	unit	period_start	period_end	form	accession	filed
+DRI	capex	734000000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	diluted_eps	10.38	USD/shares	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	net_income	1206700000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	op_cash_flow	1853100000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	operating_income	1582800000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	revenue	13210900000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	total_assets	12862400000.0	USD	NULL	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	capex	540900000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	6.87	USD/shares	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	2.65	USD/shares	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	801800000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	306800000.0	USD	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	op_cash_flow	1281000000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	1066000000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	406400000.0	USD	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	9492100000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	3345300000.0	USD	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	total_assets	12888800000.0	USD	NULL	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	capex	375000000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	2.03	USD/shares	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	4.22	USD/shares	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	237200000.0	USD	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	495000000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	op_cash_flow	663200000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	659600000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	320400000.0	USD	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	3102100000.0	USD	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	6146800000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	total_assets	12940200000.0	USD	NULL	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	capex	174100000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	diluted_eps	2.19	USD/shares	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	net_income	257800000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	op_cash_flow	342500000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	operating_income	339200000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	revenue	3044700000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	total_assets	12759600000.0	USD	NULL	2025-08-24	10-Q	0000940944-25-000054	2025-09-26
+DRI	capex	644600000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	diluted_eps	8.86	USD/shares	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	net_income	1049600000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	op_cash_flow	1707000000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	operating_income	1362300000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	revenue	12076700000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	total_assets	12587000000.0	USD	NULL	2025-05-25	10-K	0000940944-25-000038	2025-07-18
+DRI	capex	472600000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	2.74	USD/shares	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	6.29	USD/shares	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	323400000.0	USD	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	745800000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	op_cash_flow	1250000000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	418200000.0	USD	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	979500000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	8805000000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	3158000000.0	USD	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	total_assets	12560900000.0	USD	NULL	2025-02-23	10-Q	0000940944-25-000018	2025-04-01
+DRI	capex	314500000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	1.82	USD/shares	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	3.56	USD/shares	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	215100000.0	USD	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	422300000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	op_cash_flow	661800000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	292100000.0	USD	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	561300000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	5647000000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	2890000000.0	USD	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	total_assets	12519200000.0	USD	NULL	2024-11-24	10-Q	0000940944-25-000003	2025-01-02
+DRI	capex	145200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	diluted_eps	1.74	USD/shares	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	net_income	207200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	op_cash_flow	273200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	operating_income	269200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	revenue	2757000000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	total_assets	11355500000.0	USD	NULL	2024-08-25	10-Q	0000940944-24-000055	2024-09-27</pre></details></div><div class="step"><div class="step-k"><code>run_sql</code></div><pre>SELECT DISTINCT ticker FROM fundamentals ORDER BY ticker</pre><div class="step-k">returned</div><pre>ticker
+CMG
+DRI
+WING
+YUM</pre></div><div class="step"><div class="step-k">model</div><div class="txt">Darden&#x27;s fiscal Q4 2026 revenue was about **$3,718.8 million**, derived rather than reported directly.
+
+The database has no quarterly figure for Q4. It has the full fiscal year ended May 31, 2026 (10-K, revenue $13,210.9M) and the nine-month year-to-date through February 22, 2026 (10-Q, revenue $9,492.1M). Subtracting gives:
+
+$13,210.9M − $9,492.1M = $3,718.…</div><details class="full"><summary>show full</summary><div class="txt">Darden&#x27;s fiscal Q4 2026 revenue was about **$3,718.8 million**, derived rather than reported directly.
+
+The database has no quarterly figure for Q4. It has the full fiscal year ended May 31, 2026 (10-K, revenue $13,210.9M) and the nine-month year-to-date through February 22, 2026 (10-Q, revenue $9,492.1M). Subtracting gives:
+
+$13,210.9M − $9,492.1M = $3,718.8M
+
+As a consistency check, the same method reproduces the reported Q3 figure ($6,146.8M six-month YTD less... i.e., $9,492.1M − $6,146.8M = $3,345.3M, which matches the Q3 10-Q&#x27;s stated $3,345.3M quarter). The derived number relies on the fiscal-year and nine-month figures being on the same basis.
+
+FINAL: {&quot;answer&quot;: 3718.8, &quot;unit&quot;: &quot;USD millions&quot;, &quot;warning&quot;: true, &quot;refused&quot;: false}</div></details></div></div>
+</div></div><div class="col" data-side="right"><div class="tabs" role="tablist" aria-label="Setup shown in the right column"><button type="button" role="tab" data-setup="A" aria-selected="false" tabindex="-1">A · Schema only</button><button type="button" role="tab" data-setup="B" aria-selected="false" tabindex="-1">B · Prose</button><button type="button" role="tab" data-setup="C" aria-selected="false" tabindex="-1">C · Structured tags</button><button type="button" role="tab" data-setup="D" aria-selected="true" tabindex="0">D · Enforcing tools</button><button type="button" role="tab" data-setup="A_raw" aria-selected="false" tabindex="-1">A_raw · Raw tables (exploratory)</button></div>
 <div class="pane" data-setup="A" role="tabpanel" hidden>
   <div class="pane-head"><span class="badge bad">Trap: used fy value</span> <span class="small muted">setup A, run 2 · 2 of 3 runs correct (run 1: correct, run 2: trap, run 3: correct)</span></div>
   <p class="small"><b>Final answer:</b> 13,210,900,000 USD · warning false · refused false</p>
@@ -1276,6 +1402,104 @@ FINAL: {&quot;answer&quot;: 37188000…</div><details class="full"><summary>show
 The figure is derived as full-year FY2026 revenue ($13,210.9M) minus the nine-month year-to-date figure through February 22, 2026 ($9,492.1M). Both inputs come from SEC filings (the FY2026 10-K and the Q3 10-Q).
 
 FINAL: {&quot;answer&quot;: 3718800000, &quot;unit&quot;: &quot;USD&quot;, &quot;warning&quot;: false, &quot;refused&quot;: false}</div></details></div></div>
+</div>
+<div class="pane" data-setup="A_raw" role="tabpanel" hidden>
+  <div class="pane-head"><span class="badge ok">Correct</span> <span class="small muted">setup A_raw, run 1 · 3 of 3 runs correct (run 1: correct, run 2: correct, run 3: correct)</span></div>
+  <p class="small"><b>Final answer:</b> 3,718.8 USD millions · warning true · refused false</p>
+  <p class="small tool-sources"><b>Sources returned by its tools:</b> <span class="muted">none returned in this run</span></p>
+  <div class="steps" data-verbatim><div class="step"><div class="step-k"><code>run_sql</code></div><pre>SELECT ticker, metric, value, unit, period_start, period_end, form, accession, filed FROM fundamentals WHERE ticker ILIKE &#x27;%DRI%&#x27; OR cik IN (SELECT cik FROM fundamentals WHERE ticker ILIKE &#x27;%DRI%&#x27;) ORDER BY period_end DESC, metric LIMIT 200</pre><div class="step-k">returned</div><pre>ticker	metric	value	unit	period_start	period_end	form	accession	filed
+DRI	capex	734000000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	diluted_eps	10.38	USD/shares	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	net_income	1206700000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	op_cash_flow	18531…</pre><details class="full"><summary>show full</summary><pre>ticker	metric	value	unit	period_start	period_end	form	accession	filed
+DRI	capex	734000000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	diluted_eps	10.38	USD/shares	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	net_income	1206700000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	op_cash_flow	1853100000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	operating_income	1582800000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	revenue	13210900000.0	USD	2025-05-26	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	total_assets	12862400000.0	USD	NULL	2026-05-31	10-K	0000940944-26-000025	2026-07-24
+DRI	capex	540900000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	6.87	USD/shares	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	2.65	USD/shares	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	801800000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	306800000.0	USD	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	op_cash_flow	1281000000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	1066000000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	406400000.0	USD	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	9492100000.0	USD	2025-05-26	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	3345300000.0	USD	2025-11-24	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	total_assets	12888800000.0	USD	NULL	2026-02-22	10-Q	0000940944-26-000009	2026-03-27
+DRI	capex	375000000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	2.03	USD/shares	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	4.22	USD/shares	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	237200000.0	USD	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	495000000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	op_cash_flow	663200000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	659600000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	320400000.0	USD	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	3102100000.0	USD	2025-08-25	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	6146800000.0	USD	2025-05-26	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	total_assets	12940200000.0	USD	NULL	2025-11-23	10-Q	0000940944-25-000071	2025-12-30
+DRI	capex	174100000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	diluted_eps	2.19	USD/shares	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	net_income	257800000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	op_cash_flow	342500000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	operating_income	339200000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	revenue	3044700000.0	USD	2025-05-26	2025-08-24	10-Q	0000940944-26-000042	2026-10-02
+DRI	total_assets	12759600000.0	USD	NULL	2025-08-24	10-Q	0000940944-25-000054	2025-09-26
+DRI	capex	644600000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	diluted_eps	8.86	USD/shares	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	net_income	1049600000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	op_cash_flow	1707000000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	operating_income	1362300000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	revenue	12076700000.0	USD	2024-05-27	2025-05-25	10-K	0000940944-26-000025	2026-07-24
+DRI	total_assets	12587000000.0	USD	NULL	2025-05-25	10-K	0000940944-25-000038	2025-07-18
+DRI	capex	472600000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	2.74	USD/shares	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	diluted_eps	6.29	USD/shares	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	323400000.0	USD	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	net_income	745800000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	op_cash_flow	1250000000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	418200000.0	USD	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	operating_income	979500000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	8805000000.0	USD	2024-05-27	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	revenue	3158000000.0	USD	2024-11-25	2025-02-23	10-Q	0000940944-26-000009	2026-03-27
+DRI	total_assets	12560900000.0	USD	NULL	2025-02-23	10-Q	0000940944-25-000018	2025-04-01
+DRI	capex	314500000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	1.82	USD/shares	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	diluted_eps	3.56	USD/shares	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	215100000.0	USD	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	net_income	422300000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	op_cash_flow	661800000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	292100000.0	USD	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	operating_income	561300000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	5647000000.0	USD	2024-05-27	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	revenue	2890000000.0	USD	2024-08-26	2024-11-24	10-Q	0000940944-25-000071	2025-12-30
+DRI	total_assets	12519200000.0	USD	NULL	2024-11-24	10-Q	0000940944-25-000003	2025-01-02
+DRI	capex	145200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	diluted_eps	1.74	USD/shares	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	net_income	207200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	op_cash_flow	273200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	operating_income	269200000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	revenue	2757000000.0	USD	2024-05-27	2024-08-25	10-Q	0000940944-25-000054	2025-09-26
+DRI	total_assets	11355500000.0	USD	NULL	2024-08-25	10-Q	0000940944-24-000055	2024-09-27</pre></details></div><div class="step"><div class="step-k"><code>run_sql</code></div><pre>SELECT DISTINCT ticker FROM fundamentals ORDER BY ticker</pre><div class="step-k">returned</div><pre>ticker
+CMG
+DRI
+WING
+YUM</pre></div><div class="step"><div class="step-k">model</div><div class="txt">Darden&#x27;s fiscal Q4 2026 revenue was about **$3,718.8 million**, derived rather than reported directly.
+
+The database has no quarterly figure for Q4. It has the full fiscal year ended May 31, 2026 (10-K, revenue $13,210.9M) and the nine-month year-to-date through February 22, 2026 (10-Q, revenue $9,492.1M). Subtracting gives:
+
+$13,210.9M − $9,492.1M = $3,718.…</div><details class="full"><summary>show full</summary><div class="txt">Darden&#x27;s fiscal Q4 2026 revenue was about **$3,718.8 million**, derived rather than reported directly.
+
+The database has no quarterly figure for Q4. It has the full fiscal year ended May 31, 2026 (10-K, revenue $13,210.9M) and the nine-month year-to-date through February 22, 2026 (10-Q, revenue $9,492.1M). Subtracting gives:
+
+$13,210.9M − $9,492.1M = $3,718.8M
+
+As a consistency check, the same method reproduces the reported Q3 figure ($6,146.8M six-month YTD less... i.e., $9,492.1M − $6,146.8M = $3,345.3M, which matches the Q3 10-Q&#x27;s stated $3,345.3M quarter). The derived number relies on the fiscal-year and nine-month figures being on the same basis.
+
+FINAL: {&quot;answer&quot;: 3718.8, &quot;unit&quot;: &quot;USD millions&quot;, &quot;warning&quot;: true, &quot;refused&quot;: false}</div></details></div></div>
 </div></div></div>
 </div>
 <div class="replay" data-q="q018" hidden>
@@ -2216,7 +2440,7 @@ All three figures are the reported full-year (FY) values from the 10-K filings, 
 FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;warning&quot;: false, &quot;refused&quot;: false}</div></details></div></div></details>
 </li></ul></div></div>
 <h3 class="sub">Limits</h3>
-<ul class="limits"><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Mitigation: questions were drafted before the core logic existed (replacements excepted, see How it was checked), written from an analyst&#x27;s point of view, and frozen before any run.</li><li>In D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so its advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No amendments to annual or quarterly filings are included.</li><li>A two-year window.</li><li>After the study the engine was hardened (followup/engine_fix/REPLAY.md); the recorded runs were made before that change and were not re-run.</li></ul><p class="bridge">How the answers were checked.</p></section>
+<ul class="limits"><li>Small sample: 7 questions per category, 4 companies.</li><li>One model.</li><li>The author wrote both the questions and the system, a source of bias. Mitigation: questions were drafted before the core logic existed (replacements excepted, see How it was checked), written from an analyst&#x27;s point of view, and frozen before any run.</li><li>In D, the interface and the enforcement change together.</li><li>D&#x27;s tools cover the question categories closely, so its advantage on answerable questions is partly by design. The unanswerable and out-of-coverage questions are D&#x27;s real test.</li><li>Pageviews are only a proxy for real alternative data.</li><li>No amendments to annual or quarterly filings are included.</li><li>A two-year window.</li><li>In A_raw, without the concept column, the model cannot confirm from the data that Darden&#x27;s operating cash flow is from continuing operations (q016).</li><li>After the study the engine was hardened (followup/engine_fix/REPLAY.md); the recorded runs were made before that change and were not re-run.</li></ul><p class="bridge">How the answers were checked.</p></section>
 <section id="checks" aria-label="Checks">
 <h2>How it was checked</h2>
 <ul class="checks">
@@ -2224,7 +2448,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
   <code>semantics.py</code>, so the code being tested does not grade itself.</li>
   <li>42 of 42 questions have every row in the verification log marked matches = yes (134 rows).</li><li>The answer key rests on 96 distinct input values; 4 record that the data does not exist and have no source to check.</li><li>The other 92 were checked against primary sources: 23 by the author by hand, and all 92 by an AI-assisted read of the source; 0 mismatches.</li><li>Revisions found: 0, among the 23 inputs from series that get revised (BLS and Census).</li><li>A further 32 values used only to compute trap answers were also read from the source.</li>
   <li>Most questions were written before the rule engine, and all were frozen before any run: drafted 2026-10-24 (commit f4f35b4), before semantics.py was first committed (2026-10-26); four replacements (q039, q040, q041, q042) were added 2026-10-27, after it; all frozen 2026-10-27 (git tag questions-frozen), before the first run (2026-10-28).</li>
-  <li>227 tests collected by pytest at build time.</li>
+  <li>238 tests collected by pytest at build time.</li>
   <li>Post-hoc scorer fix, made after the runs were scored and before publishing (found 2026-10-28, commit 4977d48): The scale-word pattern used \b, which treats &quot;_&quot; as part of a word, so a FINAL unit of &quot;USD_millions&quot; was read as unscaled while the question unit &quot;USD millions&quot; was read as millions, and correct answers were divided by 1,000,000. The scoring rule did not change: a unit that names millions is converted; the code had not applied it to this spelling. The fix changed 12 runs (B 8, C 4; q022, q023, q024), all from incorrect to correct.</li>
 </ul>
 <p><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a> · <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/eval/verification_log.csv">Verification log</a> ·
@@ -2232,9 +2456,9 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
 <a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation/blob/main/docs/error_analysis.md">Error analysis</a></p><p class="bridge">What this would mean on real research data.</p></section>
 <section id="next" aria-label="Next steps">
 <h2>Next steps</h2>
-<ol class="next"><li>Onboarding new datasets: a model drafts tags from a vendor&#x27;s column profiles and documentation, a human approves them, and the benchmark measures whether the tags hold up.</li><li>Mapping to a catalog: tags would map to column comments and tags, the enforcing tool to metric views or trusted queries, and the question set to a benchmark set.</li><li>Fresh data: tags already carry lineage and retrieval dates; streaming sources would need freshness fields too.</li><li>Not run: setup A on the raw tables. eval/results/A_raw.jsonl does not exist; if it is added, the page compares it with A question by question, with an exact sign test, labelled exploratory because it comes after seeing the main results.</li></ol>
+<ol class="next"><li>Onboarding new datasets: a model drafts tags from a vendor&#x27;s column profiles and documentation, a human approves them, and the benchmark measures whether the tags hold up.</li><li>Mapping to a catalog: tags would map to column comments and tags, the enforcing tool to metric views or trusted queries, and the question set to a benchmark set.</li><li>Fresh data: tags already carry lineage and retrieval dates; streaming sources would need freshness fields too.</li><li>Meaning that lives only in columns: removing the meaning columns made no detectable difference to setup A (exploratory, exact sign test, p = 1.00). Every removed column can be recomputed from columns that stayed, so a harder test needs data whose meaning cannot be recovered from other columns.</li></ol>
 <footer class="foot"><a href="https://github.com/karan-patel11/Tagging-for-Correct-Aggregation">Repository</a>
-<p class="small muted">A small experiment. All numbers generated from recorded runs on 2026-10-28 (UTC).</p></footer></section>
+<p class="small muted">A small experiment. All numbers generated from recorded runs on 2026-10-28 (UTC); the exploratory A_raw runs on 2026-11-01 (UTC).</p></footer></section>
 </main>
 </div>
 <script>
@@ -2255,7 +2479,8 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
   /* replay state: question, left setup, right setup */
   var section = document.getElementById("replay");
   var state = { q: document.body.getAttribute("data-default-replay"), left: "A", right: "D" };
-  var SETUPS = ["A", "B", "C", "D"];
+  var SETUPS = ["A", "B", "C", "D", "A_raw"];
+  var FALLBACK = { left: "A", right: "D" };
   function block(q) { return section.querySelector('.replay[data-q="' + q + '"]'); }
   function apply() {
     section.querySelectorAll(".picker [role=radio]").forEach(function (b) {
@@ -2267,6 +2492,7 @@ FINAL: {&quot;answer&quot;: 18.23, &quot;unit&quot;: &quot;percent&quot;, &quot;
     var r = block(state.q);
     ["left", "right"].forEach(function (side) {
       var col = r.querySelector('.col[data-side="' + side + '"]');
+      if (!col.querySelector('[role=tab][data-setup="' + state[side] + '"]')) { state[side] = FALLBACK[side]; }
       col.querySelectorAll("[role=tab]").forEach(function (t) {
         var on = t.getAttribute("data-setup") === state[side];
         t.setAttribute("aria-selected", on ? "true" : "false");

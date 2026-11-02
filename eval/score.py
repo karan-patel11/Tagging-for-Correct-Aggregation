@@ -34,6 +34,7 @@ Run: python eval/score.py --pilot
 
 import argparse
 import json
+import math
 import re
 import sys
 from collections import defaultdict
@@ -170,6 +171,62 @@ def _mean(xs):
     return sum(xs) / len(xs) if xs else None
 
 
+def setup_stats(rows, run_ids, categories, qs):
+    """Per-setup results (§11.6) from scored runs. Shared by A-D and the exploratory setups."""
+    def acc_by_run(rs):
+        per = [_mean([r["correct"] for r in rs if r["run"] == k]) for k in run_ids]
+        per = [p for p in per if p is not None]
+        return {"mean": _mean(per), "min": min(per) if per else None, "max": max(per) if per else None}
+
+    answer_runs = [r for r in rows if r["expected"] == "answer"]
+    per_q = defaultdict(list)
+    for r in rows:
+        per_q[r["question_id"]].append(r)
+    traps = defaultdict(lambda: [0, 0])
+    for r in rows:
+        if r["expected"] == "refuse":
+            continue
+        for name in qs[r["question_id"]].get("trap_answers") or {}:
+            traps[name][1] += 1
+            traps[name][0] += r["trap_hit"] == name
+    return {
+        "n": len(rows),
+        "correct_runs": sum(r["correct"] for r in rows),
+        "accuracy": acc_by_run(rows),
+        "accuracy_by_category": {c: acc_by_run([r for r in rows if r["category"] == c])
+                                 for c in categories},
+        "behavior_accuracy": _mean([r["behavior_ok"] for r in rows]),
+        "over_warning_rate": _mean([r["over_warning"] for r in answer_runs]),
+        "over_warning_runs": sum(r["over_warning"] for r in answer_runs),
+        "answer_question_runs": len(answer_runs),
+        "scaled_runs": sum(r["scaled"] for r in rows),
+        "trap_hits": {k: {"hits": h, "runs": n, "rate": h / n} for k, (h, n) in sorted(traps.items())},
+        "unparsed": [f"{r['question_id']} run {r['run']}" for r in rows if not r["parsed"]],
+        "avg_tool_calls": _mean([r["tool_calls"] for r in rows]),
+        "avg_tokens": {k: _mean([r["tokens"].get(k, 0) for r in rows]) for k in TOKEN_KEYS},
+        "cost_usd": round(sum(r["cost_usd"] for r in rows), 6),
+        "per_question": {q: {"tool_calls": _mean([r["tool_calls"] for r in rs]),
+                             "tokens": _mean([sum(r["tokens"].get(k, 0) for k in TOKEN_KEYS) for r in rs])}
+                         for q, rs in sorted(per_q.items())},
+    }
+
+
+def majority_vote(rows):
+    """question_id -> True when more than half of its runs are correct."""
+    votes = defaultdict(list)
+    for r in rows:
+        votes[r["question_id"]].append(r["correct"])
+    return {k: sum(v) > len(v) / 2 for k, v in votes.items()}
+
+
+def sign_test_p(b, c):
+    """Exact two-sided sign test on discordant pairs: 2 x P(X <= min(b, c)), X ~ Bin(b + c, 1/2), capped at 1."""
+    n = b + c
+    if n == 0:
+        return 1.0
+    return min(1.0, 2 * sum(math.comb(n, i) for i in range(min(b, c) + 1)) / 2 ** n)
+
+
 def summarize(scored, records, qs):
     by = defaultdict(list)
     for r in scored:
@@ -182,52 +239,10 @@ def summarize(scored, records, qs):
          "total_cost_usd": round(sum(rec.get("cost_usd", 0.0) for rec in records), 6),
          "n_runs": len(scored), "runs_per_question": run_ids, "setups": {}}
 
-    def acc_by_run(rows):
-        per = [_mean([r["correct"] for r in rows if r["run"] == k]) for k in run_ids]
-        per = [p for p in per if p is not None]
-        return {"mean": _mean(per), "min": min(per) if per else None, "max": max(per) if per else None}
-
     for setup in SETUPS:
-        rows = by.get(setup, [])
-        answer_runs = [r for r in rows if r["expected"] == "answer"]
-        per_q = defaultdict(list)
-        for r in rows:
-            per_q[r["question_id"]].append(r)
-        traps = defaultdict(lambda: [0, 0])
-        for r in rows:
-            if r["expected"] == "refuse":
-                continue
-            for name in qs[r["question_id"]].get("trap_answers") or {}:
-                traps[name][1] += 1
-                traps[name][0] += r["trap_hit"] == name
-        s["setups"][setup] = {
-            "n": len(rows),
-            "correct_runs": sum(r["correct"] for r in rows),
-            "accuracy": acc_by_run(rows),
-            "accuracy_by_category": {c: acc_by_run([r for r in rows if r["category"] == c])
-                                     for c in categories},
-            "behavior_accuracy": _mean([r["behavior_ok"] for r in rows]),
-            "over_warning_rate": _mean([r["over_warning"] for r in answer_runs]),
-            "over_warning_runs": sum(r["over_warning"] for r in answer_runs),
-            "answer_question_runs": len(answer_runs),
-            "scaled_runs": sum(r["scaled"] for r in rows),
-            "trap_hits": {k: {"hits": h, "runs": n, "rate": h / n} for k, (h, n) in sorted(traps.items())},
-            "unparsed": [f"{r['question_id']} run {r['run']}" for r in rows if not r["parsed"]],
-            "avg_tool_calls": _mean([r["tool_calls"] for r in rows]),
-            "avg_tokens": {k: _mean([r["tokens"].get(k, 0) for r in rows]) for k in TOKEN_KEYS},
-            "cost_usd": round(sum(r["cost_usd"] for r in rows), 6),
-            "per_question": {q: {"tool_calls": _mean([r["tool_calls"] for r in rs]),
-                                 "tokens": _mean([sum(r["tokens"].get(k, 0) for k in TOKEN_KEYS) for r in rs])}
-                             for q, rs in sorted(per_q.items())},
-        }
+        s["setups"][setup] = setup_stats(by.get(setup, []), run_ids, categories, qs)
 
-    def majority(setup):
-        votes = defaultdict(list)
-        for r in by.get(setup, []):
-            votes[r["question_id"]].append(r["correct"])
-        return {k: sum(v) > len(v) / 2 for k, v in votes.items()}
-
-    b, c = majority("B"), majority("C")
+    b, c = majority_vote(by.get("B", [])), majority_vote(by.get("C", []))
     common = sorted(set(b) & set(c))
     s["b_vs_c"] = {"questions": len(common),
                    "b_right_c_wrong": [k for k in common if b[k] and not c[k]],
@@ -237,6 +252,61 @@ def summarize(scored, records, qs):
                    "note": "Majority vote across runs (more than half correct). With this sample, "
                            "a difference of a few questions is within noise."}
     return s
+
+
+EXPLORATORY = ["A_raw"]
+EXPLORATORY_NOTE = ("Added after seeing the main results (SPEC section 15, 2026-11-01). A_raw is setup A on "
+                    "data/warehouse_raw.duckdb: the same tables with the meaning columns removed (fundamentals: "
+                    "period_basis, fiscal_year, fiscal_quarter, concept; brand_attention_daily: grain, brand). "
+                    "Same questions, answer key, model, instructions and scorer. Not one of the planned A-D "
+                    "comparisons and never mixed into their tables.")
+
+
+def load_exploratory(results_dir, setup):
+    """(question_id, run) -> record for an exploratory setup, or None if its file is absent."""
+    p = results_dir / f"{setup}.jsonl"
+    if not p.exists():
+        return None
+    runs = {}
+    for line in p.read_text().splitlines():
+        if line.strip():
+            r = json.loads(line)
+            if r["setup"] != setup:
+                sys.exit(f"{p} holds a run for setup {r['setup']}")
+            runs[(r["question_id"], r["run"])] = r
+    return runs
+
+
+def summarize_exploratory(setup, scored_x, records_x, scored_main, qs):
+    """Exploratory block: the setup's own results and a paired comparison with A by majority vote."""
+    run_ids = sorted({r["run"] for r in scored_x})
+    categories = sorted({r["category"] for r in scored_main})
+    st = setup_stats(scored_x, run_ids, categories, qs)
+    st.update({"model": sorted({rec.get("model") for rec in records_x}),
+               "run_dates": sorted({rec["started_at"][:10] for rec in records_x if rec.get("started_at")})
+               or "not recorded",
+               "runs_per_question": run_ids})
+    a = majority_vote([r for r in scored_main if r["setup"] == "A"])
+    x = majority_vote(scored_x)
+    if set(a) != set(x):
+        sys.exit(f"{setup} and A cover different questions: {sorted(set(a) ^ set(x))}")
+    common = sorted(a)
+    a_only = [k for k in common if a[k] and not x[k]]
+    x_only = [k for k in common if x[k] and not a[k]]
+    p = sign_test_p(len(a_only), len(x_only))
+    return {"note": EXPLORATORY_NOTE, "setups": {setup: st},
+            "a_vs_" + setup.lower(): {
+                "questions": len(common),
+                "a_right_" + setup.lower() + "_wrong": a_only,
+                setup.lower() + "_right_a_wrong": x_only,
+                "both_right": sum(a[k] and x[k] for k in common),
+                "both_wrong": sum(not a[k] and not x[k] for k in common),
+                "discordant": len(a_only) + len(x_only),
+                "sign_test_p": p,
+                "test": "exact two-sided sign test (McNemar) on discordant questions",
+                "rule": "a difference is reported only if p < 0.05; otherwise no detectable difference",
+                "note": "Majority vote across runs (more than half correct). With this sample, "
+                        "a difference of a few questions is within noise."}}
 
 
 def fmt(v):
@@ -328,7 +398,51 @@ def write_md(s, path):
         L.append(f"| {q} | " + " | ".join(cells) + " |")
     unparsed = [f"{k}: {u}" for k, v in s["setups"].items() for u in v["unparsed"]]
     L += ["", "## Unparseable FINAL lines (scored incorrect)", ""] + ([f"- {u}" for u in unparsed] or ["None."])
+    write_exploratory_md(s, L)
     path.write_text("\n".join(L) + "\n")
+
+
+def write_exploratory_md(s, L):
+    ex = s.get("exploratory")
+    if not ex:
+        return
+    pct = lambda x: "n/a" if x is None else f"{x:.1%}"
+    L += ["", "## Exploratory: setup A_raw (added after seeing the main results)", "", ex["note"], ""]
+    for k, v in ex["setups"].items():
+        a, ref = v["accuracy"], s["setups"]["A"]
+        L += [f"Model: {', '.join(m for m in v['model'] if m)}. Run date(s): {', '.join(v['run_dates'])}. "
+              f"Runs scored: {v['n']} ({len(v['runs_per_question'])} per question). Cost: ${v['cost_usd']:.4f}.", "",
+              "A is repeated from the tables above for reference only.", "",
+              "| Setup | Correct runs | Mean | Min | Max | Behavior accuracy | Unparsed |",
+              "|---|---|---|---|---|---|---|"]
+        for name, w in (("A (reference)", ref), (k, v)):
+            L.append(f"| {name} | {w['correct_runs']} / {w['n']} | {pct(w['accuracy']['mean'])} | {pct(w['accuracy']['min'])} "
+                     f"| {pct(w['accuracy']['max'])} | {pct(w['behavior_accuracy'])} | {len(w['unparsed'])} |")
+        L += ["", f"### {k}: accuracy by category (mean [min, max])", "", f"| Category | A (reference) | {k} |", "|---|---|---|"]
+        for c, ac in v["accuracy_by_category"].items():
+            ar = ref["accuracy_by_category"][c]
+            L.append(f"| {c} | {pct(ar['mean'])} [{pct(ar['min'])}, {pct(ar['max'])}] "
+                     f"| {pct(ac['mean'])} [{pct(ac['min'])}, {pct(ac['max'])}] |")
+        L += ["", f"### {k}: trap hits", "", "| Trap | A (reference) hits / runs | " + k + " hits / runs |", "|---|---|---|"]
+        for t, h in v["trap_hits"].items():
+            r = ref["trap_hits"][t]
+            L.append(f"| {t} | {r['hits']} / {r['runs']} | {h['hits']} / {h['runs']} |")
+        t, rt = v["avg_tokens"], ref["avg_tokens"]
+        L += ["", f"### {k}: cost (averages per run)", "",
+              "| Setup | Tool calls | Input | Cache write | Cache read | Output | Cost |", "|---|---|---|---|---|---|---|"]
+        for name, w, tk in (("A (reference)", ref, rt), (k, v, t)):
+            L.append(f"| {name} | {w['avg_tool_calls']:.1f} | {tk['input_tokens']:.0f} | {tk['cache_creation_input_tokens']:.0f} "
+                     f"| {tk['cache_read_input_tokens']:.0f} | {tk['output_tokens']:.0f} | ${w['cost_usd']:.4f} |")
+        L += ["", f"Over-warned runs / answer-question runs: {k} {v['over_warning_runs']} / {v['answer_question_runs']} "
+              f"(A {ref['over_warning_runs']} / {ref['answer_question_runs']}). Scale-converted runs: {k} {v['scaled_runs']} "
+              f"(A {ref['scaled_runs']}). Unparseable FINAL lines in {k}: "
+              f"{', '.join(v['unparsed']) if v['unparsed'] else 'none'}."]
+        pc = ex["a_vs_" + k.lower()]
+        L += ["", f"### A vs. {k}, paired by question", "",
+              f"Questions: {pc['questions']}. A right, {k} wrong: {len(pc['a_right_' + k.lower() + '_wrong'])} "
+              f"{pc['a_right_' + k.lower() + '_wrong']}. {k} right, A wrong: {len(pc[k.lower() + '_right_a_wrong'])} "
+              f"{pc[k.lower() + '_right_a_wrong']}. Both right: {pc['both_right']}. Both wrong: {pc['both_wrong']}. "
+              f"{pc['test'][0].upper() + pc['test'][1:]}: p = {pc['sign_test_p']:.2f} ({pc['rule']}).", "", pc["note"]]
 
 
 def main():
@@ -351,11 +465,26 @@ def main():
     s = summarize(scored, list(runs.values()), qs)
     if results_dir.resolve() == RESULTS.resolve():
         s["scorer_notes"] = SCORER_NOTES
+    for setup in EXPLORATORY:
+        xr = load_exploratory(results_dir, setup)
+        if xr is None:
+            continue
+        unknown = sorted({k[0] for k in xr} - set(qs))
+        if unknown:
+            sys.exit(f"{setup} results name questions not in questions.yaml: {unknown}")
+        sx = [score_run(r, qs[k[0]]) for k, r in xr.items()]
+        print(f"\nExploratory {setup} (not part of the A-D tables):")
+        print_table(sx)
+        s.setdefault("exploratory", {}).update(summarize_exploratory(setup, sx, list(xr.values()), scored, qs))
     print()
     for k, v in s["setups"].items():
         print(f"{k}: correct {v['correct_runs']}/{v['n']} | behavior "
               f"{v['behavior_accuracy']:.0%} | over-warning {v['over_warning_runs']} | scaled {v['scaled_runs']} "
               f"| unparsed {len(v['unparsed'])} {v['unparsed'] or ''}")
+    for k, v in s.get("exploratory", {}).get("setups", {}).items():
+        pc = s["exploratory"]["a_vs_" + k.lower()]
+        print(f"{k} (exploratory): correct {v['correct_runs']}/{v['n']} | behavior {v['behavior_accuracy']:.0%} "
+              f"| unparsed {len(v['unparsed'])} | A vs {k}: {pc['discordant']} discordant, p = {pc['sign_test_p']:.2f}")
     (results_dir / "summary.json").write_text(json.dumps(s, indent=1) + "\n")
     write_md(s, results_dir / "summary.md")
     print(f"\nWrote {results_dir / 'summary.json'} and {results_dir / 'summary.md'}")
