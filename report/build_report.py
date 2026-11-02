@@ -94,6 +94,8 @@ class Paths:
     template: Path = ROOT / "report" / "template.html"
     make_questions: Path = ROOT / "eval" / "make_questions.py"
     failure_types: Path = ROOT / "report" / "failure_types.yaml"
+    autotag_runs: Path = ROOT / "followup" / "autotag" / "results" / "D_autotag.jsonl"
+    autotag_scores: Path = ROOT / "followup" / "autotag" / "results" / "score_tags.json"
     contexts: Path = ROOT / "eval" / "contexts"
     out: Path = ROOT / "docs" / "index.html"
     links: Path = ROOT / "report" / "links_to_check.txt"
@@ -353,12 +355,19 @@ def load(paths):
             die("summary.json: missing key exploratory (eval/results/A_raw.jsonl exists; run python eval/score.py)")
         check_exploratory(summary, questions, runs, a_raw)
         raw_schema = removed_columns(read(paths.contexts / "schema_only.txt"), read(paths.contexts / "schema_raw.txt"))
+    autotag = {}
+    for line in read(paths.autotag_runs).splitlines():
+        if line.strip():
+            r = json.loads(line)
+            autotag[(r["question_id"], r["run"])] = r
+    autotag_scores = json.loads(read(paths.autotag_scores))
     replays = yaml.safe_load(read(paths.replays))
     ea = read(paths.error_analysis)
     template = read(paths.template)
     failure_types = check_failure_types(yaml.safe_load(read(paths.failure_types)), questions, runs)
     data = {"summary": summary, "questions": questions, "tags": tags, "vlog": vlog, "vlog_ai": vlog_ai,
             "runs": runs, "a_raw": a_raw, "raw_schema": raw_schema, "failure_types": failure_types,
+            "autotag": {"runs": autotag, "scores": autotag_scores},
             "replays": replays, "error_analysis": ea, "tool_specs": tool_specs,
             "make_questions": read(paths.make_questions), "git": git}
     files = {"summary": rel(paths.results / "summary.json"), "questions": rel(paths.questions),
@@ -367,6 +376,7 @@ def load(paths):
              "raw_schema": rel(paths.contexts / "schema_only.txt") + " vs " + rel(paths.contexts / "schema_raw.txt"),
              "replays": rel(paths.replays), "error_analysis": rel(paths.error_analysis),
              "failure_types": rel(paths.failure_types),
+             "autotag": rel(paths.autotag_runs) + ", " + rel(paths.autotag_scores),
              "tool_specs": rel(paths.tool_specs), "make_questions": rel(paths.make_questions),
              "git": "git metadata"}
     return Evidence(data, files), template, covered
@@ -1364,22 +1374,24 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
 <ul class="misses">{"".join(items)}</ul>
 </div>"""
 
-    # Conclusion: the whole experiment in one section, every number read from the outputs
+    # Conclusion: the whole experiment in one section, organised by the two problems it addresses
+    # (AI accessibility; alternative data and onboarding). Every number is read from the outputs.
     def conclusion(self):
         ev = self.ev
         s, questions, r = ev("summary"), ev("questions"), ev("replays")
         f = self.facts()
         st_ = s["setups"]
         repo = need(r, "links", "repo")
+        rule = "conclusion: "
         n_q = len({qq for v in st_.values() for qq in v["per_question"]})
-        n_cat = len({questions[qq]["category"] for v in st_.values() for qq in v["per_question"]})
         n_cat_q = {}
         for qq in questions.values():
             n_cat_q[qq["category"]] = n_cat_q.get(qq["category"], 0) + 1
         qpc = (str(min(n_cat_q.values())) if len(set(n_cat_q.values())) == 1
                else f"{min(n_cat_q.values())}–{max(n_cat_q.values())}")
         companies = len({SEC_RE.fullmatch(x["source_url"])[1] for x in ev("vlog") if SEC_RE.fullmatch(x["source_url"])})
-        # sources: only the enforcing tools return them (checked over every answerable run)
+
+        # Pillar 1 evidence
         with_src = {x: [0, 0] for x in score.SETUPS}
         for (qid, st, _), rec in ev("runs").items():
             if questions[qid]["expected_behavior"] == "refuse":
@@ -1387,75 +1399,134 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
             with_src[st][1] += 1
             with_src[st][0] += bool(tool_sources(rec, repo))
         if any(with_src[x][0] for x in score.SETUPS if x != "D"):
-            die("a SQL setup returned sources; the conclusion says only the enforcing tools do")
+            die("a SQL setup returned sources; the conclusion says only the enforcing tool does")
         dk, dn = with_src["D"]
         bc = s["b_vs_c"]
-        bvc, _ = b_vs_c_verdict(len(bc["b_right_c_wrong"]), len(bc["c_right_b_wrong"]))
+        _, bvc_p = b_vs_c_verdict(len(bc["b_right_c_wrong"]), len(bc["c_right_b_wrong"]))
+        b_c_disc = len(bc["b_right_c_wrong"]) + len(bc["c_right_b_wrong"])
         d = st_["A"]["answer_question_runs"]
         if {st_[x]["answer_question_runs"] for x in score.SETUPS} != {d}:
             die("over-warning totals differ by setup; the conclusion needs one shared total")
-        type_phrase = {"missed_warning": ("a missed calendar warning", "missed calendar warnings"),
-                       "period_misread": ("a misread period", "misread periods"),
-                       "execution_slip": ("an arithmetic slip", "arithmetic slips"),
-                       "tool_interface": ("the enforcing tools' own interface", "the enforcing tools' own interface")}
-        kinds = [plural(f["n"][t], *type_phrase[t]) for t in FAILURE_TYPES if f["n"][t]]
-        kinds_txt = ", ".join(kinds[:-1]) + (" and " if len(kinds) > 1 else "") + kinds[-1]
-        rule = "conclusion: "
-        did = self.claim(rule + "question, category and company counts; summary.json model, runs, total runs and cost",
-                         f"{n_q} analyst-style questions across {word(n_cat)} categories, answered from {word(companies)} "
-                         f"restaurant companies' SEC filings and public data, were put to {', '.join(s['model'])} in four "
-                         f"setups: the table schema only, prose descriptions, structured tags, and enforcing tools with no "
-                         f"SQL. Each question ran {len(s['runs_per_question'])} times per setup: {f['total']} runs, "
-                         f"${s['total_cost_usd']:.2f} in total.")
-        found = [
-            self.claim(rule + "wrong runs and stored-trap hits (summary.json)",
-                       f"Wrong runs were rare: {f['wrong']} of {f['total']}, with {f['hits']} stored-trap "
-                       f"{plural(f['hits'], 'hit', 'hits')} in {f['checks']} checks."),
-            self.claim(rule + f"setup A mean accuracy; stated only if A is at most {FEW_ERRORS:.0%} wrong",
-                       f"Setup A, with no tags at all, was already {pct(f['acc_a'])} correct, so the experiment sits "
-                       "near its ceiling and cannot show tags raising accuracy."),
-            self.claim(rule + "wrong runs by type (report/failure_types.yaml)", breakdown_claim(f, trap_phrase=f["trap_phrase"])),
-            self.claim(rule + "B vs C exact sign test (summary.json b_vs_c)", bvc),
+        d_wrong = st_["D"]["n"] - st_["D"]["correct_runs"]
+        if f["n"]["tool_interface"] != d_wrong:
+            die("not every wrong setup D run is a tool_interface failure; the conclusion says they all are")
+
+        # Pillar 2 evidence: vendor-style traps
+        parent = [(st_[x]["trap_hits"]["included_parent_rows"]["hits"], st_[x]["trap_hits"]["included_parent_rows"]["runs"])
+                  for x in score.SETUPS]
+        p_hits, p_checks = sum(h for h, _ in parent), sum(n for _, n in parent)
+        if p_hits:
+            die("the parent-row trap fired; the conclusion says no run added the parent's row")
+        h_ok = h_n = 0
+        c_warn = c_n = 0
+        for (qid, st, _), rec in ev("runs").items():
+            qq = questions[qid]
+            sc = score.score_run(rec, qq)
+            if qq["category"] == "hierarchy":
+                h_n += 1
+                h_ok += sc["correct"]
+            if qq["category"] == "comparability_unanswerable" and qq["expected_behavior"] == "answer_with_warning":
+                c_n += 1
+                c_warn += bool(sc["final"] and sc["final"]["warning"])
+        # Pillar 2 evidence: auto-drafted tags (followup/autotag)
+        at = ev("autotag")
+        at_sc = [score.score_run(rec, questions[k[0]]) for k, rec in at["runs"].items()]
+        at_ok, at_n = sum(x["correct"] for x in at_sc), len(at_sc)
+        at_bad = [x for x in at_sc if not x["correct"]]
+        refused = sum(1 for x in at_bad if x["final"] and x["final"]["refused"])
+        no_final = sum(1 for x in at_bad if x["final"] is None)
+        silent = sum(1 for x in at_bad if x["final"] and not x["final"]["refused"] and not x["final"]["warning"]
+                     and x["value"] is not None)
+        if silent:
+            die("auto-drafted tags produced silent wrong numbers; the conclusion says none did")
+        if refused + no_final != len(at_bad):
+            die("some auto-tag failures are neither refusals nor missing final lines; reword the conclusion")
+        verdicts = need(at["scores"], "verdicts")
+        review = sum(1 for v in verdicts.values() if v["verdict"] == "needs human review")
+
+        bottom = self.claim(rule + f"setup A at most {FEW_ERRORS:.0%} wrong (summary.json); judgment drawn from the findings below",
+                            "Making a dataset usable by AI is not mainly a model problem; it is a metadata and tooling "
+                            "problem. On this data, the model already got the arithmetic right almost every time. The real "
+                            "gains and the real risks were in what surrounds it: whether an answer carries its source, "
+                            "whether the tools let the model ask the right question, and whether the tags themselves are correct.")
+        did = self.claim(rule + "question and company counts; summary.json model, runs and cost",
+                         f"{n_q} analyst-style questions from {word(companies)} restaurant companies' SEC filings and public "
+                         f"data were put to {', '.join(s['model'])} in four setups: A, the table schema only; B, prose "
+                         "descriptions; C, the same facts as structured tags; D, an MCP tool that enforces the tags. "
+                         f"{f['total']} runs in total, ${s['total_cost_usd']:.2f}. The answer key was checked against "
+                         "primary sources and computed without the code under test, and the questions were frozen before "
+                         "the first run.")
+        p1 = [
+            self.claim(rule + "setup A mean accuracy and wrong runs (summary.json)",
+                       f"Accuracy was not the bottleneck. With no tags, the model was already {pct(f['acc_a'])} correct; "
+                       f"only {f['wrong']} of {f['total']} runs were wrong. This experiment cannot show tags raising accuracy."),
+            self.claim(rule + "B vs C exact sign test, stated only if p >= 0.05 (checked in facts())",
+                       "Format did not matter. Prose and structured tags with the same facts showed no detectable "
+                       f"difference ({b_c_disc} discordant {plural(b_c_disc, 'question', 'questions')}; "
+                       f"{sign_test_text(b_c_disc, bvc_p)}). Good documentation carried the same information as "
+                       "structured metadata."),
             self.claim(rule + "answerable runs whose tools returned at least one source, per setup",
-                       f"Only the enforcing tools returned a source with the answer: setup D in {dk} of {dn} answerable "
-                       "runs, the three SQL setups in none."),
+                       f"Enforcement bought traceability. Only the MCP tool returned a source with each answer: {dk} of "
+                       f"{dn} answerable runs, against none for raw SQL. An analyst who cannot read SQL can still click "
+                       "through to the filing."),
+            self.claim(rule + "over_warning_runs for A, B and D against the shared answer_question_runs total",
+                       f"Context cut false alarms. Warnings where none was needed fell from {st_['A']['over_warning_runs']} "
+                       f"of {d} runs to {st_['B']['over_warning_runs']} with prose and {st_['D']['over_warning_runs']} with "
+                       "the tool. This was not a planned measure, so it is a lead, not a result."),
+            self.claim(rule + "wrong setup D runs equal the tool_interface runs in report/failure_types.yaml",
+                       "The tool's interface became the weak point. "
+                       + ("Both of the tool setup's failures" if d_wrong == 2 else
+                          "The tool setup's one failure" if d_wrong == 1 else
+                          f"All {word(d_wrong)} of the tool setup's failures")
+                       + f" came from its own design, not from the data."),
         ]
-        extra = []
-        if ev("a_raw") is not None:
-            pc = need(s, "exploratory", "a_vs_a_raw")
-            v, _ = a_raw_verdict(len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))
-            extra.append(self.claim(rule + "exploratory A vs A_raw (summary.json exploratory.a_vs_a_raw)",
-                                    "Added after seeing the main results, setup A was rerun on the same tables with the "
-                                    f"meaning columns removed. {v} Every removed column could be recomputed from columns "
-                                    "that stayed, so this does not show that written meaning is unnecessary."))
-        extra.append(self.claim(rule + "over_warning_runs for A, B and D against the shared answer_question_runs total",
-                                f"Over-warning, a warning when none was needed, fell from {st_['A']['over_warning_runs']} of "
-                                f"{d} runs with no tags to {st_['B']['over_warning_runs']} with prose and "
-                                f"{st_['D']['over_warning_runs']} with the enforcing tools. It was not a planned measure, "
-                                "so it is a lead, not a result."))
+        p2 = [
+            self.claim(rule + "included_parent_rows trap hits (summary.json); hierarchy runs correct; comps runs that warned",
+                       f"The vendor-style traps held up. No run added a parent company's row on top of its brands "
+                       f"({p_hits} hits in {p_checks} checks); brand-hierarchy questions were wrong in {h_n - h_ok} of "
+                       f"{h_n} runs; and comparable-sales questions, where each company defines the measure its own way, "
+                       f"drew the required caveat in {c_warn} of {c_n} runs."),
+            self.claim(rule + "followup/autotag/results/D_autotag.jsonl scored with score.py; hand D from summary.json; "
+                       "field verdicts from followup/autotag/results/score_tags.json",
+                       "Auto-drafted tags are not ready to trust. In a follow-up, a model drafted the tags from column "
+                       "profiles and documentation, as you would for a new vendor dataset. With those drafts in place of the "
+                       f"hand tags, the tool setup fell from {st_['D']['correct_runs']} to {at_ok} correct runs out of {at_n}. "
+                       f"None of the {len(at_bad)} wrong runs was a silent wrong number: {refused} were refusals and "
+                       f"{no_final} ended without a final answer. {review} of {len(verdicts)} tag fields need human review. "
+                       "The workflow this points to: the model drafts, a human approves, and a benchmark checks the result."),
+        ]
         means = self.claim(rule + "restates the rule-checked findings above",
-                           "On this data, the model given only the table schema already got almost every answer right, "
-                           "so tags had few errors left to remove. What the experiment does show is narrower: prose and "
-                           "structured tags with the same facts performed alike, only the enforcing tools returned sources, "
-                           f"and the few remaining errors were {kinds_txt}. The next test needs data whose meaning cannot be "
-                           "recovered from other columns.")
+                           "For making datasets AI-accessible, the leverage is in tags a human has checked, tools that return "
+                           "lineage with every number, and a benchmark of real analyst questions run before and after "
+                           "tagging, not in model cleverness. For alternative data, raw vendor quirks are learnable, but tag "
+                           "drafting needs a review step before it scales.")
         limits = self.claim(rule + "questions per category and companies (questions.yaml, verification_log.csv)",
-                            f"Limits: {qpc} questions per category, {word(companies)} companies and one model; the enforcing "
-                            "tools were built around these categories, and the author wrote both the questions and the system.")
+                            f"Limits: {qpc} questions per category, {word(companies)} companies, one model. The pageview "
+                            "data is a stand-in for an alternative-data panel and predicts nothing. The tool was built around "
+                            "these categories, and the author wrote both the questions and the system.")
+        li = lambda items: "".join(f"<li>{e(t)}</li>" for t in items)  # noqa: E731
         return f"""
 <h2>Conclusion</h2>
 <div class="conclusion">
+<p class="punch">{e(bottom)}</p>
 <h3>Why we did it</h3>
-<p>Analysts now ask AI assistants finance questions over raw tables. A query can run without error and still be
-wrong when a column's meaning is not written down: a balance summed across quarters, a year-to-date figure read as a
-single quarter, a fiscal calendar misread, a brand counted together with its parent. This experiment asked whether
-writing that meaning down as tags, and enforcing it with tools, changes how often the answer is right.</p>
+<p>A research data team has two jobs here. First, make its datasets usable by AI end to end, so a model
+understands each metric and calculates and aggregates it correctly; an MCP connector alone does not do that.
+Second, bring in alternative data, which arrives raw: daily grain, brand rows next to parent rows, renamed series,
+and definitions that differ by vendor. We built both problems into one test with traps from real filings: balances
+that cannot be summed, year-to-date cash flow, Darden's May fiscal year, brand-versus-parent pageviews, and
+company-specific comparable-sales definitions.</p>
 <h3>What we did</h3>
 <p>{e(did)}</p>
-<h3>What we found</h3>
-<ul>{"".join(f"<li>{e(t)}</li>" for t in found + extra)}</ul>
+<h3>Pillar one: AI accessibility</h3>
+<ol>{li(p1)}</ol>
+<h3>Pillar two: alternative data and onboarding</h3>
+<ol start="{len(p1) + 1}">{li(p2)}</ol>
 <h3>What it means</h3>
 <p>{e(means)}</p>
+<h3>What would change the answer</h3>
+<p>Data whose meaning cannot be recovered from other columns, more questions to detect small effects, and a scorer
+that grades the explanation as well as the number.</p>
 <p class="small muted">{e(limits)}</p>
 </div>"""
 
