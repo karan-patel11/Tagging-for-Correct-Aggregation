@@ -36,6 +36,8 @@ a { color: var(--accent); }
 code, pre, .sql { font-family: var(--mono); font-size: 0.8rem; }
 pre { background: var(--code); border-radius: 6px; padding: 8px 10px; margin: 4px 0; white-space: pre-wrap;
   overflow-wrap: anywhere; }
+mark.hl { background: var(--accent-soft); color: var(--accent); font-weight: 700; border-radius: 3px;
+  padding: 0 2px; }
 h1 { font-size: 2.6rem; line-height: 1.1; margin: 0 0 10px; letter-spacing: -0.02em; }
 h2 { font-size: 1.45rem; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.01em; }
 h3 { font-size: 1rem; margin: 0 0 6px; }
@@ -91,6 +93,9 @@ section { background: var(--surface); border: 1px solid var(--line); border-radi
 .trapcount { max-width: 70ch; margin: 0 0 12px; }
 .headline { border-left: 4px solid var(--accent); padding: 8px 14px; margin: 12px 0; max-width: 80ch; }
 .headline p { margin: 4px 0 0; font-size: 1.05rem; }
+.result-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.result-pill { margin: 0; font-size: 0.9rem; background: var(--accent-soft); border: 1px solid var(--line);
+  border-radius: 10px; padding: 8px 12px; max-width: 34ch; }
 .kicker.exploratory { display: inline-block; border: 1px dashed var(--muted); color: var(--muted); border-radius: 999px;
   padding: 2px 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
 .punch { font-size: 1.2rem; font-weight: 600; max-width: 60ch; }
@@ -169,6 +174,8 @@ table.heat td { text-align: center; padding: 2px 3px; }
   border-radius: 6px; padding: 6px 8px; margin: 4px 0; }
 details > summary { cursor: pointer; color: var(--accent); font-size: 0.8rem; }
 details.more { display: inline; }
+details.breakdown { margin-top: 6px; }
+details.breakdown table { margin-top: 6px; }
 
 /* S7 */
 .box { border: 2px solid var(--accent); border-radius: 12px; padding: 16px 18px; }
@@ -235,7 +242,7 @@ everything needed; the model reported the full-year row instead of deriving the 
   <div class="stat bad-edge"><div class="stat-k">The trap: the full fiscal year</div>
     <div class="big">13,210,900,000 <span class="unit">USD</span></div>
     <div class="small muted">The query a recorded run wrote (setup A, run 2):</div>
-    <pre class="sql">SELECT ticker, metric, concept, value, unit, period_start, period_end, period_basis, fiscal_year, fiscal_quarter, form, filed FROM fundamentals WHERE ticker IN (&#x27;DRI&#x27;) AND (metric ILIKE &#x27;%revenue%&#x27; OR concept ILIKE &#x27;%revenue%&#x27;) ORDER BY period_end DESC LIMIT 50</pre>
+    <pre class="sql">SELECT ticker, metric, concept, value, unit, period_start, period_end, <mark class="hl">period_basis</mark>, fiscal_year, <mark class="hl">fiscal_quarter</mark>, form, filed FROM fundamentals WHERE ticker IN (&#x27;DRI&#x27;) AND (metric ILIKE &#x27;%revenue%&#x27; OR concept ILIKE &#x27;%revenue%&#x27;) ORDER BY period_end DESC LIMIT 50</pre>
     <div class="small muted">In that run the full-year row came back with period_basis FY and fiscal_quarter 4, and the model put it in its final answer.</div>
     <div class="small">Source: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">10-K on SEC EDGAR</a> (full fiscal year)</div></div>
   <div class="stat ok-edge"><div class="stat-k">The correct answer: the fourth quarter</div>
@@ -244,7 +251,8 @@ everything needed; the model reported the full-year row instead of deriving the 
     <div class="small">Sources: <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/">10-K on SEC EDGAR</a> (full fiscal year) · <a href="https://www.sec.gov/Archives/edgar/data/940944/000094094426000009/">10-Q on SEC EDGAR</a> (first nine months)</div></div>
 </div>
 <p class="trapcount"><b>1 of 12 recorded runs on this question fell into this trap (setup A, run 2). The other 11 were correct.</b></p>
-<div class="headline"><div class="stat-k">The result</div><p>With these tables and this model (claude-haiku-5-5), every setup made few errors: 0 to 4 wrong runs out of 126 per setup. B vs. C (prose vs. structured tags with the same facts) showed no detectable difference. Setup A, with no tags at all, was already 96.8% correct, so tagging had few errors to remove here. In an exploratory run added after seeing the main results, setup A on raw tables without the meaning columns showed no detectable difference from setup A (exact sign test, p = 1.00).</p></div>
+<div class="headline"><div class="stat-k">The result</div>
+  <div class="result-pills"><p class="result-pill">With these tables and this model (claude-haiku-5-5), every setup made few errors: 0 to 4 wrong runs out of 126 per setup.</p><p class="result-pill">B vs. C (prose vs. structured tags with the same facts) showed no detectable difference.</p><p class="result-pill">Setup A, with no tags at all, was already 96.8% correct, so tagging had few errors to remove here.</p><p class="result-pill">In an exploratory run added after seeing the main results, setup A on raw tables without the meaning columns showed no detectable difference from setup A (exact sign test, p = 1.00).</p></div></div>
 <p class="small muted">Both numbers come from the answer key; the trap count is scored from the recorded runs.</p><p class="bridge">The same kind of unstated rule turns up in seven places in this data.</p></section>
 <section id="traps" aria-label="Seven traps">
 <h2>Seven traps in real data</h2>
@@ -377,7 +385,7 @@ question: p = 1.00.</p>
 <div class="results-grid">
   <div class="panel"><h3>Accuracy <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3><svg viewBox="0 0 560 88" role="img" aria-label="Accuracy, A vs A_raw, with lowest and highest run: A · Schema only 96.8% (runs 92.9% to 100.0%); A_raw · Raw tables 100.0% (runs 100.0% to 100.0%)" class="chart"><line x1="150.0" x2="150.0" y1="6" y2="70" class="grid"/><text x="150.0" y="84" class="tick" text-anchor="middle">0%</text><line x1="320.0" x2="320.0" y1="6" y2="70" class="grid"/><text x="320.0" y="84" class="tick" text-anchor="middle">50%</text><line x1="490.0" x2="490.0" y1="6" y2="70" class="grid"/><text x="490.0" y="84" class="tick" text-anchor="middle">100%</text><text x="142" y="20" class="lab" text-anchor="end">A · Schema only</text><rect x="150" y="6" width="329.2" height="18" class="bar" rx="2"/><line x1="465.7" x2="490.0" y1="15.0" y2="15.0" class="whisker"/><line x1="465.7" x2="465.7" y1="9" y2="21" class="whisker"/><line x1="490.0" x2="490.0" y1="9" y2="21" class="whisker"/><text x="498.0" y="20" class="val">96.8%</text><text x="142" y="50" class="lab" text-anchor="end">A_raw · Raw tables</text><rect x="150" y="36" width="340.0" height="18" class="bar" rx="2"/><line x1="490.0" x2="490.0" y1="45.0" y2="45.0" class="whisker"/><line x1="490.0" x2="490.0" y1="39" y2="51" class="whisker"/><line x1="490.0" x2="490.0" y1="39" y2="51" class="whisker"/><text x="498.0" y="50" class="val">100.0%</text></svg>
     <p class="small muted range-text">A: runs 92.9% to 100.0% · A_raw: runs 100.0% to 100.0%</p><table class='cost'><thead><tr><th scope='col'>Measure</th><th scope='col'>A · Schema only</th><th scope='col'>A_raw · Raw tables (exploratory)</th></tr></thead><tbody><tr><th scope='row'>Correct runs</th><td>122 of 126</td><td>126 of 126</td></tr><tr><th scope='row'>Accuracy, mean [lowest, highest run]</th><td>96.8% [92.9%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Behavior accuracy</th><td>98.4%</td><td>100.0%</td></tr><tr><th scope='row'>Stored-trap hits</th><td>1 of 153</td><td>0 of 153</td></tr><tr><th scope='row'>Unparseable final lines</th><td>0</td><td>0</td></tr><tr><th scope='row'>Over-warned runs (not scored wrong)</th><td>34 of 102</td><td>37 of 102</td></tr><tr><th scope='row'>Tool calls per question</th><td>2.2</td><td>2.2</td></tr><tr><th scope='row'>Tokens per question</th><td>6,498</td><td>5,614</td></tr><tr><th scope='row'>Total cost</th><td>$0.100</td><td>$0.090</td></tr></tbody></table></div>
-  <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3><table class='cost'><thead><tr><th scope='col'>Category</th><th scope='col'>A</th><th scope='col'>A_raw</th></tr></thead><tbody><tr><th scope='row'>Balances over time</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Ratios</th><td>90.5% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Year-to-date and fiscal calendars</th><td>95.2% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Price indices</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Brand hierarchy</th><td>95.2% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Comparability and refusals</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr></tbody></table></div>
+  <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3><details class="breakdown"><summary>View full statistical breakdown</summary><table class='cost'><thead><tr><th scope='col'>Category</th><th scope='col'>A</th><th scope='col'>A_raw</th></tr></thead><tbody><tr><th scope='row'>Balances over time</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Ratios</th><td>90.5% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Year-to-date and fiscal calendars</th><td>95.2% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Price indices</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Brand hierarchy</th><td>95.2% [85.7%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr><tr><th scope='row'>Comparability and refusals</th><td>100.0% [100.0%, 100.0%]</td><td>100.0% [100.0%, 100.0%]</td></tr></tbody></table></details></div>
 </div>
 <p class="small">Scored correct is not the same as explained correctly. On q016 (Darden operating cash flow from continuing operations), 3 of 3 A_raw runs had the right number, but two of them (runs 1, 2) told the reader it was total operating cash flow; the column that said continuing operations was removed, and the scorer does not grade the explanation.</p>
 <p class="small"><a class="jump" href="#replay?q=q017&amp;left=A&amp;right=A_raw">Compare A and A_raw on q017 →</a> ·

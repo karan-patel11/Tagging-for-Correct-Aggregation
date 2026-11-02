@@ -36,6 +36,8 @@ a { color: var(--accent); }
 code, pre, .sql { font-family: var(--mono); font-size: 0.8rem; }
 pre { background: var(--code); border-radius: 6px; padding: 8px 10px; margin: 4px 0; white-space: pre-wrap;
   overflow-wrap: anywhere; }
+mark.hl { background: var(--accent-soft); color: var(--accent); font-weight: 700; border-radius: 3px;
+  padding: 0 2px; }
 h1 { font-size: 2.6rem; line-height: 1.1; margin: 0 0 10px; letter-spacing: -0.02em; }
 h2 { font-size: 1.45rem; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.01em; }
 h3 { font-size: 1rem; margin: 0 0 6px; }
@@ -91,6 +93,9 @@ section { background: var(--surface); border: 1px solid var(--line); border-radi
 .trapcount { max-width: 70ch; margin: 0 0 12px; }
 .headline { border-left: 4px solid var(--accent); padding: 8px 14px; margin: 12px 0; max-width: 80ch; }
 .headline p { margin: 4px 0 0; font-size: 1.05rem; }
+.result-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.result-pill { margin: 0; font-size: 0.9rem; background: var(--accent-soft); border: 1px solid var(--line);
+  border-radius: 10px; padding: 8px 12px; max-width: 34ch; }
 .kicker.exploratory { display: inline-block; border: 1px dashed var(--muted); color: var(--muted); border-radius: 999px;
   padding: 2px 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
 .punch { font-size: 1.2rem; font-weight: 600; max-width: 60ch; }
@@ -169,6 +174,8 @@ table.heat td { text-align: center; padding: 2px 3px; }
   border-radius: 6px; padding: 6px 8px; margin: 4px 0; }
 details > summary { cursor: pointer; color: var(--accent); font-size: 0.8rem; }
 details.more { display: inline; }
+details.breakdown { margin-top: 6px; }
+details.breakdown table { margin-top: 6px; }
 
 /* S7 */
 .box { border: 2px solid var(--accent); border-radius: 12px; padding: 16px 18px; }

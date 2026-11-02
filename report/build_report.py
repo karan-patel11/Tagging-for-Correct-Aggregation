@@ -146,6 +146,16 @@ def inline_md(text):
     return re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", t)
 
 
+def mark_terms(text, terms):
+    """HTML-escape text, then wrap whole-word matches of terms in <mark>. The text itself is
+    unchanged (recorded SQL and tool output are shown as recorded); this only adds emphasis
+    markup around words already present verbatim."""
+    out = e(text)
+    for t in terms:
+        out = re.sub(rf"\b{re.escape(t)}\b", lambda m: f'<mark class="hl">{m[0]}</mark>', out)
+    return out
+
+
 # ---------- evidence tracking (the story audit) ----------
 
 class Evidence:
@@ -858,7 +868,7 @@ everything needed; the model reported the full-year row instead of deriving the 
   <div class="stat bad-edge"><div class="stat-k">The trap: the full fiscal year</div>
     <div class="big">{e(num(trap))} <span class="unit">{e(q["unit"])}</span></div>
     <div class="small muted">The query a recorded run wrote (setup {e(hits[0][1])}, run {hits[0][2]}):</div>
-    <pre class="sql">{e(sql)}</pre>
+    <pre class="sql">{mark_terms(sql, ["period_basis", "fiscal_quarter"])}</pre>
     <div class="small muted">{e(row_desc)}</div>
     <div class="small">Source: {by["FY"]}</div></div>
   <div class="stat ok-edge"><div class="stat-k">The correct answer: the fourth quarter</div>
@@ -867,7 +877,8 @@ everything needed; the model reported the full-year row instead of deriving the 
     <div class="small">Sources: {by["FY"]} · {by["YTD9"]}</div></div>
 </div>
 <p class="trapcount"><b>{e(rec)}</b></p>
-<div class="headline"><div class="stat-k">The result</div><p>{" ".join(e(t) for t in head)}</p></div>
+<div class="headline"><div class="stat-k">The result</div>
+  <div class="result-pills">{"".join(f'<p class="result-pill">{e(t)}</p>' for t in head)}</div></div>
 <p class="small muted">Both numbers come from the answer key; the trap count is scored from the recorded runs.</p>"""
 
     # S2
@@ -1142,7 +1153,7 @@ question{"" if pc["discordant"] == 1 else "s"}: p = {p:.2f}.</p>
 <div class="results-grid">
   <div class="panel"><h3>Accuracy <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3>{bars}
     <p class="small muted range-text">{ranges}</p>{table}</div>
-  <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3>{cat_table}</div>
+  <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3><details class="breakdown"><summary>View full statistical breakdown</summary>{cat_table}</details></div>
 </div>
 {f'<p class="small">{e(note016)}</p>' if note016 else ""}
 <p class="small"><a class="jump" href="#replay?q={e(hq)}&amp;left=A&amp;right=A_raw">Compare A and A_raw on {e(hq)} →</a> ·
