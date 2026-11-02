@@ -92,6 +92,7 @@ class Paths:
     replays: Path = ROOT / "report" / "replays.yaml"
     template: Path = ROOT / "report" / "template.html"
     make_questions: Path = ROOT / "eval" / "make_questions.py"
+    failure_types: Path = ROOT / "report" / "failure_types.yaml"
     contexts: Path = ROOT / "eval" / "contexts"
     out: Path = ROOT / "docs" / "index.html"
     links: Path = ROOT / "report" / "links_to_check.txt"
@@ -345,6 +346,7 @@ def load(paths):
     replays = yaml.safe_load(read(paths.replays))
     ea = read(paths.error_analysis)
     template = read(paths.template)
+    failure_types = check_failure_types(yaml.safe_load(read(paths.failure_types)), questions, runs)
     data = {"summary": summary, "questions": questions, "tags": tags, "vlog": vlog, "vlog_ai": vlog_ai,
             "runs": runs, "a_raw": a_raw, "raw_schema": raw_schema,
             "replays": replays, "error_analysis": ea, "tool_specs": tool_specs,
@@ -376,6 +378,30 @@ def check_exploratory(summary, questions, runs, a_raw):
         die("summary.json exploratory.a_vs_a_raw does not match the transcripts; run python eval/score.py")
     if abs(mcnemar_p(len(a_only), len(raw_only)) - pc["sign_test_p"]) > 1e-12:
         die("summary.json exploratory.a_vs_a_raw.sign_test_p does not match the exact sign test")
+
+
+FAILURE_TYPES = ("missed_warning", "execution_slip", "tool_interface")
+
+
+def check_failure_types(doc, questions, runs):
+    """report/failure_types.yaml must list exactly the runs score.py scores incorrect, each with one of
+    FAILURE_TYPES. Returns (setup, question_id, run) -> entry."""
+    entries = (doc or {}).get("failures") or die("report/failure_types.yaml has no 'failures' list")
+    typed = {}
+    for x in entries:
+        k = (x.get("setup"), x.get("question_id"), x.get("run"))
+        if k in typed:
+            die(f"report/failure_types.yaml lists {k} twice")
+        if x.get("type") not in FAILURE_TYPES:
+            die(f"report/failure_types.yaml {k}: type {x.get('type')!r} is not one of {', '.join(FAILURE_TYPES)}")
+        if not str(x.get("note") or "").strip():
+            die(f"report/failure_types.yaml {k}: no note")
+        typed[k] = x
+    wrong = {(k[1], k[0], k[2]) for k, rec in runs.items() if not score.score_run(rec, questions[k[0]])["correct"]}
+    if set(typed) != wrong:
+        die("report/failure_types.yaml keys do not match the wrong runs in the results: "
+            f"missing {sorted(wrong - set(typed))}, not wrong {sorted(set(typed) - wrong)}")
+    return typed
 
 
 # ---------- scoring ----------
