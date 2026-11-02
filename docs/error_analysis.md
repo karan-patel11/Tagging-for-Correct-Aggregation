@@ -8,7 +8,7 @@ The recorded run starts fall on October 28, 2026 UTC (October 27 Eastern). Each 
 
 ## A: schema and SQL
 
-- **q017, run 2 — annual revenue substituted for a quarter.** The response actually calculated Darden's fiscal Q4 2026 revenue as $3,718.8 million in its explanation, but put the full-year $13,210.9 million in FINAL, matching `used_fy_value`; its other two runs answered correctly. A possible remedy is to verify the FINAL period against the requested period and the derivation before emitting it.
+- **q017, run 2 — annual revenue substituted for a quarter.** The response said the full year was the figure asked about, computed fiscal Q4 ($3,718.8 million) only as a cross-check, and put full-year revenue ($13,210.9 million) in FINAL, matching used_fy_value; its other two runs answered correctly. A possible remedy is to verify the FINAL period against the requested period and the derivation before emitting it.
 - **q031, run 2 — arithmetic after a correct retrieval.** The response listed KFC views of 313,786 and a combined total of 601,924, but reported 52.3% instead of approximately 52.1305%, outside the 0.1 percentage-point tolerance. Computing the division directly in SQL would avoid this particular handwritten calculation error.
 
 The other two A failures are q010 runs 1 and 2: both returned the correct combined margin but omitted the required mixed-fiscal-calendar warning. That is a behavior error, not a mean-of-margins trap hit.
