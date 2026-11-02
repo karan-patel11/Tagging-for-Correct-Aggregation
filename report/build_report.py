@@ -839,6 +839,10 @@ PARTS = [
          "Where it still breaks."),
         ("failures", "Where it fails", "Is this honest?", "What the score itself cannot see."),
         ("misses", "What the score misses", "What does a correct score not tell you?",
+         "So what does it all add up to?"),
+    ]),
+    ("part-conclusion", "Conclusion", [
+        ("conclusion", "Conclusion", "If I read only one section, what did this experiment find?",
          "How the answers were checked."),
     ]),
     ("part-footer", None, [
@@ -1358,6 +1362,101 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
 <div class="note-box">
 <h2>What the score misses</h2>
 <ul class="misses">{"".join(items)}</ul>
+</div>"""
+
+    # Conclusion: the whole experiment in one section, every number read from the outputs
+    def conclusion(self):
+        ev = self.ev
+        s, questions, r = ev("summary"), ev("questions"), ev("replays")
+        f = self.facts()
+        st_ = s["setups"]
+        repo = need(r, "links", "repo")
+        n_q = len({qq for v in st_.values() for qq in v["per_question"]})
+        n_cat = len({questions[qq]["category"] for v in st_.values() for qq in v["per_question"]})
+        n_cat_q = {}
+        for qq in questions.values():
+            n_cat_q[qq["category"]] = n_cat_q.get(qq["category"], 0) + 1
+        qpc = (str(min(n_cat_q.values())) if len(set(n_cat_q.values())) == 1
+               else f"{min(n_cat_q.values())}–{max(n_cat_q.values())}")
+        companies = len({SEC_RE.fullmatch(x["source_url"])[1] for x in ev("vlog") if SEC_RE.fullmatch(x["source_url"])})
+        # sources: only the enforcing tools return them (checked over every answerable run)
+        with_src = {x: [0, 0] for x in score.SETUPS}
+        for (qid, st, _), rec in ev("runs").items():
+            if questions[qid]["expected_behavior"] == "refuse":
+                continue
+            with_src[st][1] += 1
+            with_src[st][0] += bool(tool_sources(rec, repo))
+        if any(with_src[x][0] for x in score.SETUPS if x != "D"):
+            die("a SQL setup returned sources; the conclusion says only the enforcing tools do")
+        dk, dn = with_src["D"]
+        bc = s["b_vs_c"]
+        bvc, _ = b_vs_c_verdict(len(bc["b_right_c_wrong"]), len(bc["c_right_b_wrong"]))
+        d = st_["A"]["answer_question_runs"]
+        if {st_[x]["answer_question_runs"] for x in score.SETUPS} != {d}:
+            die("over-warning totals differ by setup; the conclusion needs one shared total")
+        type_phrase = {"missed_warning": ("a missed calendar warning", "missed calendar warnings"),
+                       "period_misread": ("a misread period", "misread periods"),
+                       "execution_slip": ("an arithmetic slip", "arithmetic slips"),
+                       "tool_interface": ("the enforcing tools' own interface", "the enforcing tools' own interface")}
+        kinds = [plural(f["n"][t], *type_phrase[t]) for t in FAILURE_TYPES if f["n"][t]]
+        kinds_txt = ", ".join(kinds[:-1]) + (" and " if len(kinds) > 1 else "") + kinds[-1]
+        rule = "conclusion: "
+        did = self.claim(rule + "question, category and company counts; summary.json model, runs, total runs and cost",
+                         f"{n_q} analyst-style questions across {word(n_cat)} categories, answered from {word(companies)} "
+                         f"restaurant companies' SEC filings and public data, were put to {', '.join(s['model'])} in four "
+                         f"setups: the table schema only, prose descriptions, structured tags, and enforcing tools with no "
+                         f"SQL. Each question ran {len(s['runs_per_question'])} times per setup: {f['total']} runs, "
+                         f"${s['total_cost_usd']:.2f} in total.")
+        found = [
+            self.claim(rule + "wrong runs and stored-trap hits (summary.json)",
+                       f"Wrong runs were rare: {f['wrong']} of {f['total']}, with {f['hits']} stored-trap "
+                       f"{plural(f['hits'], 'hit', 'hits')} in {f['checks']} checks."),
+            self.claim(rule + f"setup A mean accuracy; stated only if A is at most {FEW_ERRORS:.0%} wrong",
+                       f"Setup A, with no tags at all, was already {pct(f['acc_a'])} correct, so the experiment sits "
+                       "near its ceiling and cannot show tags raising accuracy."),
+            self.claim(rule + "wrong runs by type (report/failure_types.yaml)", breakdown_claim(f, trap_phrase=f["trap_phrase"])),
+            self.claim(rule + "B vs C exact sign test (summary.json b_vs_c)", bvc),
+            self.claim(rule + "answerable runs whose tools returned at least one source, per setup",
+                       f"Only the enforcing tools returned a source with the answer: setup D in {dk} of {dn} answerable "
+                       "runs, the three SQL setups in none."),
+        ]
+        extra = []
+        if ev("a_raw") is not None:
+            pc = need(s, "exploratory", "a_vs_a_raw")
+            v, _ = a_raw_verdict(len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))
+            extra.append(self.claim(rule + "exploratory A vs A_raw (summary.json exploratory.a_vs_a_raw)",
+                                    "Added after seeing the main results, setup A was rerun on the same tables with the "
+                                    f"meaning columns removed. {v} Every removed column could be recomputed from columns "
+                                    "that stayed, so this does not show that written meaning is unnecessary."))
+        extra.append(self.claim(rule + "over_warning_runs for A, B and D against the shared answer_question_runs total",
+                                f"Over-warning, a warning when none was needed, fell from {st_['A']['over_warning_runs']} of "
+                                f"{d} runs with no tags to {st_['B']['over_warning_runs']} with prose and "
+                                f"{st_['D']['over_warning_runs']} with the enforcing tools. It was not a planned measure, "
+                                "so it is a lead, not a result."))
+        means = self.claim(rule + "restates the rule-checked findings above",
+                           "On this data, the model given only the table schema already got almost every answer right, "
+                           "so tags had few errors left to remove. What the experiment does show is narrower: prose and "
+                           "structured tags with the same facts performed alike, only the enforcing tools returned sources, "
+                           f"and the few remaining errors were {kinds_txt}. The next test needs data whose meaning cannot be "
+                           "recovered from other columns.")
+        limits = self.claim(rule + "questions per category and companies (questions.yaml, verification_log.csv)",
+                            f"Limits: {qpc} questions per category, {word(companies)} companies and one model; the enforcing "
+                            "tools were built around these categories, and the author wrote both the questions and the system.")
+        return f"""
+<h2>Conclusion</h2>
+<div class="conclusion">
+<h3>Why we did it</h3>
+<p>Analysts now ask AI assistants finance questions over raw tables. A query can run without error and still be
+wrong when a column's meaning is not written down: a balance summed across quarters, a year-to-date figure read as a
+single quarter, a fiscal calendar misread, a brand counted together with its parent. This experiment asked whether
+writing that meaning down as tags, and enforcing it with tools, changes how often the answer is right.</p>
+<h3>What we did</h3>
+<p>{e(did)}</p>
+<h3>What we found</h3>
+<ul>{"".join(f"<li>{e(t)}</li>" for t in found + extra)}</ul>
+<h3>What it means</h3>
+<p>{e(means)}</p>
+<p class="small muted">{e(limits)}</p>
 </div>"""
 
     # Footer: limits (SPEC §11.8)
