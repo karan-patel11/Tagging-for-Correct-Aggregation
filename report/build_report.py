@@ -34,6 +34,7 @@ import html
 import io
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -96,6 +97,7 @@ class Paths:
     contexts: Path = ROOT / "eval" / "contexts"
     out: Path = ROOT / "docs" / "index.html"
     links: Path = ROOT / "report" / "links_to_check.txt"
+    values: Path = ROOT / "report" / "page_values_to_check.csv"
 
 
 def rel(p):
@@ -184,15 +186,23 @@ def first_commit_date(path):
 
 
 @lru_cache(maxsize=1)
-def pytest_count():
-    """Number of tests pytest collects (collection only; nothing runs). None if it can't be read."""
-    try:
-        r = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q"], cwd=ROOT,
-                           capture_output=True, text=True, timeout=180)
-    except (OSError, subprocess.TimeoutExpired):
+def pytest_passed():
+    """Run the test suite and return the number of tests passed; the build fails if any test fails or
+    errors. Returns None when this build is itself running inside pytest (the tests build the page),
+    so the suite never runs itself recursively."""
+    if os.environ.get("PYTEST_CURRENT_TEST") or os.environ.get("BUILD_REPORT_IN_PYTEST"):
         return None
-    m = re.search(r"^(\d+) tests? collected", r.stdout, re.M)
-    return int(m.group(1)) if m else None
+    env = {**os.environ, "BUILD_REPORT_IN_PYTEST": "1"}
+    try:
+        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider"], cwd=ROOT,
+                           capture_output=True, text=True, timeout=900, env=env)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        die(f"pytest could not run during the build: {exc}")
+    tail = (r.stdout.strip().splitlines() or [""])[-1]
+    passed = re.search(r"(\d+) passed", tail)
+    if r.returncode != 0 or not passed or re.search(r"\b(failed|error|errors)\b", tail):
+        die(f"pytest failed during the build: {tail or r.stderr.strip()[-300:]}")
+    return int(passed.group(1))
 
 
 # ---------- load and validate ----------
@@ -348,7 +358,7 @@ def load(paths):
     template = read(paths.template)
     failure_types = check_failure_types(yaml.safe_load(read(paths.failure_types)), questions, runs)
     data = {"summary": summary, "questions": questions, "tags": tags, "vlog": vlog, "vlog_ai": vlog_ai,
-            "runs": runs, "a_raw": a_raw, "raw_schema": raw_schema,
+            "runs": runs, "a_raw": a_raw, "raw_schema": raw_schema, "failure_types": failure_types,
             "replays": replays, "error_analysis": ea, "tool_specs": tool_specs,
             "make_questions": read(paths.make_questions), "git": git}
     files = {"summary": rel(paths.results / "summary.json"), "questions": rel(paths.questions),
@@ -356,6 +366,7 @@ def load(paths):
              "runs": rel(paths.results / "{A,B,C,D}.jsonl"), "a_raw": rel(a_raw_path) + ("" if a_raw is not None else " (absent)"),
              "raw_schema": rel(paths.contexts / "schema_only.txt") + " vs " + rel(paths.contexts / "schema_raw.txt"),
              "replays": rel(paths.replays), "error_analysis": rel(paths.error_analysis),
+             "failure_types": rel(paths.failure_types),
              "tool_specs": rel(paths.tool_specs), "make_questions": rel(paths.make_questions),
              "git": "git metadata"}
     return Evidence(data, files), template, covered
@@ -380,7 +391,7 @@ def check_exploratory(summary, questions, runs, a_raw):
         die("summary.json exploratory.a_vs_a_raw.sign_test_p does not match the exact sign test")
 
 
-FAILURE_TYPES = ("missed_warning", "execution_slip", "tool_interface")
+FAILURE_TYPES = ("missed_warning", "period_misread", "execution_slip", "tool_interface")
 
 
 def check_failure_types(doc, questions, runs):
@@ -591,6 +602,15 @@ def b_vs_c_verdict(b_right_c_wrong, c_right_b_wrong):
             f"({b} vs {c} discordant questions; too few to separate from noise)."), p
 
 
+MIN_DISCORDANT = 6  # an exact two-sided sign test cannot reach p < 0.05 with fewer discordant questions
+TOO_FEW = "too few discordant questions to separate from noise"
+
+
+def sign_test_text(n_discordant, p):
+    """'p = x.xx', or the too-few phrase when the discordant count is below MIN_DISCORDANT."""
+    return TOO_FEW if n_discordant < MIN_DISCORDANT else f"p = {p:.2f}"
+
+
 def overlaps(r1, r2):
     return r1[0] <= r2[1] and r2[0] <= r1[1]
 
@@ -678,8 +698,8 @@ def a_raw_verdict(a_only, raw_only):
                     f"disagreed (exact sign test, p = {p:.2f})."), p
         return (f"A (schema with meaning columns) was right where A_raw was wrong on {a_only} of {n} questions "
                 f"where they disagreed (exact sign test, p = {p:.2f})."), p
-    return (f"No detectable difference between A and A_raw ({a_only} vs {raw_only} discordant questions; "
-            f"exact sign test, p = {p:.2f})."), p
+    test = TOO_FEW if n < MIN_DISCORDANT else f"exact sign test, p = {p:.2f}"
+    return f"No detectable difference between A and A_raw ({a_only} vs {raw_only} discordant questions; {test}).", p
 
 
 def a_raw_headline(a_only, raw_only):
@@ -732,6 +752,10 @@ def verification_counts(vlog, vlog_ai):
     if hand & unsourced:
         die(f"inputs marked hand-checked have no source in verification_ai.csv: {sorted(hand & unsourced)}")
     labelled = {k for k, r in ai.items() if r["status"] == "hand_checked_reread"}
+    hand_rows = sum(1 for r in vlog if HAND_RE.search(r["notes"]))
+    if len(labelled) != len(hand):
+        die(f"hand checks disagree, counts differ: verification_ai.csv status hand_checked_reread = {len(labelled)}; "
+            f"distinct verification_log.csv inputs whose notes record a hand read = {len(hand)} ({hand_rows} rows)")
     if labelled != hand:
         die("hand checks disagree: verification_log.csv notes vs verification_ai.csv status hand_checked_reread "
             f"(log only: {sorted(hand - labelled)[:5]}; ai only: {sorted(labelled - hand)[:5]})")
@@ -785,26 +809,65 @@ def paired(x, y):
 A_RAW_NOT_RUN = ("Not run: setup A on the raw tables. eval/results/A_raw.jsonl does not exist; if it is added, "
                  "the page compares it with A question by question, with an exact sign test, labelled exploratory "
                  "because it comes after seeing the main results.")
-EXPLORATORY = ("exploratory", "Exploratory", "Was setup A accurate only because the meaning was already in the columns?",
-               "Numbers hide how. Watch the same question go wrong and right.")
-EXPLORATORY_IN = "One more comparison, added after seeing the main results."
+EXPLORATORY = ("exploratory", "Why the baseline was so strong",
+               "Was setup A accurate only because the meaning was already in the columns?",
+               "Where it still breaks.")
+EXPLORATORY_IN = "So why was the baseline so strong?"  # bridge from B vs C when the exploratory run exists
 
 FAILURE_ORDER = ["D", "A", "B", "C"]  # D first: where enforcement itself broke
 
-SECTIONS = [  # id, rail name, reader question, bridge into the next section
-    ("problem", "Problem", "What's the problem?", "The same kind of unstated rule turns up in {n_traps} places in this data."),
-    ("traps", "{n_traps} traps", "How common or broad is this?", "So what would a model need to know to avoid these?"),
-    ("fix", "The fix", "What's the proposed solution?", "Does any of this actually change what the model gets right?"),
-    ("experiment", "Experiment", "How was it tested fairly?", "Here's what happened."),
-    ("results", "Results", "Did it work, and where?", "Numbers hide how. Watch the same question go wrong and right."),
-    ("replay", "Replay", "What does failure actually look like?",
-     "The headline question was format: prose vs. structured tags."),
-    ("b-vs-c", "B vs C", "Should tagging effort go into structure, or is good documentation enough?",
-     "Where it still breaks."),
-    ("failures", "Failures", "Is this honest?", "How the answers were checked."),
-    ("checks", "Checks", "How were the answers checked?", "What this would mean on real research data."),
-    ("next", "Next steps", "What would this mean on real research data?", "{closing}"),
+# Three parts plus a footer. Each section: id, rail name, reader question, bridge into the next section.
+PARTS = [
+    ("part-problem", "Problem", [
+        ("problem", "The question", "What's the problem?",
+         "The same kind of unstated rule turns up in {n_traps} places in this data."),
+        ("traps", "{n_traps} traps", "How common or broad is this?",
+         "So what would a model need to know to avoid these?"),
+    ]),
+    ("part-approach", "Approach", [
+        ("fix", "The fix", "What's the proposed solution?",
+         "Does any of this actually change what the model gets right?"),
+        ("experiment", "The experiment", "How was it tested fairly?", "Here's what happened."),
+    ]),
+    ("part-results", "Results", [
+        ("results", "Overview", "Did it work, and where?",
+         "Numbers hide how. Watch the same question go wrong and right."),
+        ("replay", "Replay", "What does failure actually look like?",
+         "The headline question was format: prose vs. structured tags."),
+        ("b-vs-c", "B vs C", "Should tagging effort go into structure, or is good documentation enough?",
+         "Where it still breaks."),
+        ("failures", "Where it fails", "Is this honest?", "What the score itself cannot see."),
+        ("misses", "What the score misses", "What does a correct score not tell you?",
+         "How the answers were checked."),
+    ]),
+    ("part-footer", None, [
+        ("checks", "How it was checked", "How were the answers checked?", "What this can and cannot show."),
+        ("limits", "Limits", "What can't this show?", "What this would mean on real research data."),
+        ("next", "Next steps", "What would this mean on real research data?", "{closing}"),
+    ]),
 ]
+SECTIONS = [x for _, _, secs in PARTS for x in secs]
+
+
+def plural(n, one, many):
+    return one if n == 1 else many
+
+
+def qid_list(ids):
+    return ", ".join(dict.fromkeys(ids))
+
+
+def breakdown_claim(f, trap_phrase):
+    """The wrong-run breakdown by failure type, singular or plural to match each count. trap_phrase adds
+    ', the one stored-trap hit' after the period_misread IDs (the caller verifies it holds)."""
+    n, q = f["n"], f["qids"]
+    mis = f"{n['period_misread']} answered for the full year instead of the requested quarter ({q['period_misread']}"
+    mis += (", the one stored-trap hit" if trap_phrase else "") + ")"
+    return (f"Of the wrong runs, {n['missed_warning']} missed a calendar warning ({q['missed_warning']}), {mis}, "
+            f"{n['execution_slip']} {plural(n['execution_slip'], 'made an arithmetic slip', 'made arithmetic slips')} "
+            f"after correct retrieval ({q['execution_slip']}), and {n['tool_interface']} "
+            f"{plural(n['tool_interface'], 'was a failure', 'were failures')} of the enforcing tools' own interface "
+            f"({q['tool_interface']}).")
 
 
 class Page:
@@ -816,6 +879,49 @@ class Page:
     def claim(self, rule, text):
         self.claims.append((self.ev.section, rule, text))
         return text
+
+    def facts(self):
+        """Counts shared by the hero and the Results lead, each read from summary.json, the transcripts or
+        report/failure_types.yaml. Dies if a sentence the page states about them would no longer hold."""
+        if getattr(self, "_facts", None):
+            return self._facts
+        ev = self.ev
+        s, questions, ft = ev("summary"), ev("questions"), ev("failure_types")
+        st_ = s["setups"]
+        total = sum(st_[x]["n"] for x in score.SETUPS)
+        wrong = sum(st_[x]["n"] - st_[x]["correct_runs"] for x in score.SETUPS)
+        if wrong != len(ft):
+            die(f"summary.json counts {wrong} wrong runs but report/failure_types.yaml lists {len(ft)}")
+        hits = sum(t["hits"] for x in score.SETUPS for t in st_[x]["trap_hits"].values())
+        checks = sum(t["runs"] for x in score.SETUPS for t in st_[x]["trap_hits"].values())
+        acc_a = st_["A"]["accuracy"]["mean"]
+        if 1 - acc_a > FEW_ERRORS:
+            die(f"setup A is {pct(acc_a)} correct; 'already ... correct, so this experiment can't show tags helping' "
+                f"needs at most {FEW_ERRORS:.0%} wrong")
+        if hits / checks > FEW_ERRORS:
+            die("stored traps fired in more than a few checks; 'the traps rarely fired' no longer holds")
+        by = {t: [k for k, x in sorted(ft.items(), key=lambda kv: (kv[0][1], kv[0][0], kv[0][2])) if x["type"] == t]
+              for t in FAILURE_TYPES}
+        for k in by["missed_warning"]:
+            if "calendar" not in (questions[k[1]].get("notes") or ""):
+                die(f"{k}: missed_warning, but the question's notes don't name a calendar warning")
+        trap_runs = {(k[1], k[0], k[2]) for k, rec in ev("runs").items()
+                     if score.score_run(rec, questions[k[0]])["trap_hit"]}
+        for k in by["period_misread"]:
+            sc = score.score_run(ev("runs")[(k[1], k[0], k[2])], questions[k[1]])
+            if sc["trap_hit"] != "used_fy_value":
+                die(f"{k}: period_misread, but its stored trap is {sc['trap_hit']!r}, not the full-year value")
+        bc = s["b_vs_c"]
+        _, bvc_p = b_vs_c_verdict(len(bc["b_right_c_wrong"]), len(bc["c_right_b_wrong"]))
+        if bvc_p < 0.05:
+            die("B vs C differs (p < 0.05); the hero sentence 'no detectable difference' no longer holds")
+        self._facts = {
+            "total": total, "wrong": wrong, "hits": hits, "checks": checks, "acc_a": acc_a,
+            "n": {t: len(v) for t, v in by.items()},
+            "qids": {t: qid_list(k[1] for k in v) for t, v in by.items()},
+            "trap_phrase": trap_runs == set(by["period_misread"]),
+        }
+        return self._facts
 
     # S1
     def problem(self):
@@ -863,22 +969,34 @@ class Page:
                 f"Of the other {n - len(hits)}, {n_ok} were correct.")
         rec = self.claim("hero trap count: recorded runs on the hero question whose score hits the hero trap (score.py over the jsonl)",
                          f"{len(hits)} of {n} recorded runs on this question fell into this trap ({where}). {rest}")
-        row_desc = self.claim("hero row: the trap value's row in the recorded tool output",
+        said = " ".join(shown.get("text") or [])
+        if not (re.search(r"full year is the figure you asked about", said) and "cross-check" in said):
+            die(f"{qid} setup {hits[0][1]} run {hits[0][2]}: the transcript no longer says the full year was the "
+                "figure asked about with the quarter as a cross-check; the hero wording depends on it")
+        row_desc = self.claim("hero row: the trap value's row in the recorded tool output; the run's text says the "
+                              "full year was the figure asked about and gives the quarter as a cross-check",
                               f"In that run the full-year row came back with period_basis {row.get('period_basis')} "
-                              f"and fiscal_quarter {row.get('fiscal_quarter')}, and the model put it in its final answer.")
-        st_ = s["setups"]
-        wrong = {x: (st_[x]["n"] - st_[x]["correct_runs"], st_[x]["n"]) for x in score.SETUPS}
-        _, p = b_vs_c_verdict(len(s["b_vs_c"]["b_right_c_wrong"]), len(s["b_vs_c"]["c_right_b_wrong"]))
-        avx = s.get("exploratory", {}).get("a_vs_a_raw")
-        ar = (len(avx["a_right_a_raw_wrong"]), len(avx["a_raw_right_a_wrong"])) if avx else None
-        head = [self.claim("headline: summary.json correct_runs per setup (few errors = at most "
-                           f"{FEW_ERRORS:.0%} wrong in every setup), the B vs C sign test"
-                           + (" and the exploratory A vs A_raw sign test (summary.json exploratory.a_vs_a_raw)" if ar else ""), t)
-                for t in headline_claim(", ".join(s["model"]), wrong, p, ar)]
+                              f"and fiscal_quarter {row.get('fiscal_quarter')}. The model said the full year was the "
+                              "figure asked about, computed the quarter only as a cross-check, and put the full-year "
+                              "value in its final answer.")
+        f = self.facts()
+        boxes = [
+            self.claim("hero box: wrong runs and stored-trap hits summed over setups (summary.json)",
+                       f"{f['wrong']} wrong runs out of {f['total']}; the stored traps fired {f['hits']} "
+                       f"{plural(f['hits'], 'time', 'times')} in {f['checks']} checks."),
+            self.claim(f"hero box: setup A mean accuracy (summary.json); stated only if A is at most {FEW_ERRORS:.0%} wrong",
+                       f"Setup A, with no tags, was already {pct(f['acc_a'])} correct, so this experiment can't show "
+                       "tags helping."),
+            self.claim("hero box: wrong runs by type from report/failure_types.yaml",
+                       breakdown_claim(f, trap_phrase=False)),
+            self.claim("hero box: B vs C exact sign test, stated only if p >= 0.05",
+                       "Prose vs. structured tags with the same facts: no detectable difference."),
+        ]
         return f"""
-<h1>Valid SQL, wrong answer.</h1>
-<p class="lede">A query can run without error and still return the wrong number. Here the table held
-everything needed; the model reported the full-year row instead of deriving the quarter.</p>
+<h1>Do tags help an AI agent aggregate financial data correctly?</h1>
+<p class="lede"><b>The trap: valid SQL, wrong answer.</b> A query can run without error and still produce the wrong number.
+Here the table held every row needed. The model read the question as asking for the full year, computed the
+quarter only as a cross-check, and reported the full-year figure.</p>
 <p class="q">“{e(q["question"])}”</p>
 <div class="compare">
   <div class="stat bad-edge"><div class="stat-k">The trap: the full fiscal year</div>
@@ -893,7 +1011,8 @@ everything needed; the model reported the full-year row instead of deriving the 
     <div class="small">Sources: {by["FY"]} · {by["YTD9"]}</div></div>
 </div>
 <p class="trapcount"><b>{e(rec)}</b></p>
-<div class="headline"><div class="stat-k">The result</div><p>{" ".join(e(t) for t in head)}</p></div>
+<div class="headline"><div class="stat-k">The result</div>
+  <div class="result-grid">{"".join(f'<p class="result-box">{e(t)}</p>' for t in boxes)}</div></div>
 <p class="small muted">Both numbers come from the answer key; the trap count is scored from the recorded runs.</p>"""
 
     # S2
@@ -903,6 +1022,9 @@ everything needed; the model reported the full-year row instead of deriving the 
         tags = ev("tags")
         cards = []
         replay_by_cat = {ev("questions")[x["question_id"]]["category"]: x for x in need(r, "replays")}
+        per_cat = {}
+        for t in need(r, "traps"):
+            per_cat[need(t, "category")] = per_cat.get(t["category"], 0) + 1
         for t in need(r, "traps"):
             cat = need(t, "category")
             rp = replay_by_cat.get(cat) or die(f"no replay for category {cat} (trap card {t.get('name')})")
@@ -928,7 +1050,7 @@ everything needed; the model reported the full-year row instead of deriving the 
   <h3>{e(need(t, "name"))}</h3>
   <p>{e(need(t, "rule"))}</p>
   <p class="small"><span class="pill">{e(need(t, "source"))}</span> <span class="muted">{e(" · ".join(dict.fromkeys(srcs)))}</span></p>
-  <p class="small muted">{e(CATEGORY_NAMES[cat])}: {wrong} of {runs} runs wrong across all setups.</p>
+  <p class="small muted">{e(CATEGORY_NAMES[cat]) + (" (shared category)" if per_cat[cat] > 1 else "")}: {wrong} of {runs} runs wrong{"" if per_cat[cat] > 1 else " across all setups"}.</p>
   <a class="jump" href="{e(href)}">{e(link)} →</a>
 </article>""")
         return f"""
@@ -1058,31 +1180,60 @@ metric views). The contribution is the measurement.</p>"""
         cost = ("<table class='cost'><thead><tr><th scope='col'>Setup</th><th scope='col'>Tool calls per question</th>"
                 "<th scope='col'>Tokens per question</th><th scope='col'>Total cost</th></tr></thead><tbody>"
                 + "".join(cost_rows) + "</tbody></table>")
-        # takeaway, by rule
-        take = [self.claim("§3 accuracy: a difference is real only if the setups' run ranges don't overlap",
-                           accuracy_claim(acc)),
-                self.claim("trap total: summary.json trap_hits summed over setups and traps", trap_claim(totals))]
-        d_ans = [0, 0]
-        d_ref = [0, 0]
-        for (qid, st, _), rec in ev("runs").items():
-            if st != "D":
-                continue
-            ok = score.score_run(rec, questions[qid])["correct"]
-            tgt = d_ref if questions[qid]["expected_behavior"] == "refuse" else d_ans
-            tgt[0] += ok
-            tgt[1] += 1
-        dc = d_claim(tuple(d_ans), tuple(d_ref))
-        take.append(self.claim("§3 D rule: D at 100% on answerable questions", dc) if dc else
-                    self.claim("behavior range: summary.json behavior_accuracy, lowest to highest", behavior_claim(beh)))
+        f = self.facts()
+        lead = [
+            self.claim("results lead: wrong runs and stored-trap hits summed over setups (summary.json)",
+                       f"On this data the traps rarely fired: {f['wrong']} wrong runs out of {f['total']}, and "
+                       f"{f['hits']} stored-trap {plural(f['hits'], 'hit', 'hits')} in {f['checks']} checks."),
+            self.claim(f"results lead: setup A mean accuracy; stated only if A is at most {FEW_ERRORS:.0%} wrong",
+                       f"Setup A, with no tags, scored {pct(f['acc_a'])}, so the experiment sits near its ceiling "
+                       "and can't show tags helping."),
+            self.claim("results lead: wrong runs by type from report/failure_types.yaml; 'the one stored-trap hit' "
+                       "only if the stored-trap-hit runs equal the period_misread runs",
+                       breakdown_claim(f, trap_phrase=f["trap_phrase"])),
+        ]
+        if not f["trap_phrase"]:
+            self.notes.append("stored-trap-hit runs differ from the period_misread runs; "
+                              "'the one stored-trap hit' omitted from the Results lead")
         return f"""
-<h2>Results</h2>
-<p class="takeaway">{" ".join(e(t) for t in take)}</p>
+<h2>Results at a glance</h2>
+<p class="takeaway">{" ".join(e(t) for t in lead)}</p>
 <div class="results-grid">
   <div class="panel"><h3>Accuracy by setup <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3>{acc_svg}{acc_tab}
-    <h3>Behavior accuracy <span class="muted small">warn when needed, refuse when unanswerable</span></h3>{beh_svg}{beh_tab}
-    <h3>Cost per setup <span class="muted small">means per question</span></h3>{cost}</div>
-  <div class="panel"><h3>Stored-trap hits <span class="muted small">hits / runs; select a cell to open its replay</span></h3>{heat}</div>
-</div>"""
+    <h3>Behavior accuracy <span class="muted small">warn when needed, refuse when unanswerable</span></h3>{beh_svg}{beh_tab}</div>
+  <div class="panel"><h3>Cost per setup <span class="muted small">means per question</span></h3>{cost}</div>
+</div>
+{self.trust_badges()}
+<h3 class="sub">Stored-trap hits <span class="muted small">hits / runs; select a cell to open its replay</span></h3>
+{heat}"""
+
+    def trust_badges(self):
+        ev = self.ev
+        s = ev("summary")
+        if re.search(r"^\s*(from|import)\s+semantics\b", ev("make_questions"), re.M):
+            die("eval/make_questions.py imports semantics; the page says the answer key is independent")
+        v = verification_counts(ev("vlog"), ev("vlog_ai"))
+        frozen, first_run = commit_date("questions-frozen"), min(s["run_dates"])
+        tests = pytest_passed()
+        cost = f"${s['total_cost_usd']:.2f} to rerun"
+        if tests is None:
+            self.notes.append("pytest not run inside this build (it is itself running under pytest)")
+        self.test_line = (f"{tests} tests pass · {cost}" if tests is not None
+                          else f"Tests run when the page is published · {cost}")
+        cards = [
+            self.claim("trust badge: eval/make_questions.py does not import semantics.py",
+                       "Answer key computed without semantics.py"),
+            self.claim("trust badge: distinct sourced inputs (verification_log.csv), hand checks from "
+                       "verification_ai.csv status hand_checked_reread, mismatches from verification_ai.csv",
+                       f"{v['sourced']} inputs checked against primary sources ({v['hand']} by hand), "
+                       f"{v['mismatches']} {plural(v['mismatches'], 'mismatch', 'mismatches')}"),
+            self.claim("trust badge: git tag questions-frozen commit date; first run date in summary.json",
+                       f"Questions frozen {frozen}; first run {first_run}"),
+            self.claim("trust badge: pytest run during the build (passed count); summary.json total_cost_usd",
+                       self.test_line),
+        ]
+        return ('<ul class="trust-grid" aria-label="How far to trust these numbers">'
+                + "".join(f'<li class="trust">{e(c)}</li>' for c in cards) + "</ul>")
 
     # S5b, only when eval/results/A_raw.jsonl exists
     def exploratory(self):
@@ -1129,17 +1280,6 @@ metric views). The contribution is the measurement.</p>"""
                  f"<th scope='col'>A_raw · {e(SETUP_NAMES[X])}</th></tr></thead><tbody>{body}</tbody></table>")
         cat_table = (f"<table class='cost'><thead><tr><th scope='col'>Category</th><th scope='col'>A</th>"
                      f"<th scope='col'>A_raw</th></tr></thead><tbody>{cats}</tbody></table>")
-        # q016: what the scorer does not grade. Count A_raw runs whose text calls the figure total cash flow.
-        q016 = sorted(k for k in raw if k[0] == "q016")
-        total_ocf = [k[1] for k in q016 if re.search(r"total operating cash flow", " ".join(raw[k].get("text") or []), re.I)]
-        q016_ok = sum(score.score_run(raw[k], q["q016"])["correct"] for k in q016)
-        note016 = self.claim(
-            "q016: A_raw runs scored correct (score.py) and A_raw runs whose recorded text contains 'total operating cash flow'",
-            f"Scored correct is not the same as explained correctly. On q016 (Darden operating cash flow from continuing "
-            f"operations), {q016_ok} of {len(q016)} A_raw runs had the right number, but {word(len(total_ocf))} of them "
-            f"(run{'s' if len(total_ocf) != 1 else ''} {', '.join(map(str, total_ocf))}) told the reader it was total "
-            "operating cash flow; the column that said continuing operations was removed, and the scorer does not grade "
-            "the explanation.") if total_ocf else None
         repo = need(ev("replays"), "links", "repo")
         hq = need(ev("replays"), "hero", "question_id")
         if X not in next((x["runs"] for x in need(ev("replays"), "replays") if x["question_id"] == hq), {}):
@@ -1148,7 +1288,7 @@ metric views). The contribution is the measurement.</p>"""
         n_runs = len(v["runs_per_question"])
         return f"""
 <div class="kicker exploratory">Added after seeing the main results</div>
-<h2>Exploratory: the same questions without meaning columns</h2>
+<h2>Why the baseline was so strong</h2>
 <p class="muted">Setup A again, on a copy of the database with the columns that carry meaning removed
 ({e(removed)}). Same questions, answer key, model, instructions and scorer. Each removed column can be
 recomputed from columns that stayed (<code>src/build_raw_views.py</code> checks this), so no question became
@@ -1163,17 +1303,66 @@ unanswerable. This run is not one of the planned comparisons.</p>
 </dl>
 <p class="small muted">A setup is right on a question when more than half of its {n_runs} runs are correct
 ({pc["questions"]} questions). Exact two-sided sign test on the {pc["discordant"]} discordant
-question{"" if pc["discordant"] == 1 else "s"}: p = {p:.2f}.</p>
+question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant"], p))}.</p>
 </div>
 <div class="results-grid">
   <div class="panel"><h3>Accuracy <span class="muted small">bar = mean, whiskers = lowest–highest run</span></h3>{bars}
     <p class="small muted range-text">{ranges}</p>{table}</div>
   <div class="panel"><h3>Accuracy by category <span class="muted small">mean [lowest, highest run]</span></h3>{cat_table}</div>
 </div>
-{f'<p class="small">{e(note016)}</p>' if note016 else ""}
 <p class="small"><a class="jump" href="#replay?q={e(hq)}&amp;left=A&amp;right=A_raw">Compare A and A_raw on {e(hq)} →</a> ·
 <a href="{e(repo)}/blob/main/eval/results/A_raw_failures.md">A_raw runs worth reading</a> ·
 <a href="{e(repo)}/blob/main/eval/results/summary.md">summary.md</a></p>"""
+
+    # Results, last: what a correct score does not show
+    def misses(self):
+        ev = self.ev
+        s, q = ev("summary"), ev("questions")
+        items = []
+        raw = ev("a_raw")
+        if raw is not None:
+            q016 = sorted(k for k in raw if k[0] == "q016")
+            said = [k for k in q016 if re.search(r"total operating cash flow", " ".join(raw[k].get("text") or []), re.I)]
+            ok = sum(score.score_run(raw[k], q["q016"])["correct"] for k in q016)
+            if said:
+                t = self.claim(
+                    "q016: A_raw runs scored correct (score.py) and A_raw runs whose recorded text contains "
+                    "'total operating cash flow'",
+                    f"q016, the right number with the wrong explanation: on Darden operating cash flow from continuing "
+                    f"operations, {ok} of {len(q016)} A_raw runs had the right number, and {len(said)} told the reader "
+                    "it was total operating cash flow; the scorer doesn't grade the explanation.")
+                rec = raw[said[0]]
+                items.append(f"""
+<li><span class="kicker exploratory">From the exploratory run</span>
+  <p>{e(t)}</p>
+  <details class="transcript"><summary>show transcript (A_raw, q016, run {said[0][1]})</summary>
+    <p class="small"><b>Final answer:</b> {e(json.dumps(rec.get("final")))}</p>
+    <div class="steps" data-verbatim>{render_steps(rec)}</div></details></li>""")
+        st_ = s["setups"]
+        ow = ", ".join(f"{x} {st_[x]['over_warning_runs']} of {st_[x]['answer_question_runs']}" for x in score.SETUPS)
+        t = self.claim("over-warning: summary.json over_warning_runs / answer_question_runs per setup",
+                       f"Over-warned runs (a warning when none was needed, not scored wrong): {ow}.")
+        items.append(f"<li><p>{e(t)}</p></li>")
+        return f"""
+<div class="note-box">
+<h2>What the score misses</h2>
+<ul class="misses">{"".join(items)}</ul>
+</div>"""
+
+    # Footer: limits (SPEC §11.8)
+    def limits(self):
+        ev = self.ev
+        r = ev("replays")
+        n_cat = {}
+        for qq in ev("questions").values():
+            n_cat[qq["category"]] = n_cat.get(qq["category"], 0) + 1
+        qpc = str(min(n_cat.values())) if len(set(n_cat.values())) == 1 else f"{min(n_cat.values())}–{max(n_cat.values())}"
+        ciks = {SEC_RE.fullmatch(x["source_url"])[1] for x in ev("vlog") if SEC_RE.fullmatch(x["source_url"])}
+        fmt = {"questions_per_category": qpc, "companies": len(ciks)}
+        lims = "".join(f"<li>{e(lim.format(**fmt))}</li>" for lim in need(r, "limitations"))
+        return f"""
+<h2>Limits</h2>
+<ul class="limits">{lims}</ul>"""
 
     # S6
     def replay(self):
@@ -1271,6 +1460,17 @@ question{"" if pc["discordant"] == 1 else "s"}: p = {p:.2f}.</p>
         self.claim("§3 B vs C: exact two-sided sign test (McNemar) on discordant questions, p < 0.05", verdict)
         n_runs = len(s["runs_per_question"])
         lst = lambda ids: f" ({', '.join(ids)})" if ids else ""  # noqa: E731
+        notes = s["scorer_notes"]
+        if len(notes) != 1:
+            die(f"summary.json has {len(notes)} scorer_notes; the B vs C line describes exactly one fix")
+        n = notes[0]
+        if not n["flip_direction"].startswith("incorrect to correct"):
+            die("scorer_notes flip_direction is not 'incorrect to correct'; the B vs C line says it is")
+        fb, fc = n["flipped_by_setup"].get("B", 0), n["flipped_by_setup"].get("C", 0)
+        fix_line = self.claim("B vs C: summary.json scorer_notes flipped_by_setup and flip_direction",
+                              f"B's count includes the unit-parsing fix described in How it was checked, which changed "
+                              f"{fb} B {plural(fb, 'run', 'runs')} and {fc} C {plural(fc, 'run', 'runs')} from "
+                              "incorrect to correct.")
         return f"""
 <div class="box">
 <h2>B vs. C, paired by question</h2>
@@ -1283,7 +1483,8 @@ question{"" if pc["discordant"] == 1 else "s"}: p = {p:.2f}.</p>
 </dl>
 <p class="small muted">B and C receive the same facts; only the format differs. A setup is right on a question
 when more than half of its {n_runs} runs are correct (majority vote). Exact two-sided sign test (McNemar) on
-the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
+the {b + c} discordant question{"" if b + c == 1 else "s"}: {e(sign_test_text(b + c, p))}.</p>
+<p class="small">{e(fix_line)}</p>
 </div>"""
 
     # S8
@@ -1306,6 +1507,12 @@ the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
                     die(f"docs/error_analysis.md cites unknown question {qid}")
                 rec, sc = scored(ev, qid, st, run)
                 failed += not is_ok(outcome(sc))
+                mark = badge(sc)
+                if k == n:  # a setup with no wrong runs shows over-warning examples instead
+                    if not (sc["correct"] and sc["over_warning"]):
+                        die(f"error_analysis.md {st} {qid} run {run}: a no-failure setup's example must be an "
+                            "over-warned, correct run")
+                    mark = '<span class="badge neutral">Over-warned</span>'
                 if (qid, st, run) in shown:
                     left, right = (st, "D") if st != "D" else ("A", "D")
                     more = f'<a class="jump" href="#replay?q={e(qid)}&amp;left={left}&amp;right={right}">open its replay →</a>'
@@ -1315,7 +1522,7 @@ the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
                             f'<div class="steps" data-verbatim>{render_steps(rec)}</div></details>')
                 items.append(f"""
 <li class="fail" data-q="{e(qid)}" data-run="{run}">
-  <div>{badge(sc)} <b>{e(qid)}, run {run}</b>{" — " + e(title) if title else ""}</div>
+  <div>{mark} <b>{e(qid)}, run {run}</b>{" — " + e(title) if title else ""}</div>
   <p class="small"><b>What happened:</b> {inline_md(happened)}</p>
   <p class="small"><b>What would fix it:</b> <span class="fix">{inline_md(fix)}</span></p>
   {more}
@@ -1327,25 +1534,18 @@ the {b + c} discordant question{"" if b + c == 1 else "s"}: p = {p:.2f}.</p>
                 head = self.claim("no-failure note: setup's scored runs, all correct",
                                   f"{st} had no incorrect runs ({k} of {n} correct); the error analysis lists two "
                                   "over-warning examples instead, which are scored correct.")
-            groups.append(f'<div class="fail-group"><h3>{e(st)} · {e(SETUP_NAMES[st])} '
-                          f'<span class="muted small">{n - k} of {n} runs wrong</span></h3>'
+            title = (f'{e(st)} · {e(SETUP_NAMES[st])}: {n - k} of {n} runs wrong; {word(len(items))} over-warnings shown'
+                     if k == n else
+                     f'{e(st)} · {e(SETUP_NAMES[st])} <span class="muted small">{n - k} of {n} runs wrong</span>')
+            groups.append(f'<div class="fail-group"><h3>{title}</h3>'
                           + (f'<p class="small muted">{e(head)}</p>' if head else "")
                           + f'<ul class="fails">{"".join(items)}</ul></div>')
-        n_cat = {}
-        for q in ev("questions").values():
-            n_cat[q["category"]] = n_cat.get(q["category"], 0) + 1
-        qpc = str(min(n_cat.values())) if len(set(n_cat.values())) == 1 else f"{min(n_cat.values())}–{max(n_cat.values())}"
-        ciks = {SEC_RE.fullmatch(x["source_url"])[1] for x in ev("vlog") if SEC_RE.fullmatch(x["source_url"])}
-        fmt = {"questions_per_category": qpc, "companies": len(ciks)}
-        lims = "".join(f"<li>{e(lim.format(**fmt))}</li>" for lim in need(r, "limitations"))
         return f"""
 <h2>Where it fails</h2>
 <p class="muted">Two instructive runs per setup, from <code>docs/error_analysis.md</code>. Each badge is
 recomputed from the recorded score. D comes first: its failures show where the enforcing tools
 themselves broke on answerable questions.</p>
-<div class="fail-grid">{"".join(groups)}</div>
-<h3 class="sub">Limits</h3>
-<ul class="limits">{lims}</ul>"""
+<div class="fail-grid">{"".join(groups)}</div>"""
 
     # S9
     def checks(self):
@@ -1385,13 +1585,8 @@ themselves broke on answerable questions.</p>
             f"before semantics.py was first committed ({d_engine}); {word(len(repl))} replacements "
             f"({', '.join(repl)}) were added {d_repl}, after it; all frozen {d_frozen} (git tag questions-frozen), "
             f"before the first run ({first_run}).")
-        tests = pytest_count()
-        test_li = ""
-        if tests is None:
-            self.notes.append("pytest collection could not be read; the tests item is omitted from S9")
-        else:
-            test_li = "<li>" + e(self.claim("tests: pytest --collect-only at build time",
-                                            f"{tests} tests collected by pytest at build time.")) + "</li>"
+        test_li = "<li>" + e(self.claim("tests: pytest run during the build (same line as the trust badge)",
+                                        self.test_line)) + "</li>"
         bug = []
         for n in s["scorer_notes"]:
             fl = n["flipped_by_setup"]
@@ -1620,6 +1815,83 @@ class Result:
     claims: list
     notes: list
     pilot: bool
+    values: list = None
+
+
+VALUE_COLS = ["value", "where_on_page", "question_id", "source_url", "where_in_source", "matches"]
+NUM_RE = re.compile(r"(?<![A-Za-z0-9_.])\$?\d+(?:,\d{3})*(?:\.\d+)?(?:\s*(?:million|billion))?%?")
+
+
+def page_values(d):
+    """Every source-derived number in the hero, the replays, the tag cards and the failure cards, with the
+    verification_log.csv row it comes from where there is one. matches is left empty for a hand check."""
+    rows = []
+    vlog, questions, r = d["vlog"], d["questions"], d["replays"]
+    by_q = {}
+    for v in vlog:
+        by_q.setdefault(v["question_id"], []).append(v)
+
+    def inputs(qid, where):
+        for v in by_q.get(qid, []):
+            rows.append([num(float(v["value_seen"])) if v["value_seen"] else "", where, qid, v["source_url"],
+                         v["where_in_source"], ""])
+
+    def derived(qid, value, where):
+        rows.append([value, where, qid, " ; ".join(dict.fromkeys(v["source_url"] for v in by_q.get(qid, []))),
+                     "answer key (eval/questions.yaml), computed from the inputs listed with this question", ""])
+
+    hq = r["hero"]["question_id"]
+    q = questions[hq]
+    for name, label in ((r["hero"]["trap"], "Hero, trap card (full fiscal year)"),
+                        (r["hero"]["minus"], "Hero, correct-answer card (first nine months)")):
+        val = q["trap_answers"][name]
+        src = [v for v in by_q.get(hq, []) if v["value_seen"] and float(v["value_seen"]) == val]
+        if not src:
+            die(f"page values: hero value {val} has no verification_log.csv row")
+        rows.append([num(val), label, hq, src[0]["source_url"], src[0]["where_in_source"], ""])
+    derived(hq, f"{num(q['correct'])} {q['unit']}", "Hero, correct-answer card (fourth quarter)")
+    for x in r["replays"]:
+        qid = x["question_id"]
+        qq = questions[qid]
+        derived(qid, f"{num(qq['correct'])} {qq['unit']}", f"Replay {qid}, correct answer")
+        inputs(qid, f"Replay {qid}, input to the correct answer")
+    tags = d["tags"]
+    for c in r["tag_cards"]:
+        t = tags[c["id"]]
+        rows.append([t["lineage"]["retrieved_on"], f"Tag card {c['id']}, lineage retrieved date", "",
+                     t["lineage"].get("url_template") or t["lineage"].get("url") or "",
+                     "tags/tags.yaml lineage.retrieved_on (a retrieval date, not a filing value)", ""])
+    for st, es in parse_error_analysis(d["error_analysis"]).items():
+        for qid, run, _, happened, fix, _ in es:
+            for part, text in (("what happened", happened), ("what would fix it", fix)):
+                clean = text.replace("`", "")
+                for m in NUM_RE.finditer(clean):
+                    tok = m.group(0).strip()
+                    if re.search(r"\b(?:run|runs)\s*$", clean[:m.start()], re.I):
+                        continue  # a run number, not a value
+                    raw = tok.replace("$", "").replace(",", "").replace("%", "")
+                    mult = 1e6 if "million" in raw else 1e9 if "billion" in raw else 1
+                    try:
+                        val = float(raw.replace("million", "").replace("billion", "").strip()) * mult
+                    except ValueError:
+                        continue
+                    src = [v for v in by_q.get(qid, []) if v["value_seen"]
+                           and abs(float(v["value_seen"]) - val) <= 1e-9 * max(1, abs(val))]
+                    where = f"Failure card {st} {qid} run {run}, {part}"
+                    qq = questions.get(qid, {})
+                    key = {"correct": qq.get("correct"), **(qq.get("trap_answers") or {})}
+                    hit = [k for k, kv in key.items() if isinstance(kv, (int, float))
+                           and abs(kv - val) <= 0.0005 * max(1, abs(kv))]
+                    if not src and hit:
+                        rows.append([tok, where, qid, " ; ".join(dict.fromkeys(v["source_url"] for v in by_q.get(qid, []))),
+                                     f"answer key (eval/questions.yaml) {hit[0]}, computed from this question's inputs", ""])
+                    elif src:
+                        rows.append([tok, where, qid, src[0]["source_url"], src[0]["where_in_source"], ""])
+                    else:
+                        rows.append([tok, where, qid, "", "not an input value: from the recorded transcript, the "
+                                     "answer key or the scoring tolerance; check against eval/results and "
+                                     "eval/questions.yaml", ""])
+    return rows
 
 
 def build(paths=Paths()):
@@ -1634,12 +1906,15 @@ def build(paths=Paths()):
     pilot = summary.get("pilot") is True or len(covered) < len(ev._data["questions"])
     page = Page(ev)
     n_traps = len(need(ev._data["replays"], "traps"))
-    spec = list(SECTIONS)
+    parts_spec = [(pid, label, list(secs)) for pid, label, secs in PARTS]
     if ev._data["a_raw"] is not None:
-        i = [x[0] for x in spec].index("results")
-        spec[i] = (*spec[i][:3], EXPLORATORY_IN)
-        spec.insert(i + 1, EXPLORATORY)
-    sections = [(sid, name.format(n_traps=word(n_traps).capitalize()), q, b) for sid, name, q, b in spec]
+        res = next(secs for pid, _, secs in parts_spec if pid == "part-results")
+        i = [x[0] for x in res].index("b-vs-c")
+        res[i] = (*res[i][:3], EXPLORATORY_IN)
+        res.insert(i + 1, EXPLORATORY)
+    fmt = lambda name: name.format(n_traps=word(n_traps).capitalize())  # noqa: E731
+    parts_spec = [(pid, label, [(sid, fmt(n), q, b) for sid, n, q, b in secs]) for pid, label, secs in parts_spec]
+    sections = [x for _, _, secs in parts_spec for x in secs]
     parts, audit, links = {}, [], {}
     banner = '<div class="pilot-banner" role="alert">PILOT DATA — NOT FINAL</div>' if pilot else ""
     for sid, name, question, bridge in sections:
@@ -1654,9 +1929,19 @@ def build(paths=Paths()):
     for name, q, files, bridge in audit:
         if not (name and q and files and bridge):
             die(f"story audit: section '{name}' has an empty cell")
-    rail = "".join(f'<li><a href="#{sid}">{e(name)}</a></li>' for sid, name, _, _ in sections)
+    rail, body = [], []
+    for pid, label, secs in parts_spec:
+        links_html = "".join(f'<li><a href="#{sid}">{e(name)}</a></li>' for sid, name, _, _ in secs)
+        rail.append(f'<li class="rail-part">' + (f'<span class="rail-label">{e(label)}</span>' if label else "")
+                    + f'<ol>{links_html}</ol></li>')
+        inner = "\n".join(parts[sid] for sid, _, _, _ in secs)
+        if label:
+            body.append(f'<div class="part" id="{pid}"><h2 class="part-h">{e(label)}</h2>\n{inner}</div>')
+        else:
+            body.append(f'<div class="part part-foot" id="{pid}">\n{inner}</div>')
+    rail = "".join(rail)
     out = template
-    fills = {"RAIL": rail, "SECTIONS": "\n".join(parts[s[0]] for s in sections),
+    fills = {"RAIL": rail, "SECTIONS": "\n".join(body),
              "PILOT": '<div class="pilot-fixed" aria-hidden="true">PILOT DATA — NOT FINAL</div>' if pilot else "",
              "DESCRIPTION": e(f"A small experiment: {len(covered)} restaurant-finance questions, four setups, "
                               f"{', '.join(summary['model'])}."),
@@ -1678,7 +1963,7 @@ def build(paths=Paths()):
     size = len(out.encode())
     if size > MAX_BYTES:
         die(f"page is {size:,} bytes, over the {MAX_BYTES:,} byte limit")
-    return Result(out, audit, links, page.claims, page.notes, pilot)
+    return Result(out, audit, links, page.claims, page.notes, pilot, page_values(ev._data))
 
 
 def links_text(links):
@@ -1703,13 +1988,18 @@ def main(argv=None):
     try:
         if args.check:
             tmp = Path(tempfile.mkdtemp(prefix="build_report_"))
-            paths = replace(paths, out=tmp / "index.html", links=tmp / "links_to_check.txt")
+            paths = replace(paths, out=tmp / "index.html", links=tmp / "links_to_check.txt",
+                            values=tmp / "page_values_to_check.csv")
         res = build(paths)
     except BuildError as exc:
         sys.exit(f"build_report: FAILED: {exc}")
     paths.out.parent.mkdir(parents=True, exist_ok=True)
     paths.out.write_text(res.page)
     paths.links.write_text(links_text(res.links))
+    with paths.values.open("w", newline="") as fh:
+        w = csv.writer(fh, lineterminator="\n")
+        w.writerow(VALUE_COLS)
+        w.writerows(res.values)
     for n in res.notes:
         print(f"warning: {n}")
     if res.pilot:
