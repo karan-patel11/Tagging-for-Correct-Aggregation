@@ -550,9 +550,10 @@ def test_conclusion_section_restates_the_findings_from_the_outputs(built):
     ids = re.findall(r'<section id="([^"]+)"', built.page)
     assert ids[ids.index("misses") + 1] == "conclusion" and ids[ids.index("conclusion") + 1] == "checks"
     text = " ".join(br.page_text(_section(built.page, "conclusion")).split())
-    for head in ("Why we did it", "What we did", "What we found: using existing data with AI",
-                 "What we found: adding new, messy data", "What it means", "What would change the answer"):
+    for head in ("Why I did it", "What I did", "What I found: using existing data with AI",
+                 "What I found: adding new, messy data", "What it means", "What would change the answer"):
         assert head in text
+    assert not re.search(r"\b(we|We|our|Our)\b", text)  # individual work: first person singular
     for jargon in ("Pillar", "stored-trap", "discordant", "lineage", "silent wrong"):
         assert jargon not in text, jargon
     total = sum(v["n"] for v in st.values())

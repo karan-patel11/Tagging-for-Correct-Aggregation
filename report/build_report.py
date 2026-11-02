@@ -1451,7 +1451,7 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
                             "came with its source, whether the tool let the model ask for what it needed, and whether the "
                             "descriptions of the data were correct.")
         did = self.claim(rule + "question and company counts; summary.json model, runs and cost",
-                         f"We wrote {n_q} questions an analyst might ask about {word(companies)} restaurant companies, using "
+                         f"I wrote {n_q} questions an analyst might ask about {word(companies)} restaurant companies, using "
                          f"their SEC filings and public data, and asked {', '.join(s['model'])} each question in four setups, "
                          "each adding one thing: (A) only the table and column names; (B) a plain-English description of "
                          "every column; (C) the same facts as structured tags; (D) a tool that applies those tags and does "
@@ -1475,7 +1475,7 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
             self.claim(rule + "over_warning_runs for A, B and D against the shared answer_question_runs total",
                        f"Descriptions cut false alarms. Unneeded caveats fell from {st_['A']['over_warning_runs']} of {d} "
                        f"answers with no descriptions to {st_['B']['over_warning_runs']} with plain-English descriptions "
-                       f"and {st_['D']['over_warning_runs']} with the tool. We did not plan to measure this, so treat it as "
+                       f"and {st_['D']['over_warning_runs']} with the tool. I did not plan to measure this, so treat it as "
                        "a hint, not a result."),
             self.claim(rule + "wrong setup D runs equal the tool_interface runs in report/failure_types.yaml",
                        "The tool itself became the weak point. "
@@ -1508,25 +1508,25 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
         limits = self.claim(rule + "questions per category and companies (questions.yaml, verification_log.csv)",
                             f"Limits: {qpc} questions per category, {word(companies)} companies, one model. The website-traffic "
                             "data stands in for a real vendor dataset and predicts nothing. The tool was designed around these "
-                            "question types, and the same person wrote both the questions and the system.")
+                            "question types, and I wrote both the questions and the system.")
         li = lambda items: "".join(f"<li>{e(t)}</li>" for t in items)  # noqa: E731
         return f"""
 <h2>Conclusion</h2>
 <div class="conclusion">
 <p class="punch">{e(bottom)}</p>
-<h3>Why we did it</h3>
+<h3>Why I did it</h3>
 <p>Analysts now ask AI assistants questions about financial data in plain English. That raises two problems.
 First, existing datasets have to be made usable by AI. Connecting a model to a database (for example through an
 MCP connector) is not enough: the model also has to know what each column means, such as whether it can be added
 up across quarters, whether it is a year-to-date total, and which fiscal calendar it follows. Second, new data from
 outside vendors, often called alternative data, arrives messy: daily rows, brand and parent-company rows mixed
-together, renamed series, and definitions that differ by company. We built both problems into one test, using
+together, renamed series, and definitions that differ by company. I built both problems into one test, using
 traps taken from real company filings.</p>
-<h3>What we did</h3>
+<h3>What I did</h3>
 <p>{e(did)}</p>
-<h3>What we found: using existing data with AI</h3>
+<h3>What I found: using existing data with AI</h3>
 <ol>{li(p1)}</ol>
-<h3>What we found: adding new, messy data</h3>
+<h3>What I found: adding new, messy data</h3>
 <ol start="{len(p1) + 1}">{li(p2)}</ol>
 <h3>What it means</h3>
 <p>{e(means)}</p>
