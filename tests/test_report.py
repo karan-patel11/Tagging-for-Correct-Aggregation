@@ -55,9 +55,10 @@ import yaml  # noqa: E402
 import build_report as br  # noqa: E402
 
 RESULTS = ROOT / "eval" / "results"
-# Ten planned sections (SPEC §13.1) plus the exploratory A_raw section, shown because
-# eval/results/A_raw.jsonl exists (SPEC §15, 2026-11-01).
-N_SECTIONS = 11
+# Thirteen sections in three parts plus a footer (results-page revision): the ten planned sections
+# (SPEC §13.1), "What the score misses", "Limits" (moved out of Failures into the footer), and the
+# exploratory A_raw section, shown because eval/results/A_raw.jsonl exists (SPEC §15, 2026-11-01).
+N_SECTIONS = 13
 
 
 @pytest.fixture(scope="module")
@@ -282,12 +283,23 @@ def test_headline_rule():
 
 
 def test_headline_on_page_is_generated_from_summary(built):
+    """The four result boxes in the hero, every number read from summary.json and failure_types.yaml."""
     s = json.loads((RESULTS / "summary.json").read_text())
-    wrong = {x: (v["n"] - v["correct_runs"], v["n"]) for x, v in s["setups"].items()}
-    _, p = br.b_vs_c_verdict(len(s["b_vs_c"]["b_right_c_wrong"]), len(s["b_vs_c"]["c_right_b_wrong"]))
-    text = br.page_text(_section(built.page, "problem"))
-    for sentence in br.headline_claim(", ".join(s["model"]), wrong, p):
-        assert sentence in text
+    ft = yaml.safe_load((ROOT / "report" / "failure_types.yaml").read_text())["failures"]
+    st = s["setups"]
+    total = sum(v["n"] for v in st.values())
+    wrong = sum(v["n"] - v["correct_runs"] for v in st.values())
+    hits = sum(t["hits"] for v in st.values() for t in v["trap_hits"].values())
+    checks = sum(t["runs"] for v in st.values() for t in v["trap_hits"].values())
+    assert wrong == len(ft)
+    text = " ".join(br.page_text(_section(built.page, "problem")).split())
+    assert f"{wrong} wrong runs out of {total}; the stored traps were hit in {hits} of {checks} checks." in text
+    assert f"Setup A, with no tags, was already {br.pct(st['A']['accuracy']['mean'])} correct" in text
+    n = {t: sum(x["type"] == t for x in ft) for t in br.FAILURE_TYPES}
+    assert f"Of the wrong runs, {n['missed_warning']} missed a calendar warning" in text
+    assert f"{n['period_misread']} answered for the full year instead of the requested quarter" in text
+    assert "Prose vs. structured tags with the same facts: no detectable difference." in text
+    assert "Do tags help an AI agent aggregate financial data correctly?" in text
 
 
 def test_failures_section_starts_with_d_breakages(built):
@@ -339,11 +351,11 @@ def test_exploratory_section_reads_every_number_from_summary(built):
     x, a = s["exploratory"], s["setups"]["A"]
     v, pc = x["setups"]["A_raw"], x["a_vs_a_raw"]
     ids = re.findall(r'<section id="([^"]+)"', built.page)
-    assert ids[ids.index("results") + 1] == "exploratory"
+    assert ids[ids.index("b-vs-c") + 1] == "exploratory"
     sec = _section(built.page, "exploratory")
     text = " ".join(br.page_text(sec).split())
     assert "Added after seeing the main results" in text
-    assert "Exploratory: the same questions without meaning columns" in text
+    assert "Why the baseline was so strong" in text
     verdict, p = br.a_raw_verdict(len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))
     assert verdict in text and abs(p - pc["sign_test_p"]) < 1e-12
     for w in (a, v):
@@ -372,12 +384,12 @@ def test_exploratory_section_reads_every_number_from_summary(built):
 def test_exploratory_headline_next_steps_and_limit(built):
     pc = json.loads((RESULTS / "summary.json").read_text())["exploratory"]["a_vs_a_raw"]
     ab = (len(pc["a_right_a_raw_wrong"]), len(pc["a_raw_right_a_wrong"]))
-    assert br.a_raw_headline(*ab) in br.page_text(_section(built.page, "problem"))
+    assert br.a_raw_headline(*ab) not in br.page_text(_section(built.page, "problem"))  # hero has four boxes now
     nxt = " ".join(br.page_text(_section(built.page, "next")).split())
     assert br.a_raw_next_step(*ab) in nxt
     lim = ("In A_raw, without the concept column, the model cannot confirm from the data that Darden's "
            "operating cash flow is from continuing operations (q016).")
-    assert lim in " ".join(br.page_text(_section(built.page, "failures")).split())
+    assert lim in " ".join(br.page_text(_section(built.page, "limits")).split())
 
 
 def test_q017_replay_has_an_a_raw_tab_in_both_columns(built):
@@ -395,7 +407,8 @@ def test_q017_replay_has_an_a_raw_tab_in_both_columns(built):
 
 def test_a_raw_verdict_rule():
     none, p = br.a_raw_verdict(0, 1)
-    assert p == 1.0 and none == "No detectable difference between A and A_raw (0 vs 1 discordant questions; exact sign test, p = 1.00)."
+    assert p == 1.0 and none == ("No detectable difference between A and A_raw (0 vs 1 discordant questions; "
+                                 "too few discordant questions to separate from noise).")
     raw_better, p = br.a_raw_verdict(0, 6)
     assert p < 0.05 and raw_better.startswith("A_raw (raw tables) was right where A was wrong on 6 of 6")
     a_better, p = br.a_raw_verdict(6, 0)
@@ -427,7 +440,8 @@ def test_identical_a_raw_runs_give_no_discordant_questions(tmp_path):
     (d / "summary.json").write_text(json.dumps(s))
     res = br.build(paths_for(tmp_path, results=d))
     text = br.page_text(_section(res.page, "exploratory"))
-    assert "No detectable difference between A and A_raw (0 vs 0 discordant questions; exact sign test, p = 1.00)" in text
+    assert ("No detectable difference between A and A_raw (0 vs 0 discordant questions; "
+            "too few discordant questions to separate from noise)") in text
 
 
 def test_without_a_raw_next_steps_says_not_run(tmp_path):
