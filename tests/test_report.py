@@ -550,22 +550,25 @@ def test_conclusion_section_restates_the_findings_from_the_outputs(built):
     ids = re.findall(r'<section id="([^"]+)"', built.page)
     assert ids[ids.index("misses") + 1] == "conclusion" and ids[ids.index("conclusion") + 1] == "checks"
     text = " ".join(br.page_text(_section(built.page, "conclusion")).split())
-    for head in ("Why we did it", "What we did", "Pillar one: AI accessibility",
-                 "Pillar two: alternative data and onboarding", "What it means", "What would change the answer"):
+    for head in ("Why we did it", "What we did", "What we found: using existing data with AI",
+                 "What we found: adding new, messy data", "What it means", "What would change the answer"):
         assert head in text
+    for jargon in ("Pillar", "stored-trap", "discordant", "lineage", "silent wrong"):
+        assert jargon not in text, jargon
     total = sum(v["n"] for v in st.values())
     wrong = sum(v["n"] - v["correct_runs"] for v in st.values())
-    assert f"only {wrong} of {total} runs were wrong" in text
-    assert f"{total} runs in total, ${s['total_cost_usd']:.2f}." in text
+    assert f"only {wrong} of {total} answers were wrong" in text
+    assert f"{total} answers in total, costing ${s['total_cost_usd']:.2f}." in text
     assert f"already {br.pct(st['A']['accuracy']['mean'])} correct" in text
-    assert (f"fell from {st['A']['over_warning_runs']} of {st['A']['answer_question_runs']} runs to "
-            f"{st['B']['over_warning_runs']} with prose and {st['D']['over_warning_runs']} with the tool") in text
-    assert "against none for raw SQL" in text
+    assert (f"fell from {st['A']['over_warning_runs']} of {st['A']['answer_question_runs']} answers with no descriptions "
+            f"to {st['B']['over_warning_runs']} with plain-English descriptions and {st['D']['over_warning_runs']} "
+            "with the tool") in text
+    assert "against none when it wrote SQL itself" in text
     # the auto-tag follow-up, scored here with the same scorer
     qs = {q["id"]: q for q in yaml.safe_load((ROOT / "eval" / "questions.yaml").read_text())}
     at = [json.loads(l) for l in (ROOT / "followup/autotag/results/D_autotag.jsonl").read_text().splitlines() if l.strip()]
     ok = sum(score.score_run(r, qs[r["question_id"]])["correct"] for r in at)
-    assert f"fell from {st['D']['correct_runs']} to {ok} correct runs out of {len(at)}" in text
+    assert f"fell from {st['D']['correct_runs']} to {ok} out of {len(at)}" in text
     v = json.loads((ROOT / "followup/autotag/results/score_tags.json").read_text())["verdicts"]
     review = sum(x["verdict"] == "needs human review" for x in v.values())
-    assert f"{review} of {len(v)} tag fields need human review" in text
+    assert f"{review} of {len(v)} tag fields needed a person to correct them" in text
