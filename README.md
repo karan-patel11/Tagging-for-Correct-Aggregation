@@ -1,5 +1,7 @@
 # Tagging for Correct Aggregation
 
+**Live case study:** https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/
+
 SQL that runs without error can still answer the wrong question about financial data, for example by summing four quarter-end balances into a meaningless "annual" total assets. This small experiment asks one model (claude-haiku-5-5) the same 42 restaurant-sector questions in four setups (A: table schema only; B: prose descriptions; C: a tags file; D: semantic tools, no SQL) and scores 504 recorded runs against an answer key computed with direct SQL and checked against the filings and agency data (96 distinct input values; the 92 that have a source were all read from it with AI assistance, and 23 of them also by hand by the author; no mismatches; see the results page).
 
 **Headline result** (from [eval/results/summary.md](eval/results/summary.md)):
@@ -16,7 +18,7 @@ SQL that runs without error can still answer the wrong question about financial 
 
 A and A_raw differ by majority vote on one question of 42 (q010, where the difference is a warning flag), exact sign test p = 1.00: no detectable difference, and since every removed column can be recomputed from columns that stayed, this does not show that written meaning is unnecessary ([eval/results/A_raw_failures.md](eval/results/A_raw_failures.md)).
 
-**Links:** [results page (docs/index.html)](docs/index.html) · [live page](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/) · video: TODO: video link · [results summary](eval/results/summary.md) · [error analysis](docs/error_analysis.md) · [terms and question texts](docs/key.md)
+**Links:** [results page (docs/index.html)](docs/index.html) · [live case study](https://karan-patel11.github.io/Tagging-for-Correct-Aggregation/) · video: TODO: video link · [results summary](eval/results/summary.md) · [error analysis](docs/error_analysis.md) · [terms and question texts](docs/key.md)
 
 Question IDs: q017 means question 17 in [eval/questions.yaml](eval/questions.yaml); [docs/key.md](docs/key.md) lists the text of every ID mentioned here and in the error analysis. q017 is "What was Darden's total revenue in fiscal Q4 2026 (the 14-week quarter ended May 31, 2026), in US dollars?"
 
@@ -48,15 +50,15 @@ Duplicates: duration facts keep the latest-filed row (consistent, split-adjusted
 
 ## Question provenance
 
-Question wording drafted on 2026-10-24, frozen on 2026-10-27. The first populated draft is commit `f4f35b4`; the lightweight `questions-frozen` tag points to commit `88506ef`, dated 2026-10-27. A lightweight tag has no separate creation timestamp, so the freeze date is taken from its target commit. Both dates agree in UTC and America/New_York.
+Question wording drafted on 2026-10-24, frozen on 2026-10-27. The first populated draft is commit `22528d3`; the lightweight `questions-frozen` tag points to commit `6b7ecc6`, dated 2026-10-27. A lightweight tag has no separate creation timestamp, so the freeze date is taken from its target commit. Both dates agree in UTC and America/New_York.
 
-Four replacement questions (q039–q042) were added in commit `4f06c42` on 2026-10-27 UTC (2026-10-26 Eastern), after the core logic existed. Several method hints were also removed then. The original draft predates the core logic; the final question set does not. All questions were frozen before the pilot and full evaluation.
+Four replacement questions (q039–q042) were added in commit `e86dbf5` on 2026-10-27 UTC (2026-10-26 Eastern), after the core logic existed. Several method hints were also removed then. The original draft predates the core logic; the final question set does not. All questions were frozen before the pilot and full evaluation.
 
 The full evaluation's recorded start times are 2026-10-28 00:17:40–00:25:49 UTC, equivalent to 2026-10-27 20:17:40–20:25:49 America/New_York. These are run start times, not completion times. The page labels its run date as UTC.
 
 ## Engine hardening (after the study)
 
-After the auto-tag follow-up showed tags that made the engine raise or compute the wrong method, `src/semantics.py` was changed to refuse any method a code path does not implement and to return a clean error when a tag lacks metadata it needs, and `src/tags.py` gained five consistency rules. The results above were produced before this change (commit `bbc6310`) and were not re-run; re-executing all 455 recorded setup D tool calls on the hardened engine gave identical outputs for 455 of 455. Details: [followup/engine_fix/REPLAY.md](followup/engine_fix/REPLAY.md).
+After the auto-tag follow-up showed tags that made the engine raise or compute the wrong method, `src/semantics.py` was changed to refuse any method a code path does not implement and to return a clean error when a tag lacks metadata it needs, and `src/tags.py` gained five consistency rules. The results above were produced before this change (commit `9c41ddd`) and were not re-run; re-executing all 455 recorded setup D tool calls on the hardened engine gave identical outputs for 455 of 455. Details: [followup/engine_fix/REPLAY.md](followup/engine_fix/REPLAY.md).
 
 ## Quickstart
 

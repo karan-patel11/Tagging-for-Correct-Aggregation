@@ -14,7 +14,7 @@ Reviewed with coding assistance on October 28, 2026. This records source, numeri
 - The replay heading now counts six questions, rather than calling the displayed question/setup combinations six runs.
 - Added `docs/error_analysis.md`, rebuilt the page and verified its relative link resolves to the existing local file. The "not written yet" message is gone. The analysis explicitly reports no scored B failures and distinguishes B's over-warning examples from incorrect answers.
 - Labelled the page date `(UTC)`. Recorded start timestamps span 2026-10-28 00:17:40–00:25:49 UTC, which is October 27, 20:17:40–20:25:49 America/New_York. These are starts, not completion timestamps.
-- README records the October 24 initial draft (`f4f35b4`) and October 27 freeze target (`88506ef`), with the lightweight-tag timestamp limitation. It also discloses the four replacement questions written after the core logic existed.
+- README records the October 24 initial draft (`22528d3`) and October 27 freeze target (`6b7ecc6`), with the lightweight-tag timestamp limitation. It also discloses the four replacement questions written after the core logic existed.
 - README limitations give the exact financial window: fiscal 2024–2025 for CMG, WING and YUM; fiscal 2025–2026 for Darden.
 
 ## Filing destinations checked
@@ -35,7 +35,7 @@ The six distinct SEC links on the rebuilt page were opened and matched to their 
 - `python -m pytest -q`: 59 passed.
 - `python report/build_report.py`: completed without missing inputs or replay-score mismatches.
 - Programmatic DOM checks: all six question selectors and all three A/B/C tabs (18 combinations), q017's values and badge, both D failure badges, all four summary rows, accuracy bar/range coordinates, the paired comparison, scorer disclosure, UTC label, local error-analysis link and theme toggle passed. No DOM JavaScript errors or external script/stylesheet declarations were found. A DOM check does not measure layout or visual appearance.
-- Compared 19 protected question, tag, tool, scorer, verification and result files byte-for-byte with the reviewed PR head `93e2cd4`: unchanged.
+- Compared 19 protected question, tag, tool, scorer, verification and result files byte-for-byte with the reviewed PR head `e02f43c`: unchanged.
 - `git diff --check`: clean.
 
 ## Still pending before visual sign-off

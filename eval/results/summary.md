@@ -6,7 +6,7 @@ Model: claude-haiku-5-5. Run date(s): 2026-10-28. Runs scored: 504. Total cost: 
 
 The scale-word pattern used \b, which treats "_" as part of a word, so a FINAL unit of "USD_millions" was read as unscaled while the question unit "USD millions" was read as millions, and correct answers were divided by 1,000,000. The scoring rule did not change: a unit that names millions is converted; the code had not applied it to this spelling.
 
-Fixed in commit 4977d48. 12 runs flipped (B 8, C 4), all on q022, q023, q024, incorrect to correct; no other field changed except number_ok on the same runs.
+Fixed in commit 7370770. 12 runs flipped (B 8, C 4), all on q022, q023, q024, incorrect to correct; no other field changed except number_ok on the same runs.
 
 | Setup | Correct before fix | Correct after fix |
 |---|---|---|

@@ -157,8 +157,8 @@ limitations:  # SPEC §11.8. {placeholders} are filled from the data at build ti
     were made before that change and were not re-run.
 
 provenance:   # S9. Dates are read from git at build time.
-  draft_commit: f4f35b4          # "questions: draft before core logic"
-  replacement_commit: 4f06c42    # four replacement questions, written after semantics.py existed
+  draft_commit: 22528d3          # "questions: draft before core logic"
+  replacement_commit: e86dbf5    # four replacement questions, written after semantics.py existed
   replacement_questions: [q039, q040, q041, q042]
 
 next_steps:

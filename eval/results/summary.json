@@ -1178,7 +1178,7 @@
   {
    "id": "underscore_scale_word",
    "found": "2026-10-28",
-   "fix_commit": "4977d48",
+   "fix_commit": "7370770",
    "description": "The scale-word pattern used \\b, which treats \"_\" as part of a word, so a FINAL unit of \"USD_millions\" was read as unscaled while the question unit \"USD millions\" was read as millions, and correct answers were divided by 1,000,000. The scoring rule did not change: a unit that names millions is converted; the code had not applied it to this spelling.",
    "runs_flipped": 12,
    "flipped_by_setup": {

@@ -33,7 +33,7 @@ HAND_D = ROOT / "eval" / "results" / "D.jsonl"
 DRAFT_D = AUTOTAG / "results" / "D_autotag.jsonl"
 HAND_TAGS = ROOT / "tags" / "tags.yaml"
 DRAFTS = {n: AUTOTAG / "drafts" / f"{n}.yaml" for n in ("draft_1", "draft_2", "draft_3")}
-RESULTS_COMMIT = "bbc6310"  # the main results (eval/results) were produced with src/ at this commit
+RESULTS_COMMIT = "9c41ddd"  # the main results (eval/results) were produced with src/ at this commit
 SRC_FILES = ["semantics.py", "tags.py", "mcp_server.py", "tool_specs.py"]
 OUT_MD, OUT_JSON = HERE / "REPLAY.md", HERE / "replay.json"
 # Arguments for a direct aggregate call on a permissive pair, per table (as in

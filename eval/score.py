@@ -47,13 +47,13 @@ QUESTIONS = ROOT / "eval" / "questions.yaml"
 RESULTS = ROOT / "eval" / "results"
 SETUPS = ["A", "B", "C", "D"]
 
-# Scorer bug found while checking the full run (commit 4977d48). Its counts come from scoring
-# eval/results/*.jsonl at commit 4ded7d0 with the score.py before and after the fix; they cannot be
+# Scorer bug found while checking the full run (commit 7370770). Its counts come from scoring
+# eval/results/*.jsonl at commit d5503b2 with the score.py before and after the fix; they cannot be
 # recomputed from the fixed code, so they are recorded here and copied into the full-run summary.
 SCORER_NOTES = [{
     "id": "underscore_scale_word",
     "found": "2026-10-28",
-    "fix_commit": "4977d48",
+    "fix_commit": "7370770",
     "description": ('The scale-word pattern used \\b, which treats "_" as part of a word, so a FINAL unit '
                     'of "USD_millions" was read as unscaled while the question unit "USD millions" was '
                     "read as millions, and correct answers were divided by 1,000,000. The scoring rule "

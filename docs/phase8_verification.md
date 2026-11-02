@@ -1,7 +1,7 @@
 # Phase 8 local MCP verification
 
 Date: 2026-10-26. PR: #12, branch `claude/festive-ritchie-b6fdlj`.
-Server implementation checked at commit `1907c506afa51325c3366480b361cb7afb3fd3a7`.
+Server implementation checked at commit `671edf8cc0cd70d48c8c0d1913ad41537f2e7306`.
 
 ## Environment and acceptance checks
 

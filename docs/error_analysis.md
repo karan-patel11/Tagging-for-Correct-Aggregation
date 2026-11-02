@@ -40,7 +40,7 @@ Neither example proves that the question is impossible with D's tools. The direc
 
 ## Scoring disclosure and interpretation
 
-The unit parser originally treated `USD_millions` differently from `USD millions`. Commit `4977d48` fixed that spelling bug without changing the rule: units naming millions must be converted. Twelve runs changed from incorrect to correct (eight B and four C), all on q022–q024. The raw model outputs were preserved; the summary and page show corrected scores and before/after counts.
+The unit parser originally treated `USD_millions` differently from `USD millions`. Commit `7370770` fixed that spelling bug without changing the rule: units naming millions must be converted. Twelve runs changed from incorrect to correct (eight B and four C), all on q022–q024. The raw model outputs were preserved; the summary and page show corrected scores and before/after counts.
 
 B and C have the same majority-vote outcome on 41 of 42 questions; q010 is the only difference. With this sample and no statistical significance test, the results do not establish that either format is better. D changes interface and enforcement together, so its performance cannot isolate enforcement's causal effect.
 
