@@ -58,7 +58,7 @@ RESULTS = ROOT / "eval" / "results"
 # Thirteen sections in three parts plus a footer (results-page revision): the ten planned sections
 # (SPEC §13.1), "What the score misses", "Limits" (moved out of Failures into the footer), and the
 # exploratory A_raw section, shown because eval/results/A_raw.jsonl exists (SPEC §15, 2026-11-01).
-N_SECTIONS = 13
+N_SECTIONS = 14  # + Conclusion (its own part, before the footer)
 
 
 @pytest.fixture(scope="module")
@@ -542,3 +542,23 @@ def test_sql_setups_show_no_tool_sources(built):
     pane = re.search(r'<div class="replay" data-q="q017".*?(<div class="pane" data-setup="A".*?</p>\s*<p class="small tool-sources">.*?</p>)',
                      built.page, re.S).group(1)
     assert "none returned in this run" in pane
+
+
+def test_conclusion_section_restates_the_findings_from_the_outputs(built):
+    s = json.loads((RESULTS / "summary.json").read_text())
+    st = s["setups"]
+    ids = re.findall(r'<section id="([^"]+)"', built.page)
+    assert ids[ids.index("misses") + 1] == "conclusion" and ids[ids.index("conclusion") + 1] == "checks"
+    text = " ".join(br.page_text(_section(built.page, "conclusion")).split())
+    for head in ("Why we did it", "What we did", "What we found", "What it means"):
+        assert head in text
+    total = sum(v["n"] for v in st.values())
+    wrong = sum(v["n"] - v["correct_runs"] for v in st.values())
+    assert f"Wrong runs were rare: {wrong} of {total}," in text
+    assert f"{total} runs, ${s['total_cost_usd']:.2f} in total." in text
+    assert f"already {br.pct(st['A']['accuracy']['mean'])} correct" in text
+    bc = s["b_vs_c"]
+    assert br.b_vs_c_verdict(len(bc["b_right_c_wrong"]), len(bc["c_right_b_wrong"]))[0] in text
+    assert (f"fell from {st['A']['over_warning_runs']} of {st['A']['answer_question_runs']} runs with no tags to "
+            f"{st['B']['over_warning_runs']} with prose and {st['D']['over_warning_runs']} with the enforcing tools") in text
+    assert "the three SQL setups in none" in text
