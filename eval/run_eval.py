@@ -31,10 +31,10 @@ Exploratory setup A_raw (added after the main results; SPEC §15, 2026-11-01) is
 --exploratory and never runs with A-D. It is setup A with one change: its context is
 schema_raw.txt and its run_sql reads data/warehouse_raw.duckdb (src/build_raw_views.py), which has
 the same tables without the meaning columns. Model, instructions, FINAL format, turn limit,
-max_tokens, temperature, concurrency, retries and caching are A's. It has its own hard cap of $3,
+max_tokens, temperature, concurrency, retries and caching are A's. It has its own hard cap of $2.40,
 covering its pilot and its full run together. --exploratory runs the pilot (the same 5 questions),
 prints the projection, and continues to the full run only if all 5 pilot runs finished without a
-harness error (API error, turn limit or no stop) and the projection is under $3.
+harness error (API error, turn limit or no stop) and the projection is under $2.40.
 
 Run: python eval/run_eval.py --pilot
      python eval/run_eval.py [--runs 3]

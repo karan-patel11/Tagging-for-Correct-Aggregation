@@ -28,7 +28,7 @@ def test_a_raw_matches_a_except_db_and_context():
     assert ba[0] == br[0] and ba[0]["text"] == run_eval.BASE_INSTRUCTIONS
     assert ba[1]["cache_control"] == br[1]["cache_control"]
     assert br[1]["text"].startswith(run_eval.CONTEXT_HEADER)
-    assert run_eval.EXPLORATORY_COST_CAP_USD == 3.00
+    assert run_eval.EXPLORATORY_COST_CAP_USD == 2.40
 
 
 def test_a_raw_run_sql_reads_raw_db_read_only():
