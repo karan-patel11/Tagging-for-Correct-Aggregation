@@ -293,8 +293,7 @@ def test_headline_on_page_is_generated_from_summary(built):
     checks = sum(t["runs"] for v in st.values() for t in v["trap_hits"].values())
     assert wrong == len(ft)
     text = " ".join(br.page_text(_section(built.page, "problem")).split())
-    assert f"{wrong} wrong runs out of {total}; the stored traps fired {hits} time" in text
-    assert f"in {checks} checks." in text
+    assert f"{wrong} wrong runs out of {total}; the stored traps were hit in {hits} of {checks} checks." in text
     assert f"Setup A, with no tags, was already {br.pct(st['A']['accuracy']['mean'])} correct" in text
     n = {t: sum(x["type"] == t for x in ft) for t in br.FAILURE_TYPES}
     assert f"Of the wrong runs, {n['missed_warning']} missed a calendar warning" in text

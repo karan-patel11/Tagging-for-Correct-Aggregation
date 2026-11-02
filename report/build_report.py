@@ -712,14 +712,15 @@ def a_raw_headline(a_only, raw_only):
 
 
 def a_raw_next_step(a_only, raw_only):
-    _, p = a_raw_verdict(a_only, raw_only)
+    n, p = a_only + raw_only, mcnemar_p(a_only, raw_only)
+    test = TOO_FEW if n < MIN_DISCORDANT else f"exact sign test, p = {p:.2f}"
     if p >= 0.05:
         return ("Meaning that lives only in columns: removing the meaning columns made no detectable difference "
-                f"to setup A (exploratory, exact sign test, p = {p:.2f}). Every removed column can be recomputed "
+                f"to setup A (exploratory; {test}). Every removed column can be recomputed "
                 "from columns that stayed, so a harder test needs data whose meaning cannot be recovered from "
                 "other columns.")
     return ("Meaning that lives only in columns: removing the meaning columns changed setup A's results "
-            f"(exploratory, exact sign test, p = {p:.2f}); test the same on a second dataset before relying on it.")
+            f"(exploratory; {test}); test the same on a second dataset before relying on it.")
 
 
 VKEY = re.compile(r"^\[([^\]]+)\]")
@@ -982,8 +983,8 @@ class Page:
         f = self.facts()
         boxes = [
             self.claim("hero box: wrong runs and stored-trap hits summed over setups (summary.json)",
-                       f"{f['wrong']} wrong runs out of {f['total']}; the stored traps fired {f['hits']} "
-                       f"{plural(f['hits'], 'time', 'times')} in {f['checks']} checks."),
+                       f"{f['wrong']} wrong runs out of {f['total']}; the stored traps were hit in {f['hits']} "
+                       f"of {f['checks']} checks."),
             self.claim(f"hero box: setup A mean accuracy (summary.json); stated only if A is at most {FEW_ERRORS:.0%} wrong",
                        f"Setup A, with no tags, was already {pct(f['acc_a'])} correct, so this experiment can't show "
                        "tags helping."),
@@ -1342,7 +1343,17 @@ question{"" if pc["discordant"] == 1 else "s"}: {e(sign_test_text(pc["discordant
         ow = ", ".join(f"{x} {st_[x]['over_warning_runs']} of {st_[x]['answer_question_runs']}" for x in score.SETUPS)
         t = self.claim("over-warning: summary.json over_warning_runs / answer_question_runs per setup",
                        f"Over-warned runs (a warning when none was needed, not scored wrong): {ow}.")
-        items.append(f"<li><p>{e(t)}</p></li>")
+        d_vals = {st_[x]["answer_question_runs"] for x in score.SETUPS}
+        if len(d_vals) != 1:
+            die(f"over-warning runs are out of different totals per setup ({d_vals}); the lead sentence needs one shared total")
+        lead = self.claim(
+            "over-warning lead: summary.json over_warning_runs for A, B and D, read against the same "
+            "answer_question_runs total; no comparison between B and C",
+            f"This is the one place context visibly changed behavior: over-warning fell from "
+            f"{st_['A']['over_warning_runs']} of {d_vals.pop()} runs with no tags to {st_['B']['over_warning_runs']} "
+            f"with prose and {st_['D']['over_warning_runs']} with the enforcing tools. It was not a planned measure, "
+            "so treat it as a lead, not a result.")
+        items.append(f"<li><p>{e(t)} {e(lead)}</p></li>")
         return f"""
 <div class="note-box">
 <h2>What the score misses</h2>

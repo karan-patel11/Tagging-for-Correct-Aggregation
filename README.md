@@ -22,6 +22,8 @@ Question IDs: q017 means question 17 in [eval/questions.yaml](eval/questions.yam
 
 Companies: CMG, WING, YUM, DRI. Sources: SEC XBRL filings, BLS, Census, Wikipedia pageviews, earnings releases. No model calls are made by the results page.
 
+Duplicates: duration facts keep the latest-filed row (consistent, split-adjusted history); balance-sheet facts keep the earliest-filed row, because later filings can mis-date comparatives. See the decisions log.
+
 ## Limitations
 
 - Financial coverage is fiscal 2024–2025 for CMG, WING and YUM, with Darden's fiscal 2025–2026. Fiscal labels do not imply aligned calendar periods.
