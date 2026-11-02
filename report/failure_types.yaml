@@ -1,8 +1,9 @@
 # One entry per wrong run in the main evaluation (setups A-D), keyed setup / question_id / run.
 # report/build_report.py fails unless these keys are exactly the runs score.py scores incorrect,
-# and unless every type is one of the three below.
+# and unless every type is one of the four below.
 #
 #   missed_warning   the number was right but a required warning was missing
+#   period_misread   the model answered for a different period than the one asked
 #   execution_slip   correct retrieval or reasoning, then a wrong final number
 #                    (a transcription or arithmetic slip)
 #   tool_interface   the enforcing tools' own interface caused the failure
@@ -23,11 +24,10 @@ failures:
   - setup: A
     question_id: q017
     run: 2
-    type: UNRESOLVED   # none of the three types fits the transcript; see the note and the session report
+    type: period_misread
     note: >-
       Stated that "the full year is the figure you asked about", gave the derived fiscal Q4 (3,718.8M)
       only "as a cross-check", and put the full-year 13,210.9M in FINAL (stored trap used_fy_value).
-      The requested period was misread; it was not a transcription or arithmetic slip.
   - setup: A
     question_id: q031
     run: 2

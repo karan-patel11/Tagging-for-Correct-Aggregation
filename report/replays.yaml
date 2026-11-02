@@ -38,8 +38,9 @@ replays:
     runs: {A: 2, B: 1, C: 1, D: 1, A_raw: 1}   # A_raw: exploratory tab, shown only if A_raw.jsonl exists
     expect: {A: trap, B: correct, C: correct, D: correct, A_raw: correct}
     note: >-
-      Darden's fourteen-week fiscal fourth quarter. In the run shown, A derived the quarter in its
-      explanation, then put the full-year figure in its final answer. A's other runs were correct.
+      Darden's fourteen-week fiscal fourth quarter. In the run shown, A read the question as asking for
+      the full year, computed the quarter only as a cross-check, and put the full-year figure in its final
+      answer. A's other runs were correct.
       The A_raw tab is the exploratory run on the raw tables, which have no fiscal-quarter column.
 
   - question_id: q018
